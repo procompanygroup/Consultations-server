@@ -12,12 +12,16 @@ return [
     | as required, but they're a perfect start for most applications.
     |
     */
-
+/*
     'defaults' => [
         'guard' => 'web',
         'passwords' => 'users',
     ],
-
+    */
+    'defaults' => [
+        'guard' => 'api',
+        'passwords' => 'users',
+    ],
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -34,14 +38,20 @@ return [
     | Supported: "session"
     |
     */
-
+/*
     'guards' => [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
     ],
-
+    */
+    'guards' => [
+        'api' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
+        ],
+    ],
     /*
     |--------------------------------------------------------------------------
     | User Providers
