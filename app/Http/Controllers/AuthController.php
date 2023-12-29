@@ -44,20 +44,20 @@ class AuthController extends Controller
         ->where('password',$credentials['password']);
         */
       //  $passhash=Hash::make( $request['password']);
-        
-      $user = auth()->user();
+        /*
+     $user = auth()->user();
       // $user = User::find(1);
       
         return response()->json([
             'token' => $token,
             'message'=>"success",
             'user'=>  $user ,
-            //'username'=> $user->userName,
+             'username'=> $user->userName,
              
        
         ] );
-         
-      // return $this->respondWithToken($token);
+         */
+       return $this->respondTokenwithExpire($token);
         
     }
     public function register(Request $request)
@@ -120,10 +120,12 @@ class AuthController extends Controller
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
     }
-    public function failed()
+    protected function respondTokenwithExpire($token)
     {
         return response()->json([
-            'messag' => 'UnAuthorize',             
+            ' token' => $token,           
+            'expires_in' => auth()->factory()->getTTL() * 60
         ]);
     }
+  
 }
