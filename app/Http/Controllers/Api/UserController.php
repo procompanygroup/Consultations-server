@@ -138,7 +138,11 @@ if(is_null($userdb)){
     }
 */
   }
-
+  public function addUser(User $newUser)
+  {
+      $newUser->save();
+      return $newUser;
+  }
   /**
    * Display the specified resource.
    */

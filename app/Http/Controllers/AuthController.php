@@ -1,11 +1,14 @@
 <?php
 namespace App\Http\Controllers;
+use App\Http\Requests\Api\User\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Controllers\Api\UserController;
+use Illuminate\Support\Facades\Validator;
 class AuthController extends Controller
 {
     /**
@@ -15,7 +18,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register','failed']]);
+        $this->middleware('auth:api', ['except' => ['login','register']]);
     }
 
     /**
@@ -60,9 +63,70 @@ class AuthController extends Controller
        return $this->respondTokenwithExpire($token);
         
     }
-    public function register(Request $request)
+    public function register()
     {
-        return response()->json(['name' => 'Unauthorized']);
+        $userCont=new UserController();
+        $formdata = request(['name',
+        'userName', 
+        'password',      
+        'email',
+        'mobile',
+        'nationality',
+        'gender' ,
+        'maritalStatus',
+        'image',
+    ]);
+      $storrequest=new StoreUserRequest();
+    //  $storrequest->request()=$formdata ;
+   //   $storrequest=  $formdata ;
+      $validator = Validator::make($formdata,
+      $storrequest->rules(),
+      $storrequest->messages()
+    );
+    if ($validator->fails()) {
+        /*
+          return redirect('/cpanel/users/add')
+          ->withErrors($validator)
+                      ->withInput();
+                      */
+                      return response()->json(['errorValidation' => $validator->errors()]);
+     //   return redirect()->back()->withErrors($validator)->withInput();
+  
+      } else {
+
+        $user=new User();
+        $user->userName= $formdata["userName"];
+        $user->password= $formdata["password"];
+        $user->email= $formdata["email"];
+        $user->mobile= $formdata["mobile"];
+        $user->nationality= $formdata["nationality"];
+        $user->gender= $formdata["gender"];
+        $user->maritalStatus= $formdata["maritalStatus"];
+        $user->image= $formdata["image"];
+        $user= $userCont->addUser($user);
+
+       // return response()->json(['formdata' => $formdata ]);
+        // return response()->json(['userName' => $formdata["userName"]]);
+         return response()->json(['userId' => $user->id]);
+      }
+
+    /*
+    {
+    "userName":"ahmad2",
+     "password":"123123",
+    "email":"aa@gmail.com",
+    "mobile":"0957575",
+    "nationality":"syr",
+    "gender":0,
+    "maritalStatus":"single",
+    "image":""
+    }
+    */
+  
+  
+      //  $token=Auth::login($user);
+
+      //  return response()->json(['name' => 'Unauthorized']);
         /*
         $credentials = request(['userName', 'password']);
 
@@ -73,6 +137,8 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
         */
     }
+     
+  
     /**
      * Get the authenticated User.
      *
