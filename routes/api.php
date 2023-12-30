@@ -23,7 +23,7 @@ Route::middleware(['auth:api' ])->group(function () {
 
 Route::prefix('/users')->group(function () {
     Route::get('/view', [UserController::class, 'index']);
-  
+    Route::get('/getLoginUser', [UserController::class, 'getLoginUser']); 
    
 });
 
