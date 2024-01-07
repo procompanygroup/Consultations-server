@@ -12,16 +12,18 @@ return [
     | as required, but they're a perfect start for most applications.
     |
     */
-/*
+ 
     'defaults' => [
         'guard' => 'web',
         'passwords' => 'users',
     ],
-    */
+     
+    /*
     'defaults' => [
         'guard' => 'api',
         'passwords' => 'users',
     ],
+    */
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
@@ -38,20 +40,43 @@ return [
     | Supported: "session"
     |
     */
-/*
     'guards' => [
+        'api' => [
+            'driver' => 'jwt',
+            'provider' => 'experts',
+        ],   
+        'api_clients' => [
+            'driver' => 'jwt',
+            'provider' => 'clients',
+        ],
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+    ],
+ /*
+    'guards' => [
+        'api' => [
+            'driver' => 'jwt',
+            'provider' => 'experts',  
+            'multiple' => [
+                'experts' => [
+                    'driver' => 'jwt',
+                    'provider' => 'experts',
+                ],
+                'clients' => [
+                    'driver' => 'jwt',
+                    'provider' => 'clients',  
+                ],
+              
+            ],
+        ],
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
         ],
     ],
     */
-    'guards' => [
-        'api' => [
-            'driver' => 'jwt',
-            'provider' => 'users',
-        ],
-    ],
     /*
     |--------------------------------------------------------------------------
     | User Providers
@@ -74,7 +99,15 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
+        'experts' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Expert::class,  
+        ],
+    
+        'clients' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Client::class,  
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Validator;
+use JWTAuth;
 class AuthController extends Controller
 {
     /**

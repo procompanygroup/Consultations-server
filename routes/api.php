@@ -19,6 +19,14 @@ Route::post('login', [AuthController::class, 'login']);
  
 Route::get('failed', [AuthController::class, 'failed']);
 
+Route::middleware('auth:api')->group(function () {
+  // مسارات المصادقة للـ Expert
+});
+Route::middleware('auth:api_clients')->group(function () {
+    // مسارات المصادقة للـ Client
+});
+
+/*
 Route::middleware(['auth:api' ])->group(function () {
 
 Route::prefix('/users')->group(function () {
@@ -28,6 +36,8 @@ Route::prefix('/users')->group(function () {
 });
 
 });
+*/
+
 /*
 Route::group([
 

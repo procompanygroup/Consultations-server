@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use Image;
+//use Image;
 
 use File;
 use Illuminate\Http\RedirectResponse;
@@ -115,7 +115,7 @@ if(is_null($userdb)){
           }
           $imagePath = $path . '\\' . $imageName;
           //Upload the Image
-          Image::make($image_tmp)->save($imagePath);
+     //     Image::make($image_tmp)->save($imagePath);
           $user->image = $imageName;
           $user->save();
         }
@@ -185,7 +185,7 @@ if(is_null($userdb)){
 
     } else {
 
-      $current_photo = DB::table('users')->find($userid)->image;
+      $current_photo ="";// DB::table('users')->find($userid)->image;
       //update image
       if ($request->hasFile('image')) {
         $image_tmp = $request->file('image');
@@ -210,7 +210,7 @@ if(is_null($userdb)){
           }
           $imagePath = $path . '\\' . $imageName;
           //Upload the Image
-          Image::make($image_tmp)->save($imagePath);
+         // Image::make($image_tmp)->save($imagePath);
 
         }
       } else {

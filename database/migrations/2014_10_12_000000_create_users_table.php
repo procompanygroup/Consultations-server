@@ -17,15 +17,18 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('userName')->unique() ;
-            $table->string('mobile')->nullable();
-            $table->string('nationality')->nullable();
-            $table->integer('gender')->nullable();
-            $table->string('maritalStatus')->nullable();
-            $table->string('image')->nullable();
+          
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
         
-             
-
+            $table->string('user_name')->nullable();
+        
+            $table->string('role')->nullable();
+            $table->string('token')->nullable();
+            $table->foreignId('createuser_id')->nullable();
+            $table->foreignId('updateuser_id')->nullable();
+            $table->string('mobile')->nullable();       
+            
             $table->rememberToken();
             $table->timestamps();
         });

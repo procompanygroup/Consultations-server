@@ -74,6 +74,7 @@ return array(
     'Laravel\\Sanctum\\' => array($vendorDir . '/laravel/sanctum/src'),
     'Laravel\\Sail\\' => array($vendorDir . '/laravel/sail/src'),
     'Laravel\\Prompts\\' => array($vendorDir . '/laravel/prompts/src'),
+    'Laravel\\Breeze\\' => array($vendorDir . '/laravel/breeze/src'),
     'Intervention\\Image\\' => array($vendorDir . '/intervention/image/src'),
     'Intervention\\Gif\\' => array($vendorDir . '/intervention/gif/src'),
     'Illuminate\\Support\\' => array($vendorDir . '/laravel/framework/src/Illuminate/Macroable', $vendorDir . '/laravel/framework/src/Illuminate/Collections', $vendorDir . '/laravel/framework/src/Illuminate/Conditionable'),
