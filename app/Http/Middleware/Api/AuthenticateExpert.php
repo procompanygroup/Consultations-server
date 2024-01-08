@@ -36,7 +36,7 @@ class AuthenticateExpert  extends Middleware
    
     protected function redirectTo(Request $request): ?string
     {
-        return $request->expectsJson() ? null : route('login');
+        return $request->expectsJson() ? null :  abort(response()->json(['error' => 'Unauthenticated'], 401));;
     }
 
 //     public function handle(Request $request, Closure $next): Response

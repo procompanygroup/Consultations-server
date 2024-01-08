@@ -67,14 +67,14 @@ class ExpertAuthController extends Controller
         ] );
          */
         
-        $user=auth('api')->user();
-        auth('api')->login( $user);
+      //  $user=auth('api')->user();
+      //  auth('api')->login( $user);
        // $type=  auth('api')->type();
        // Auth::login($user);
         return response()->json([
             'token' => $token,
             'message'=>"success",
-            'user'=> $user,
+          //  'user'=> $user,
          //   'type'=>  $type,
              
        

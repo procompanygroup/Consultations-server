@@ -38,6 +38,30 @@ class ClientController extends Controller
         return response()->json( $users );
     //  return response()->json(   $atype );
     }
+    public function getloguser()
+    {
+        //$users = JWTAuth::parseToken()->authenticate();
+       
+        // return view('admin.user.showusers',['users' => $users]); 
+    // $atype=  Auth::user() ;
+    //  $userc=auth('api_clients')->user();
+    //  $user=auth('api')->user();
+    // $userw=auth()->user();
+     if (auth()->user() instanceof \App\Models\Expert) {
+        // عمليات خاصة بـ User Model
+        $customValue = 'Expert';
+    }
+    elseif(auth()->user() instanceof \App\Models\Client){
+        $customValue = 'Client';
+    }else{
+        $customValue = 'No auth';
+    }
+      // $atype=Auth::check();
+        return response()->json( 
+            ['user-type' => $customValue 
+        ]);
+    //  return response()->json(   $atype );
+    }
     public function addUser(Client $newUClient)
     {
         $newUClient->save();

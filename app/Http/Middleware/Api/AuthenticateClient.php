@@ -15,7 +15,7 @@ class AuthenticateClient   extends Middleware
      */
     protected function unauthenticated($request, array $guards)
     {
-        abort(response()->json(['error' => 'UnauthenticatedC'], 401));
+        abort(response()->json(['error' => 'Unauthenticated'], 401));
     }
    
     // public function handle(Request $request, Closure $next): Response
@@ -25,7 +25,7 @@ class AuthenticateClient   extends Middleware
    
     protected function redirectTo(Request $request): ?string
     {
-        return $request->expectsJson() ? null : route('login');
+        return $request->expectsJson() ? null :  abort(response()->json(['error' => 'Unauthenticated'], 401));
     }
 
     // protected function redirectTo(Request $request): ?string

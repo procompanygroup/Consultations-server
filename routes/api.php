@@ -29,14 +29,18 @@ Route::middleware('authExpert:api')->group(function () {
   // مسارات المصادقة للـ Expert
   Route::prefix('/expert')->group(function () {
     Route::get('/view', [ExpertController::class, 'index']);
+    Route::get('/getloguser', [ClientController::class, 'getloguser']);
 });
 
-});
 
+
+});
+Route::get('getloguser', [ClientController::class, 'getloguser']);
 Route::middleware('authClient:api_clients')->group(function () {
     // مسارات المصادقة للـ Client
     Route::prefix('/client')->group(function () {
         Route::get('/view', [ClientController::class, 'index']);
+        Route::get('/getloguser', [ClientController::class, 'getloguser']);
     });
 });
 
