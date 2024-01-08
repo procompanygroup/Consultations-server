@@ -20,9 +20,12 @@ class ExpertController extends Controller
     /**
      * Display a listing of the resource.
      */
+   
     public function index()
     {
-        //
+        $users = DB::table('experts')->get();
+        // return view('admin.user.showusers',['users' => $users]); 
+        return response()->json($users);
     }
     public function addUser(Expert $newExpert)
     {

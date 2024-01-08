@@ -12,16 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('experts', function (Blueprint $table) {
-            $table->string('token')->after('call_cost');
+            $table->string('password')->after('call_cost');
         });
     }
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('experts', function (Blueprint $table) {
+        Schema::table('password', function (Blueprint $table) {
             $table->dropColum('token');
         });
     }

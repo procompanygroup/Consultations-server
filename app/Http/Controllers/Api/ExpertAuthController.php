@@ -5,16 +5,16 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-
-use App\Http\Requests\Api\User\StoreUserRequest;
+use App\Http\Requests\Api\Client\StoreClientRequest;
 use App\Models\Expert;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\ExpertController;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Middleware\Api\AuthenticateExpert;
 use JWTAuth;
+ 
 class ExpertAuthController extends Controller
 {
      /**
@@ -24,7 +24,7 @@ class ExpertAuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login','register']]);
+       $this->middleware('authExpert:api', ['except' => ['register','login','loginexpert','registerexpert']]);
     }
 
     /**
@@ -43,10 +43,10 @@ class ExpertAuthController extends Controller
         ]
         );
         */
-        $credentials = request(['userName', 'password']);
+        $credentials = request(['user_name', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if (! $token = auth('api')->attempt($credentials)) {
+            return response()->json(['error' => 'UnauthorizedE'], 401);
         }
         /*
         $user = User::where('userName',$credentials['userName'])
@@ -66,23 +66,38 @@ class ExpertAuthController extends Controller
        
         ] );
          */
-       return $this->respondTokenwithExpire($token);
+        
+        $user=auth('api')->user();
+        auth('api')->login( $user);
+       // $type=  auth('api')->type();
+       // Auth::login($user);
+        return response()->json([
+            'token' => $token,
+            'message'=>"success",
+            'user'=> $user,
+         //   'type'=>  $type,
+             
+       
+        ] );
+    //   return $this->respondTokenwithExpire($token);
         
     }
     public function register()
     {
-        $userCont=new UserController();
-        $formdata = request(['name',
-        'userName', 
-        'password',      
+        $userCont=new ExpertController();
+        $formdata = request(['user_name',
+        'password',
+         'mobile',
         'email',
-        'mobile',
         'nationality',
-        'gender' ,
-        'maritalStatus',
-        'image',
+         'birthdate',
+         'gender',
+        'marital_status',
+         'image',
+        'token',
+        'points_balance',
     ]);
-      $storrequest=new StoreUserRequest();
+      $storrequest=new StoreClientRequest();
     //  $storrequest->request()=$formdata ;
    //   $storrequest=  $formdata ;
       $validator = Validator::make($formdata,
@@ -100,7 +115,7 @@ class ExpertAuthController extends Controller
   
       } else {
 
-        $user=new User();
+        $user=new Expert();
         $user->userName= $formdata["userName"];
         $user->password= $formdata["password"];
         $user->email= $formdata["email"];
@@ -152,7 +167,7 @@ class ExpertAuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return response()->json(auth('api')->user());
     }
 
     /**
@@ -162,7 +177,7 @@ class ExpertAuthController extends Controller
      */
     public function logout()
     {
-        auth()->logout();
+        auth('api')->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }
@@ -174,7 +189,7 @@ class ExpertAuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(auth('api')->refresh());
     }
 
     /**
@@ -189,14 +204,14 @@ class ExpertAuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth('api')->factory()->getTTL() * 60
         ]);
     }
     protected function respondTokenwithExpire($token)
     {
         return response()->json([
             ' token' => $token,           
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth('api')->factory()->getTTL() * 60
         ]);
     }
   

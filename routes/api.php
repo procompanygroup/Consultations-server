@@ -2,8 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Api\UserController;
+//use App\Http\Controllers\AuthController;
+//use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ClientAuthController;
+use App\Http\Controllers\Api\ExpertAuthController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ExpertController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,16 +18,23 @@ use App\Http\Controllers\Api\UserController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::post('register', [AuthController::class, 'register']);
-Route::post('login', [AuthController::class, 'login']);
+Route::post('registerexpert', [ExpertAuthController::class, 'register']);
+Route::post('loginexpert', [ExpertAuthController::class, 'login']);
  
-Route::get('failed', [AuthController::class, 'failed']);
-
-Route::middleware('auth:api')->group(function () {
+Route::post('registerclient', [ClientAuthController::class, 'register']);
+Route::post('loginclient', [ClientAuthController::class, 'login']);
+Route::middleware('authExpert:api')->group(function () {
   // مسارات المصادقة للـ Expert
+  Route::prefix('/expert')->group(function () {
+    Route::get('/view', [ExpertController::class, 'index']);
 });
-Route::middleware('auth:api_clients')->group(function () {
+
+});
+Route::middleware('authClient:api_clients')->group(function () {
     // مسارات المصادقة للـ Client
+    Route::prefix('/client')->group(function () {
+        Route::get('/view', [ClientController::class, 'index']);
+    });
 });
 
 /*
@@ -56,3 +67,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 */
+// Broadcast::routes([
+//     'middleware' => [
+//         'authExpert:api',
+//         'authClient:api_clients'
+
+//     ]
+// ]);

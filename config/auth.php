@@ -16,6 +16,7 @@ return [
     'defaults' => [
         'guard' => 'web',
         'passwords' => 'users',
+      
     ],
      
     /*
@@ -112,6 +113,13 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
+        /*
+ 'clients' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Client::class,  
+        ],
+        */
     ],
 
     /*

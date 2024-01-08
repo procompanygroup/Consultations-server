@@ -17,7 +17,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Routing\Redirector;
 //use App\Http\Requests\Admin\User\UpdateUserRequest;
 use App\Http\Requests\Api\Client\StoreClientRequest;
-
+ 
+use Illuminate\Support\Facades\Auth;//temp
+use JWTAuth;
+//use Tymon\JWTAuth\Facades\JWTAuth;
 class ClientController extends Controller
 {
     /**
@@ -25,7 +28,15 @@ class ClientController extends Controller
      */
     public function index()
     {
-        //
+        //$users = JWTAuth::parseToken()->authenticate();
+       $users = DB::table('clients')->get();
+        // return view('admin.user.showusers',['users' => $users]); 
+    // $atype=  Auth::user() ;
+     $user=auth('api')->user();
+   //  $user= Auth::guard( )->user();
+      // $atype=Auth::check();
+        return response()->json( $user );
+    //  return response()->json(   $atype );
     }
     public function addUser(Client $newUClient)
     {

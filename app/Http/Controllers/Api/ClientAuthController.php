@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\Api\User\StoreUserRequest;
+use App\Http\Requests\Api\Client\StoreClientRequest;
 use App\Models\Client;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\ClientController;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Middleware\Api\AuthenticateClient;
 use JWTAuth;
 class ClientAuthController extends Controller
 {
@@ -22,7 +23,7 @@ class ClientAuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api_clients', ['except' => ['loginclient','registerclient']]);
+       $this->middleware('authClient:api_clients', ['except' => ['register','login','loginclient','registerclient']]);
     }
 
     /**
@@ -41,18 +42,26 @@ class ClientAuthController extends Controller
         ]
         );
         */
-        $credentials = request(['user_name', 'password']);
-
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        $credentials = request(['user_name','password']);
+      //  return response()->json(['form' =>  $credentials]);
+        if (! $token = auth('api_clients')->attempt($credentials)) {
+            return response()->json(['error' => 'UnauthorizedC'], 401);
         }
+        //Auth::check();
+     //  $atype=  Auth::user()->type; 
+     $user=auth('api_clients')->user();
+     auth('api_clients')->login($user);
+       return response()->json([
+        'token' => $token,
+        'user'=> $user,   
+    ] );
         /*
         $user = User::where('userName',$credentials['userName'])
         ->where('password',$credentials['password']);
         */
       //  $passhash=Hash::make( $request['password']);
         /*
-     $user = auth()->user();
+     $user = auth('api_clients')->user();
       // $user = User::find(1);
       
         return response()->json([
@@ -64,7 +73,7 @@ class ClientAuthController extends Controller
        
         ] );
          */
-       return $this->respondTokenwithExpire($token);
+     //  return $this->respondTokenwithExpire($token);
         
     }
     public function register()
@@ -82,7 +91,7 @@ class ClientAuthController extends Controller
         'token',
         'points_balance',
     ]);
-      $storrequest=new StoreUserRequest();
+      $storrequest=new StoreClientRequest();
     //  $storrequest->request()=$formdata ;
    //   $storrequest=  $formdata ;
       $validator = Validator::make($formdata,
@@ -100,7 +109,7 @@ class ClientAuthController extends Controller
   
       } else {
 
-        $user=new User();
+        $user=new Client();
         $user->userName= $formdata["user_name"];
         $user->password= $formdata["password"];
         $user->email= $formdata["email"];
@@ -136,7 +145,7 @@ class ClientAuthController extends Controller
         /*
         $credentials = request(['userName', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (! $token = auth('api_clients')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -152,7 +161,7 @@ class ClientAuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return response()->json(auth('api_clients')->user());
     }
 
     /**
@@ -162,7 +171,7 @@ class ClientAuthController extends Controller
      */
     public function logout()
     {
-        auth()->logout();
+        auth('api_clients')->logout();
 
         return response()->json(['message' => 'Successfully logged out']);
     }
@@ -174,7 +183,7 @@ class ClientAuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(auth('api_clients')->refresh());
     }
 
     /**
@@ -189,14 +198,14 @@ class ClientAuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth('api_clients')->factory()->getTTL() * 60
         ]);
     }
     protected function respondTokenwithExpire($token)
     {
         return response()->json([
             ' token' => $token,           
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth('api_clients')->factory()->getTTL() * 60
         ]);
     }
   
