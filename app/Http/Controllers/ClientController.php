@@ -32,10 +32,10 @@ class ClientController extends Controller
        $users = DB::table('clients')->get();
         // return view('admin.user.showusers',['users' => $users]); 
     // $atype=  Auth::user() ;
-     $user=auth('api')->user();
+    // $user=auth('api_clients')->user();
    //  $user= Auth::guard( )->user();
       // $atype=Auth::check();
-        return response()->json( $user );
+        return response()->json( $users );
     //  return response()->json(   $atype );
     }
     public function addUser(Client $newUClient)

@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\ClientAuthController;
 use App\Http\Controllers\Api\ExpertAuthController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ExpertController;
+ //use App\Http\Middleware\Api\AuthenticateClient;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,6 +32,7 @@ Route::middleware('authExpert:api')->group(function () {
 });
 
 });
+
 Route::middleware('authClient:api_clients')->group(function () {
     // مسارات المصادقة للـ Client
     Route::prefix('/client')->group(function () {

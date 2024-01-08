@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
-class AuthenticateClient
+class AuthenticateClient   extends Middleware
 {
     /**
      * Handle an incoming request.
@@ -18,11 +18,16 @@ class AuthenticateClient
         abort(response()->json(['error' => 'UnauthenticatedC'], 401));
     }
    
-    public function handle(Request $request, Closure $next): Response
-    {
-        return $next($request);
-    }
+    // public function handle(Request $request, Closure $next): Response
+    // {
+    //     return $next($request);
+    // }
    
+    protected function redirectTo(Request $request): ?string
+    {
+        return $request->expectsJson() ? null : route('login');
+    }
+
     // protected function redirectTo(Request $request): ?string
     // {
     //     return $request->expectsJson() ? null : route('loginclient');
