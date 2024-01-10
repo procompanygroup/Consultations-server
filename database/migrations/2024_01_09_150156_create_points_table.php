@@ -19,7 +19,7 @@ $table->decimal('price')->nullable()->default(0);
 $table->decimal('pricebefor')->nullable()->default(0);
 $table->integer('countbefor')->nullable()->default(0);
 $table->foreignId('createuser_id')->nullable();
-$table->foreignId('createuser_id')->nullable();
+$table->foreignId('updateuser_id')->nullable();
 
             $table->timestamps();
         });
