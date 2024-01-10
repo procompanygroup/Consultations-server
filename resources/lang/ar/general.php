@@ -17,6 +17,7 @@ return [
     'cpanel' => "لوحة تحكم",
     'welcome_name' => "اهلا بك سيد :Name  المحترم",
     'login' => "تسجيل دخول",
+    'register'=> 'انشاء حساب',
 ];
 /*
   {{ __('general.welcome_name',['Name'=>'احمد']) }} 

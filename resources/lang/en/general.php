@@ -17,4 +17,5 @@ return [
     'cpanel' => "Control panel", 
     'welcome_name' =>  "Welcome Mr. :Name",
     'login' => "Log in",
+    'register'=> 'Register',
 ];
