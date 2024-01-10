@@ -18,4 +18,6 @@ return [
     'welcome_name' =>  "Welcome Mr. :Name",
     'login' => "Log in",
     'register'=> 'Register',
+    'manage'=> 'Management',
+    'supervisors'=> 'Supervisors',
 ];

@@ -1,18 +1,19 @@
 $(function(e) {
 	//file export datatable
 	var table = $('#example').DataTable({
-		lengthChange: false,
+		 lengthChange: true,
 		buttons: [ 'copy', 'excel', 'pdf', 'colvis' ],
-		responsive: true,
+	 	//responsive: true,
 		language: {
 			searchPlaceholder: 'Search...',
 			sSearch: '',
 			lengthMenu: '_MENU_ ',
 		}
 	});
+	 
 	table.buttons().container()
 	.appendTo( '#example_wrapper .col-md-6:eq(0)' );		
-	
+	 
 	$('#example1').DataTable({
 		language: {
 			searchPlaceholder: 'Search...',

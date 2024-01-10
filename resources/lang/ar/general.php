@@ -18,6 +18,12 @@ return [
     'welcome_name' => "اهلا بك سيد :Name  المحترم",
     'login' => "تسجيل دخول",
     'register'=> 'انشاء حساب',
+    'manage'=> 'الادارة',
+    'supervisors'=> 'المشرفون',
+    'add'=> 'اضافة',
+    'show'=> 'عرض',
+    'edit'=> 'تعديل',
+    'delete'=> 'حذف',
 ];
 /*
   {{ __('general.welcome_name',['Name'=>'احمد']) }} 

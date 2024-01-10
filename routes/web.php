@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ExpertController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Web\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,6 +29,11 @@ Route::get('/dashboard', function () {
  
 Route::middleware(['auth', 'verified']) ->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index']);
+    // user 
+    Route::prefix('/user')->group(function () {
+        Route::get('', [UserController::class, 'index']);
+        Route::get('/add', [UserController::class, 'create']);
+    });
        Route::prefix('/expert')->group(function () {
         Route::get('/view', [ExpertController::class, 'index']);
         Route::get('/getloguser', [ClientController::class, 'getloguser']);
