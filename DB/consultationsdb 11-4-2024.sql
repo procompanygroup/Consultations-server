@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 11, 2024 at 12:36 PM
+-- Generation Time: Jan 11, 2024 at 03:02 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.2.0
 
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `cashtransfers` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -68,15 +68,7 @@ CREATE TABLE IF NOT EXISTS `clients` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `clients_user_name_unique` (`user_name`),
   UNIQUE KEY `clients_mobile_unique` (`mobile`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `clients`
---
-
-INSERT INTO `clients` (`id`, `user_name`, `password`, `mobile`, `email`, `nationality`, `birthdate`, `gender`, `marital_status`, `image`, `token`, `points_balance`, `created_at`, `updated_at`) VALUES
-(1, 'ahmad', '$2y$12$oXfs1CEoT.FEy7iNvZk3TuDgQkSqgcarXF8o/fS.7Qt.zIMrzl6bS', '0945994666', 'ahmad@gmail.com', 'ksa', NULL, NULL, 'single', NULL, NULL, 0, NULL, NULL),
-(2, 'ahmad2', '$2y$12$oXfs1CEoT.FEy7iNvZk3TuDgQkSqgcarXF8o/fS.7Qt.zIMrzl6bS', '0945994876', 'ahmad2@gmail.com', 'ksa', NULL, NULL, 'single', NULL, NULL, 0, NULL, NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -102,22 +94,14 @@ CREATE TABLE IF NOT EXISTS `experts` (
   `record` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `desc` text COLLATE utf8mb4_unicode_ci,
   `call_cost` int DEFAULT '0',
+  `token` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `experts_user_name_unique` (`user_name`),
   UNIQUE KEY `experts_mobile_unique` (`mobile`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `experts`
---
-
-INSERT INTO `experts` (`id`, `user_name`, `mobile`, `email`, `nationality`, `birthdate`, `gender`, `marital_status`, `image`, `points_balance`, `cash_balance`, `cash_balance_todate`, `rates`, `record`, `desc`, `call_cost`, `password`, `token`, `created_at`, `updated_at`) VALUES
-(1, 'expert', '06919696', 'ahmad@gmail.com', 'syr', '2000-01-22 22:01:24', 2, 'single', NULL, 0, '0.00', '0.00', '0.00', NULL, 'expert', 0, '$2y$12$oXfs1CEoT.FEy7iNvZk3TuDgQkSqgcarXF8o/fS.7Qt.zIMrzl6bS', '', '2024-01-01 20:01:24', '2024-01-01 20:01:24'),
-(2, 'expert2', '069196326', 'ahmad2@gmail.com', 'uae', '2000-01-22 22:01:24', 2, 'single', NULL, 0, '0.00', '0.00', '0.00', NULL, 'expert', 0, '$2y$12$oXfs1CEoT.FEy7iNvZk3TuDgQkSqgcarXF8o/fS.7Qt.zIMrzl6bS', '', '2024-01-01 20:01:24', '2024-01-01 20:01:24');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -133,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `expertsfavorites` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -149,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `experts_services` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -168,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `failed_jobs` (
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -187,7 +171,7 @@ CREATE TABLE IF NOT EXISTS `inputs` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -203,7 +187,7 @@ CREATE TABLE IF NOT EXISTS `inputs_services` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -219,7 +203,7 @@ CREATE TABLE IF NOT EXISTS `inputvalues` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -233,7 +217,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -247,22 +231,20 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (5, '2019_12_14_000001_create_personal_access_tokens_table', 1),
 (6, '2024_01_06_193109_create_experts_table', 1),
 (7, '2024_01_06_193700_create_clients_table', 1),
-(8, '2024_01_07_145557_add_token_to_experts_table', 2),
-(9, '2024_01_07_145557_add_password_to_experts_table', 3),
-(10, '2024_01_09_150050_create_services_table', 4),
-(11, '2024_01_09_150101_create_inputs_table', 4),
-(12, '2024_01_09_150108_create_inputvalues_table', 4),
-(13, '2024_01_09_150128_create_selectedservices_table', 4),
-(14, '2024_01_09_150156_create_points_table', 5),
-(15, '2024_01_09_150206_create_pointstransfers_table', 5),
-(16, '2024_01_09_150216_create_cashtransfers_table', 5),
-(17, '2024_01_09_150228_create_expertsfavorites_table', 5),
-(18, '2024_01_09_150239_create_servisesfavorites_table', 5),
-(19, '2024_01_09_150247_create_permission_table', 5),
-(20, '2024_01_09_150254_create_reasons_table', 5),
-(21, '2024_01_09_152338_create_inputs_services_table', 5),
-(22, '2024_01_09_153018_create_experts_services_table', 5),
-(23, '2024_01_09_153308_create_values_services_table', 5);
+(8, '2024_01_09_150050_create_services_table', 1),
+(9, '2024_01_09_150101_create_inputs_table', 1),
+(10, '2024_01_09_150108_create_inputvalues_table', 1),
+(11, '2024_01_09_150128_create_selectedservices_table', 1),
+(12, '2024_01_09_150156_create_points_table', 1),
+(13, '2024_01_09_150206_create_pointstransfers_table', 1),
+(14, '2024_01_09_150216_create_cashtransfers_table', 1),
+(15, '2024_01_09_150228_create_expertsfavorites_table', 1),
+(16, '2024_01_09_150239_create_servisesfavorites_table', 1),
+(17, '2024_01_09_150247_create_permissions_table', 1),
+(18, '2024_01_09_150254_create_reasons_table', 1),
+(19, '2024_01_09_152338_create_inputs_services_table', 1),
+(20, '2024_01_09_153018_create_experts_services_table', 1),
+(21, '2024_01_09_153308_create_values_services_table', 1);
 
 -- --------------------------------------------------------
 
@@ -276,7 +258,7 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
   `token` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   KEY `password_resets_email_index` (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -290,23 +272,16 @@ CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
   `token` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `password_reset_tokens`
---
-
-INSERT INTO `password_reset_tokens` (`email`, `token`, `created_at`) VALUES
-('najims833@gmail.com', '$2y$12$E3Q1Ts3QG3t.DIyhKe53OOIiUb3/FRKOMYv1bgudRRIXjj2qBsvVq', '2024-01-10 17:58:19');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `permission`
+-- Table structure for table `permissions`
 --
 
-DROP TABLE IF EXISTS `permission`;
-CREATE TABLE IF NOT EXISTS `permission` (
+DROP TABLE IF EXISTS `permissions`;
+CREATE TABLE IF NOT EXISTS `permissions` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` bigint UNSIGNED DEFAULT NULL,
   `service_id` bigint UNSIGNED DEFAULT NULL,
@@ -316,7 +291,7 @@ CREATE TABLE IF NOT EXISTS `permission` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -339,7 +314,7 @@ CREATE TABLE IF NOT EXISTS `personal_access_tokens` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -359,7 +334,7 @@ CREATE TABLE IF NOT EXISTS `points` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -380,7 +355,7 @@ CREATE TABLE IF NOT EXISTS `pointstransfers` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -396,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `reasons` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -421,7 +396,7 @@ CREATE TABLE IF NOT EXISTS `selectedservices` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -440,7 +415,7 @@ CREATE TABLE IF NOT EXISTS `services` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -456,7 +431,7 @@ CREATE TABLE IF NOT EXISTS `servisesfavorites` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -484,16 +459,15 @@ CREATE TABLE IF NOT EXISTS `users` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `first_name`, `last_name`, `user_name`, `role`, `token`, `createuser_id`, `updateuser_id`, `mobile`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'ahmad333', 'najyms@gmail.com', NULL, '$2y$12$oXfs1CEoT.FEy7iNvZk3TuDgQkSqgcarXF8o/fS.7Qt.zIMrzl6bS', NULL, NULL, NULL, 'admin', NULL, NULL, NULL, NULL, NULL, '2024-01-07 16:47:22', '2024-01-07 16:47:22'),
-(2, 'ahmad2333', 'najims833@gmail.com', NULL, '$2y$12$x1tFQq8C2USr3TVtNijNAOUfPCvzS1vEU2iLM6gaQG03GA5Q9/i4e', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-01-07 16:49:17', '2024-01-07 16:49:17'),
-(3, 'ahmad', 'customer@gmail.com', NULL, '$2y$12$RYE6luXiIomy/uTOVwDWluTBcp/cReqZcKHBtysexZEZNbYyGgaJq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2024-01-10 13:04:25', '2024-01-10 13:04:25');
+(1, 'ahmad', 'najyms@gmail.com', NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, NULL, NULL, 'admin', NULL, NULL, NULL, NULL, NULL, '2024-01-11 12:47:38', '2024-01-11 12:47:38'),
+(2, 'super1', 'super@gmail.com', NULL, '$2y$12$Bhtt5mZSK0f6kkE3qc54m.C0p1YwjfNH/eBE93BV25mp1s0Om1SJG', NULL, NULL, NULL, 'super', NULL, NULL, NULL, NULL, NULL, '2024-01-11 12:48:33', '2024-01-11 12:48:33');
 
 -- --------------------------------------------------------
 
@@ -510,7 +484,7 @@ CREATE TABLE IF NOT EXISTS `values_services` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

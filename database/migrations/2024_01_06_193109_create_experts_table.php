@@ -29,7 +29,7 @@ $table->string('record')->nullable();
 $table->text('desc')->nullable();
 $table->integer('call_cost')->nullable()->default(0);
 $table->string('token')->nullable();
-
+$table->string('password');
             $table->timestamps();
         });
     }
