@@ -73,8 +73,6 @@
 										</thead>
 										<tbody>
 											@foreach ($users as $user)
-												
-										
 											<tr>
 											 
 												<td>{{ $user->user_name }}</td>

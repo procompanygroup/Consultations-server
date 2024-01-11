@@ -20,15 +20,15 @@ use App\Http\Controllers\Web\UserController;
 Route::get('/', function () {
     return view('welcome');
 });
- 
+ /*
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
  
-
+*/
  
 Route::middleware(['auth', 'verified']) ->prefix('admin')->group(function () {
-    Route::get('/', [AdminController::class, 'index']);
+    Route::get('/', [AdminController::class, 'index'])->name('admin');;
     // user 
     Route::prefix('/user')->group(function () {
         Route::get('', [UserController::class, 'index']);
