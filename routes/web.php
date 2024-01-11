@@ -26,17 +26,29 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
  
 */
- 
-Route::middleware(['auth', 'verified']) ->prefix('admin')->group(function () {
-    Route::get('/', [AdminController::class, 'index'])->name('admin');;
+
+Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('admin');
+
+    Route::middleware('role.admin')->group(function () {
     // user 
     Route::prefix('/user')->group(function () {
         Route::get('', [UserController::class, 'index']);
         Route::get('/add', [UserController::class, 'create']);
     });
-       Route::prefix('/expert')->group(function () {
-        Route::get('/view', [ExpertController::class, 'index']);
-        Route::get('/getloguser', [ClientController::class, 'getloguser']);
+
+
+    });
+ 
+    Route::middleware('role.supervisor')  ->group(function () {
+        // user 
+      /*
+        Route::prefix('/expert')->group(function () {
+            Route::get('/view', [ExpertController::class, 'index']);
+            Route::get('/getloguser', [ClientController::class, 'getloguser']);
+    
+        });
+*/
     });
 
 });

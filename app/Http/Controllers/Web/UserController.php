@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use File;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
     /**
@@ -33,7 +34,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+      if(  Auth::check())
+      $res="yes";
+    $user= Auth::user()->role;
+        return    $res;
     }
 
     /**
