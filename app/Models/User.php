@@ -9,7 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
- 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 
 class User extends Authenticatable
 {
@@ -31,6 +32,8 @@ class User extends Authenticatable
 'role',
 'token',
 'mobile',
+'createuser_id',
+'updateuser_id',
     ];
 
     /**
@@ -53,7 +56,28 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function createusers(): HasMany
+    {
+        return $this->hasMany(User::class,'createuser_id');
+    }
 
-     
+    public function createruser(): BelongsTo
+    {
+        return $this->belongsTo(User::class,'createuser_id')->withDefault();
+    }
+    //
+    public function updateusers(): HasMany
+    {
+        return $this->hasMany(User::class,'updateuser_id');
+    }
 
+    public function updateruser(): BelongsTo
+    {
+        return $this->belongsTo(User::class,'updateuser_id')->withDefault();
+    }
+    //
+    public function permissions(): HasMany
+    {
+        return $this->hasMany(Permission::class);
+    }
 }

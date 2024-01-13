@@ -21,4 +21,29 @@ class Service extends Model
     ];
 
  
+    public function selectedservices(): HasMany
+    {
+        return $this->hasMany(Selectedservice::class);
+    }
+    public function expertservices(): HasMany
+    {
+        return $this->hasMany(ExpertService::class);
+    }
+    public function inputservices(): HasMany
+    {
+        return $this->hasMany(InputService::class);
+    }
+    public function pointtransfers(): HasMany
+    {
+        return $this->hasMany(Pointtransfer::class);
+    }
+    public function servicefavorites(): HasMany
+    {
+        return $this->hasMany(Servicefavorite::class);
+    }
+    public function permissions(): HasMany
+    {
+        return $this->hasMany(Permission::class);
+    }
+    
 }

@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 class Client extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -61,5 +62,27 @@ class Client extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+    
+    public function pointsTransfers(): HasMany
+    {
+        return $this->hasMany(Pointtransfer::class);
+    }
+    public function cashTransfers(): HasMany
+    {
+        return $this->hasMany(Cashtransfer::class);
+    }
+    public function expertsFavorites(): HasMany
+    {
+        return $this->hasMany(Expertfavorite::class);
+    }
+    
+    public function servicesfavorites(): HasMany
+    {
+        return $this->hasMany(Servicefavorite::class);
+    }
+    public function selectedservices(): HasMany
+    {
+        return $this->hasMany(Selectedservice::class);
     }
 }

@@ -11,14 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('servisesfavorites', function (Blueprint $table) {
-            $table->id();
-        
-$table->foreignId('client_id')->nullable();
-$table->foreignId('service_id')->nullable();
-
-            $table->timestamps();
-        });
+        Schema::rename('servisesfavorites', 'servicesfavorites');
     }
 
     /**
@@ -26,6 +19,8 @@ $table->foreignId('service_id')->nullable();
      */
     public function down(): void
     {
-        Schema::dropIfExists('servisesfavorites');
+        Schema::table('servicesfavorites', function (Blueprint $table) {
+            //
+        });
     }
 };
