@@ -16,7 +16,7 @@ class Point extends Model
         'countbefor',
         'createuser_id',
         'updateuser_id',
-         
+        'is_active',
              
     ];
     public function pointsTransfers(): HasMany

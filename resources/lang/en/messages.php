@@ -18,7 +18,6 @@ return [
     'throttled' => 'Please wait before retrying.',
     'token' => 'This password reset token is invalid.',
     'user' => "We can't find a user with that email address.",
-    'user_name is required' => 'اسم المستخدم مطلوب',
-    'The user_name is already exist'=>'اسم المستخدم موجود'
-
+    'user_name is required' => 'The Username is required',
+    'The user_name is already exist'=>'The user_name is already exist',
 ];

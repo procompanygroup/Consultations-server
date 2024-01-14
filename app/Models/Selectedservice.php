@@ -22,7 +22,7 @@ class Selectedservice extends Model
         'iscommentconfirmd',
         'issendconfirmd',
         'isanswerconfirmd',
-        
+        'status',
 
              
     ];

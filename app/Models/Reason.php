@@ -12,7 +12,7 @@ class Reason extends Model
         
         'content',
 'type',
-
+'is_active',
              
     ];
 }

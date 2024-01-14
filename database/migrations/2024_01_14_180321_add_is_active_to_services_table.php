@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::rename('servisesfavorites', 'servicesfavorites');
+        Schema::table('services', function (Blueprint $table) {
+            $table->boolean('is_active'); 
+        });
     }
 
     /**
@@ -19,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('servicesfavorites', function (Blueprint $table) {
-            //
+        Schema::table('services', function (Blueprint $table) {
+            $table->dropColum('is_active');
         });
     }
 };

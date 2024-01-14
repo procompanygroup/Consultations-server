@@ -10,9 +10,11 @@ class ExpertService extends Model
     use HasFactory;
     protected $fillable = [
         
-        'client_id',
+        
         'service_id',
-            
+        'expert_id',
+
+
     ];
     public function expert(): BelongsTo
     {

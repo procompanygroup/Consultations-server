@@ -27,7 +27,7 @@ class StoreUserRequest extends FormRequest
         $maxMobileLength=15;
         return[
            
-            'userName'=>'required|alpha_num:ascii|unique:users,name',    
+            'user_name'=>'required|alpha_num:ascii|unique:users,name',    
          // 'name'=>'required|alpha_num:ascii|unique:users,name',        
           'email'=>'required|email|unique:users,email',
         //  'first_name'=>'nullable|alpha',    

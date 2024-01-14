@@ -15,7 +15,7 @@ class Input extends Model
 'tooltipe',
 'icon',
 'ispersonal',
-
+'is_active',
              
     ];
     public function inputvalues(): HasMany

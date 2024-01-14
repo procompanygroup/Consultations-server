@@ -27,6 +27,7 @@ class Client extends Authenticatable implements JWTSubject
         'image',
        ' token',
        ' points_balance',
+       'is_active',
     ];
 
     /**
