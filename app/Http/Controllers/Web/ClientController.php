@@ -65,27 +65,7 @@ class ClientController extends Controller
       } else {
        
         $newObj = new Client;
-  /*
-    'user_name',
-          'password',
-          'mobile',
-          'email',
-          'nationality',
-          'birthdate',
-          'gender',
-          'marital_status',
-          'image',
-          'points_balance',
-          'cash_balance',
-          'cash_balance_todate',
-          'rates',
-          'record',
-          'desc',
-          'call_cost',
-          'created_at',
-          'updated_at',
-          'token',
-  */
+ 
   $newObj->user_name = $formdata['user_name'];
   $newObj->password = $formdata['password'];
   $newObj->mobile = $formdata['mobile'];
@@ -107,7 +87,7 @@ class ClientController extends Controller
   
         $newObj->save();
         //save image
-        $this->path = 'media/clients';
+      //  $this->path = 'media/clients';
         $separator = '/';
         if ($request->hasFile('image')) {
           // $imagemodel->save();
@@ -164,7 +144,7 @@ class ClientController extends Controller
       $object = DB::table('clients')->find($id);
   
       //
-      return view('admin.clients.edit', ['client' => $object]);
+      return view('admin.client.edit', ['client' => $object]);
     }
   
     /**
@@ -254,9 +234,6 @@ class ClientController extends Controller
     public function destroy($id)
     {
       $object = Client::find($id);
-  
-  
-  
       if (!($object === null)) {
   
         //delete check related tables
@@ -266,26 +243,26 @@ class ClientController extends Controller
         $item2 = Cashtransfer::where('client_id', $id)->first();
         $item3 = Selectedservice::where('client_id', $id)->first();
         if (!($item1 === null) || !($item2 === null) || !($item3 === null)) {
-          //delete image
-          if (!empty($object->image)) {
-            $imgpath = $this->path . '/' . $object->image;
-            if (File::exists($imgpath)) {
-              File::delete($imgpath);
-            }
-          }
-  //delete related rows
-          
-          Expertfavorite::where('client_id', $id)->delete();
-         Servicefavorite::where('client_id', $id)->delete();
-          //delete object
-          Client::find($id)->delete();
+         // disable client account
+         Client::find($id)->update([
+          "is_active" => 0
+        ]);
   
         } else {
-          // disable client account
-          Client::find($id)->update([
-            "is_active" => 0
-          ]);
-  
+         
+    //delete image
+    if (!empty($object->image)) {
+      $imgpath = $this->path . '/' . $object->image;
+      if (File::exists($imgpath)) {
+        File::delete($imgpath);
+      }
+    }
+//delete related rows
+    
+    Expertfavorite::where('client_id', $id)->delete();
+   Servicefavorite::where('client_id', $id)->delete();
+    //delete object
+    Client::find($id)->delete();
         }
       }
       return redirect()->route('admin.client.show');

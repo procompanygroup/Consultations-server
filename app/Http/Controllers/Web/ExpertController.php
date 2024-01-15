@@ -245,24 +245,24 @@ $newObj->call_cost = $formdata['call_cost'];
       $item2 = Cashtransfer::where('expert_id', $id)->first();
       $item3 = Selectedservice::where('expert_id', $id)->first();
       if (!($item1 === null) || !($item2 === null) || !($item3 === null)) {
-        //delete image
-        if (!empty($object->image)) {
-          $imgpath = $this->path . '/' . $object->image;
-          if (File::exists($imgpath)) {
-            File::delete($imgpath);
-          }
-        }
-//delete related rows
-        ExpertService::where('expert_id', $id)->delete();
-        Expertfavorite::where('expert_id', $id)->delete();
-        //delete object
-        Expert::find($id)->delete();
-
-      } else {
-        // disable expert account
-        Expert::find($id)->update([
+         // disable expert account
+         Expert::find($id)->update([
           "is_active" => 0
         ]);
+      } else {
+      
+ //delete image
+ if (!empty($object->image)) {
+  $imgpath = $this->path . '/' . $object->image;
+  if (File::exists($imgpath)) {
+    File::delete($imgpath);
+  }
+}
+//delete related rows
+ExpertService::where('expert_id', $id)->delete();
+Expertfavorite::where('expert_id', $id)->delete();
+//delete object
+Expert::find($id)->delete();
 
       }
     }
