@@ -29,18 +29,25 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin');
+    Route::middleware('role.admin:admin')  ->group(function () {
 
-    Route::middleware('role.admin')->group(function () {
-    // user 
-    Route::prefix('/user')->group(function () {
-        Route::get('', [UserController::class, 'index'])->name('admin.user.show');
-        Route::get('/add', [UserController::class, 'create']);
-        Route::post('/store', [UserController::class, 'store']);
-        Route::get('/edit/{id}', [UserController::class, 'edit']);
-        Route::post('/update/{id}', [UserController::class, 'update']);
-        Route::get('/delete/{id}', [UserController::class, 'destroy']);
-    });
-    // expert
+        Route::prefix('/user')->group(function () {
+            Route::get('', [UserController::class, 'index'])->name('admin.user.show');
+            Route::get('/add', [UserController::class, 'create']);
+            Route::post('/store', [UserController::class, 'store']);
+            Route::get('/edit/{id}', [UserController::class, 'edit']);
+            Route::post('/update/{id}', [UserController::class, 'update']);
+            Route::get('/delete/{id}', [UserController::class, 'destroy']);
+        });
+        
+            });//->middleware('roles:admin');
+
+
+   // Route::middleware('role.admin'|'role.supervisor')->group(function () {
+   // Route::group(['middleware' => ('role.admin')?'role.admin':'role.supervisor'],function () {
+    Route::middleware('role.admin:admin-super')  ->group(function () {
+            // user 
+         // expert
     Route::prefix('/expert')->group(function () {
         Route::get('', [ExpertController::class, 'index'])->name('admin.expert.show');
         Route::get('/add', [ExpertController::class, 'create']);
@@ -50,18 +57,21 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         Route::get('/delete/{id}', [ExpertController::class, 'destroy']);
     });
 
-    });
- 
+    });//->middleware('roles:admin,super');
+/*
     Route::middleware('role.supervisor')  ->group(function () {
-        // user 
-      /*
-        Route::prefix('/expert')->group(function () {
-            Route::get('/view', [ExpertController::class, 'index']);
-            Route::get('/getloguser', [ClientController::class, 'getloguser']);
-    
-        });
-*/
+
+Route::prefix('/expert')->group(function () {
+    Route::get('', [ExpertController::class, 'index'])->name('admin.expert.show');
+    Route::get('/add', [ExpertController::class, 'create']);
+    Route::post('/store', [ExpertController::class, 'store']);
+    Route::get('/edit/{id}', [ExpertController::class, 'edit']);
+    Route::post('/update/{id}', [ExpertController::class, 'update']);
+    Route::get('/delete/{id}', [ExpertController::class, 'destroy']);
+});
+
     });
+    */
 
 });
 Route::middleware('auth')->group(function () {

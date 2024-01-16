@@ -304,6 +304,7 @@ class ServeCommand extends Command
      * @param  string  $line
      * @return \Illuminate\Support\Carbon
      */
+    /*
     protected function getDateFromLine($line)
     {
         $regex = env('PHP_CLI_SERVER_WORKERS', 1) > 1
@@ -316,7 +317,20 @@ class ServeCommand extends Command
 
         return Carbon::createFromFormat('D M d H:i:s Y', $matches[1]);
     }
+    */
+    protected function getDateFromLine($line)
+    {
+        $regex = env('PHP_CLI_SERVER_WORKERS', 1) > 1
+            ? '/^\[\d+]\s\[(.*)]/'
+            : '/^\[([^\]]+)\]/';
 
+        preg_match($regex, $line, $matches);
+
+        if (isset($matches[1])) {  
+         return Carbon::createFromFormat('D M d H:i:s Y', $matches[1]);
+        }
+         return Carbon::now(); 
+    }
     /**
      * Get the request port from the given PHP server output.
      *

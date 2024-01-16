@@ -67,6 +67,6 @@ class Kernel extends HttpKernel
         'authClient' =>  \App\Http\Middleware\Api\AuthenticateClient::class,
         'authExpert' => \App\Http\Middleware\Api\AuthenticateExpert::class,
         'role.admin' => \App\Http\Middleware\Web\AdminRole::class,
-        'role.supervisor' =>  \App\Http\Middleware\Web\SupervisorRole::class,
+      
     ];
 }
