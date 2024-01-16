@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ClientAuthController;
 use App\Http\Controllers\Api\ExpertAuthController;
-use App\Http\Controllers\ClientController;
-use App\Http\Controllers\ExpertController;
+use App\Http\Controllers\Api\ClientController;
+use App\Http\Controllers\Api\ExpertController;
  //use App\Http\Middleware\Api\AuthenticateClient;
 
 /*

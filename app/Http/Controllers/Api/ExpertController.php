@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Models\Expert;
+use Illuminate\Support\Facades\DB;
 class ExpertController extends Controller
 {
     /**
@@ -12,7 +13,14 @@ class ExpertController extends Controller
      */
     public function index()
     {
-        //
+        $users = DB::table('experts')->get();
+        // return view('admin.user.showusers',['users' => $users]); 
+        return response()->json($users);
+    }
+    public function addUser(Expert $newExpert)
+    {
+        $newExpert->save();
+        return $newExpert;
     }
 
     /**
