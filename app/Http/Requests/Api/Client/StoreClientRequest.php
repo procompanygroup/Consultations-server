@@ -26,7 +26,7 @@ class StoreClientRequest extends FormRequest
        $maxMobileLength=15;
        return[
           
-           'user_name'=>'required|alpha_num:ascii|unique:users,name',    
+           'user_name'=>'required|alpha_num:ascii|unique:clients,user_name',    
         // 'name'=>'required|alpha_num:ascii|unique:users,name',        
          'email'=>'required|email|unique:users,email',
        //  'first_name'=>'nullable|alpha',    
@@ -38,7 +38,7 @@ class StoreClientRequest extends FormRequest
      
          'nationality'=>'required',
        //  'city'=>'required|alpha_num',
-         'mobile'=>'nullable|numeric|digits_between:'. $minMobileLength.','.$maxMobileLength,          
+         'mobile'=>'nullable|numeric|unique:clients,mobile|digits_between:'. $minMobileLength.','.$maxMobileLength,          
       //   'phone'=>'nullable|numeric|digits_between:'. $minMobileLength.','.$maxMobileLength,
         // 'role'=>'required',      
        ];   

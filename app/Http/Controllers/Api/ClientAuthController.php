@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Controllers\ClientController;
+use App\Http\Controllers\Api\ClientController;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Middleware\Api\AuthenticateClient;
 use JWTAuth;
@@ -76,9 +76,13 @@ class ClientAuthController extends Controller
      //  return $this->respondTokenwithExpire($token);
         
     }
-    public function register()
+    public function register(Request $filerequest)
     {
-        $userCont=new clientController();
+        $clintCont=new clientController();
+        $formdata = $filerequest->all();
+
+    //    $id = $formdata["id"];
+        /*
         $formdata = request(['user_name',
         'password',
          'mobile',
@@ -88,9 +92,14 @@ class ClientAuthController extends Controller
          'gender',
         'marital_status',
          'image',
-        'token',
-        'points_balance',
+     //  'token',
+        //'points_balance',
     ]);
+    */
+    if ($filerequest->hasFile('image')) {
+        $file= $filerequest->file('image');
+    }
+  //  $file=  $formdata ->file('image');
       $storrequest=new StoreClientRequest();
     //  $storrequest->request()=$formdata ;
    //   $storrequest=  $formdata ;
@@ -109,20 +118,20 @@ class ClientAuthController extends Controller
   
       } else {
 
-        $user=new Client();
-        $user->userName= $formdata["user_name"];
-        $user->password= $formdata["password"];
-        $user->email= $formdata["email"];
-        $user->mobile= $formdata["mobile"];
-        $user->nationality= $formdata["nationality"];
-        $user->gender= $formdata["gender"];
-        $user->maritalStatus= $formdata["maritalStatus"];
-        $user->image= $formdata["image"];
-        $user= $userCont->addUser($user);
-
+        $newObj=new Client();
+        $newObj->user_name= $formdata["user_name"];
+        $newObj->password= $formdata["password"];
+        $newObj->email= $formdata["email"];
+        $newObj->mobile= $formdata["mobile"];
+        $newObj->nationality= $formdata["nationality"];
+        $newObj->gender= $formdata["gender"];
+        $newObj->marital_status= $formdata["marital_status"];
+      //  $newObj->image= $formdata["image"];
+        $newObj= $clintCont->addUser( $newObj);
+        $clintCont->storeImage( $file,$newObj->id);
        // return response()->json(['formdata' => $formdata ]);
         // return response()->json(['userName' => $formdata["userName"]]);
-         return response()->json(['userId' => $user->id]);
+         return response()->json(['userId' => $newObj->id]);
       }
 
     /*
@@ -208,5 +217,6 @@ class ClientAuthController extends Controller
             'expires_in' => auth('api_clients')->factory()->getTTL() * 60
         ]);
     }
+
   
 }

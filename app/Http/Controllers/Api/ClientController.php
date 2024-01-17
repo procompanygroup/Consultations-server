@@ -5,8 +5,29 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
+use App\Models\Client;
+use File;
+
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Facades\Storage;
+/*
+use App\Http\Requests\Web\Client\StoreClientRequest;
+use App\Http\Requests\Web\Client\UpdateClientRequest;
+use App\Models\Pointtransfer;
+use App\Models\Cashtransfer;
+use App\Models\Expertfavorite;
+use App\Models\Servicefavorite;
+use App\Models\Selectedservice;
+*/
 class ClientController extends Controller
 {
+
+    
     /**
      * Display a listing of the resource.
      */
@@ -14,7 +35,7 @@ class ClientController extends Controller
     {
         //
     }
-
+    public $path = 'images/clients';
     /**
      * Show the form for creating a new resource.
      */
@@ -61,5 +82,36 @@ class ClientController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function addUser(Client $newUClient)
+    {
+        $newUClient->save();
+        return $newUClient;
+    }
+    public function storeImage( $file,$id)
+    {
+        $imagemodel = Client::find($id);
+  $oldimage=  $imagemodel->image;
+  $oldimagename=basename($oldimage);         
+        $oldimagepath = $this->path . '/' .$oldimagename;  
+        //save photo
+       
+        if ($file!==null) {    
+        //  $filename= rand(10000, 99999).".".$file->getClientOriginalExtension();
+          $filename= rand(10000, 99999).$id.".webp";      
+           $manager = new ImageManager(new Driver());  
+           $image = $manager->read($file);
+          $image= $image->toWebp(75);
+        if (!File::isDirectory(Storage::url('/'. $this->path ))) {
+          Storage::makeDirectory('public/'. $this->path );
+      }
+           $image->save(storage_path('app/public').'/'. $this->path .'/'.$filename);      
+           $url =  url('storage/app/public'.'/'.$this->path .'/'.$filename);       
+                Client::find($id)->update([
+                    "image" =>    $filename
+                ]);            
+                Storage::delete("public/". $this->path.'/'.$oldimagename);           
+            }         
+        return 1; 
     }
 }
