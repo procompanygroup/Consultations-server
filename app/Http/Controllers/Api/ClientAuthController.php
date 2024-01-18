@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\ClientController;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Middleware\Api\AuthenticateClient;
 use JWTAuth;
+use Carbon\Carbon;
 class ClientAuthController extends Controller
 {
     /**
@@ -97,11 +98,14 @@ class ClientAuthController extends Controller
       } else {
 
         $newObj=new Client();
+        $birthdate= Carbon::create($formdata["birthdate"])->format('Y-m-d');
+   
         $newObj->user_name= $formdata["user_name"];
        // $newObj->password= $formdata["password"];
         $newObj->email= $formdata["email"];
         $newObj->mobile= $formdata["mobile"];
         $newObj->nationality= $formdata["nationality"];
+        $newObj->birthdate= $birthdate;
         $newObj->gender= $formdata["gender"];
         $newObj->marital_status= $formdata["marital_status"];
       //  $newObj->image= $formdata["image"];
