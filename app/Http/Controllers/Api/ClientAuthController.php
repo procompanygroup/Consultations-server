@@ -33,49 +33,29 @@ class ClientAuthController extends Controller
      */
     public function login()
     {
-     //   $credentials = request(['username', 'password']);
-      //   return response()->json( $request);
-    /*
-        $request->validate(
-            ['userName'=>'required',
-            'password'=>'required',
-        ]
-        );
-        */
-        $credentials = request(['user_name','password']);
+    
+        $credentials = request(['mobile']);
+        $user= Client::where('mobile',  $credentials)->first();
       //  return response()->json(['form' =>  $credentials]);
-        if (! $token = auth('api_clients')->attempt($credentials)) {
-            return response()->json(['error' => 'UnauthorizedC'], 401);
+        if (  !is_null( $user)) {
+            if(! $token = auth('api_clients')->fromUser($user)){
+                return response()->json(['error' => 'notexist'], 401);
+            }
+           
+        }else{
+            return response()->json(['error' => 'notexist'], 401);
         }
         //Auth::check();
      //  $atype=  Auth::user()->type; 
-     $user=auth('api_clients')->user();
-     auth('api_clients')->login($user);
+   //  $user=auth('api_clients')->user();
+    // auth('api_clients')->login($user);
        return response()->json([
         'token' => $token,
-        'user'=> $user,   
+       // 'user'=> $user,   
     ] );
-        /*
-        $user = User::where('userName',$credentials['userName'])
-        ->where('password',$credentials['password']);
-        */
-      //  $passhash=Hash::make( $request['password']);
-        /*
-     $user = auth('api_clients')->user();
-      // $user = User::find(1);
       
-        return response()->json([
-            'token' => $token,
-            'message'=>"success",
-            'user'=>  $user ,
-             'username'=> $user->userName,
-             
-       
-        ] );
-         */
-     //  return $this->respondTokenwithExpire($token);
-        
     }
+
     public function register(Request $filerequest)
     {
         $clintCont=new clientController();
@@ -96,9 +76,7 @@ class ClientAuthController extends Controller
         //'points_balance',
     ]);
     */
-    if ($filerequest->hasFile('image')) {
-        $file= $filerequest->file('image');
-    }
+   
   //  $file=  $formdata ->file('image');
       $storrequest=new StoreClientRequest();
     //  $storrequest->request()=$formdata ;
@@ -120,7 +98,7 @@ class ClientAuthController extends Controller
 
         $newObj=new Client();
         $newObj->user_name= $formdata["user_name"];
-        $newObj->password= $formdata["password"];
+       // $newObj->password= $formdata["password"];
         $newObj->email= $formdata["email"];
         $newObj->mobile= $formdata["mobile"];
         $newObj->nationality= $formdata["nationality"];
@@ -128,7 +106,11 @@ class ClientAuthController extends Controller
         $newObj->marital_status= $formdata["marital_status"];
       //  $newObj->image= $formdata["image"];
         $newObj= $clintCont->addUser( $newObj);
-        $clintCont->storeImage( $file,$newObj->id);
+        if ($filerequest->hasFile('image')) {
+            $file= $filerequest->file('image');
+            $clintCont->storeImage( $file,$newObj->id);
+        }
+       
        // return response()->json(['formdata' => $formdata ]);
         // return response()->json(['userName' => $formdata["userName"]]);
          return response()->json(['userId' => $newObj->id]);
@@ -184,7 +166,34 @@ class ClientAuthController extends Controller
 
         return response()->json(['message' => 'Successfully logged out']);
     }
+    /*
+ public function login()
+    {
+     //   $credentials = request(['username', 'password']);
+      //   return response()->json( $request);
+  
 
+        $credentials = request(['mobile','password']);
+      //  return response()->json(['form' =>  $credentials]);
+        if (! $token = auth('api_clients')->attempt($credentials)) {
+            return response()->json(['error' => 'UnauthorizedC'], 401);
+        }
+        //Auth::check();
+     //  $atype=  Auth::user()->type; 
+     $user=auth('api_clients')->user();
+     auth('api_clients')->login($user);
+       return response()->json([
+        'token' => $token,
+        'user'=> $user,   
+    ] );
+       
+      //  $passhash=Hash::make( $request['password']);
+     
+     //  return $this->respondTokenwithExpire($token);
+        
+    }
+
+    */
     /**
      * Refresh a token.
      *

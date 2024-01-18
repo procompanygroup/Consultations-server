@@ -25,20 +25,21 @@ class StoreClientRequest extends FormRequest
        $minMobileLength=10;
        $maxMobileLength=15;
        return[
-          
-           'user_name'=>'required|alpha_num:ascii|unique:clients,user_name',    
+              'user_name'=>'required', 
+        //   'user_name'=>'required|alpha_num:ascii|unique:clients,user_name',    
         // 'name'=>'required|alpha_num:ascii|unique:users,name',        
-         'email'=>'required|email|unique:users,email',
+         //'email'=>'required|email|unique:users,email',
+         'email'=>'required',
        //  'first_name'=>'nullable|alpha',    
          //'last_name'=>'nullable|alpha',
-         'password'=>'required',
+       //  'password'=>'required',
        //  'inputPasswordConfirm' => 'same:password',
       //   'address'=>'nullable|between:0,'.$maxlength,
       'gender'=>'required|numeric',
      
          'nationality'=>'required',
        //  'city'=>'required|alpha_num',
-         'mobile'=>'nullable|numeric|unique:clients,mobile|digits_between:'. $minMobileLength.','.$maxMobileLength,          
+         'mobile'=>'nullable|unique:clients,mobile|digits_between:'. $minMobileLength.','.$maxMobileLength,          
       //   'phone'=>'nullable|numeric|digits_between:'. $minMobileLength.','.$maxMobileLength,
         // 'role'=>'required',      
        ];   

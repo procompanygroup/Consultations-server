@@ -39,8 +39,9 @@ Route::get('getloguser', [ClientController::class, 'getloguser']);
 Route::middleware('authClient:api_clients')->group(function () {
     // مسارات المصادقة للـ Client
     Route::prefix('/client')->group(function () {
-        Route::get('/view', [ClientController::class, 'index']);
-        Route::get('/getloguser', [ClientController::class, 'getloguser']);
+        Route::post('/view', [ClientController::class, 'index']);
+        Route::post('/getloguser', [ClientController::class, 'getloguser']);
+        Route::post('/getbymobile', [ClientController::class, 'getbymobile']);
     });
 });
 

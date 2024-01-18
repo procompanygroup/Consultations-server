@@ -59,7 +59,29 @@ class ClientController extends Controller
     {
         //
     }
-
+    public function getbymobile()
+    {
+       
+        
+            $credentials = request(['mobile']);
+            $user= Client::where('mobile',  $credentials)->first();
+            $authuser= auth()->user();
+          //  return response()->json(['form' =>  $credentials]);
+            if (  !is_null( $user)) {
+                if(!  ($user->mobile ==  $authuser->mobile)){
+                    return response()->json(['error' => 'notexist'], 401);
+                }
+               
+            }else{
+                return response()->json(['error' => 'notexist'], 401);
+            }
+         
+           return response()->json([            
+             'user'=> $authuser,   
+        ] );
+          
+        
+    }
     /**
      * Show the form for editing the specified resource.
      */
