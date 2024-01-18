@@ -17,16 +17,16 @@ class Client extends Authenticatable implements JWTSubject
 
     protected $fillable = [
         'user_name',
-       ' password',
+       'password',
         'mobile',
-       ' email',
-       ' nationality',
+       'email',
+       'nationality',
         'birthdate',
         'gender',
-       ' marital_status',
+       'marital_status',
         'image',
-       ' token',
-       ' points_balance',
+       'token',
+       'points_balance',
        'is_active',
     ];
 

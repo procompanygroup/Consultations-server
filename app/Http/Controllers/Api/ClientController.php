@@ -15,6 +15,7 @@ use Illuminate\Support\Carbon;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Facades\Storage;
+
 /*
 use App\Http\Requests\Web\Client\StoreClientRequest;
 use App\Http\Requests\Web\Client\UpdateClientRequest;
@@ -27,7 +28,7 @@ use App\Models\Selectedservice;
 class ClientController extends Controller
 {
 
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -61,26 +62,37 @@ class ClientController extends Controller
     }
     public function getbymobile()
     {
-       
-        
-            $credentials = request(['mobile']);
-            $user= Client::where('mobile',  $credentials)->first();
-            $authuser= auth()->user();
-          //  return response()->json(['form' =>  $credentials]);
-            if (  !is_null( $user)) {
-                if(!  ($user->mobile ==  $authuser->mobile)){
-                    return response()->json(['error' => 'notexist'], 401);
-                }
-               
-            }else{
+
+
+        $credentials = request(['mobile']);
+        $user = Client::where('mobile', $credentials)->select(
+            'id',
+            'user_name',
+            'mobile',
+            'email',
+            'nationality',
+            'birthdate',
+            'gender',
+            'marital_status',
+            'image',
+            'is_active',
+        )->first();
+        $authuser = auth()->user();
+        //  return response()->json(['form' =>  $credentials]);
+        if (!is_null($user)) {
+            if (!($user->mobile == $authuser->mobile)) {
                 return response()->json(['error' => 'notexist'], 401);
             }
-         
-           return response()->json([            
-             'user'=> $authuser,   
-        ] );
-          
-        
+
+        } else {
+            return response()->json(['error' => 'notexist'], 401);
+        }
+
+        return response()->json([
+            'client' => $user,
+        ]);
+
+
     }
     /**
      * Show the form for editing the specified resource.
@@ -110,30 +122,30 @@ class ClientController extends Controller
         $newUClient->save();
         return $newUClient;
     }
-    public function storeImage( $file,$id)
+    public function storeImage($file, $id)
     {
         $imagemodel = Client::find($id);
-  $oldimage=  $imagemodel->image;
-  $oldimagename=basename($oldimage);         
-        $oldimagepath = $this->path . '/' .$oldimagename;  
+        $oldimage = $imagemodel->image;
+        $oldimagename = basename($oldimage);
+        $oldimagepath = $this->path . '/' . $oldimagename;
         //save photo
-       
-        if ($file!==null) {    
-        //  $filename= rand(10000, 99999).".".$file->getClientOriginalExtension();
-          $filename= rand(10000, 99999).$id.".webp";      
-           $manager = new ImageManager(new Driver());  
-           $image = $manager->read($file);
-          $image= $image->toWebp(75);
-        if (!File::isDirectory(Storage::url('/'. $this->path ))) {
-          Storage::makeDirectory('public/'. $this->path );
-      }
-           $image->save(storage_path('app/public').'/'. $this->path .'/'.$filename);      
-           $url =  url('storage/app/public'.'/'.$this->path .'/'.$filename);       
-                Client::find($id)->update([
-                    "image" =>    $filename
-                ]);            
-                Storage::delete("public/". $this->path.'/'.$oldimagename);           
-            }         
-        return 1; 
+
+        if ($file !== null) {
+            //  $filename= rand(10000, 99999).".".$file->getClientOriginalExtension();
+            $filename = rand(10000, 99999) . $id . ".webp";
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($file);
+            $image = $image->toWebp(75);
+            if (!File::isDirectory(Storage::url('/' . $this->path))) {
+                Storage::makeDirectory('public/' . $this->path);
+            }
+            $image->save(storage_path('app/public') . '/' . $this->path . '/' . $filename);
+            $url = url('storage/app/public' . '/' . $this->path . '/' . $filename);
+            Client::find($id)->update([
+                "image" => $filename
+            ]);
+            Storage::delete("public/" . $this->path . '/' . $oldimagename);
+        }
+        return 1;
     }
 }

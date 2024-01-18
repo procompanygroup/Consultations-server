@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('clients', function (Blueprint $table) {
-         
-                $table->boolean('is_active'); 
+            $table->boolean('is_active'); 
+            $table->foreignId('updateuser_id')->nullable();
         });
     }
 
@@ -24,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('clients', function (Blueprint $table) {
             $table->dropColum('is_active');
+            $table->dropColum('updateuser_id');
         });
     }
 };
