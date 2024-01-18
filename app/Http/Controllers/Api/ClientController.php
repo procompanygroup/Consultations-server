@@ -65,6 +65,7 @@ class ClientController extends Controller
 
 
         $credentials = request(['mobile']);
+        $url = url('storage/app/public' . '/' . $this->path  ).'/';
         $user = Client::where('mobile', $credentials)->select(
             'id',
             'user_name',
@@ -73,10 +74,11 @@ class ClientController extends Controller
             'nationality',
             'birthdate',
             'gender',
-            'marital_status',
-            'image',
+            'marital_status',             
             'is_active',
+            DB::raw("CONCAT('$url',image)  AS image")
         )->first();
+
         $authuser = auth()->user();
         //  return response()->json(['form' =>  $credentials]);
         if (!is_null($user)) {
