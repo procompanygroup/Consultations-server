@@ -21,7 +21,7 @@ use App\Http\Controllers\Api\ServiceController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::post('registerexpert', [ExpertAuthController::class, 'register']);
+//Route::post('registerexpert', [ExpertAuthController::class, 'register']);
 Route::post('loginexpert', [ExpertAuthController::class, 'login']);
  
 Route::post('registerclient', [ClientAuthController::class, 'register']);

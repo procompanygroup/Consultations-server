@@ -10,7 +10,7 @@ use App\Models\Expert;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Controllers\ExpertController;
+use App\Http\Controllers\Api\ExpertController;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Middleware\Api\AuthenticateExpert;
 use JWTAuth;
