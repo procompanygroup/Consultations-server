@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ClientAuthController;
 use App\Http\Controllers\Api\ExpertAuthController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\ExpertController;
+use App\Http\Controllers\Api\ServiceController;
  //use App\Http\Middleware\Api\AuthenticateClient;
 
 /*
@@ -42,7 +43,12 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/view', [ClientController::class, 'index']);
         Route::post('/getloguser', [ClientController::class, 'getloguser']);
         Route::post('/getbymobile', [ClientController::class, 'getbymobile']);
+//api/client/service
+        Route::prefix('/service')->group(function () {
+            Route::post('/viewall', [serviceController::class, 'index']);        
+        });
     });
+  
 });
 
 /*

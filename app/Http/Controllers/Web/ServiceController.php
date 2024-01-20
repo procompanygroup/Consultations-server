@@ -34,7 +34,7 @@ Permission
           */
 class ServiceController extends Controller
 {
-    public $path = 'media/services';
+  public $path = 'images/services';
     /**
      * Display a listing of the resource.
      */

@@ -18,6 +18,7 @@ class Service extends Model
         'createuser_id',
         'updateuser_id',
         'is_active',
+        'icon',
              
     ];
 
