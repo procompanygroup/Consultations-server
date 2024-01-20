@@ -32,6 +32,7 @@ class Expert extends Authenticatable implements JWTSubject
         'created_at',
         'updated_at',
         'token',
+        'answer_speed',
         
     ];
 
