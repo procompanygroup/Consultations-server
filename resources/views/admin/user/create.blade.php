@@ -32,19 +32,19 @@
 							<div class="card-body pt-0">
 								<form class="form-horizontal" >
 									<div class="form-group">
-										<input type="text" class="form-control" id="inputName" placeholder="f_name">
+										<input type="text" class="form-control" id="inputName" placeholder="First Name" name="f_name">
 									</div>
                                     <div class="form-group">
-										<input type="text" class="form-control" id="inputName" placeholder="l_name">
+										<input type="text" class="form-control" id="inputName" placeholder="Last Name" name="l_name">
 									</div>
 									<div class="form-group">
-										<input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+										<input type="email" class="form-control" id="inputEmail3" placeholder="Email" name="email">
 									</div>
                                     <div class="form-group">
-										<input type="text" class="form-control" id="inputName" placeholder="username">
+										<input type="text" class="form-control" id="inputName" placeholder="Username" name="username">
 									</div>
 									<div class="form-group">
-										<input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+										<input type="password" class="form-control" id="inputPassword3" placeholder="Password" name="password">
 									</div>
                                     <div class="mb-4">
                                         <select name="somename" class="form-control SlectBox" onclick="console.log($(this).val())" onchange="console.log('change is firing')">
@@ -54,6 +54,22 @@
                                             <option value="supervisor">مشرف</option>
                                         </select>
                                     </div>
+                                    <div class="form-group">
+										<input type="text" class="form-control" id="inputName" placeholder="Mobile" name="mobile">
+									</div>
+                                    <div class="form-group justify-content-end">
+										<div class="checkbox">
+											<div class="custom-checkbox custom-control">
+												<input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-2" name="is_active">
+												<label for="checkbox-2" class="custom-control-label mt-1">تفعيل</label>
+											</div>
+										</div>
+									</div>
+                                    <div class="form-group mb-4 justify-content-end">
+										<div class="custom-file">
+											<input class="custom-file-input" id="customFile" type="file"> <label class="custom-file-label" for="customFile">Choose file</label>
+										</div>
+									</div>
 									<div class="form-group mb-0 mt-3 justify-content-end">
 										<div>
 											<button type="submit" class="btn btn-primary">حفظ</button>
