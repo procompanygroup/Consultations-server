@@ -11,13 +11,18 @@ use Illuminate\Support\Facades\DB;
 //use Image;
 
 use File;
-use Illuminate\Http\RedirectResponse;
+//use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Web\User\StoreUserRequest;
 use App\Http\Requests\Web\User\UpdateUserRequest;
+use Illuminate\Support\Carbon;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
+  public $path = 'images/users';
     /**
      * Display a listing of the resource.
      */
@@ -65,18 +70,21 @@ class UserController extends Controller
                      ->withInput();
 
      }else{
-             $user = new User;
-             $user->name = $formdata['user_name'];
+             $newObj = new User;
+             $newObj->name = $formdata['user_name'];
             //  $user->first_name = $formdata['first_name'];
             //  $user->last_name = $formdata['last_name'];
-             $user->email = $formdata['email'];
-             $user->password =bcrypt($formdata['password']);
-             $user->mobile = $formdata['mobile'];
-             $user->role = $formdata['role'];
-             $user->createuser_id= Auth::user()->id;
-             $user->updateuser_id= Auth::user()->id;
-             $user->save();
-
+             $newObj->email = $formdata['email'];
+             $newObj->password =bcrypt($formdata['password']);
+             $newObj->mobile = $formdata['mobile'];
+             $newObj->role = $formdata['role'];
+             $newObj->createuser_id= Auth::user()->id;
+             $newObj->updateuser_id= Auth::user()->id;
+             $newObj->save();
+             if ($request->hasFile('image')) {
+              $file= $request->file('image');
+              $this->storeImage( $file,$newObj->id);
+          }
               return redirect()->back()->with('success_message','user has been Added!');
          }
     }
@@ -171,5 +179,31 @@ class UserController extends Controller
         }
          return redirect()->route('admin.user.show');
 
+    }
+    public function storeImage($file, $id)
+    {
+        $imagemodel = User::find($id);
+        $oldimage = $imagemodel->image;
+        $oldimagename = basename($oldimage);
+        $oldimagepath = $this->path . '/' . $oldimagename;
+        //save photo
+
+        if ($file !== null) {
+            //  $filename= rand(10000, 99999).".".$file->getClientOriginalExtension();
+            $filename = rand(10000, 99999) . $id . ".webp";
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($file);
+            $image = $image->toWebp(75);
+            if (!File::isDirectory(Storage::url('/' . $this->path))) {
+                Storage::makeDirectory('public/' . $this->path);
+            }
+            $image->save(storage_path('app/public') . '/' . $this->path . '/' . $filename);
+         //   $url = url('storage/app/public' . '/' . $this->path . '/' . $filename);
+            User::find($id)->update([
+                "image" => $filename
+            ]);
+            Storage::delete("public/" . $this->path . '/' . $oldimagename);
+        }
+        return 1;
     }
 }
