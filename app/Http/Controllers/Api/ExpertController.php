@@ -6,8 +6,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Expert;
 use Illuminate\Support\Facades\DB;
+
+use File;
+use Illuminate\Support\Facades\Validator;
+
+use Illuminate\Support\Carbon;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Facades\Hash;
 class ExpertController extends Controller
 {
+    
+    public $path = 'images/experts';
     /**
      * Display a listing of the resource.
      */
@@ -17,6 +27,58 @@ class ExpertController extends Controller
         // return view('admin.user.showusers',['users' => $users]); 
         return response()->json($users);
     }
+    public function getexpert()
+    {
+      //  $credentials = request(['user_name','password']);
+        $url = url('storage/app/public' . '/' . $this->path  ).'/';
+        $pass=request(['password']);
+        $passval=$pass['password'];
+     $passhash=bcrypt($passval);
+       // $passhash=Hash::make( $passval);
+      // Hash::check('plain-text-password', $hashedPassword)
+        $user = Expert::where('user_name',request(['user_name']))->
+   //where('password',  $passhash)->
+        select(
+            'id',
+            'user_name',
+            'password',
+            'mobile',
+            'email',
+            'nationality',
+            'birthdate',
+            'gender',
+            'marital_status',             
+            'is_active',
+            'points_balance',
+            'cash_balance',
+            'cash_balance_todate',
+            'rates',
+            'record',
+            'desc',
+            'call_cost',
+            'answer_speed',
+            DB::raw("(CASE 
+            WHEN image = '' THEN ''                     
+            ELSE CONCAT('$url',image)
+            END) AS image")
+        )->first();
+
+        $authuser = auth()->user();
+        //  return response()->json(['form' =>  $credentials]);
+        if (!is_null($user)) {
+            if (!(($user->user_name == $authuser->user_name)&& (Hash::check( $passval, $user->password))) ){
+                return response()->json(['error' => 'notexist'], 401);
+            }
+
+        } else {
+            return response()->json(['error' => 'notexist'], 401);
+        }
+ 
+        return response()->json([
+          'expert' => $user
+          
+        ]);
+        }
     public function addUser(Expert $newExpert)
     {
         $newExpert->save();

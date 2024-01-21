@@ -46,7 +46,7 @@ class ExpertAuthController extends Controller
         $credentials = request(['user_name', 'password']);
 
         if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'UnauthorizedE'], 401);
+            return response()->json(['error' => 'notexist'], 401);
         }
         /*
         $user = User::where('userName',$credentials['userName'])
@@ -73,7 +73,7 @@ class ExpertAuthController extends Controller
        // Auth::login($user);
         return response()->json([
             'token' => $token,
-            'message'=>"success",
+           // 'message'=>"success",
           //  'user'=> $user,
          //   'type'=>  $type,
              
