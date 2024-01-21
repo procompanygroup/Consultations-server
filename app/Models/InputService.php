@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class InputService extends Model
 {
     use HasFactory;
+    protected $table = 'inputs_services';
     protected $fillable = [
         'service_id',
         'input_id',

@@ -36,6 +36,7 @@ class User extends Authenticatable
 'mobile',
 'createuser_id',
 'updateuser_id',
+'image',
     ];
 
     /**

@@ -43,7 +43,8 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/getbymobile', [ClientController::class, 'getbymobile']);
 //api/client/service
         Route::prefix('/service')->group(function () {
-            Route::post('/viewall', [serviceController::class, 'index']);        
+            Route::post('/viewall', [serviceController::class, 'index']); 
+            Route::post('/getinputform', [serviceController::class, 'getinputserviceform']);            
         });
     });
   
