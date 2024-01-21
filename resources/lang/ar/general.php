@@ -24,7 +24,13 @@ return [
     'show'=> 'عرض',
     'edit'=> 'تعديل',
     'delete'=> 'حذف',
+    'experts'=> 'الخبراء',
+    'services'=> 'الخدمات',
+    'clients'=> 'العملاء',
+    'points'=> 'النقاط',
+    'accounts'=> 'المعاملات المالية',
+    'notifications'=> 'التنبيهات'
 ];
 /*
-  {{ __('general.welcome_name',['Name'=>'احمد']) }} 
+  {{ __('general.welcome_name',['Name'=>'احمد']) }}
 */

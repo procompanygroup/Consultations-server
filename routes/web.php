@@ -16,7 +16,7 @@ use App\Http\Controllers\Web\UserController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
- 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -24,26 +24,30 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
- 
+
 */
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin');
     Route::middleware('role.admin:admin') ->group(function () {
 
-        Route::prefix('/user')->group(function () {
-            Route::get('', [UserController::class, 'index'])->name('admin.user.show');
-            Route::get('/add', [UserController::class, 'create']);
-            Route::post('/store', [UserController::class, 'store']);
-            Route::get('/edit/{id}', [UserController::class, 'edit']);
-            Route::post('/update/{id}', [UserController::class, 'update']);
-            Route::get('/delete/{id}', [UserController::class, 'destroy']);
-        });
-        
+        // Route::prefix('user')->group(function () {
+        //     Route::get('', [UserController::class, 'index'])->name('admin.user.show');
+        //     Route::get('/add', [UserController::class, 'create']);
+        //     Route::post('/store', [UserController::class, 'store']);
+        //     Route::get('/edit/{id}', [UserController::class, 'edit']);
+        //     Route::post('/update/{id}', [UserController::class, 'update']);
+        //     Route::get('/delete/{id}', [UserController::class, 'destroy']);
+        // });
+
+        Route::resource('user', UserController::class);
+
+
+
             });
 
     Route::middleware('role.admin:admin-super')->group(function () {
-          
+
          // expert
     Route::prefix('/expert')->group(function () {
        Route::get('', [ExpertController::class, 'index'])->name('admin.expert.show');
@@ -57,11 +61,11 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     });
     /*
     Route::middleware('role.admin:super')->group(function () {
-          
+
         // expert
    Route::prefix('/expert')->group(function () {
        Route::get('', [ExpertController::class, 'index'])->name('admin.expert.show');
-   
+
    });
 
    });

@@ -13,32 +13,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto">Tables</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ Data Tables</span>
-						</div>
-					</div>
-					<div class="d-flex my-xl-auto right-content">
-						<div class="pr-1 mb-3 mb-xl-0">
-							<button type="button" class="btn btn-info btn-icon ml-2"><i class="mdi mdi-filter-variant"></i></button>
-						</div>
-						<div class="pr-1 mb-3 mb-xl-0">
-							<button type="button" class="btn btn-danger btn-icon ml-2"><i class="mdi mdi-star"></i></button>
-						</div>
-						<div class="pr-1 mb-3 mb-xl-0">
-							<button type="button" class="btn btn-warning  btn-icon ml-2"><i class="mdi mdi-refresh"></i></button>
-						</div>
-						<div class="mb-3 mb-xl-0">
-							<div class="btn-group dropdown">
-								<button type="button" class="btn btn-primary">14 Aug 2019</button>
-								<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" id="dropdownMenuDate" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<span class="sr-only">Toggle Dropdown</span>
-								</button>
-								<div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuDate" data-x-placement="bottom-end">
-									<a class="dropdown-item" href="#">2015</a>
-									<a class="dropdown-item" href="#">2016</a>
-									<a class="dropdown-item" href="#">2017</a>
-									<a class="dropdown-item" href="#">2018</a>
-								</div>
-							</div>
+							<h4 class="content-title mb-0 my-auto">{{ __('general.supervisors') }}</h4>
 						</div>
 					</div>
 				</div>
@@ -47,38 +22,37 @@
 @section('content')
 				<!-- row opened -->
 				<div class="row row-sm">
-				
-					
+
+
 					<!--div-->
 					<div class="col-xl-12">
 						<div class="card mg-b-20">
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
-									<h4 class="card-title mg-b-0">Bordered Table</h4>
-									<i class="mdi mdi-dots-horizontal text-gray"></i>
+									<h4 class="card-title mg-b-0">إدارة حسابات المستخدمين</h4>
+									<button type="submit" class="btn btn-primary btn-small">إنشاء مستخدم جديد</button>
 								</div>
-								<p class="tx-12 tx-gray-500 mb-2">Example of Valex Bordered Table.. <a href="">Learn more</a></p>
 							</div>
 							<div class="card-body">
 								<div class="table-responsive">
 									<table id="example" class="table text-md-nowrap">
 										<thead>
 											<tr>
-											 
+
 												<th class="border-bottom-0">User name</th>
 												<th class="border-bottom-0">Email</th>
 												<th class="border-bottom-0">Role</th>
-										 
+
 											</tr>
 										</thead>
 										<tbody>
 											@foreach ($users as $user)
 											<tr>
-											 
+
 												<td>{{ $user->user_name }}</td>
 												<td>{{ $user->email }}</td>
 												<td>{{ $user->role }}</td>
-										 
+
 											</tr>
 											@endforeach
 									</tbody>
@@ -89,7 +63,7 @@
 					</div>
 					<!--/div-->
 
-					 
+
 				</div>
 				<!-- /row -->
 			</div>
