@@ -18,6 +18,7 @@ class ExpertController extends Controller
 {
     
     public $path = 'images/experts';
+    public $recordpath = 'images/experts/records';
     /**
      * Display a listing of the resource.
      */
@@ -85,6 +86,7 @@ class ExpertController extends Controller
            $data = request(['id']);
            $id=$data ['id'];
             $url = url('storage/app/public' . '/' . $this->path  ).'/';
+            $recurl = url('storage/app/public' . '/' . $this->recordpath  ).'/';
           //  $pass=request(['password']);
          //   $passval=$pass['password'];
         // $passhash=bcrypt($passval);
@@ -117,7 +119,11 @@ class ExpertController extends Controller
                 'cash_balance',
                 'cash_balance_todate',
                 'rates',
-                'record',
+                 
+                DB::raw("(CASE 
+                WHEN record = '' THEN ''                     
+                ELSE CONCAT('$recurl',record)
+                END) AS record"),
                 'desc',
                 'call_cost',
                 'answer_speed',
