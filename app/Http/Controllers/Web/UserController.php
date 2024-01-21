@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
- 
+
 use Illuminate\Routing\Router;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -23,12 +23,12 @@ class UserController extends Controller
      */
     public function index()
     {
-  
+
 
     $users = DB::table('users')->get();
-      return view('admin.user.show',['users' => $users]); 
+      return view('admin.user.show',['users' => $users]);
     //return response()->json($users);
-   
+
     }
 
     /**
@@ -36,8 +36,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.user.add' ); 
-        
+        return view('admin.user.create' );
+
     }
 /*
     public function check()
@@ -53,32 +53,32 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $formdata=$request->all();  
+        $formdata=$request->all();
         $validator = Validator::make($formdata,
         $request->rules(),
         $request->messages()
      );
-     
+
      if ($validator->fails()) {
-     
+
                      return  redirect()->back()->withErrors($validator)
                      ->withInput();
-                    
+
      }else{
              $user = new User;
              $user->name = $formdata['user_name'];
             //  $user->first_name = $formdata['first_name'];
             //  $user->last_name = $formdata['last_name'];
              $user->email = $formdata['email'];
-             $user->password =bcrypt($formdata['password']);          
-             $user->mobile = $formdata['mobile'];      
-             $user->role = $formdata['role'];            
+             $user->password =bcrypt($formdata['password']);
+             $user->mobile = $formdata['mobile'];
+             $user->role = $formdata['role'];
              $user->createuser_id= Auth::user()->id;
              $user->updateuser_id= Auth::user()->id;
              $user->save();
-            
+
               return redirect()->back()->with('success_message','user has been Added!');
-         } 
+         }
     }
 
     /**
@@ -97,7 +97,7 @@ class UserController extends Controller
         $user= DB::table('users')->find($id);
 
         //
- return view('admin.user.edit',['user' => $user]); 
+ return view('admin.user.edit',['user' => $user]);
     }
 
     /**
@@ -107,7 +107,7 @@ class UserController extends Controller
     {
         $formdata=$request->all();
         //validate
-        
+
         $validator = Validator::make($formdata,
         $request->rules(),
         $request->messages()
@@ -120,7 +120,7 @@ class UserController extends Controller
                      */
                      return  redirect()->back()->withErrors($validator)
                      ->withInput();
-                    
+
      }else{
 
         /*
@@ -128,24 +128,24 @@ class UserController extends Controller
             //  $user->first_name = $formdata['first_name'];
             //  $user->last_name = $formdata['last_name'];
              $user->email = $formdata['email'];
-             $user->password =bcrypt($formdata['password']);          
-             $user->mobile = $formdata['mobile'];      
-             $user->role = $formdata['role'];            
+             $user->password =bcrypt($formdata['password']);
+             $user->mobile = $formdata['mobile'];
+             $user->role = $formdata['role'];
              $user->createuser_id= Auth::user()->id;
              $user->updateuser_id= Auth::user()->id;
         */
-            
- 
+
+
       User::find($id)->update([
-'user_name'=>$formdata['user_name'], 
+'user_name'=>$formdata['user_name'],
 'email' => $formdata['email'],
-'password' => bcrypt($formdata['password']), 
-'mobile' => $formdata['mobile'], 
+'password' => bcrypt($formdata['password']),
+'mobile' => $formdata['mobile'],
 'role' => $formdata['role'],
 'updateuser_id'=> Auth::user()->id,
- 
+
 ]);
-     
+
       return redirect()->back()->with('success_message','user has been Updated!');
     }
     }
@@ -165,11 +165,11 @@ class UserController extends Controller
         ]);
       //delete user
         $user= User::find($id);
-              
+
         if (!($user === null)) {
       User::find($id)->delete();
         }
          return redirect()->route('admin.user.show');
-     
+
     }
 }

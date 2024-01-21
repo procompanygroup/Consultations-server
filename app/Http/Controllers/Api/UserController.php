@@ -23,7 +23,7 @@ class UserController extends Controller
     //
 
     $users = DB::table('users')->get();
-    // return view('admin.user.showusers',['users' => $users]); 
+    // return view('admin.user.showusers',['users' => $users]);
     return response()->json($users);
   }
   public function getLoginUser()
@@ -48,7 +48,7 @@ class UserController extends Controller
   public function create()
   {
     //
-    // return view('admin.user.adduser'); 
+    // return view('admin.user.adduser');
     return view('admin.user.adduser');
   }
 
@@ -98,7 +98,7 @@ if(is_null($userdb)){
       $user->phone = $formdata['phone'];
       $user->role = $formdata['role'];
       $user->status = 0;
-      // $user->image ="image.jpg";   
+      // $user->image ="image.jpg";
       $user->save();
       //save image
       if ($request->hasFile('image')) {
@@ -127,7 +127,7 @@ if(is_null($userdb)){
     } catch (\Exception  $e) {
          //laravel error
         return $e->getMessage();
-        
+
      // return 'error';
     }
 
