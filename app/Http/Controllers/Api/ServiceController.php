@@ -85,7 +85,10 @@ $q->select('id','input_id','service_id');
         'tooltipe',
         'icon',
         'ispersonal');
-            }  
+            }  ,
+            'inputservices.input.inputvalues'=>function($q){
+                $q->select('id', 'value','input_id');
+                    }  
 ]
 );
 
