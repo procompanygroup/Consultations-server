@@ -8,12 +8,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ExpertService extends Model
 {
     use HasFactory;
+    protected $table = 'experts_services';
     protected $fillable = [
         
         
         'service_id',
         'expert_id',
-
+        'points',
+        'expert_cost',
+        'cost_type',
+        'expert_cost_value',
+        
 
     ];
     public function expert(): BelongsTo

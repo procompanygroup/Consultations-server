@@ -46,6 +46,10 @@ Route::middleware('authClient:api_clients')->group(function () {
             Route::post('/viewall', [serviceController::class, 'index']); 
             Route::post('/getinputform', [serviceController::class, 'getinputserviceform']);            
         });
+        Route::prefix('/expert')->group(function () {
+            Route::post('/getexpertsbyserviceid', [ExpertController::class, 'getexpertsbyserviceid']); 
+               
+        });
     });
   
 });

@@ -67,60 +67,52 @@ DB::raw("(CASE
         $service = Service::find($data['id'])->with('inputservices.input')
         ->first();
          */
-       /*
-        select('services.id',
-       'services.name',
-       'services.inputs_services.id',
-       'services.inputs_services.input_id',
-       'services.inputs_services.inputs.id',
-       'services.inputs_services.inputs.name',
-       'services.inputs_services.inputs.type',      
-       ) 
-        */
-        /*
-        $service = Service::find($data['id'])->load(
-            ['inputservices'=>[
-                'input'=>function($q){
-$q->select('id','name');
-                }     
-            ]
-        
-        ]);
-        */
-       /*
-        $service=   Service::find($data['id'])->with(['inputservices' => function ($query) {
-                $query->select('id','input_id')->get();
-            }])->first();
-*/
-/*
+      
+$service = Service::find($data['id'])->select('id',
+'name',
+'desc',
 DB::raw("(CASE 
-            WHEN services.image = ''THEN ''   
-            WHEN services.image IS NULL THEN ''              
-            ELSE CONCAT('$url',image)
-            END) AS image")
-*/
-/*
-$service = Service::find($data['id'])->with(
+WHEN services.image = '' THEN ''                     
+ELSE CONCAT('$url',image)
+END) AS image"),
+'icon')->first()->load(
     ['inputservices'=>function($q){
-$q->select('id','input_id')->get();
+$q->select('id','input_id','service_id');
         }    ,
         'inputservices.input'=>function($q){
-        $q->select('id','name')->get();
+        $q->select('id','name',
+        'type',
+        'tooltipe',
+        'icon',
+        'ispersonal');
             }  
 ]
-)->first();
-*/
-$service = Service::with([
-    'inputservices' => function ($query1) {
-        $query1->select('input_id');
-        $query1->with([            
-            'input' => function ($query) {
-                $query;
-            },
-        ]);
-    },
-])->find($data['id']);
-      
+);
+
+  /*
+   $service = Service::find($data['id'])->select('id',
+   'name',
+   'desc',
+   DB::raw("(CASE 
+   WHEN services.image = '' THEN ''                     
+   ELSE CONCAT('$url',image)
+   END) AS image"),
+   'icon')->first()->load(
+       ['inputservices'=>
+          function($q){
+            $q->with([            
+                'input' => function ($query) {
+                    $query->select('id','name',
+                    'type',
+                    'tooltipe',
+                    'icon',
+                    'ispersonal');
+                },
+            ]);
+$q->select( 'id','input_id','service_id');
+           }  
+   ]);
+   */
 return response()->json([
             'service' =>  $service,
         ]);
