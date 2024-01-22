@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('services', function (Blueprint $table) {
-            $table->boolean('is_active')->nullable()->default(1);
+        Schema::table('users', function (Blueprint $table) {
+            $table->text('image')->nullable();
         });
     }
 
     /**
-     * Reverse the migrations.add_points_to_experts_services_table
+     * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('services', function (Blueprint $table) {
-            $table->dropColum('is_active');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColum('image');
         });
     }
 };

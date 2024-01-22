@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 20, 2024 at 04:31 PM
+-- Generation Time: Jan 21, 2024 at 10:56 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.2.0
 
@@ -110,17 +110,20 @@ CREATE TABLE IF NOT EXISTS `experts` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL,
+  `answer_speed` decimal(8,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `experts_user_name_unique` (`user_name`),
   UNIQUE KEY `experts_mobile_unique` (`mobile`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `experts`
 --
 
-INSERT INTO `experts` (`id`, `user_name`, `mobile`, `email`, `nationality`, `birthdate`, `gender`, `marital_status`, `image`, `points_balance`, `cash_balance`, `cash_balance_todate`, `rates`, `record`, `desc`, `call_cost`, `token`, `password`, `created_at`, `updated_at`, `is_active`) VALUES
-(1, 'expert1', '096959459459', 'expert@gmail.com', 'Syrian', '2000-01-01 17:59:22', NULL, 'm', NULL, 0, '0.00', '0.00', '0.00', NULL, NULL, 0, NULL, '', NULL, NULL, 1);
+INSERT INTO `experts` (`id`, `user_name`, `mobile`, `email`, `nationality`, `birthdate`, `gender`, `marital_status`, `image`, `points_balance`, `cash_balance`, `cash_balance_todate`, `rates`, `record`, `desc`, `call_cost`, `token`, `password`, `created_at`, `updated_at`, `is_active`, `answer_speed`) VALUES
+(1, 'expert1', '096959459459', 'expert@gmail.com', 'Syrian', '2000-01-01 17:59:22', NULL, 'm', NULL, 0, '0.00', '0.00', '0.00', NULL, NULL, 0, NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, NULL, 1, NULL),
+(2, 'expert2', '096959459451', 'expert2012@gmail.com', 'Syrian', '2000-01-01 17:59:22', NULL, 'm', NULL, 0, '0.00', '0.00', '0.00', NULL, NULL, 0, NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, NULL, 1, NULL),
+(3, 'expert3', '096959459441', 'expert2011@gmail.com', 'Syrian', '2000-01-01 17:59:22', NULL, 'm', NULL, 0, '0.00', '0.00', '0.00', NULL, NULL, 0, NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -151,8 +154,20 @@ CREATE TABLE IF NOT EXISTS `experts_services` (
   `service_id` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `points` int DEFAULT '0',
+  `expert_cost` decimal(8,2) DEFAULT '0.00',
+  `cost_type` int DEFAULT '0',
+  `expert_cost_value` decimal(8,2) DEFAULT '0.00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `experts_services`
+--
+
+INSERT INTO `experts_services` (`id`, `expert_id`, `service_id`, `created_at`, `updated_at`, `points`, `expert_cost`, `cost_type`, `expert_cost_value`) VALUES
+(1, 1, 1, NULL, NULL, 0, '0.00', 0, '0.00'),
+(2, 2, 1, NULL, NULL, 0, '0.00', 0, '0.00');
 
 -- --------------------------------------------------------
 
@@ -190,7 +205,22 @@ CREATE TABLE IF NOT EXISTS `inputs` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `inputs`
+--
+
+INSERT INTO `inputs` (`id`, `name`, `type`, `tooltipe`, `icon`, `ispersonal`, `created_at`, `updated_at`) VALUES
+(1, 'user_name', 'text', 'الاسم', NULL, 1, NULL, NULL),
+(2, 'mobile', 'text', 'الموبيل', NULL, 1, NULL, NULL),
+(3, 'nationality', 'text', 'الجنسية', NULL, 1, NULL, NULL),
+(4, 'birthdate', 'date', 'تاريخ الميلاد', NULL, 1, NULL, NULL),
+(5, 'gender', 'text', 'الجنس', NULL, 1, NULL, NULL),
+(6, 'marital_status', 'text', 'الحالة الاجتماعية', NULL, 1, NULL, NULL),
+(7, 'الوضع الدراسي', 'list', 'الوضع الدراسي', NULL, 0, NULL, NULL),
+(8, 'العمل الحالي', 'text', 'العمل الحالي', NULL, 0, NULL, NULL),
+(9, 'هل يوجد مرض مزمن', 'bool', 'هل يوجد مرض مزمن', NULL, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -206,7 +236,18 @@ CREATE TABLE IF NOT EXISTS `inputs_services` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `inputs_services`
+--
+
+INSERT INTO `inputs_services` (`id`, `service_id`, `input_id`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, NULL, NULL),
+(2, 1, 4, NULL, NULL),
+(3, 1, 5, NULL, NULL),
+(4, 1, 7, NULL, NULL),
+(5, 1, 9, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -222,7 +263,18 @@ CREATE TABLE IF NOT EXISTS `inputvalues` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `inputvalues`
+--
+
+INSERT INTO `inputvalues` (`id`, `value`, `input_id`, `created_at`, `updated_at`) VALUES
+(1, 'اعدادي', 7, NULL, NULL),
+(2, 'ثانوي', 7, NULL, NULL),
+(3, 'معهد', 7, NULL, NULL),
+(4, 'اجازة جامعية', 7, NULL, NULL),
+(5, 'دراسات عليا', 7, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -236,7 +288,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -276,7 +328,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (31, '2024_01_18_201734_add_is_active_to_clients_table', 6),
 (32, '2024_01_18_203735_add_is_active_to_clients_table', 7),
 (33, '2024_01_20_143356_add_icon_to_services_table', 8),
-(34, '2024_01_20_152656_add_is_active_to_services_table', 9);
+(34, '2024_01_20_152656_add_is_active_to_services_table', 9),
+(35, '2024_01_20_165855_add_answer_speed_to_experts_table', 10),
+(36, '2024_01_21_122146_add_image_to_users_table', 11),
+(37, '2024_01_21_222132_add_points_to_experts_services_table', 12),
+(38, '2024_01_21_223010_change_points_in_experts_services_table', 13),
+(39, '2024_01_21_225228_change_cost_type_in_experts_services_table', 14);
 
 -- --------------------------------------------------------
 
@@ -501,6 +558,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `image` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -509,9 +567,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `first_name`, `last_name`, `user_name`, `role`, `token`, `createuser_id`, `updateuser_id`, `mobile`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'ahmad', 'najyms@gmail.com', NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, NULL, NULL, 'admin', NULL, NULL, NULL, NULL, NULL, '2024-01-11 12:47:38', '2024-01-11 12:47:38'),
-(2, 'super1', 'super@gmail.com', NULL, '$2y$12$Bhtt5mZSK0f6kkE3qc54m.C0p1YwjfNH/eBE93BV25mp1s0Om1SJG', NULL, NULL, NULL, 'super', NULL, NULL, NULL, NULL, NULL, '2024-01-11 12:48:33', '2024-01-11 12:48:33');
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `first_name`, `last_name`, `user_name`, `role`, `token`, `createuser_id`, `updateuser_id`, `mobile`, `remember_token`, `created_at`, `updated_at`, `image`) VALUES
+(1, 'ahmad', 'najyms@gmail.com', NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, NULL, NULL, 'admin', NULL, NULL, NULL, NULL, NULL, '2024-01-11 12:47:38', '2024-01-11 12:47:38', NULL),
+(2, 'super1', 'super@gmail.com', NULL, '$2y$12$Bhtt5mZSK0f6kkE3qc54m.C0p1YwjfNH/eBE93BV25mp1s0Om1SJG', NULL, NULL, NULL, 'super', NULL, NULL, NULL, NULL, NULL, '2024-01-11 12:48:33', '2024-01-11 12:48:33', NULL);
 
 -- --------------------------------------------------------
 

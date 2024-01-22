@@ -34,7 +34,7 @@ class ClientAuthController extends Controller
      */
     public function login()
     {
-    
+  
         $credentials = request(['mobile']);
         $user= Client::where('mobile',  $credentials)->first();
       //  return response()->json(['form' =>  $credentials]);

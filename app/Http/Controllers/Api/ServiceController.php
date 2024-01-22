@@ -59,6 +59,68 @@ DB::raw("(CASE
         ]);
         //return response()->json($users);
     }
+    public function getinputserviceform()
+    {
+        $data = request(['id']);
+        $url = url('storage/app/public' . '/' . $this->path) . '/';
+         /*
+        $service = Service::find($data['id'])->with('inputservices.input')
+        ->first();
+         */
+      
+$service = Service::find($data['id'])->select('id',
+'name',
+'desc',
+DB::raw("(CASE 
+WHEN services.image = '' THEN ''                     
+ELSE CONCAT('$url',image)
+END) AS image"),
+'icon')->first()->load(
+    ['inputservices'=>function($q){
+$q->select('id','input_id','service_id');
+        }    ,
+        'inputservices.input'=>function($q){
+        $q->select('id','name',
+        'type',
+        'tooltipe',
+        'icon',
+        'ispersonal');
+            }  ,
+            'inputservices.input.inputvalues'=>function($q){
+                $q->select('id', 'value','input_id');
+                    }  
+]
+);
+
+  /*
+   $service = Service::find($data['id'])->select('id',
+   'name',
+   'desc',
+   DB::raw("(CASE 
+   WHEN services.image = '' THEN ''                     
+   ELSE CONCAT('$url',image)
+   END) AS image"),
+   'icon')->first()->load(
+       ['inputservices'=>
+          function($q){
+            $q->with([            
+                'input' => function ($query) {
+                    $query->select('id','name',
+                    'type',
+                    'tooltipe',
+                    'icon',
+                    'ispersonal');
+                },
+            ]);
+$q->select( 'id','input_id','service_id');
+           }  
+   ]);
+   */
+return response()->json([
+            'service' =>  $service,
+        ]);
+        //return response()->json($users);
+    }
 
     /**
      * Show the form for creating a new resource.
