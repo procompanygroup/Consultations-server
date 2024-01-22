@@ -49,15 +49,15 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::middleware('role.admin:admin-super')->group(function () {
 
          // expert
-    Route::prefix('/expert')->group(function () {
-       Route::get('', [ExpertController::class, 'index'])->name('admin.expert.show');
-        Route::get('/add', [ExpertController::class, 'create']);
-        Route::post('/store', [ExpertController::class, 'store']);
-        Route::get('/edit/{id}', [ExpertController::class, 'edit']);
-        Route::post('/update/{id}', [ExpertController::class, 'update']);
-        Route::get('/delete/{id}', [ExpertController::class, 'destroy']);
-    });
-
+        // Route::prefix('/expert')->group(function () {
+        // Route::get('', [ExpertController::class, 'index'])->name('admin.expert.show');
+        //     Route::get('/add', [ExpertController::class, 'create']);
+        //     Route::post('/store', [ExpertController::class, 'store']);
+        //     Route::get('/edit/{id}', [ExpertController::class, 'edit']);
+        //     Route::post('/update/{id}', [ExpertController::class, 'update']);
+        //     Route::get('/delete/{id}', [ExpertController::class, 'destroy']);
+        // });
+        Route::resource('expert', ExpertController::class);
     });
     /*
     Route::middleware('role.admin:super')->group(function () {

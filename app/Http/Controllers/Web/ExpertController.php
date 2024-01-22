@@ -35,13 +35,13 @@ class ExpertController extends Controller
     //return response()->json($users);
 
   }
-  
+
   /**
    * Show the form for creating a new resource.
    */
   public function create()
   {
-    return view('admin.expert.add');
+    return view('admin.expert.create');
   }
 
   /**
@@ -62,7 +62,7 @@ class ExpertController extends Controller
         ->withInput();
 
     } else {
-     
+
       $newObj = new Expert;
 
 $newObj->user_name = $formdata['user_name'];
@@ -135,7 +135,7 @@ $newObj->call_cost = $formdata['call_cost'];
     //
   }
 
-  /** 
+  /**
    * Show the form for editing the specified resource.
    */
   public function edit(string $id)
@@ -152,7 +152,7 @@ $newObj->call_cost = $formdata['call_cost'];
   public function update(UpdateExpertRequest $request, $id)
   {
     $formdata = $request->all();
-    //validate      
+    //validate
     $validator = Validator::make(
       $formdata,
       $request->rules(),
@@ -188,7 +188,7 @@ $newObj->call_cost = $formdata['call_cost'];
         'desc' => $formdata['desc'],
         'call_cost' => $formdata['call_cost'],
      //   'token' => $formdata['token'],
-        
+
       ]);
       //save image
 
@@ -250,7 +250,7 @@ $newObj->call_cost = $formdata['call_cost'];
           "is_active" => 0
         ]);
       } else {
-      
+
  //delete image
  if (!empty($object->image)) {
   $imgpath = $this->path . '/' . $object->image;
