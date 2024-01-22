@@ -16,7 +16,7 @@ class StoreUserRequest extends FormRequest
 protected   $minpass=4;
 protected   $maxpass=16;
 protected  $minMobileLength=10;
-protected $maxMobileLength=15;
+protected $maxMobileLength=10;
 protected $maxlength=500;
     public function rules(): array
     {
@@ -46,27 +46,28 @@ public function messages(): array
 {
   
    return[   
-      'first_name.required'=>'required',
-      'last_name.required'=>'required',   
-     'name.required'=> __('messages.user_name is required'),
+      'first_name.required'=> __('messages.this field is required') ,
+      'last_name.required'=>__('messages.this field is required') ,   
+     'name.required'=> __('messages.this field is required') ,
   //   'name.alpha_num'=>'The name format must be alphabet',
      'name.unique'=>__('messages.The user_name is already exist'),
-    'email.required'=>'Email is required',
-     'email.email'=>'Valid Email  is required',
-   'email.unique'=>'The Email is already exist',
+    'email.required'=>__('messages.this field is required') ,
+     'email.email'=>__('messages.must be email') ,
+   'email.unique'=>__('messages.email is already exist') ,
     // 'inputPasswordConfirm' => 'confirm must match passowrd',
 //     'first_name.alpha'=>'first name format must be alphabet',
   //   'last_name.alpha'=>'last name format must be alphabet',
-     'password.required'=>'password is required',
-     'password.between'=>'password must be between '. $this->minpass.' and '. $this->maxpass,
+     'password.required'=>__('messages.this field is required') ,
+     'password.between'=>__('messages.password must be between',['Minpass'=>$this->minpass,'Maxpass'=>$this->maxpass]),
     // 'address.between'=>'address charachters must be les than '.$maxlength,
-    
+    'confirm_password.same' => __('messages.confirm_password match') ,
    
      //'city.required'=>'city is required',
-     'mobile.numeric'=>'mobile must contain only numbers',
-     'mobile.digits_between'=>'mobile number must be between '. $this->minMobileLength.' and '.$this->maxMobileLength,
-  
-     'role.required'=>'role is required',
+     'mobile.numeric'=>__('messages.only numbers') ,
+     'mobile.digits_between'=>__('messages.this field must be between',['Minmobile'=> $this->minMobileLength]),
+     'role.in'=>__('messages.this field is required') ,
+     'role.required'=>__('messages.this field is required') ,
+     'image'=>__('messages.file must be image') ,
     ];
     
 }

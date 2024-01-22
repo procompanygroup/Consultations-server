@@ -19,6 +19,14 @@ return [
     'token' => 'This password reset token is invalid.',
     'user' => "We can't find a user with that email address.",
     'user_name is required' => 'اسم المستخدم مطلوب',
-    'The user_name is already exist'=>'اسم المستخدم موجود'
-
+    'The user_name is already exist'=>'اسم المستخدم موجود',
+    'this field is required' => 'هذا الحقل مطلوب',
+    'must be email' => 'هذا الحقل يجب ان يكون عنوان بريد الكتروني',
+    'email is already exist'=>'عنوان البريد الاكتروني موجود',
+    'password must be between' => "كلمة المرور يجب ان تكون مكونة من :Minpass الى :Maxpass محرف ",
+    'confirm_password match' => 'هذا الحقل يجب ان يكون مطابق لكلمة المرور',
+    'only numbers'=>'هذا الحقل يجب ان يحوي ارقام فقط',
+    'this field must be between'=>'هذا الحقل يجب ان يكون مكون من :Minmobile ارقام ',
+    'file must be image'=>'الملف يجب ان يكون صورة'
 ];
+//{{ __('general.welcome_name',['Name'=>'احمد']) }}

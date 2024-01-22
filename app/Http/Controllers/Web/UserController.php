@@ -66,9 +66,12 @@ class UserController extends Controller
      );
 
      if ($validator->fails()) {
-
+/*
                      return  redirect()->back()->withErrors($validator)
                      ->withInput();
+                     */
+                    // return response()->withErrors($validator)->json();
+                    return response()->json($validator);
 
      }else{
              $newObj = new User;
