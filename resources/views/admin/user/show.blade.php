@@ -30,7 +30,7 @@
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
 									<h4 class="card-title mg-b-0">إدارة حسابات المستخدمين</h4>
-									<button type="submit" class="btn btn-primary btn-small">إنشاء مستخدم جديد</button>
+									<button type="submit" class="btn btn-primary btn-small">مستخدم جديد</button>
 								</div>
 							</div>
 							<div class="card-body">
@@ -42,6 +42,7 @@
 												<th class="border-bottom-0">User name</th>
 												<th class="border-bottom-0">Email</th>
 												<th class="border-bottom-0">Role</th>
+                                                <th class="border-bottom-0">Action</th>
 
 											</tr>
 										</thead>
@@ -52,6 +53,15 @@
 												<td>{{ $user->user_name }}</td>
 												<td>{{ $user->email }}</td>
 												<td>{{ $user->role }}</td>
+                                                <td>
+                                                    <button type="submit" class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i></button>
+                                                    <form action="{{route('user.destroy', $user->id)}}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm" title="Delete"><i class="fa fa-trash"></i></button>
+                                                    </form>
+
+                                                </td>
 
 											</tr>
 											@endforeach

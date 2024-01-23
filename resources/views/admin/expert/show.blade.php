@@ -47,15 +47,15 @@
 @section('content')
 				<!-- row opened -->
 				<div class="row row-sm">
-				
-					
+
+
 					<!--div-->
 					<div class="col-xl-12">
 						<div class="card mg-b-20">
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
 									<h4 class="card-title mg-b-0">Bordered Table</h4>
-									<i class="mdi mdi-dots-horizontal text-gray"></i>
+									<button type="submit" class="btn btn-primary btn-small">خبير جديد</button>
 								</div>
 								<p class="tx-12 tx-gray-500 mb-2">Example of Valex Bordered Table.. <a href="">Learn more</a></p>
 							</div>
@@ -64,21 +64,31 @@
 									<table id="example" class="table text-md-nowrap">
 										<thead>
 											<tr>
-											 
+
 												<th class="border-bottom-0">User name</th>
 												<th class="border-bottom-0">Email</th>
 												<th class="border-bottom-0">Nationality</th>
-										 
+                                                <th class="border-bottom-0">Action</th>
+
 											</tr>
 										</thead>
 										<tbody>
 											@foreach ($experts as $expert)
 											<tr>
-											 
+
 												<td>{{$expert->user_name }}</td>
 												<td>{{ $expert->email }}</td>
 												<td>{{ $expert->nationality }}</td>
-										 
+                                                <td>
+                                                    <button type="submit" class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i></button>
+                                                    <form action="{{route('expert.destroy', $expert->id)}}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm" title="Delete"><i class="fa fa-trash"></i></button>
+                                                    </form>
+
+                                                </td>
+
 											</tr>
 											@endforeach
 									</tbody>
@@ -89,7 +99,7 @@
 					</div>
 					<!--/div-->
 
-					 
+
 				</div>
 				<!-- /row -->
 			</div>
