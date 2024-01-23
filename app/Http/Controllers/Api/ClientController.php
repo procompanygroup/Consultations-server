@@ -92,9 +92,9 @@ class ClientController extends Controller
             return response()->json(['error' => 'notexist'], 401);
         }
 
-        return response()->json([
-            'client' => $user,
-        ]);
+        return response()->json(
+          $user
+        );
 
 
     }
