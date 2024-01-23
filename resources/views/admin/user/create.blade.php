@@ -8,7 +8,7 @@
 <link href="{{URL::asset('assets/plugins/pickerjs/picker.min.css')}}" rel="stylesheet">
 <!-- Internal Spectrum-colorpicker css -->
 <link href="{{URL::asset('assets/plugins/spectrum-colorpicker/spectrum.css')}}" rel="stylesheet">
-<link href="{{URL::asset('assets/css/content.css')}}" rel="stylesheet">
+<link href="{{URL::asset('assets/css/admin/content.css')}}" rel="stylesheet">
 
 @endsection
 @section('page-header')
@@ -77,7 +77,7 @@
                                     <div class="mb-4">
                                         <select name="role"   id="role" class="form-control SlectBox" onclick="console.log($(this).val())" onchange="console.log('change is firing')">
                                             <!--placeholder-->
-                                            <option title="Choose The Role" class="text-muted">اختر المهمة..</option>
+                                            <option title=""   class="text-muted">اختر المهمة..</option>
                                             <option value="admin">مدير</option>
                                             <option value="super">مشرف</option>
                                         </select>
@@ -156,98 +156,10 @@
 <script src="{{URL::asset('assets/plugins/pickerjs/picker.min.js')}}"></script>
 <!-- Internal form-elements js -->
 <script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
-<script src="{{URL::asset('assets/js/content.js')}}"></script>
-<script>
-	 
-	 $(document).ready(function() {
-	 // $('#sortbody').html('');
-	 $('#btn_cancel').on('click', function(e) {
-jQuery('#create_form')[0].reset();
-$('#image_label').text("Choose File" );
-$('#imgshow').attr("src", "{{URL::asset('assets/img/photos/1.jpg')}}");
-ClearErrors();
-	 });
-	  $('#btn_save').on('click', function(e) {
-		e.preventDefault()
-		ClearErrors();
-  //var fdata = $( "#create_form" ).serialize();
-  var form = $('#create_form')[0];
-  var formData = new FormData(form);
-		
-var urlval ='{{url("admin/user")}}';
-  //const formData = new FormData("#create_form");
-  //  alert(formData.toString());
-    
-		  $.ajax({			 
-			url: urlval,              
-			type: "POST",
-		    data: formData,
-			contentType : false,
-					processData : false,
-			//contentType: 'application/json',
-			  success: function(data){
-			//	alert(data);
-					 $('#error').text(data.toString());
-				//$('#errormsg').html('');
-				//$('#sortbody').html('');
-				 if(data.length==0){
-				//  $('#sortbody').html('No Data');
-				 }else{
-				//  fillsortlist(data, $('#sortbody'));
-				 }
-		  
-			   // $('.alert').html(result.success);
-			  }, error:function (errorresult) {
-                   var response = $.parseJSON(errorresult.responseText);
-					// $('#errormsg').html( errorresult );
-					
-                    $.each(response.errors, function (key, val) {
-                         $("#" + key + "_error").text(val[0]);
-						 $("#" + key).addClass('parsley-error');
-						//$('#error').append(key+"-"+ val[0] +"/");
-                    });
-				
-                }
-			  /*
-			  error: function(jqXHR, textStatus, errorThrown) {
-			   alert(jqXHR.responseText);
-				// $('#errormsg').html(jqXHR.responseText);
-				//$('#errormsg').html("Error");
-				$('#error').text(jqXHR.responseText);
-			  }
-			  */
-		  
-		  });
+<script  >var urlval ="{{url('admin/user')}}";
+var emptyimg ="{{URL::asset('assets/img/photos/1.jpg')}}"</script>
+<script src="{{URL::asset('assets/js/admin/validate.js')}}"></script>
+<script src="{{URL::asset('assets/js/admin/content.js')}}"></script>
 
-  
-   
-	  });
-   
-	 
-	  function ClearErrors(){
  
-	$('.parsley-required').html('');
-	$( ":input" ).removeClass('parsley-error');
-  }
-
-  $("#image").on("change",function(){ 
-      imageChangeForm ("#image","#image_label","#imgshow");
-    });
-
-  function imageChangeForm (btn_id,upload_label,imageId){ 
- /* Current this object refer to input element */         
- var $input = $(btn_id);
- var reader = new FileReader(); 
-
- reader.onload = function(){
-       $(imageId).attr("src", reader.result);
-    //   var filename = $('#photo_edit')[0].files.length ? ('#photo_edit')[0].files[0].name : "";
-       var filename = $(btn_id).val().split('\\').pop();
-       $(upload_label).text(filename );
- } 
- reader.readAsDataURL($input[0].files[0]);
- 
-   }
-  });
-  </script>
 @endsection
