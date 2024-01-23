@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 //use Image;
 
 use File;
-//use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Web\User\StoreUserRequest;
@@ -56,36 +56,48 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store( StoreUserRequest $request)
     {
         $formdata=$request->all();
+       // return redirect()->back()->with('success_message', $formdata);
         $validator = Validator::make($formdata,
         $request->rules(),
         $request->messages()
      );
 
      if ($validator->fails()) {
-
+/*
                      return  redirect()->back()->withErrors($validator)
                      ->withInput();
+                     */
+                    // return response()->withErrors($validator)->json();
+                    return response()->json($validator);
 
      }else{
              $newObj = new User;
-             $newObj->name = $formdata['user_name'];
-            //  $user->first_name = $formdata['first_name'];
-            //  $user->last_name = $formdata['last_name'];
+             $newObj->name = $formdata['name'];
+              $newObj->first_name = $formdata['first_name'];
+            $newObj->last_name = $formdata['last_name'];
              $newObj->email = $formdata['email'];
              $newObj->password =bcrypt($formdata['password']);
              $newObj->mobile = $formdata['mobile'];
              $newObj->role = $formdata['role'];
+          //   $newObj->is_active = $formdata['is_active'];
              $newObj->createuser_id= Auth::user()->id;
              $newObj->updateuser_id= Auth::user()->id;
-             $newObj->save();
+             $newObj->is_active = isset($formdata["is_active"]) ? 1 : 0;
+           $newObj->save();
+          
              if ($request->hasFile('image')) {
+
               $file= $request->file('image');
-              $this->storeImage( $file,$newObj->id);
+                     // $filename= $file->getClientOriginalName();
+                     
+           $this->storeImage( $file,$newObj->id);
+           //  $this->storeImage( $file,2);
           }
-              return redirect()->back()->with('success_message','user has been Added!');
+               
+              return response()->json("ok");
          }
     }
 

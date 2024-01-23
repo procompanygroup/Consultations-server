@@ -37,6 +37,7 @@ class User extends Authenticatable
 'createuser_id',
 'updateuser_id',
 'image',
+'is_active',
     ];
 
     /**

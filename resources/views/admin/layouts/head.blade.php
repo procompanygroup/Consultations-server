@@ -10,6 +10,7 @@
 <link href="{{URL::asset('assets/plugins/sidebar/sidebar.css')}}" rel="stylesheet">
 <!-- Sidemenu css -->
 <link rel="stylesheet" href="{{URL::asset('assets/css-rtl/sidemenu.css')}}">
+<meta name="csrf-token" content="{{ csrf_token() }}" />
 @yield('css')
 <!--Fonts-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
