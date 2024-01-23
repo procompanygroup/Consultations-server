@@ -16,7 +16,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto">Forms</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ Form-Elements</span>
+							<h4 class="content-title mb-0 my-auto"><a href="{{ route('user.index') }}">{{ __('general.supervisors') }}</a></h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ {{ __('general.new supervisor') }}</span>
 						</div>
 					</div>
 				</div>
@@ -29,15 +29,15 @@
 						<div class="card  box-shadow-0">
 						
 							<div class="card-header">
-								<h4 class="card-title mb-1">Default Form</h4>
-								<p class="mb-2">It is Very Easy to Customize and it uses in your website apllication.</p>
+								<h4 class="card-title mb-1">{{ __('general.supervisor info') }}</h4>
+								<p class="mb-2"></p>
 								
 							</div>
 							<div class="card-body pt-0">
 								<form class="form-horizontal" name="create_form" method="POST" enctype="multipart/form-data" id="create_form">
 									@csrf
 									<div class="form-group">
-										<input type="text" class="form-control " id="first_name" placeholder="First Name" name="first_name">
+										<input type="text" class="form-control " id="first_name" placeholder="{{ __('general.first_name') }}" name="first_name">
 										<ul class="parsley-errors-list filled" >
 											<li class="parsley-required" id="first_name_error"></li>
 										</ul>
@@ -45,31 +45,31 @@
 									</div>
 
                                     <div class="form-group">
-										<input type="text" class="form-control" id="last_name" placeholder="Last Name" name="last_name">
+										<input type="text" class="form-control" id="last_name" placeholder="{{ __('general.last_name') }}" name="last_name">
 										<ul class="parsley-errors-list filled" >
 											<li class="parsley-required" id="last_name_error"></li>
 										</ul>
 									</div>
 									<div class="form-group">
-										<input type="email" class="form-control" id="email" placeholder="Email" name="email">
+										<input type="email" class="form-control" id="email" placeholder="{{ __('general.email') }}" name="email">
 										<ul class="parsley-errors-list filled" >
 											<li class="parsley-required" id="email_error"></li>
 										</ul>
 									</div>
                                     <div class="form-group">
-										<input type="text" class="form-control" id="name" placeholder="Username" name="name">
+										<input type="text" class="form-control" id="name" placeholder="{{ __('general.user_name') }}" name="name">
 										<ul class="parsley-errors-list filled" >
 											<li class="parsley-required" id="name_error"></li>
 										</ul>
 									</div>
 									<div class="form-group">
-										<input type="password" class="form-control" id="password" placeholder="كلمة المرور" name="password">
+										<input type="password" class="form-control" id="password" placeholder="{{ __('general.password') }}" name="password">
 										<ul class="parsley-errors-list filled" >
 											<li class="parsley-required" id="password_error"></li>
 										</ul>
 									</div>
 									<div class="form-group">
-										<input type="password" class="form-control" id="confirm_password" placeholder="تأكيد كلمة المرور" name="confirm_password">
+										<input type="password" class="form-control" id="confirm_password" placeholder="{{ __('general.confirm_password') }}" name="confirm_password">
 										<ul class="parsley-errors-list filled" >
 											<li class="parsley-required" id="confirm_password_error"></li>
 										</ul>
@@ -77,9 +77,9 @@
                                     <div class="mb-4">
                                         <select name="role"   id="role" class="form-control SlectBox" onclick="console.log($(this).val())" onchange="console.log('change is firing')">
                                             <!--placeholder-->
-                                            <option title=""   class="text-muted">اختر المهمة..</option>
-                                            <option value="admin">مدير</option>
-                                            <option value="super">مشرف</option>
+                                            <option title=""   class="text-muted">{{ __('general.choose role') }}</option>
+                                            <option value="admin">{{ __('general.admin') }}</option>
+                                            <option value="super">{{ __('general.super') }}</option>
                                         </select>
 										<ul class="parsley-errors-list filled">
 											<li class="parsley-required"  id="role_error"></li>
@@ -95,7 +95,7 @@
 										<div class="checkbox">
 											<div class="custom-checkbox custom-control">
 												<input type="checkbox" data-checkboxes="mygroup" checked="" class="custom-control-input" id="checkbox-2" value="0" name="is_active">
-												<label for="checkbox-2" class="custom-control-label mt-1"  >تفعيل</label>
+												<label for="checkbox-2" class="custom-control-label mt-1"  >{{ __('general.is_active') }}</label>
 											</div>
 											
 										</div>
@@ -106,7 +106,7 @@
 									{{-- image --}}
                                     <div class="form-group mb-4 justify-content-end">
 										<div class="custom-file">
-											<input class="custom-file-input" id="image" name="image" type="file"> <label class="custom-file-label" id="image_label" for="customFile">Choose file</label>
+											<input class="custom-file-input" id="image" name="image" type="file"> <label class="custom-file-label" id="image_label" for="customFile">{{ __('general.choose image') }}</label>
 											<ul class="parsley-errors-list filled" >
 												<li class="parsley-required" id="image_error"></li>
 											</ul>
@@ -115,8 +115,8 @@
 									</div>
 									<div class="form-group mb-0 mt-3 justify-content-end">
 										<div>
-											<button type="submit" name="btn_save" id="btn_save" class="btn btn-primary">حفظ</button>
-											<button type="button" name="btn_cancel" id="btn_cancel"  class="btn btn-secondary">إلغاء</button>
+											<button type="submit" name="btn_save" id="btn_save" class="btn btn-primary">{{ __('general.save') }}</button>
+											<button type="button" name="btn_cancel" id="btn_cancel"  class="btn btn-secondary">{{ __('general.cancel') }}</button>
 										</div>
 									</div>
 								</form>
