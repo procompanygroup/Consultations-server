@@ -8,6 +8,7 @@
 <link href="{{URL::asset('assets/plugins/pickerjs/picker.min.css')}}" rel="stylesheet">
 <!-- Internal Spectrum-colorpicker css -->
 <link href="{{URL::asset('assets/plugins/spectrum-colorpicker/spectrum.css')}}" rel="stylesheet">
+
 <link href="{{URL::asset('assets/css/admin/content.css')}}" rel="stylesheet">
 
 @endsection
@@ -154,6 +155,7 @@
 <script src="{{URL::asset('assets/plugins/jquery-simple-datetimepicker/jquery.simple-dtpicker.js')}}"></script>
 <!--Internal  pickerjs js -->
 <script src="{{URL::asset('assets/plugins/pickerjs/picker.min.js')}}"></script>
+
 <!-- Internal form-elements js -->
 <script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
 <script  >var urlval ="{{url('admin/user')}}";
