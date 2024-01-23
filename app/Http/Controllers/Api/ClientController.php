@@ -29,7 +29,7 @@ class ClientController extends Controller
 {
 
     public $path = 'images/clients';
-    public $url =url( Storage::url($this->path)).'/';
+   
     /**
      * Display a listing of the resource.
      */
@@ -67,7 +67,7 @@ class ClientController extends Controller
 
         $credentials = request(['mobile']);
     // $url = url('storage/app/public' . '/' . $this->path  ).'/';
-      
+    $url =url( Storage::url($this->path)).'/';
         $user = Client::where('mobile', $credentials)->select(
             'id',
             'user_name',
@@ -78,7 +78,7 @@ class ClientController extends Controller
             'gender',
             'marital_status',             
             'is_active',
-            DB::raw("CONCAT('$this->url',image)  AS image")
+            DB::raw("CONCAT('$url',image)  AS image")
         )->first();
 
         $authuser = auth()->user();
