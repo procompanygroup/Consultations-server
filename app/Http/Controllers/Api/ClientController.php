@@ -28,7 +28,8 @@ use App\Models\Selectedservice;
 class ClientController extends Controller
 {
 
-
+    public $path = 'images/clients';
+    public $url =url( Storage::url($this->path)).'/';
     /**
      * Display a listing of the resource.
      */
@@ -36,7 +37,7 @@ class ClientController extends Controller
     {
         //
     }
-    public $path = 'images/clients';
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -65,7 +66,8 @@ class ClientController extends Controller
 
 
         $credentials = request(['mobile']);
-        $url = url('storage/app/public' . '/' . $this->path  ).'/';
+    // $url = url('storage/app/public' . '/' . $this->path  ).'/';
+      
         $user = Client::where('mobile', $credentials)->select(
             'id',
             'user_name',
@@ -76,7 +78,7 @@ class ClientController extends Controller
             'gender',
             'marital_status',             
             'is_active',
-            DB::raw("CONCAT('$url',image)  AS image")
+            DB::raw("CONCAT('$this->url',image)  AS image")
         )->first();
 
         $authuser = auth()->user();
@@ -142,11 +144,12 @@ class ClientController extends Controller
                 Storage::makeDirectory('public/' . $this->path);
             }
             $image->save(storage_path('app/public') . '/' . $this->path . '/' . $filename);
-            $url = url('storage/app/public' . '/' . $this->path . '/' . $filename);
+        //    $url = url('storage/app/public' . '/' . $this->path . '/' . $filename);
             Client::find($id)->update([
                 "image" => $filename
             ]);
             Storage::delete("public/" . $this->path . '/' . $oldimagename);
+         
         }
         return 1;
     }
