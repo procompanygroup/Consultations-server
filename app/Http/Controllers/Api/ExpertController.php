@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 class ExpertController extends Controller
 {
     
@@ -31,7 +32,8 @@ class ExpertController extends Controller
     public function getexpert()
     {
       //  $credentials = request(['user_name','password']);
-        $url = url('storage/app/public' . '/' . $this->path  ).'/';
+      $url =url(Storage::url($this->path)).'/';
+       // $url = url('storage/app/public' . '/' . $this->path  ).'/';
       //  $pass=request(['password']);
      //   $passval=$pass['password'];
     // $passhash=bcrypt($passval);
@@ -85,8 +87,10 @@ class ExpertController extends Controller
         {
            $data = request(['id']);
            $id=$data ['id'];
-            $url = url('storage/app/public' . '/' . $this->path  ).'/';
-            $recurl = url('storage/app/public' . '/' . $this->recordpath  ).'/';
+          //  $url = url('storage/app/public' . '/' . $this->path  ).'/';
+          $url =url(Storage::url($this->path)).'/';
+          $recurl =url(Storage::url($this->recordpath)).'/';
+          //  $recurl = url('storage/app/public' . '/' . $this->recordpath  ).'/';
           //  $pass=request(['password']);
          //   $passval=$pass['password'];
         // $passhash=bcrypt($passval);

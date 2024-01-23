@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
-
+use Illuminate\Support\Facades\Storage;
 /*
 use App\Http\Requests\Web\Service\StoreServiceRequest;
 use App\Http\Requests\Web\Service\UpdateServiceRequest;
@@ -34,8 +34,8 @@ class ServiceController extends Controller
 
     public function index()
     {
-
-        $url = url('storage/app/public' . '/' . $this->path) . '/';
+        $url =url(Storage::url($this->path)).'/';
+      //  $url = url('storage/app/public' . '/' . $this->path) . '/';
         $list = DB::table('services')->where('is_active',1)->select(
             'name',
             'desc',
@@ -62,7 +62,8 @@ DB::raw("(CASE
     public function getinputserviceform()
     {
         $data = request(['id']);
-        $url = url('storage/app/public' . '/' . $this->path) . '/';
+        $url =url(Storage::url($this->path)).'/';
+       // $url = url('storage/app/public' . '/' . $this->path) . '/';
          /*
         $service = Service::find($data['id'])->with('inputservices.input')
         ->first();
