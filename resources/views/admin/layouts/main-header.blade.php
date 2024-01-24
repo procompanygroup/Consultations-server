@@ -19,7 +19,7 @@
 					<div class="main-header-right">
 						<div class="nav nav-item  navbar-nav-right ml-auto">
 							<div class="dropdown main-profile-menu nav nav-item nav-link">
-								<a class="profile-user d-flex" href=""><img alt="" src="{{URL::asset('assets/img/faces/6.jpg')}}"></a>
+								<a class="profile-user d-flex" href=""><img alt="" src="@if(auth()->user()->image==''){{URL::asset('assets/img/faces/6.jpg')}}@else{{ url('storage/images/users/'.auth()->user()->image) }}@endif"></a>
 								<div class="dropdown-menu">
 									<div class="main-header-profile bg-primary p-3">
 										<div class="d-flex wd-100p">
@@ -29,11 +29,9 @@
 											</div>
 										</div>
 									</div>
-									<a class="dropdown-item" href=""><i class="bx bx-user-circle"></i>Profile</a>
-									<a class="dropdown-item" href=""><i class="bx bx-cog"></i> Edit Profile</a>
-									<a class="dropdown-item" href=""><i class="bx bxs-inbox"></i>Inbox</a>
-									<a class="dropdown-item" href=""><i class="bx bx-envelope"></i>Messages</a>
-									<a class="dropdown-item" href=""><i class="bx bx-slider-alt"></i> Account Settings</a>
+								
+									<a class="dropdown-item" href="{{route('user.edit',auth()->user()->id)}}"><i class="bx bx-cog"></i>{{ __('general.Edit_Profile') }}</a>
+							
 										<form method="POST" action="{{ route('logout') }}">
 										@csrf
 										<a class="dropdown-item" href="{{route('logout') }}" onclick="event.preventDefault();
