@@ -17,7 +17,7 @@ return [
   'cpanel' => 'لوحة تحكم',
   'welcome_name' => 'اهلا بك سيد :Name  المحترم',
   'login' => 'تسجيل دخول',
-  'Log Out' => 'تسجيل خروج',
+  'LogOut' => 'تسجيل خروج',
   'register' => 'انشاء حساب',
   'manage' => 'الادارة',
   'supervisors' => 'المشرفون',
