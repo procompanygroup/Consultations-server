@@ -40,20 +40,20 @@ class ClientAuthController extends Controller
       //  return response()->json(['form' =>  $credentials]);
         if (  !is_null( $user)) {
             if(! $token = auth('api_clients')->fromUser($user)){
-                return response()->json(['error' => 'notexist'], 401);
+                return response()->json('notexist', 401);
             }
            
         }else{
-            return response()->json(['error' => 'notexist'], 401);
+            return response()->json('notexist', 401);
         }
         //Auth::check();
      //  $atype=  Auth::user()->type; 
    //  $user=auth('api_clients')->user();
     // auth('api_clients')->login($user);
-       return response()->json([
-        'token' => $token,
+       return response()->json(
+        $token
        // 'user'=> $user,   
-    ] );
+     );
       
     }
 
@@ -92,7 +92,7 @@ class ClientAuthController extends Controller
           ->withErrors($validator)
                       ->withInput();
                       */
-                      return response()->json(['errorValidation' => $validator->errors()]);
+                      return response()->json($validator->errors());
      //   return redirect()->back()->withErrors($validator)->withInput();
   
       } else {
@@ -117,7 +117,7 @@ class ClientAuthController extends Controller
        
        // return response()->json(['formdata' => $formdata ]);
         // return response()->json(['userName' => $formdata["userName"]]);
-         return response()->json(['userId' => $newObj->id]);
+         return response()->json($newObj->id);
       }
 
     /*
@@ -168,7 +168,7 @@ class ClientAuthController extends Controller
     {
         auth('api_clients')->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json('Success');
     }
     /*
  public function login()

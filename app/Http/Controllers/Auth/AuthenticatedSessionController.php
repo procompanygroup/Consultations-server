@@ -9,7 +9,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-
+use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -26,7 +27,11 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
+        /*
+        $path = 'images/users';
+        $url =url( Storage::url($path)).'/'.Auth::user()->image;
+        session(['fullpathimg' =>  $url ]);
+        */
         $request->session()->regenerate();
 
         return redirect()->intended(RouteServiceProvider::HOME);

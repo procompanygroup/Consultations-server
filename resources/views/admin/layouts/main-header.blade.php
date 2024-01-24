@@ -23,7 +23,7 @@
 								<div class="dropdown-menu">
 									<div class="main-header-profile bg-primary p-3">
 										<div class="d-flex wd-100p">
-											<div class="main-img-user"><img alt="" src="{{URL::asset('assets/img/faces/6.jpg')}}" class=""></div>
+											<div class="main-img-user"><img alt="" src="@if(auth()->user()->image==''){{URL::asset('assets/img/faces/6.jpg')}}@else{{ url('storage/images/users/'.auth()->user()->image) }}@endif" class=""></div>
 											<div class="mr-3 my-auto">
 												<h6>{{ auth()->user()->email }}</h6><span>{{ auth()->user()->role }}</span>
 											</div>

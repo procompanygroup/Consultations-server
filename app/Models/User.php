@@ -16,6 +16,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
     public $fullpathimg = "";
+    
+   // protected $appends = ['path'=>'1.jpg'];
     /**
      * The attributes that are mass assignable.
      *

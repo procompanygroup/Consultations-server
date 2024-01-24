@@ -46,7 +46,7 @@ class ExpertAuthController extends Controller
         $credentials = request(['user_name', 'password']);
 
         if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'notexist'], 401);
+            return response()->json('notexist', 401);
         }
         /*
         $user = User::where('userName',$credentials['userName'])
@@ -71,14 +71,12 @@ class ExpertAuthController extends Controller
       //  auth('api')->login( $user);
        // $type=  auth('api')->type();
        // Auth::login($user);
-        return response()->json([
-            'token' => $token,
+        return response()->json(
+            $token,
            // 'message'=>"success",
           //  'user'=> $user,
          //   'type'=>  $type,
-             
-       
-        ] );
+        );
     //   return $this->respondTokenwithExpire($token);
         
     }
@@ -179,7 +177,7 @@ class ExpertAuthController extends Controller
     {
         auth('api')->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json('Success');
     }
 
     /**

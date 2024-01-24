@@ -54,9 +54,7 @@ DB::raw("(CASE
             ELSE CONCAT('$url',image)
             END) AS image")
 */
-        return response()->json([
-            'services' => $list,
-        ]);
+        return response()->json($list);
         //return response()->json($users);
     }
     public function getinputserviceform()
@@ -117,9 +115,7 @@ $q->select( 'id','input_id','service_id');
            }  
    ]);
    */
-return response()->json([
-            'service' =>  $service,
-        ]);
+return response()->json($service);
         //return response()->json($users);
     }
 

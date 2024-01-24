@@ -6,6 +6,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\Web\ExpertController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Web\UserController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,10 +17,15 @@ use App\Http\Controllers\Web\UserController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+ 
 Route::get('/', function () {
-    return view('welcome');
+   // return view('welcome');
+    return redirect()-> route('login');
 });
+ 
+
+
+//Route::get('/', [AuthenticatedSessionController::class, 'create']);
  /*
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -72,9 +78,11 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
    });
 */
 });
+/*
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+*/
 require __DIR__.'/auth.php';

@@ -71,17 +71,14 @@ class ExpertController extends Controller
             if (!(($user->user_name == $authuser->user_name)
            // && (Hash::check( $passval, $user->password))
         ) ){
-                return response()->json(['error' => 'notexist'], 401);
+                return response()->json('notexist', 401);
             }
 
         } else {
-            return response()->json(['error' => 'notexist'], 401);
+            return response()->json('notexist', 401);
         }
  
-        return response()->json([
-          'expert' => $user
-          
-        ]);
+        return response()->json($user);
         }
         public function getexpertsbyserviceid()
         {
@@ -141,10 +138,7 @@ class ExpertController extends Controller
             //  return response()->json(['form' =>  $credentials]);
             
      
-            return response()->json([
-              'expert' =>$List
-              
-            ]);
+            return response()->json($List);
             }
     public function addUser(Expert $newExpert)
     {

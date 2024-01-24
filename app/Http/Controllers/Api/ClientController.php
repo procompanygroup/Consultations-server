@@ -85,11 +85,11 @@ class ClientController extends Controller
         //  return response()->json(['form' =>  $credentials]);
         if (!is_null($user)) {
             if (!($user->mobile == $authuser->mobile)) {
-                return response()->json(['error' => 'notexist'], 401);
+                return response()->json('notexist', 401);
             }
 
         } else {
-            return response()->json(['error' => 'notexist'], 401);
+            return response()->json('notexist', 401);
         }
 
         return response()->json(
