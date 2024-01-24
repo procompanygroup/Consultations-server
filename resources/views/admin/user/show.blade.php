@@ -39,10 +39,10 @@
 										<thead>
 											<tr>
 
-												<th class="border-bottom-0">User name</th>
-												<th class="border-bottom-0">Email</th>
-												<th class="border-bottom-0">Role</th>
-                                                <th class="border-bottom-0">Action</th>
+												<th class="border-bottom-0">{{ __('general.user_name') }}</th>
+												<th class="border-bottom-0">{{ __('general.email') }}</th>
+												<th class="border-bottom-0">{{ __('general.role') }}</th>
+                                                <th class="border-bottom-0">{{ __('general.action') }}</th>
 
 											</tr>
 										</thead>
@@ -50,11 +50,12 @@
 											@foreach ($users as $user)
 											<tr>
 
-												<td>{{ $user->user_name }}</td>
+												<td>{{ $user->name }}</td>
 												<td>{{ $user->email }}</td>
-												<td>{{ $user->role }}</td>
+												<td>{{ $user->role=='admin'? __('general.admin') :($user->role=='super'?__('general.super'):$user->role)}}</td>
                                                 <td>
-                                                    <button type="submit" class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i></button>
+													 
+                                                   <a href="{{route('user.edit', $user->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a>
                                                     <form action="{{route('user.destroy', $user->id)}}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')

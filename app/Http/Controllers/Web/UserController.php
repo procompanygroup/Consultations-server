@@ -189,7 +189,7 @@ class UserController extends Controller
         if (!($user === null)) {
       User::find($id)->delete();
         }
-         return redirect()->route('admin.user.show');
+         return redirect()->route('user.index'); 
 
     }
     public function storeImage($file, $id)

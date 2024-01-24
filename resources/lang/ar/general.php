@@ -53,8 +53,9 @@ return [
   'choose role'=>'اختر المهمة..',
   'admin'=>'مدير',
   'super'=>'مشرف',
-   
-
+   // table
+   'role'=>'المهمة',
+   'action'=>'العملية',
 
 
 ];
