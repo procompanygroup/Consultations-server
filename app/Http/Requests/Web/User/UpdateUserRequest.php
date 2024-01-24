@@ -13,7 +13,11 @@ class UpdateUserRequest extends FormRequest
     {
         return true;
     }
-
+    protected   $minpass=8;
+    protected   $maxpass=16;
+    protected  $minMobileLength=10;
+    protected $maxMobileLength=10;
+    protected $maxlength=500;
    
     public function rules(): array
     {
@@ -22,10 +26,11 @@ class UpdateUserRequest extends FormRequest
        return[
          'first_name'=>'required', 
          'last_name'=>'required', 
-           'name'=>'required|unique:users,name',    
+        //   'name'=>'required|unique:users,name',  
+           'name'  =>  'required|string|unique:users,name,'.$this->id,  
         // 'name'=>'required|alpha_num:ascii|unique:users,name',        
-         'email'=>'required|email|unique:users,email',      
-         'password'=>'required|between:'. $this->minpass.','. $this->maxpass,
+         'email'=>'required|email|unique:users,email,'.$this->id,      
+         'password'=>'nullable|between:'. $this->minpass.','. $this->maxpass,
          'confirm_password' => 'same:password',
          'mobile'=>'nullable|numeric|digits_between:'. $this->minMobileLength.','.$this->maxMobileLength,          
         'role'=>'required|in:admin,super',

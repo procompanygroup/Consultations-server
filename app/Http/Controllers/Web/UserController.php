@@ -114,60 +114,66 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $user= DB::table('users')->find($id);
+      $url =url(Storage::url($this->path)).'/';
+        $user=User::find($id);
+        if( $user->image !="" ){
+          $user->fullpathimg= $url.$user->image;
+        }
 
         //
  return view('admin.user.edit',['user' => $user]);
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateUserRequest $request,$id)
+ 
+    public function update(UpdateUserRequest $request ,$id )
     {
-        $formdata=$request->all();
+   //  return $request->all();
+     // UpdateUserRequest
+      
         //validate
-
+     
+        $formdata= $request->all();
         $validator = Validator::make($formdata,
         $request->rules(),
         $request->messages()
      );
-     if ($validator->fails()) {
-       /*
-         return redirect('/cpanel/users/add')
-         ->withErrors($validator)
-                     ->withInput();
-                     */
-                     return  redirect()->back()->withErrors($validator)
-                     ->withInput();
+     if ($validator->fails()) {     
+   
+                     return response()->json($validator);
 
      }else{
 
-        /*
-   $user->name = $formdata['user_name'];
-            //  $user->first_name = $formdata['first_name'];
-            //  $user->last_name = $formdata['last_name'];
-             $user->email = $formdata['email'];
-             $user->password =bcrypt($formdata['password']);
-             $user->mobile = $formdata['mobile'];
-             $user->role = $formdata['role'];
-             $user->createuser_id= Auth::user()->id;
-             $user->updateuser_id= Auth::user()->id;
-        */
 
-
+     
+        if ($request->hasFile('image')) {
+         $file= $request->file('image');
+                // $filename= $file->getClientOriginalName();                
+      $this->storeImage( $file,$id);
+        }
       User::find($id)->update([
-'user_name'=>$formdata['user_name'],
-'email' => $formdata['email'],
-'password' => bcrypt($formdata['password']),
+//'user_name'=>$formdata['user_name'],
+'name'=>$formdata['name'],
+'first_name'=>$formdata['first_name'],
+'last_name'=>$formdata['last_name'],
+'email'=>$formdata['email'],
+ 
+//'password' => bcrypt($formdata['password']),
 'mobile' => $formdata['mobile'],
 'role' => $formdata['role'],
 'updateuser_id'=> Auth::user()->id,
-
+'is_active' => isset($formdata["is_active"]) ? 1 : 0,
 ]);
 
-      return redirect()->back()->with('success_message','user has been Updated!');
+if(isset($formdata['password'])){
+  $password = trim($formdata['password']);
+  User::find($id)->update([
+    'password' => bcrypt($password),
+  ]);
+}
+  //    return redirect()->back()->with('success_message','user has been Updated!');
+      return response()->json("ok");
     }
+
+ 
     }
 
     /**
@@ -192,7 +198,14 @@ class UserController extends Controller
          return redirect()->route('user.index'); 
 
     }
-    public function storeImage($file, $id)
+    public function trimstr()
+    {
+       $s=" d d ";
+     $s=  trim($s);
+     return  response()->json($s);
+
+    }   
+     public function storeImage($file, $id)
     {
         $imagemodel = User::find($id);
         $oldimage = $imagemodel->image;

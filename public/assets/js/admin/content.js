@@ -1,3 +1,4 @@
+var urlval="";
 $(document).ready(function () {
 
 	// $('#sortbody').html('');
@@ -10,6 +11,8 @@ $(document).ready(function () {
 		$('#imgshow').attr("src", emptyimg);
 		ClearErrors();
 	});
+	 
+	//{{ route('user.index') }}
 	$('#btn_save').on('click', function (e) {
 		e.preventDefault()
 		ClearErrors();
@@ -70,7 +73,66 @@ $(document).ready(function () {
 
 	});
 
+	$('#btn_update_user').on('click', function (e) {
+		e.preventDefault()
+		ClearErrors();
+		//var fdata = $( "#create_form" ).serialize();
+		var form = $('#create_form')[0];
+		var formData = new FormData(form);
+		urlval=	$('#create_form').attr("action")
+		//var urlval ='{{url("admin/user")}}';
+		//const formData = new FormData("#create_form");
+		//  alert(formData.toString());
 
+		$.ajax({
+			url: urlval,
+			type: "POST",
+			
+			data: formData,
+			contentType: false,
+			processData: false,
+			//contentType: 'application/json',
+			success: function (data) {
+				//	alert(data);
+
+
+
+				//$('#errormsg').html('');
+				//$('#sortbody').html('');
+				if (data.length == 0) {
+					noteError();
+				} else if (data == "ok") {
+					noteSuccess();
+				//	jQuery('#create_form')[0].reset();
+					ClearErrors();
+				}
+
+				// $('.alert').html(result.success);
+			}, error: function (errorresult) {
+				var response = $.parseJSON(errorresult.responseText);
+				// $('#errormsg').html( errorresult );
+				noteError();
+				$.each(response.errors, function (key, val) {
+					$("#" + key + "_error").text(val[0]);
+					$("#" + key).addClass('parsley-error');
+					//$('#error').append(key+"-"+ val[0] +"/");
+				});
+
+			}
+			/*
+			error: function(jqXHR, textStatus, errorThrown) {
+			 alert(jqXHR.responseText);
+			  // $('#errormsg').html(jqXHR.responseText);
+			  //$('#errormsg').html("Error");
+			  $('#error').text(jqXHR.responseText);
+			}
+			*/
+
+		});
+
+
+
+	});
 	function ClearErrors() {
 
 		$('.parsley-required').html('');

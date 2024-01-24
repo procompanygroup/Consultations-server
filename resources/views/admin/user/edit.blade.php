@@ -35,8 +35,9 @@
 								
 							</div>
 							<div class="card-body pt-0">
-								<form class="form-horizontal" name="create_form" method="POST" enctype="multipart/form-data" id="create_form">
-									@csrf
+								<form class="form-horizontal" action="{{route('user.update', $user->id)}}" name="create_form" method="POST" enctype="multipart/form-data" id="create_form">
+								@csrf
+								 
 									<div class="form-group">
 										<input type="text" class="form-control " id="first_name" value="{{ $user->first_name }}" placeholder="{{ __('general.first_name') }}" name="first_name">
 										<ul class="parsley-errors-list filled" >
@@ -64,7 +65,7 @@
 										</ul>
 									</div>
 									<div class="form-group">
-										<input type="password" class="form-control" id="password" value="{{ $user->password }}" placeholder="{{ __('general.password') }}" name="password">
+										<input type="password" class="form-control" id="edit_password" value="" placeholder="{{ __('general.password') }}" name="password">
 										<ul class="parsley-errors-list filled" >
 											<li class="parsley-required" id="password_error"></li>
 										</ul>
@@ -116,14 +117,14 @@
 									</div>
 									<div class="form-group mb-0 mt-3 justify-content-end">
 										<div>
-											<button type="submit" name="btn_save" id="btn_save" class="btn btn-primary">{{ __('general.save') }}</button>
-											<button type="button" name="btn_cancel" id="btn_cancel"  class="btn btn-secondary">{{ __('general.cancel') }}</button>
+											<button type="submit" name="btn_update_user" id="btn_update_user" class="btn btn-primary">{{ __('general.save') }}</button>
+										<a href="{{ route('user.index') }}">	<button type="button" name="btn_cancel_edit" id="btn_cancel_edit"  class="btn btn-secondary">{{ __('general.cancel') }}</button></a>
 										</div>
 									</div>
 								</form>
 								<div class="pd-20 clearfix">
 									<img alt="" id="imgshow" class="rounded img-thumbnail wd-100p wd-sm-200 float-sm-right  mg-t-10 mg-sm-t-0"
-									src="{{URL::asset('assets/img/photos/1.jpg')}}" >
+									src="@if($user->image==""){{URL::asset('assets/img/photos/1.jpg')}}@else {{ $user->fullpathimg }} @endif" >
 								</div> 
 							</div>
 
@@ -158,10 +159,11 @@
 
 <!-- Internal form-elements js -->
 <script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
-<script  >var urlval ="{{url('admin/user')}}";
-var emptyimg ="{{URL::asset('assets/img/photos/1.jpg')}}"</script>
+
 <script src="{{URL::asset('assets/js/admin/validate.js')}}"></script>
 <script src="{{URL::asset('assets/js/admin/content.js')}}"></script>
+<script  > urlval ="{{route('user.update', $user->id)}}";
 
+	var emptyimg ="{{URL::asset('assets/img/photos/1.jpg')}}"</script>
  
 @endsection

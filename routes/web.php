@@ -40,9 +40,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         //     Route::get('/delete/{id}', [UserController::class, 'destroy']);
         // });
 
-        Route::resource('user', UserController::class);
-
-
+        Route::resource('user', UserController::class, ['except' => ['update']]);
+        Route::prefix('user')->group(function () {
+            Route::post('/update/{id}', [UserController::class, 'update'])->name('user.update');
+        });
 
             });
 

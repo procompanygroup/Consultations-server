@@ -13,7 +13,7 @@ class StoreUserRequest extends FormRequest
     {
         return true;
     }
-protected   $minpass=4;
+protected   $minpass=8;
 protected   $maxpass=16;
 protected  $minMobileLength=10;
 protected $maxMobileLength=10;
@@ -25,7 +25,7 @@ protected $maxlength=500;
        return[
          'first_name'=>'required', 
          'last_name'=>'required', 
-           'name'=>'required|unique:users,name',    
+           'name'=>'required|string|unique:users,name',    
         // 'name'=>'required|alpha_num:ascii|unique:users,name',        
          'email'=>'required|email|unique:users,email',      
          'password'=>'required|between:'. $this->minpass.','. $this->maxpass,
