@@ -144,7 +144,7 @@ $newObj->call_cost = $formdata['call_cost'];
     $object = DB::table('experts')->find($id);
 
     //
-    return view('admin.experts.edit', ['expert' => $object]);
+    return view('admin.expert.edit', ['expert' => $object]);
   }
 
   /**

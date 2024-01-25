@@ -55,7 +55,7 @@
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
 									<h4 class="card-title mg-b-0">{{ __('general.manage experts') }}</h4>
-									<a href=""  class="btn btn-primary btn-small">{{ __('general.new expert') }}</a>
+									<a href="{{ route('expert.create') }}" class="btn btn-primary btn-small">{{ __('general.new expert') }}</a>
 								</div>
 									</div>
 							<div class="card-body">
