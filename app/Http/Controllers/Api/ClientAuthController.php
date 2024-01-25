@@ -40,20 +40,20 @@ class ClientAuthController extends Controller
       //  return response()->json(['form' =>  $credentials]);
         if (  !is_null( $user)) {
             if(! $token = auth('api_clients')->fromUser($user)){
-                return response()->json('notexist', 401);
+                return response()->json(['error' => 'notexist'], 401);
             }
            
         }else{
-            return response()->json('notexist', 401);
+            return response()->json(['error' => 'notexist'], 401);
         }
         //Auth::check();
      //  $atype=  Auth::user()->type; 
    //  $user=auth('api_clients')->user();
     // auth('api_clients')->login($user);
-       return response()->json(
-        $token
+       return response()->json([
+        'token' => $token,
        // 'user'=> $user,   
-     );
+     ]);
       
     }
 
