@@ -8,6 +8,8 @@
 <link href="{{URL::asset('assets/plugins/pickerjs/picker.min.css')}}" rel="stylesheet">
 <!-- Internal Spectrum-colorpicker css -->
 <link href="{{URL::asset('assets/plugins/spectrum-colorpicker/spectrum.css')}}" rel="stylesheet">
+
+<link href="{{URL::asset('assets/css/admin/content.css')}}" rel="stylesheet">
 @endsection
 @section('page-header')
 				<!-- breadcrumb -->
@@ -30,63 +32,111 @@
 								<p class="mb-2">It is Very Easy to Customize and it uses in your website apllication.</p>
 							</div>
 							<div class="card-body pt-0">
-								<form class="form-horizontal" >
+								<form class="form-horizontal" name="create_form" method="POST" enctype="multipart/form-data" id="create_form">
+									@csrf
 									<div class="form-group">
-										<input type="text" class="form-control" id="inputName" placeholder="الاسم الأول" name="f_name">
+										<input type="text" class="form-control " id="first_name" placeholder="{{ __('general.first_name') }}" name="first_name">
+										<ul class="parsley-errors-list filled" >
+											<li class="parsley-required" id="first_name_error"></li>
+										</ul>
+										 
+									</div>
+
+                                    <div class="form-group">
+										<input type="text" class="form-control" id="last_name" placeholder="{{ __('general.last_name') }}" name="last_name">
+										<ul class="parsley-errors-list filled" >
+											<li class="parsley-required" id="last_name_error"></li>
+										</ul>
+									</div>
+									<div class="form-group">
+										<input type="email" class="form-control" id="email" placeholder="{{ __('general.email') }}" name="email">
+										<ul class="parsley-errors-list filled" >
+											<li class="parsley-required" id="email_error"></li>
+										</ul>
 									</div>
                                     <div class="form-group">
-										<input type="text" class="form-control" id="inputName" placeholder="الاسم الثاني/الكنية" name="l_name">
+										<input type="text" class="form-control" id="name" placeholder="{{ __('general.user_name') }}" name="name">
+										<ul class="parsley-errors-list filled" >
+											<li class="parsley-required" id="name_error"></li>
+										</ul>
 									</div>
 									<div class="form-group">
-										<input type="email" class="form-control" id="inputEmail3" placeholder="البريد الإلكتروني" name="email">
-									</div>
-                                    <div class="form-group">
-										<input type="text" class="form-control" id="inputName" placeholder="اسم المستخدم" name="username">
+										<input type="password" class="form-control" id="password" placeholder="{{ __('general.password') }}" name="password">
+										<ul class="parsley-errors-list filled" >
+											<li class="parsley-required" id="password_error"></li>
+										</ul>
 									</div>
 									<div class="form-group">
-										<input type="password" class="form-control" id="inputPassword3" placeholder="كلمة السر" name="password">
+										<input type="password" class="form-control" id="confirm_password" placeholder="{{ __('general.confirm_password') }}" name="confirm_password">
+										<ul class="parsley-errors-list filled" >
+											<li class="parsley-required" id="confirm_password_error"></li>
+										</ul>
 									</div>
-                                    <div class="form-group">
-										<input type="text" class="form-control" id="inputName" placeholder="رقم الهاتف الجوال" name="mobile">
+
+									<div class="form-group">
+										<input type="text" class="form-control" id="mobile" placeholder="{{ __('general.mobile') }}" name="mobile">
+										<ul class="parsley-errors-list filled" >
+											<li class="parsley-required" id="mobile_error"></li>
+										</ul>
 									</div>
+                                   
                                     <div class="mb-4">
-                                        <select name="gender" class="form-control SlectBox" onclick="console.log($(this).val())" onchange="console.log('change is firing')">
+                                        <select name="gender"   id="gender" class="form-control SlectBox" onclick="console.log($(this).val())" onchange="console.log('change is firing')">
                                             <!--placeholder-->
-                                            <option title="Choose Ther Role" class="text-muted">الجنس</option>
-                                            <option value="admin">ذكر</option>
-                                            <option value="supervisor">أنثى</option>
+                                            <option title=""   class="text-muted">{{ __('general.gender') }}</option>
+                                            <option value="1">{{ __('general.male') }}</option>
+                                            <option value="2">{{ __('general.female') }}</option>
                                         </select>
+										<ul class="parsley-errors-list filled">
+											<li class="parsley-required"  id="gender_error"></li>
+										</ul>
                                     </div>
+
+
                                     <div class="input-group">
 										<div class="input-group-prepend">
 											<div class="input-group-text">
-												<i class="typcn typcn-calendar-outline tx-24 lh--9 op-6"></i> تاريخ الميلاد
+												<i class="typcn typcn-calendar-outline tx-24 lh--9 op-6"></i>{{ __('general.birthdate') }}
 											</div>
-										</div><input class="form-control fc-datepicker" placeholder="MM/DD/YYYY" type="text">
+										</div><input class="form-control fc-datepicker" name="birthdate"   id="birthdate"  placeholder="MM/DD/YYYY" type="text">
+										<ul class="parsley-errors-list filled" >
+											<li class="parsley-required" id="birthdate_error"></li>
+										</ul>
 									</div>
                                     <div class="my-4">
-										<textarea class="form-control" placeholder="توصيف" rows="3" name="desc"></textarea>
+										<textarea class="form-control" placeholder="{{ __('general.descreption') }}" rows="3" id="desc" name="desc"></textarea>
 									</div>
                                     <div class="form-group mb-4 justify-content-end">
 										<div class="custom-file">
-											<input class="custom-file-input" id="customFile" type="file"> <label class="custom-file-label" for="customFile">اختر ملف الصورة</label>
+											<input class="custom-file-input" id="image" name="image" type="file"> <label class="custom-file-label" for="customFile"  id="image_label">{{ __('general.choose image') }}</label>
+											<ul class="parsley-errors-list filled" >
+												<li class="parsley-required" id="image_error"></li>
+											</ul>
 										</div>
 									</div>
-                                    <div class="form-group justify-content-end">
+									<div class="form-group justify-content-end">
 										<div class="checkbox">
 											<div class="custom-checkbox custom-control">
-												<input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-2" name="is_active">
-												<label for="checkbox-2" class="custom-control-label mt-1">تفعيل</label>
+												<input type="checkbox" data-checkboxes="mygroup" checked="" class="custom-control-input" id="checkbox-2" value="0" name="is_active">
+												<label for="checkbox-2" class="custom-control-label mt-1"  >{{ __('general.is_active') }}</label>
 											</div>
+											
 										</div>
+										<ul class="parsley-errors-list filled" >
+											<li class="parsley-required" id="is_active_error"></li>
+										</ul>
 									</div>
 									<div class="form-group mb-0 mt-3 justify-content-end">
 										<div>
-											<button type="submit" class="btn btn-primary">حفظ</button>
-											<button type="submit" class="btn btn-secondary">إلغاء</button>
+											<button type="submit" name="btn_save" id="btn_save" class="btn btn-primary">{{ __('general.save') }}</button>
+											<button type="button" name="btn_cancel" id="btn_cancel"  class="btn btn-secondary">{{ __('general.cancel') }}</button>				
 										</div>
 									</div>
 								</form>
+								<div class="pd-20 clearfix">
+									<img alt="" id="imgshow" class="rounded img-thumbnail wd-100p wd-sm-200 float-sm-right  mg-t-10 mg-sm-t-0"
+									src="{{URL::asset('assets/img/photos/1.jpg')}}" >
+								</div> 
 							</div>
 						</div>
 					</div>
@@ -116,4 +166,11 @@
 <script src="{{URL::asset('assets/plugins/pickerjs/picker.min.js')}}"></script>
 <!-- Internal form-elements js -->
 <script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
+
+<script src="{{URL::asset('assets/js/admin/validate.js')}}"></script>
+<script src="{{URL::asset('assets/js/admin/content.js')}}"></script>
+<script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
+<script  > urlval ="{{url('admin/expert')}}";
+var emptyimg ="{{URL::asset('assets/img/photos/1.jpg')}}"</script>
+ 
 @endsection

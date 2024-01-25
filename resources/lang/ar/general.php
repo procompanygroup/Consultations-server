@@ -60,9 +60,13 @@ return [
   'choose role'=>'اختر المهمة..',
   'admin'=>'مدير',
   'super'=>'مشرف',
+
+  'male' => 'ذكر',
+  'female' => 'انثى',
    // table
    'role'=>'المهمة',
    'action'=>'العملية',
+
 
 
 ];
