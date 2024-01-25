@@ -64,7 +64,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         //     Route::post('/update/{id}', [ExpertController::class, 'update']);
         //     Route::get('/delete/{id}', [ExpertController::class, 'destroy']);
         // });
-        Route::resource('expert', ExpertController::class);
+        Route::resource('expert', ExpertController::class, ['except' => ['update']]);
+        Route::prefix('expert')->group(function () {
+            Route::post('/update/{id}', [ExpertController::class, 'update'])->name('expert.update');
+        });
     });
     /*
     Route::middleware('role.admin:super')->group(function () {

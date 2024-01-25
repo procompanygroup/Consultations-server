@@ -29,8 +29,8 @@
 						<div class="card mg-b-20">
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
-									<h4 class="card-title mg-b-0">إدارة حسابات المستخدمين</h4>
-									<button type="submit" class="btn btn-primary btn-small">مستخدم جديد</button>
+									<h4 class="card-title mg-b-0">{{ __('general.manage Accounts') }}</h4>
+									<a href="{{ route('user.create') }}"   class="btn btn-primary btn-small">{{ __('general.new user') }}</a>
 								</div>
 							</div>
 							<div class="card-body">
@@ -53,7 +53,7 @@
 												<td>{{ $user->name }}</td>
 												<td>{{ $user->email }}</td>
 												<td>{{ $user->role=='admin'? __('general.admin') :($user->role=='super'?__('general.super'):$user->role)}}</td>
-                                                <td><a href="{{route('user.edit', $user->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a>
+                                                <td><a href="{{route('user.edit', $user->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a> 
                                                     <form action="{{route('user.destroy', $user->id)}}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')

@@ -13,7 +13,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto">Tables</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ Data Tables</span>
+							<h4 class="content-title mb-0 my-auto">{{ __('general.experts') }}</h4> 
 						</div>
 					</div>
 					<div class="d-flex my-xl-auto right-content">
@@ -54,21 +54,20 @@
 						<div class="card mg-b-20">
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
-									<h4 class="card-title mg-b-0">Bordered Table</h4>
-									<button type="submit" class="btn btn-primary btn-small">خبير جديد</button>
+									<h4 class="card-title mg-b-0">{{ __('general.manage experts') }}</h4>
+									<a href=""  class="btn btn-primary btn-small">{{ __('general.new expert') }}</a>
 								</div>
-								<p class="tx-12 tx-gray-500 mb-2">Example of Valex Bordered Table.. <a href="">Learn more</a></p>
-							</div>
+									</div>
 							<div class="card-body">
 								<div class="table-responsive">
 									<table id="example" class="table text-md-nowrap">
 										<thead>
 											<tr>
 
-												<th class="border-bottom-0">User name</th>
-												<th class="border-bottom-0">Email</th>
-												<th class="border-bottom-0">Nationality</th>
-                                                <th class="border-bottom-0">Action</th>
+												<th class="border-bottom-0">{{ __('general.user_name') }}</th>
+												<th class="border-bottom-0">{{ __('general.email') }}</th>
+												<th class="border-bottom-0">{{ __('general.nationality') }}</th>
+                                                <th class="border-bottom-0">{{ __('general.action') }}</th>
 
 											</tr>
 										</thead>
@@ -80,7 +79,8 @@
 												<td>{{ $expert->email }}</td>
 												<td>{{ $expert->nationality }}</td>
                                                 <td>
-                                                    <button type="submit" class="btn btn-success btn-sm" title="Edit"><i class="fa fa-edit"></i></button>
+													<a href="{{route('expert.edit', $expert->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a> 
+                                                     
                                                     <form action="{{route('expert.destroy', $expert->id)}}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')

@@ -14,6 +14,10 @@ return [
   */
 
   'user_name' => 'اسم المستخدم',
+  'new user' => 'مستخدم جديد',
+  'manage Accounts' => 'إدارة حسابات المستخدمين',
+  'manage experts' => 'إدارة حسابات الخبراء',
+  'new expert' =>'خبير جديد',
   'cpanel' => 'لوحة تحكم',
   'welcome_name' => 'اهلا بك سيد :Name  المحترم',
   'login' => 'تسجيل دخول',

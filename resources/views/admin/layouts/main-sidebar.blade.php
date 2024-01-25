@@ -27,7 +27,7 @@
 							<span class="side-menu__label"> {{ __('general.supervisors') }}</span><i class="angle fe fe-chevron-down"></i></a>
 						<ul class="slide-menu">
 							<li><a class="slide-item" href="{{ route('user.index') }}"> {{ __('general.show') }}</a></li>
-							<li><a class="slide-item" href="{{ route('user.create') }}"> {{ __('general.add') }}</a></li>
+						 
 						</ul>
 					</li>
 

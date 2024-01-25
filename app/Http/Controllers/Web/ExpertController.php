@@ -24,7 +24,8 @@ use App\Http\Requests\Web\Expert\StoreExpertRequest;
 use App\Http\Requests\Web\Expert\UpdateExpertRequest;
 class ExpertController extends Controller
 {
-  public $path = 'media/experts';
+  public $path = 'images/experts';
+  public $recordpath = 'images/experts/records';
   /**
    * Display a listing of the resource.
    */
