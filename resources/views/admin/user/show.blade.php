@@ -53,9 +53,7 @@
 												<td>{{ $user->name }}</td>
 												<td>{{ $user->email }}</td>
 												<td>{{ $user->role=='admin'? __('general.admin') :($user->role=='super'?__('general.super'):$user->role)}}</td>
-                                                <td>
-													 
-                                                   <a href="{{route('user.edit', $user->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a>
+                                                <td><a href="{{route('user.edit', $user->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a>
                                                     <form action="{{route('user.destroy', $user->id)}}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')

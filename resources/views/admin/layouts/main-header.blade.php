@@ -12,9 +12,10 @@
 							<a class="open-toggle" href="#"><i class="header-icon fe fe-align-left" ></i></a>
 							<a class="close-toggle" href="#"><i class="header-icons fe fe-x"></i></a>
 						</div>
+
 						<div class="main-header-center mr-3 d-sm-none d-md-none d-lg-block">
-							<input class="form-control" placeholder="Search for anything..." type="search"> <button class="btn"><i class="fas fa-search d-none d-md-block"></i></button>
-						</div>
+							{{-- <input class="form-control" placeholder="Search for anything..." type="search"> <button class="btn"><i class="fas fa-search d-none d-md-block"></i></button>
+						--}}</div> 
 					</div>
 					<div class="main-header-right">
 						<div class="nav nav-item  navbar-nav-right ml-auto">
@@ -25,7 +26,7 @@
 										<div class="d-flex wd-100p">
 											<div class="main-img-user"><img alt="" src="@if(auth()->user()->image==''){{URL::asset('assets/img/faces/6.jpg')}}@else{{ url('storage/images/users/'.auth()->user()->image) }}@endif" class=""></div>
 											<div class="mr-3 my-auto">
-												<h6>{{ auth()->user()->email }}</h6><span>{{ auth()->user()->role }}</span>
+												<h6>{{ auth()->user()->name }}</h6><span>{{auth()->user()->role=='admin'? __('general.admin') :(auth()->user()->role=='super'?__('general.super'):auth()->user()->role)}}</span>
 											</div>
 										</div>
 									</div>
