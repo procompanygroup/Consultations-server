@@ -15,7 +15,9 @@
 <!--Fonts-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic&display=swap" rel="stylesheet">
+
 <!--- Style css -->
 <link href="{{URL::asset('assets/css-rtl/style.css')}}" rel="stylesheet">
 <!--- Dark-mode css -->
@@ -24,8 +26,15 @@
 <link href="{{URL::asset('assets/css-rtl/skin-modes.css')}}" rel="stylesheet">
 <!--Internal   Notify -->
 <link href="{{URL::asset('assets/plugins/notify/css/notifIt.css')}}" rel="stylesheet">
+<link href="{{URL::asset('assets/css/admin/main.css')}}" rel="stylesheet">
 <style>
     body {
         font-family: 'Noto Kufi Arabic', sans-serif;
+
     }
+    
+
 </style>
+ 
+ 
+

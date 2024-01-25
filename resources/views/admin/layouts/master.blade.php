@@ -15,6 +15,7 @@
 		<div id="global-loader">
 			<img src="{{URL::asset('assets/img/loader.svg')}}" class="loader-img" alt="Loader">
 		</div>
+		<div id="loading"></div>
 		<!-- /Loader -->
 		@include('admin.layouts.main-sidebar')		
 		<!-- main-content -->

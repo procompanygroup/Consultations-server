@@ -14,7 +14,8 @@ $(document).ready(function () {
 	 
 	//{{ route('user.index') }}
 	$('#btn_save').on('click', function (e) {
-		e.preventDefault()
+		e.preventDefault();
+		startLoading();
 		ClearErrors();
 		//var fdata = $( "#create_form" ).serialize();
 		var form = $('#create_form')[0];
@@ -33,8 +34,7 @@ $(document).ready(function () {
 			//contentType: 'application/json',
 			success: function (data) {
 				//	alert(data);
-
-
+				endLoading();
 
 				//$('#errormsg').html('');
 				//$('#sortbody').html('');
@@ -48,6 +48,7 @@ $(document).ready(function () {
 
 				// $('.alert').html(result.success);
 			}, error: function (errorresult) {
+				endLoading();
 				var response = $.parseJSON(errorresult.responseText);
 				// $('#errormsg').html( errorresult );
 				noteError();
@@ -56,6 +57,9 @@ $(document).ready(function () {
 					$("#" + key).addClass('parsley-error');
 					//$('#error').append(key+"-"+ val[0] +"/");
 				});
+
+			},finally:function () {
+				endLoading();
 
 			}
 			/*
@@ -74,7 +78,8 @@ $(document).ready(function () {
 	});
 
 	$('#btn_update_user').on('click', function (e) {
-		e.preventDefault()
+		e.preventDefault();
+		startLoading();
 		ClearErrors();
 		//var fdata = $( "#create_form" ).serialize();
 		var form = $('#create_form')[0];
@@ -94,9 +99,7 @@ $(document).ready(function () {
 			//contentType: 'application/json',
 			success: function (data) {
 				//	alert(data);
-
-
-
+				endLoading();
 				//$('#errormsg').html('');
 				//$('#sortbody').html('');
 				if (data.length == 0) {
@@ -109,6 +112,7 @@ $(document).ready(function () {
 
 				// $('.alert').html(result.success);
 			}, error: function (errorresult) {
+				endLoading();
 				var response = $.parseJSON(errorresult.responseText);
 				// $('#errormsg').html( errorresult );
 				noteError();
@@ -117,6 +121,9 @@ $(document).ready(function () {
 					$("#" + key).addClass('parsley-error');
 					//$('#error').append(key+"-"+ val[0] +"/");
 				});
+
+			},finally:function () {
+				endLoading();
 
 			}
 			/*

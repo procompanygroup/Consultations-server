@@ -32,4 +32,4 @@
 <script src="{{URL::asset('assets/js/custom.js')}}"></script><!-- Left-menu js-->
 <script src="{{URL::asset('assets/plugins/side-menu/sidemenu.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/notify/js/notifIt.js')}}"></script>
- 
+<script src="{{URL::asset('assets/js/admin/main.js')}}"></script>
