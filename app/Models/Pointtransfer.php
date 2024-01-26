@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Pointtransfer extends Model
 {
     use HasFactory;
+    
+    protected $table = 'pointstransfers';
     protected $fillable = [
         'point_id',
 'client_id',

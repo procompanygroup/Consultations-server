@@ -191,7 +191,8 @@ if(isset($formdata['password'])){
         ]);
       //delete user
         $user= User::find($id);
-
+        $oldimagename=$user->image;
+        Storage::delete("public/" . $this->path . '/' . $oldimagename);
         if (!($user === null)) {
       User::find($id)->delete();
         }

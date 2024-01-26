@@ -1,4 +1,5 @@
 var urlval="";
+ 
 $(document).ready(function () {
 
 	// $('#sortbody').html('');
@@ -6,9 +7,7 @@ $(document).ready(function () {
 		//	var filename = $('#image').val().split('\\').pop();
 		//alert(filename);
 
-		jQuery('#create_form')[0].reset();
-		$('#image_label').text("Choose File");
-		$('#imgshow').attr("src", emptyimg);
+		resetForm();
 		ClearErrors();
 	});
 	 
@@ -20,7 +19,7 @@ $(document).ready(function () {
 		//var fdata = $( "#create_form" ).serialize();
 		var form = $('#create_form')[0];
 		var formData = new FormData(form);
-
+		urlval=	$('#create_form').attr("action");
 		//var urlval ='{{url("admin/user")}}';
 		//const formData = new FormData("#create_form");
 		//  alert(formData.toString());
@@ -42,7 +41,7 @@ $(document).ready(function () {
 					noteError();
 				} else if (data == "ok") {
 					noteSuccess();
-					jQuery('#create_form')[0].reset();
+					resetForm();
 					ClearErrors();
 				}
 
@@ -106,7 +105,7 @@ $(document).ready(function () {
 					noteError();
 				} else if (data == "ok") {
 					noteSuccess();
-				//	jQuery('#create_form')[0].reset();
+			 
 					ClearErrors();
 				}
 
@@ -209,8 +208,8 @@ $(document).ready(function () {
 			return true;
 		}
 	});
-	$("#mobile").focusout(function (e) {
-		/*
+	$(".mobile").focusout(function (e) {
+	 
 	if (!validatempty($(this))) {	 
 		return false;
 	} else {
@@ -218,7 +217,7 @@ $(document).ready(function () {
 		return true;
 	
 	}
-	*/
+	
 	});
 	$("#name").focusout(function (e) {
 		if (!validatempty($(this))) {
@@ -228,7 +227,22 @@ $(document).ready(function () {
 			return true;
 		}
 	});
+	$("#user_name").focusout(function (e) {
+		if (!validatempty($(this))) {
+			return false;
+		} else {
 
+			return true;
+		}
+	});
+	$("#gender").focusout(function (e) {
+		if (!validatempty($(this))) {
+			return false;
+		} else {
+
+			return true;
+		}
+	});
 	$("#role").focusout(function (e) {
 		if (!validatempty($(this))) {
 			return false;
@@ -237,7 +251,33 @@ $(document).ready(function () {
 			return true;
 		}
 	});
-
+	$("#expertdate").focusout(function (e) {
+		if (!required($(this).val())) {
+			$("#birthdate").addClass("parsley-error");//emptyMsg
+		$("#birthdate_error").html(requiredmsg);
+		  
+			return false; 
+	 
+		} else {
+			$("#birthdate").removeClass("parsley-error");
+			$("#birthdate_error").html("");
+			return true;
+		}
+	});
+	$("#ui-datepicker-div").focusout(function (e) {
+		if (!required($('#expertdate').val())) {
+			$("#birthdate").addClass("parsley-error");//emptyMsg
+		$("#birthdate_error").html(requiredmsg);
+		  
+			return false; 
+	 
+		} else {
+			$("#birthdate").removeClass("parsley-error");
+			$("#birthdate_error").html("");
+			return true;
+		}
+	});
+	
 });
 function noteSuccess() {
 	notif({
@@ -252,5 +292,10 @@ function noteError() {
 		type: "error",
 		bottom: '10'
 	});
+}
+function resetForm() {
+	jQuery('#create_form')[0].reset();
+	$('#image_label').text("اختر ملف الصورة");
+	$('#imgshow').attr("src", emptyimg);
 }
 

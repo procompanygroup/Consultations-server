@@ -38,6 +38,7 @@ return [
   //path
   'new supervisor'=>'مشرف جديد',
   'supervisor info'=>'بيانات المشرف',
+  'expert info'=>'بيانات الخبير',
   //
   'Edit_Profile'=>'تعديل المعلومات الشخصية',
 

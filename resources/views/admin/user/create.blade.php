@@ -35,7 +35,7 @@
 								
 							</div>
 							<div class="card-body pt-0">
-								<form class="form-horizontal" name="create_form" method="POST" enctype="multipart/form-data" id="create_form">
+								<form class="form-horizontal" name="create_form" method="POST" action="{{url('admin/user')}}" enctype="multipart/form-data" id="create_form">
 									@csrf
 									<div class="form-group">
 										<input type="text" class="form-control " id="first_name" placeholder="{{ __('general.first_name') }}" name="first_name">
@@ -161,7 +161,7 @@
 <script src="{{URL::asset('assets/js/admin/validate.js')}}"></script>
 <script src="{{URL::asset('assets/js/admin/content.js')}}"></script>
 <script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
-<script  > urlval ="{{url('admin/user')}}";
+<script  >  
 var emptyimg ="{{URL::asset('assets/img/photos/1.jpg')}}"</script>
  
 @endsection

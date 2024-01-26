@@ -66,7 +66,7 @@
 
 												<th class="border-bottom-0">{{ __('general.user_name') }}</th>
 												<th class="border-bottom-0">{{ __('general.email') }}</th>
-												<th class="border-bottom-0">{{ __('general.nationality') }}</th>
+											
                                                 <th class="border-bottom-0">{{ __('general.action') }}</th>
 
 											</tr>
@@ -77,7 +77,7 @@
 
 												<td>{{$expert->user_name }}</td>
 												<td>{{ $expert->email }}</td>
-												<td>{{ $expert->nationality }}</td>
+												
                                                 <td>
 													<a href="{{route('expert.edit', $expert->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a> 
                                                      

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Expertfavorite extends Model
 {
     use HasFactory;
+    
+    protected $table = 'expertsfavorites';
     protected $fillable = [
         'client_id',
         'expert_id',

@@ -16,7 +16,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto">Forms</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ Form-Elements</span>
+							<h4 class="content-title mb-0 my-auto"><a href="{{ route('expert.index') }}">{{ __('general.experts') }}</a></h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ {{ __('general.new expert') }}</span>
 						</div>
 					</div>
 				</div>
@@ -28,11 +28,11 @@
 					<div class="col">
 						<div class="card  box-shadow-0">
 							<div class="card-header">
-								<h4 class="card-title mb-1">Default Form</h4>
-								<p class="mb-2">It is Very Easy to Customize and it uses in your website apllication.</p>
+								<h4 class="card-title mb-1">{{ __('general.expert info') }}</h4>
+								<p class="mb-2"> </p>
 							</div>
 							<div class="card-body pt-0">
-								<form class="form-horizontal" name="create_form" method="POST" enctype="multipart/form-data" id="create_form">
+								<form class="form-horizontal" name="create_form" action="{{url('admin/expert')}}" method="POST" enctype="multipart/form-data" id="create_form">
 									@csrf
 									<div class="form-group">
 										<input type="text" class="form-control " id="first_name" placeholder="{{ __('general.first_name') }}" name="first_name">
@@ -55,9 +55,9 @@
 										</ul>
 									</div>
                                     <div class="form-group">
-										<input type="text" class="form-control" id="name" placeholder="{{ __('general.user_name') }}" name="name">
+										<input type="text" class="form-control" id="user_name" placeholder="{{ __('general.user_name') }}" name="user_name">
 										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="name_error"></li>
+											<li class="parsley-required" id="user_name_error"></li>
 										</ul>
 									</div>
 									<div class="form-group">
@@ -74,7 +74,7 @@
 									</div>
 
 									<div class="form-group">
-										<input type="text" class="form-control" id="mobile" placeholder="{{ __('general.mobile') }}" name="mobile">
+										<input type="text" class="form-control mobile" id="mobile" placeholder="{{ __('general.mobile') }}" name="mobile">
 										<ul class="parsley-errors-list filled" >
 											<li class="parsley-required" id="mobile_error"></li>
 										</ul>
@@ -92,17 +92,21 @@
 										</ul>
                                     </div>
 
-
-                                    <div class="input-group">
-										<div class="input-group-prepend">
+ 
+                                    <div class="input-group"  id="birthdate" >
+									 
+										<div class="input-group-prepend" style="padding-right: 1px;">
 											<div class="input-group-text">
 												<i class="typcn typcn-calendar-outline tx-24 lh--9 op-6"></i>{{ __('general.birthdate') }}
 											</div>
-										</div><input class="form-control fc-datepicker" name="birthdate"   id="birthdate"  placeholder="MM/DD/YYYY" type="text">
-										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="birthdate_error"></li>
-										</ul>
+										</div><input class="form-control fc-datepicker" name="birthdate" id='expertdate'   placeholder="MM/DD/YYYY" type="text">
+	
 									</div>
+							 
+									<ul class="parsley-errors-list filled" >
+										<li class="parsley-required" id="birthdate_error"></li>
+									</ul>
+								
                                     <div class="my-4">
 										<textarea class="form-control" placeholder="{{ __('general.descreption') }}" rows="3" id="desc" name="desc"></textarea>
 									</div>
@@ -170,7 +174,7 @@
 <script src="{{URL::asset('assets/js/admin/validate.js')}}"></script>
 <script src="{{URL::asset('assets/js/admin/content.js')}}"></script>
 <script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
-<script  > urlval ="{{url('admin/expert')}}";
+<script  >  
 var emptyimg ="{{URL::asset('assets/img/photos/1.jpg')}}"</script>
  
 @endsection

@@ -27,6 +27,7 @@ return [
     'confirm_password match' => 'هذا الحقل يجب ان يكون مطابق لكلمة المرور',
     'only numbers'=>'هذا الحقل يجب ان يحوي ارقام فقط',
     'this field must be between'=>'هذا الحقل يجب ان يكون مكون من :Minmobile ارقام ',
-    'file must be image'=>'الملف يجب ان يكون صورة'
+    'file must be image'=>'الملف يجب ان يكون صورة',
+    'this field must be date'=>'هذا الحقل يجب ان يكون تاريخ'
 ];
 //{{ __('general.welcome_name',['Name'=>'احمد']) }}
