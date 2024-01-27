@@ -115,8 +115,11 @@ class ExpertController extends Controller
    */
   public function edit(string $id)
   {
-    $object = DB::table('experts')->find($id);
-
+    $url =url(Storage::url($this->path)).'/';
+    $object = Expert::find($id);
+    if( $object->image !="" ){
+      $object->fullpathimg= $url.$object->image;
+    }
     //
     return view('admin.expert.edit', ['expert' => $object]);
   }
@@ -143,17 +146,24 @@ class ExpertController extends Controller
         ->withInput();
 
     } else {
-      $imagemodel = Expert::find($id);
-      $oldimage = $imagemodel->image;
+     // $imagemodel = Expert::find($id);
+      if ($request->hasFile('image')) {
+        $file= $request->file('image');
+               // $filename= $file->getClientOriginalName();                
+     $this->storeImage( $file,$id);
+       }
       Expert::find($id)->update([
+        'first_name'=>  $formdata['first_name'],
+        'last_name'=>  $formdata['last_name'],
         'user_name' => $formdata['user_name'],
-        'password' => $formdata['password'],
+      //  'password' => $formdata['password'],
         'mobile' => $formdata['mobile'],
         'email' => $formdata['email'],
-        'nationality' => $formdata['nationality'],
-        'birthdate' => $formdata['birthdate'],
-        'gender' => $formdata['gender'],
-        'marital_status' => $formdata['marital_status'],
+       // 'nationality' => $formdata['nationality'],
+        'birthdate' =>  $formdata['birthdate'],
+        'gender' =>(int) $formdata['gender'],
+       
+     //   'marital_status' => $formdata['marital_status'],
         //   'image' => $formdata['image'],
         //    'points_balance' => $formdata['points_balance'],
         //   'cash_balance' => $formdata['cash_balance'],
@@ -161,45 +171,20 @@ class ExpertController extends Controller
         //  'rates' => $formdata['rates'],
         'record' => $formdata['record'],
         'desc' => $formdata['desc'],
-        'call_cost' => $formdata['call_cost'],
+      'is_active' => isset($formdata['is_active']) ? 1 : 0
+      //  'call_cost' => $formdata['call_cost'],
         //   'token' => $formdata['token'],
 
       ]);
-      //save image
-
-      $separator = '/';
-      if ($request->hasFile('image')) {
-        // $imagemodel->save();
-        $image_tmp = $request->file('image');
-        if ($image_tmp->isValid()) {
-          $folderpath = $this->path . $separator;
-          //Get image Extension
-          $extension = $image_tmp->getClientOriginalExtension();
-          //Generate new Image Name
-          $now = Carbon::now();
-          $imageName = rand(10000, 99999) . $id . '.' . $extension;
-          if (!File::isDirectory($folderpath)) {
-            File::makeDirectory($folderpath, 0777, true, true);
-          }
-          $imagePath = $folderpath . $imageName;
-          //Upload the Image
-          $manager = new ImageManager(new Driver());
-          // read image from filesystem
-          $image = $manager->read($image_tmp);
-          //$image= $image->toWebp(75);
-          $image->save($imagePath);
-          Expert::find($id)->update([
-            "image" => $imageName
-          ]);
-
-          //  delete old image
-          $oldimagepath = $this->path . $separator . $oldimage;
-          if (File::exists($oldimagepath)) {
-            File::delete($oldimagepath);
-          }
-          return redirect()->back()->with('success_message', 'user has been Updated!');
-        }
+      if(isset($formdata['password'])){
+        $password = trim($formdata['password']);
+        User::find($id)->update([
+          'password' => bcrypt($password),
+        ]);
       }
+      //save image
+      return response()->json("ok");
+      
     }
   }
   /**

@@ -35,7 +35,7 @@ class Expert extends Authenticatable implements JWTSubject
         'answer_speed',
         
     ];
-
+    public $fullpathimg = "";
     /**
      * The attributes that should be hidden for serialization.
      *

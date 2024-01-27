@@ -96,7 +96,7 @@
                                     <div class="form-group justify-content-end">
 										<div class="checkbox">
 											<div class="custom-checkbox custom-control">
-												<input type="checkbox" data-checkboxes="mygroup" checked="" class="custom-control-input" id="checkbox-2" value="{{ $user->is_active }}"  name="is_active">
+												<input type="checkbox" data-checkboxes="mygroup" @if ( $user->is_active=='1') @checked(true) @endif   class="custom-control-input" id="checkbox-2" value="{{ $user->is_active }}"  name="is_active">
 												<label for="checkbox-2" class="custom-control-label mt-1"  >{{ __('general.is_active') }}</label>
 											</div>
 											

@@ -199,13 +199,7 @@ if(isset($formdata['password'])){
          return redirect()->route('user.index'); 
 
     }
-    public function trimstr()
-    {
-       $s=" d d ";
-     $s=  trim($s);
-     return  response()->json($s);
-
-    }   
+       
      public function storeImage($file, $id)
     {
         $imagemodel = User::find($id);
