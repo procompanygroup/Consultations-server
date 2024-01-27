@@ -117,10 +117,12 @@ class ExpertController extends Controller
   {
     $url =url(Storage::url($this->path)).'/';
     $object = Expert::find($id);
+    $object->birthdateStr= (string)Carbon::create($object->birthdate)->format('m/d/Y');
     if( $object->image !="" ){
       $object->fullpathimg= $url.$object->image;
     }
     //
+     //return  dd ($object);
     return view('admin.expert.edit', ['expert' => $object]);
   }
 

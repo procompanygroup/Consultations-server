@@ -35,7 +35,7 @@
 								<form class="form-horizontal" name="create_form" action="{{route('expert.update', $expert->id)}}" method="POST" enctype="multipart/form-data" id="create_form">
 									@csrf
 									<div class="form-group">
-										<input type="text" class="form-control " id="first_name" placeholder="{{ __('general.first_name') }}" name="first_name" value="{{ $expert->first_name }}">
+										<input type="text" class="form-control " id="first_name" placeholder="{{ __('general.first_name') }}" name="first_name" value="{{ $expert->first_name}}">
 										<ul class="parsley-errors-list filled" >
 											<li class="parsley-required" id="first_name_error"></li>
 										</ul>
@@ -99,7 +99,7 @@
 											<div class="input-group-text">
 												<i class="typcn typcn-calendar-outline tx-24 lh--9 op-6"></i>{{ __('general.birthdate') }}
 											</div>
-										</div><input class="form-control  fc-datepicker" name="birthdate" id='expertdate'   placeholder="MM/DD/YYYY" type="text"  value="{{ $expert->birthdate }}" >
+										</div><input class="form-control  fc-datepicker" name="birthdate" id='expertdate'   placeholder="MM/DD/YYYY" type="text"  value="{{ $expert->birthdateStr }}" >
 	
 									</div>
 							 
