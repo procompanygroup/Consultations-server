@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.change_desc_in_services_table
+     * Run the migrations.
      */
     public function up(): void
     {
-        Schema::table('values_services', function (Blueprint $table) {
-            $table->text('value')->change();
+        Schema::table('services', function (Blueprint $table) {
+            $table->text('desc')->change();
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('values_services', function (Blueprint $table) {
+        Schema::table('services', function (Blueprint $table) {
             $table->dropColum('value');
         });
     }
