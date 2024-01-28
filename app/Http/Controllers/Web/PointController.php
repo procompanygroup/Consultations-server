@@ -172,7 +172,7 @@ class PointController extends Controller
   
         }
       }
-      return redirect()->route('admin.point.show');
+      return redirect()->route('point.index');
       // return  $this->index();
       //   return redirect()->route('users.index');
   

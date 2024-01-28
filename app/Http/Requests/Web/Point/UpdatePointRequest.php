@@ -25,7 +25,7 @@ class UpdatePointRequest extends FormRequest
       
        return[
          'count'=>'required|integer', 
-         'price'=>'required|decimal:2', 
+         'price'=>'required|decimal:0,2', 
           
        ];   
     
