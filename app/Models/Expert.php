@@ -13,6 +13,8 @@ class Expert extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
     protected $fillable = [
+        'first_name',
+'last_name',
         'user_name',
         'password',
         'mobile',
