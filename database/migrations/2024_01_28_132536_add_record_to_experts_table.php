@@ -7,13 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.change_value_in_values_services_table
+     * Run the migrations.
      */
     public function up(): void
     {
         Schema::table('experts', function (Blueprint $table) {
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
+            $table->text('record');
         });
     }
 
@@ -22,9 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('exprts', function (Blueprint $table) {
-            $table->dropColum('first_name');
-            $table->dropColum('last_name');
+        Schema::table('experts', function (Blueprint $table) {
+            $table->dropColum('record');
         });
     }
 };

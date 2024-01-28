@@ -162,7 +162,7 @@ class ExpertController extends Controller
         'mobile' => $formdata['mobile'],
         'email' => $formdata['email'],
        // 'nationality' => $formdata['nationality'],
-        'birthdate' =>  $formdata['birthdate'],
+        'birthdate' =>Carbon::createFromFormat('m/d/Y', $formdata['birthdate'])->format('Y-m-d'),
         'gender' =>(int) $formdata['gender'],
        
      //   'marital_status' => $formdata['marital_status'],
@@ -171,7 +171,7 @@ class ExpertController extends Controller
         //   'cash_balance' => $formdata['cash_balance'],
         //  'cash_balance_todate' => $formdata['cash_balance_todate'],
         //  'rates' => $formdata['rates'],
-        'record' => $formdata['record'],
+     //   'record' => $formdata['record'],
         'desc' => $formdata['desc'],
       'is_active' => isset($formdata['is_active']) ? 1 : 0
       //  'call_cost' => $formdata['call_cost'],
@@ -180,7 +180,7 @@ class ExpertController extends Controller
       ]);
       if(isset($formdata['password'])){
         $password = trim($formdata['password']);
-        User::find($id)->update([
+        Expert::find($id)->update([
           'password' => bcrypt($password),
         ]);
       }
