@@ -51,8 +51,8 @@
 											@foreach ($services as $service)
 											<tr>
 
-												<td>{{$service->user_name }}</td>
-												<td>{{ $service->email }}</td>
+												<td>{{$service->name }}</td>
+												<td>{{ $service->desc }}</td>
 												
                                                 <td>
 													<a href="{{route('expert.edit', $service->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a> 
