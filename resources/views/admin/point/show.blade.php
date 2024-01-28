@@ -30,8 +30,8 @@
 						<div class="card mg-b-20">
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
-									<h4 class="card-title mg-b-0">{{ __('general.manage experts') }}</h4>
-									<a href="{{ route('expert.create') }}" class="btn btn-primary btn-small">{{ __('general.new expert') }}</a>
+									<h4 class="card-title mg-b-0">{{ __('general.manage points') }}</h4>
+									<a href="{{ route('point.create') }}" class="btn btn-primary btn-small">{{ __('general.new point') }}</a>
 								</div>
 									</div>
 							<div class="card-body">
@@ -40,24 +40,24 @@
 										<thead>
 											<tr>
 
-												<th class="border-bottom-0">{{ __('general.user_name') }}</th>
-												<th class="border-bottom-0">{{ __('general.email') }}</th>
+												<th class="border-bottom-0">{{ __('general.points') }}</th>
+												<th class="border-bottom-0">{{ __('general.price') }}</th>
 											
                                                 <th class="border-bottom-0">{{ __('general.action') }}</th>
 
 											</tr>
 										</thead>
 										<tbody>
-											@foreach ($experts as $expert)
+											@foreach ($points as $point)
 											<tr>
 
-												<td>{{$expert->user_name }}</td>
-												<td>{{ $expert->email }}</td>
+												<td>{{$point->count }}</td>
+												<td>{{ $point->price }}</td>
 												
                                                 <td>
-													<a href="{{route('expert.edit', $expert->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a> 
+													<a href="{{route('point.edit', $point->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a> 
                                                      
-                                                    <form action="{{route('expert.destroy', $expert->id)}}" method="POST" class="d-inline">
+                                                    <form action="{{route('point.destroy', $point->id)}}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger btn-sm" title="Delete"><i class="fa fa-trash"></i></button>

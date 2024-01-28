@@ -279,6 +279,22 @@ $(document).ready(function () {
 	});
 	
 });
+$("#count").focusout(function (e) {
+	if (!validatempty($(this))) {
+		return false;
+	} else {
+
+		return true;
+	}
+});
+$("#price").focusout(function (e) {
+	if (!validatempty($(this))) {
+		return false;
+	} else {
+
+		return true;
+	}
+});
 function noteSuccess() {
 	notif({
 		msg: "تمت الاضافة بنجاح ",

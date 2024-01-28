@@ -54,7 +54,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         });
         Route::resource('point', PointController::class, ['except' => ['update']]);
         Route::prefix('point')->group(function () {
-            Route::post('/update/{id}', [PointController::class, 'update'])->name('expert.update');
+            Route::post('/update/{id}', [PointController::class, 'update'])->name('point.update');
         });
             });
 
@@ -74,13 +74,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
             Route::post('/update/{id}', [ExpertController::class, 'update'])->name('expert.update');
         });
       
-        Route::resource('expert', ExpertController::class, ['except' => ['update']]);
-        Route::prefix('expert')->group(function () {
-            Route::post('/update/{id}', [ExpertController::class, 'update'])->name('expert.update');
-        });
+        
         Route::resource('service', ServiceController::class, ['except' => ['update']]);
         Route::prefix('service')->group(function () {
-            Route::post('/update/{id}', [ServiceController::class, 'update'])->name('expert.update');
+            Route::post('/update/{id}', [ServiceController::class, 'update'])->name('service.update');
         });
        
     });

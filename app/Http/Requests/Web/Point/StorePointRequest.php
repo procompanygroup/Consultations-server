@@ -14,15 +14,35 @@ class StorePointRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
-        return [
-            //
-        ];
+       
+      
+       return[
+         'count'=>'required|integer', 
+         'price'=>'required|decimal:2', 
+          
+       ];   
+    
     }
+    /**
+ * Get the error messages for the defined validation rules. 'decimal:2'
+
+ *
+ * @return array<string, string>
+ */
+public function messages(): array
+{
+  
+   return[   
+      'count.required'=> __('messages.this field is required') ,
+      'count.integer'=> __('messages.must be integer') ,
+      'price.required'=>__('messages.this field is required') ,  
+      'price.decimal'=>__('messages.must be integer') ,   
+  
+ 
+    ];
+    
+}
+
 }

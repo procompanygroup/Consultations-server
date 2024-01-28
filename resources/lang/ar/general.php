@@ -67,9 +67,11 @@ return [
    // table
    'role'=>'المهمة',
    'action'=>'العملية',
-
-
-
+   'price' => 'السعر',
+'new point'=> 'نقاط جديدة',
+'manage points'=>'ادارة النقاط',
+'point info'=>'بيانات النقاط',
+'pointscount'=>'عدد النقاط',
 ];
 /*
   {{ __('general.welcome_name',['Name'=>'احمد']) }}
