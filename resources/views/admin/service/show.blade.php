@@ -48,16 +48,16 @@
 											</tr>
 										</thead>
 										<tbody>
-											@foreach ($experts as $expert)
+											@foreach ($services as $service)
 											<tr>
 
-												<td>{{$expert->user_name }}</td>
-												<td>{{ $expert->email }}</td>
+												<td>{{$service->user_name }}</td>
+												<td>{{ $service->email }}</td>
 												
                                                 <td>
-													<a href="{{route('expert.edit', $expert->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a> 
+													<a href="{{route('expert.edit', $service->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a> 
                                                      
-                                                    <form action="{{route('expert.destroy', $expert->id)}}" method="POST" class="d-inline">
+                                                    <form action="{{route('expert.destroy', $service->id)}}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger btn-sm" title="Delete"><i class="fa fa-trash"></i></button>
