@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 28, 2024 at 01:30 PM
+-- Generation Time: Jan 28, 2024 at 01:45 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.2.0
 
@@ -112,21 +112,20 @@ CREATE TABLE IF NOT EXISTS `experts` (
   `answer_speed` decimal(8,2) DEFAULT NULL,
   `first_name` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `last_name` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `record` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `record` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `experts_user_name_unique` (`user_name`),
   UNIQUE KEY `experts_mobile_unique` (`mobile`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `experts`
 --
 
 INSERT INTO `experts` (`id`, `user_name`, `mobile`, `email`, `nationality`, `birthdate`, `gender`, `marital_status`, `image`, `points_balance`, `cash_balance`, `cash_balance_todate`, `rates`, `desc`, `call_cost`, `token`, `password`, `created_at`, `updated_at`, `is_active`, `answer_speed`, `first_name`, `last_name`, `record`) VALUES
-(1, 'expert1', '096959459459', 'expert@gmail.com', 'Syrian', '2000-01-01 17:59:22', 1, 'm', '1.webpb', 0, '0.00', '0.00', '0.00', NULL, 0, NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, NULL, 1, NULL, NULL, NULL, ''),
-(2, 'expert2', '096959459451', 'expert2012@gmail.com', 'Syrian', '2000-01-01 17:59:22', 1, 'm', NULL, 0, '0.00', '0.00', '0.00', NULL, 0, NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, NULL, 1, NULL, NULL, NULL, ''),
-(3, 'expert3', '096959459441', 'expert2011@gmail.com', 'Syrian', '2000-01-01 17:59:22', NULL, 'm', NULL, 0, '0.00', '0.00', '0.00', NULL, 0, NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, NULL, 1, NULL, NULL, NULL, ''),
-(4, 'sdvsdv', '0987456321', 'najymssdvsd@gmail.com', NULL, '2024-01-07 00:00:00', 1, NULL, '885154.webp', 0, '0.00', '0.00', '0.00', 'wfwefwe', 0, NULL, '$2y$12$ERMIdvpWCTEk7y8ty9y8Y.vSkvhEWJziPpaQQBYwX3DLL0HgvxeAq', '2024-01-28 11:15:45', '2024-01-28 11:29:42', 1, NULL, 'dvdsvsd', 'sdvsdvsdv', '');
+(1, 'expert1', '0969459459', 'expert@gmail.com', 'Syrian', '2000-01-01 00:00:00', 1, 'm', '1.webpb', 0, '0.00', '0.00', '0.00', NULL, 0, NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, '2024-01-28 11:44:54', 1, NULL, NULL, NULL, NULL),
+(2, 'expert2', '096959459451', 'expert2012@gmail.com', 'Syrian', '2000-01-01 17:59:22', 1, 'm', NULL, 0, '0.00', '0.00', '0.00', NULL, 0, NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, NULL, 1, NULL, NULL, NULL, NULL),
+(3, 'expert3', '0969459441', 'expert2011@gmail.com', 'Syrian', '2000-01-01 00:00:00', 1, 'm', NULL, 0, '0.00', '0.00', '0.00', NULL, 0, NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, '2024-01-28 11:45:31', 1, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -291,7 +290,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -344,7 +343,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (44, '2024_01_28_115214_add_side_to_pointstransfers_table', 19),
 (45, '2024_01_28_125241_change_desc_in_services_table', 20),
 (46, '2024_01_28_132233_add_record_to_experts_table', 21),
-(47, '2024_01_28_132536_add_record_to_experts_table', 22);
+(47, '2024_01_28_132536_add_record_to_experts_table', 22),
+(48, '2024_01_28_134218_add_records_to_experts_table', 23);
 
 -- --------------------------------------------------------
 
