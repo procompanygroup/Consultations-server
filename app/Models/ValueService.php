@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ValueService extends Model
 {
     use HasFactory;
+    protected $table = 'values_services';
     protected $fillable = [
         'value',
 'selectedservice_id',

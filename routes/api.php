@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ExpertAuthController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\ExpertController;
 use App\Http\Controllers\Api\ServiceController;
+use App\Http\Controllers\Api\SelectedServiceController;
  //use App\Http\Middleware\Api\AuthenticateClient;
 
 /*
@@ -44,7 +45,8 @@ Route::middleware('authClient:api_clients')->group(function () {
 //api/client/service
         Route::prefix('/service')->group(function () {
             Route::post('/viewall', [serviceController::class, 'index']); 
-            Route::post('/getinputform', [serviceController::class, 'getinputserviceform']);            
+            Route::post('/getinputform', [serviceController::class, 'getinputserviceform']); 
+            Route::post('/savewithvalues', [SelectedServiceController::class, 'savewithvalues']);          
         });
         Route::prefix('/expert')->group(function () {
             Route::post('/getexpertsbyserviceid', [ExpertController::class, 'getexpertsbyserviceid']); 

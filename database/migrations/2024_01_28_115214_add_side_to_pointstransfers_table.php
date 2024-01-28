@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.add_side_to_pointstransfers_table
+     * Run the migrations.
      */
     public function up(): void
     {
-        Schema::table('values_services', function (Blueprint $table) {
-            $table->text('value')->change();
+        Schema::table('pointstransfers', function (Blueprint $table) {
+            $table->string('side');  
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('values_services', function (Blueprint $table) {
-            $table->dropColum('value');
+        Schema::table('pointstransfers', function (Blueprint $table) {
+            $table->dropColum('side');
         });
     }
 };

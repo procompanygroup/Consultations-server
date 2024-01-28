@@ -24,6 +24,10 @@ class Selectedservice extends Model
         'isanswerconfirmd',
         'status',
         'comment_rate',
+        'expert_cost',
+'cost_type',
+'expert_cost_value',
+
              
     ];
 

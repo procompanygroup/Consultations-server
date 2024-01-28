@@ -19,6 +19,7 @@ class Pointtransfer extends Model
 'count',
 'status',
 'selectedservice_id',
+'side',
     ];
 
 
