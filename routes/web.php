@@ -7,6 +7,8 @@ use App\Http\Controllers\Web\ExpertController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Web\ServiceController;
+use App\Http\Controllers\Web\PointController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -50,7 +52,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         Route::prefix('user')->group(function () {
             Route::post('/update/{id}', [UserController::class, 'update'])->name('user.update');
         });
-
+        Route::resource('point', PointController::class, ['except' => ['update']]);
+        Route::prefix('point')->group(function () {
+            Route::post('/update/{id}', [PointController::class, 'update'])->name('expert.update');
+        });
             });
 
     Route::middleware('role.admin:admin-super')->group(function () {
@@ -68,6 +73,16 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         Route::prefix('expert')->group(function () {
             Route::post('/update/{id}', [ExpertController::class, 'update'])->name('expert.update');
         });
+      
+        Route::resource('expert', ExpertController::class, ['except' => ['update']]);
+        Route::prefix('expert')->group(function () {
+            Route::post('/update/{id}', [ExpertController::class, 'update'])->name('expert.update');
+        });
+        Route::resource('service', ServiceController::class, ['except' => ['update']]);
+        Route::prefix('service')->group(function () {
+            Route::post('/update/{id}', [ServiceController::class, 'update'])->name('expert.update');
+        });
+       
     });
     /*
     Route::middleware('role.admin:super')->group(function () {

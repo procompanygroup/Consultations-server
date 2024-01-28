@@ -17,7 +17,7 @@ use App\Models\Pointtransfer;
 use Illuminate\Support\Facades\Auth;
 class PointController extends Controller
 {
-    public $path = 'media/points';
+  public $path = 'images/points';
     /**
      * Display a listing of the resource.
      */
