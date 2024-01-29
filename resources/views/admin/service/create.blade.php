@@ -175,6 +175,50 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col">
+                                <div class="card custom-card">
+                                    <div class="card-body">
+                                        <div>
+                                            <h6 class="card-title">حقول الخدمة المختارة</h6>
+                                        </div>
+                                        <div class="service-field row">
+                                            <div class="form-group col-8">
+                                                <input type="text" class="form-control " id="first_name" placeholder="{{ __('general.first_name') }}" name="first_name">
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="form-group d-inline-block">
+                                                    <button class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" href=""><i class="fa fa-edit"></i></button>
+                                                </div>
+                                                <form class="form-horizontal d-inline-block" >
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn ripple btn-danger"><i class="fa fa-trash"></i></button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="service-field row">
+                                            <div class="form-group col-8">
+                                                <select name="role"   id="role" class="form-control SlectBox" onclick="console.log($(this).val())" onchange="console.log('change is firing')">
+                                                    <!--placeholder-->
+                                                    <option title=""   class="text-muted">{{ __('general.choose yes/no') }}</option>
+                                                    <option value="yes">{{ __('general.yes') }}</option>
+                                                    <option value="no">{{ __('general.no') }}</option>
+                                                </select>                                            </div>
+                                            <div class="col-4">
+                                                <div class="form-group d-inline-block">
+                                                    <button type="submit" class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" href=""><i class="fa fa-edit"></i></button>
+                                                </div>
+                                                <form class="form-horizontal d-inline-block" >
+                                                    @csrf
+                                                    <div class="form-group">
+                                                        <button class="btn ripple btn-danger"><i class="fa fa-trash"></i></button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 						</div>
 					</div>
 				</div>
@@ -240,37 +284,33 @@
                                     <div class="card-body pt-4">
                                         <form class="form-horizontal" name="create_form" method="POST" action="{{url('admin/user')}}" enctype="multipart/form-data" id="create_form">
                                             @csrf
+
                                             <div class="form-group">
                                                 <input type="text" class="form-control " id="field_name" placeholder="{{ __('general.field_name') }}" name="field_name">
                                                 <ul class="parsley-errors-list filled" >
                                                     <li class="parsley-required" id="field_name_error"></li>
                                                 </ul>
                                             </div>
-                                            <div class="row mb-3">
-                                                <div class="form-check col-6 mb-2">
-                                                    <label class="form-check-label pl-2" for="exampleRadios1">
-                                                        حقل نصي
-                                                    </label>
-                                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                                            {{-- image --}}
+                                            <div class="form-group mb-4 justify-content-end">
+                                                <div class="custom-file">
+                                                    <input class="custom-file-input" id="image" name="image" type="file"> <label class="custom-file-label" id="image_label" for="customFile">{{ __('general.choose image') }}</label>
+                                                    <ul class="parsley-errors-list filled" >
+                                                        <li class="parsley-required" id="image_error"></li>
+                                                    </ul>
                                                 </div>
-                                                <div class="form-check col-6 mb-2">
-                                                    <label class="form-check-label pl-2" for="exampleRadios2">
-                                                        قائمة نعم/لا
-                                                    </label>
-                                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                                                </div>
-                                                <div class="form-check col-6 mb-2">
-                                                    <label class="form-check-label pl-2" for="exampleRadios2">
-                                                        قائمة خيارات متعددة
-                                                    </label>
-                                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                                                </div>
-                                                <div class="form-check col-6 mb-2">
-                                                    <label class="form-check-label pl-2" for="exampleRadios2">
-                                                        حقل تاريخ
-                                                    </label>
-                                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                                                </div>
+
+                                            </div>
+                                            <div class="form-group mb-3">
+                                                <select name="role"   id="role" class="form-control SlectBox" onclick="console.log($(this).val())" onchange="console.log('change is firing')">
+                                                    <!--placeholder-->
+                                                    <option title=""   class="text-muted">نوع الحقل</option>
+                                                    <option value="">حقل نصي</option>
+                                                    <option value="">قائمة نعم/لا</option>
+                                                    <option value="">قائمة متعدد</option>
+                                                    <option value="">حقل تاريخ</option>
+                                                    <option value="">حقل نصي طويل</option>
+                                                </select>
                                             </div>
 
                                             <div class="mb-4">
@@ -294,16 +334,6 @@
                                                 <div>
                                                     <button type="submit" name="btn_add_field" id="btn_add_field" class="btn btn-light btn-block"><i class="fa fa-plus"></i></button>
                                                 </div>
-                                            </div>
-                                            {{-- image --}}
-                                            <div class="form-group mb-4 justify-content-end">
-                                                <div class="custom-file">
-                                                    <input class="custom-file-input" id="image" name="image" type="file"> <label class="custom-file-label" id="image_label" for="customFile">{{ __('general.choose image') }}</label>
-                                                    <ul class="parsley-errors-list filled" >
-                                                        <li class="parsley-required" id="image_error"></li>
-                                                    </ul>
-                                                </div>
-
                                             </div>
                                         </form>
                                     </div>
