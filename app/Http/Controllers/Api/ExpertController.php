@@ -224,7 +224,7 @@ class ExpertController extends Controller
                 'email',
                 'birthdate',
                 'gender',
-                'marital_status',
+             //   'marital_status',
                 'is_active',
                 'points_balance',
                 'cash_balance',
