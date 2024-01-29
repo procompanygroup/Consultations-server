@@ -39,6 +39,7 @@ class Expert extends Authenticatable implements JWTSubject
     ];
     public $fullpathimg = "";
     public $birthdateStr = "";
+    public $is_favorite = 0;
     /**
      * The attributes that should be hidden for serialization.
      *
