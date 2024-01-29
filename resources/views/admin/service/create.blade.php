@@ -36,63 +36,64 @@
 								<h4 class="card-title mb-1">{{ __('general.service info') }}</h4>
 								<p class="mb-2"> </p>
 							</div>
-							<div class="card-body pt-0">
-								<form class="form-horizontal" name="create_form" action="{{url('admin/service')}}" method="POST" enctype="multipart/form-data" id="create_form">
-									@csrf
-									<div class="form-group">
-										<input type="text" class="form-control " id="name" placeholder="{{ __('general.service_name') }}" name="name">
-										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="name_error"></li>
-										</ul>
+							<div class="card-body row pt-0">
+                                <div class="col-lg-8">
+                                    <form class="form-horizontal" name="create_form" action="{{url('admin/service')}}" method="POST" enctype="multipart/form-data" id="create_form">
+                                        @csrf
+                                        <div class="form-group">
+                                            <input type="text" class="form-control " id="name" placeholder="{{ __('general.service_name') }}" name="name">
+                                            <ul class="parsley-errors-list filled" >
+                                                <li class="parsley-required" id="name_error"></li>
+                                            </ul>
 
-									</div>
+                                        </div>
 
-                                    <div class="form-group">
-                                        <div class="my-4">
-                                            <textarea class="form-control" placeholder="{{ __('general.descreption') }}" rows="3" id="desc" name="desc"></textarea>
-                                        </div>									    <ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="user_name_error"></li>
-										</ul>
-									</div>
-                                    <div class="form-group mb-4 justify-content-end">
-										<div class="custom-file">
-											<input class="custom-file-input" id="image" name="image" type="file"> <label class="custom-file-label" for="customFile"  id="image_label">{{ __('general.choose image') }}</label>
-											<ul class="parsley-errors-list filled" >
-												<li class="parsley-required" id="image_error"></li>
-											</ul>
-										</div>
-									</div>
-                                    <div class="form-group mb-4 justify-content-end">
-										<div class="custom-file">
-											<input class="custom-file-input" id="icon" name="icon" type="file"> <label class="custom-file-label" for="customFile"  id="icon_label">{{ __('general.choose svg') }}</label>
-											<ul class="parsley-errors-list filled" >
-												<li class="parsley-required" id="icon_error"></li>
-											</ul>
-										</div>
-									</div>
-									<div class="form-group justify-content-end">
-										<div class="checkbox">
-											<div class="custom-checkbox custom-control">
-												<input type="checkbox" data-checkboxes="mygroup" checked="" class="custom-control-input" id="checkbox-2" value="0" name="is_active">
-												<label for="checkbox-2" class="custom-control-label mt-1"  >{{ __('general.is_active') }}</label>
-											</div>
+                                        <div class="form-group">
+                                            <div class="my-4">
+                                                <textarea class="form-control" placeholder="{{ __('general.descreption') }}" rows="3" id="desc" name="desc"></textarea>
+                                            </div>									    <ul class="parsley-errors-list filled" >
+                                                <li class="parsley-required" id="user_name_error"></li>
+                                            </ul>
+                                        </div>
+                                        <div class="form-group mb-4 justify-content-end">
+                                            <div class="custom-file">
+                                                <input class="custom-file-input" id="image" name="image" type="file"> <label class="custom-file-label" for="customFile"  id="image_label">{{ __('general.choose image') }}</label>
+                                                <ul class="parsley-errors-list filled" >
+                                                    <li class="parsley-required" id="image_error"></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-4 justify-content-end">
+                                            <div class="custom-file">
+                                                <input class="custom-file-input" id="icon" name="icon" type="file"> <label class="custom-file-label" for="customFile"  id="icon_label">{{ __('general.choose svg') }}</label>
+                                                <ul class="parsley-errors-list filled" >
+                                                    <li class="parsley-required" id="icon_error"></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="form-group justify-content-end">
+                                            <div class="checkbox">
+                                                <div class="custom-checkbox custom-control">
+                                                    <input type="checkbox" data-checkboxes="mygroup" checked="" class="custom-control-input" id="checkbox-2" value="0" name="is_active">
+                                                    <label for="checkbox-2" class="custom-control-label mt-1"  >{{ __('general.is_active') }}</label>
+                                                </div>
 
-										</div>
-										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="is_active_error"></li>
-										</ul>
-									</div>
-									<div class="form-group mb-0 mt-3 justify-content-end">
-										<div>
-											<button type="submit" name="btn_save" id="btn_save" class="btn btn-primary">{{ __('general.save') }}</button>
-											<button type="button" name="btn_cancel" id="btn_cancel"  class="btn btn-secondary">{{ __('general.cancel') }}</button>
-										</div>
-									</div>
-								</form>
-								<div class="pd-20 clearfix">
-									<img alt="" id="imgshow" class="rounded img-thumbnail wd-100p wd-sm-200 float-sm-right  mg-t-10 mg-sm-t-0"
-									src="{{URL::asset('assets/img/photos/1.jpg')}}" >
-								</div>
+                                            </div>
+                                            <ul class="parsley-errors-list filled" >
+                                                <li class="parsley-required" id="is_active_error"></li>
+                                            </ul>
+                                        </div>
+                                        <div class="form-group mb-0 mt-3 justify-content-end">
+                                            <div>
+                                                <button type="submit" name="btn_save" id="btn_save" class="btn btn-primary">{{ __('general.save') }}</button>
+                                                <button type="button" name="btn_cancel" id="btn_cancel"  class="btn btn-secondary">{{ __('general.cancel') }}</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="col-lg-4 mt-sm-3 mt-lg-0">
+                                    <img alt="" id="imgshow" class="rounded img-thumbnail wd-100p float-sm-right  mg-t-10 mg-sm-t-0" src="{{URL::asset('assets/img/photos/1.jpg')}}" >
+                                </div>
 							</div>
 
                             <div class="col">
