@@ -16,7 +16,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto"><a href="{{ route('expert.index') }}">{{ __('general.experts') }}</a></h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ {{ __('general.new expert') }}</span>
+							<h4 class="content-title mb-0 my-auto"><a href="{{ route('point.index') }}">{{ __('general.points') }}</a></h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ {{ __('general.new point') }}</span>
 						</div>
 					</div>
 				</div>
@@ -28,96 +28,27 @@
 					<div class="col">
 						<div class="card  box-shadow-0">
 							<div class="card-header">
-								<h4 class="card-title mb-1">{{ __('general.expert info') }}</h4>
+								<h4 class="card-title mb-1">{{ __('general.point info') }}</h4>
 								<p class="mb-2"> </p>
 							</div>
 							<div class="card-body pt-0">
-								<form class="form-horizontal" name="create_form" action="{{url('admin/expert')}}" method="POST" enctype="multipart/form-data" id="create_form">
+								<form class="form-horizontal" name="create_form" action="{{url('admin/point')}}" method="POST" enctype="multipart/form-data" id="create_form">
 									@csrf
 									<div class="form-group">
-										<input type="text" class="form-control " id="first_name" placeholder="{{ __('general.first_name') }}" name="first_name">
+										<input type="text" class="form-control " id="count" placeholder="{{ __('general.pointscount') }}" name="count">
 										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="first_name_error"></li>
+											<li class="parsley-required" id="count_error"></li>
 										</ul>
 										 
 									</div>
 
                                     <div class="form-group">
-										<input type="text" class="form-control" id="last_name" placeholder="{{ __('general.last_name') }}" name="last_name">
+										<input type="text" class="form-control" id="price" placeholder="{{ __('general.price') }}" name="price">
 										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="last_name_error"></li>
+											<li class="parsley-required" id="price_error"></li>
 										</ul>
 									</div>
-									<div class="form-group">
-										<input type="email" class="form-control" id="email" placeholder="{{ __('general.email') }}" name="email">
-										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="email_error"></li>
-										</ul>
-									</div>
-                                    <div class="form-group">
-										<input type="text" class="form-control" id="user_name" placeholder="{{ __('general.user_name') }}" name="user_name">
-										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="user_name_error"></li>
-										</ul>
-									</div>
-									<div class="form-group">
-										<input type="password" class="form-control" id="password" placeholder="{{ __('general.password') }}" name="password">
-										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="password_error"></li>
-										</ul>
-									</div>
-									<div class="form-group">
-										<input type="password" class="form-control" id="confirm_password" placeholder="{{ __('general.confirm_password') }}" name="confirm_password">
-										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="confirm_password_error"></li>
-										</ul>
-									</div>
-
-									<div class="form-group">
-										<input type="text" class="form-control mobile" id="mobile" placeholder="{{ __('general.mobile') }}" name="mobile">
-										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="mobile_error"></li>
-										</ul>
-									</div>
-                                   
-                                    <div class="mb-4">
-                                        <select name="gender"   id="gender" class="form-control SlectBox" onclick="console.log($(this).val())" onchange="console.log('change is firing')">
-                                            <!--placeholder-->
-                                            <option title=""   class="text-muted">{{ __('general.gender') }}</option>
-                                            <option value="1">{{ __('general.male') }}</option>
-                                            <option value="2">{{ __('general.female') }}</option>
-                                        </select>
-										<ul class="parsley-errors-list filled">
-											<li class="parsley-required"  id="gender_error"></li>
-										</ul>
-                                    </div>
-
- 
-                                    <div class="input-group"  id="birthdate" >
-									 
-										<div class="input-group-prepend" style="padding-right: 1px;">
-											<div class="input-group-text">
-												<i class="typcn typcn-calendar-outline tx-24 lh--9 op-6"></i>{{ __('general.birthdate') }}
-											</div>
-										</div><input class="form-control fc-datepicker" name="birthdate" id='expertdate'   placeholder="MM/DD/YYYY" type="text">
-	
-									</div>
-							 
-									<ul class="parsley-errors-list filled" >
-										<li class="parsley-required" id="birthdate_error"></li>
-									</ul>
-								
-                                    <div class="my-4">
-										<textarea class="form-control" placeholder="{{ __('general.descreption') }}" rows="3" id="desc" name="desc"></textarea>
-									</div>
-                                    <div class="form-group mb-4 justify-content-end">
-										<div class="custom-file">
-											<input class="custom-file-input" id="image" name="image" type="file"> <label class="custom-file-label" for="customFile"  id="image_label">{{ __('general.choose image') }}</label>
-											<ul class="parsley-errors-list filled" >
-												<li class="parsley-required" id="image_error"></li>
-											</ul>
-										</div>
-									</div>
+								 
 									<div class="form-group justify-content-end">
 										<div class="checkbox">
 											<div class="custom-checkbox custom-control">
@@ -137,10 +68,7 @@
 										</div>
 									</div>
 								</form>
-								<div class="pd-20 clearfix">
-									<img alt="" id="imgshow" class="rounded img-thumbnail wd-100p wd-sm-200 float-sm-right  mg-t-10 mg-sm-t-0"
-									src="{{URL::asset('assets/img/photos/1.jpg')}}" >
-								</div> 
+							 
 							</div>
 						</div>
 					</div>

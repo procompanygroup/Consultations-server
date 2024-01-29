@@ -14,7 +14,8 @@ use Intervention\Image\Drivers\Gd\Driver;
 use App\Http\Requests\Web\Point\StorePointRequest;
 use App\Http\Requests\Web\Point\UpdatePointRequest;
 use App\Models\Pointtransfer;
-use Illuminate\Support\Facades\Auth;
+//use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 class PointController extends Controller
 {
   public $path = 'images/points';
@@ -33,15 +34,21 @@ class PointController extends Controller
      */
     public function create()
     {
-      return view('admin.point.add');
+      return view('admin.point.create');
     }
   
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    
+  
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StorePointRequest $request)
     {
       $formdata = $request->all();
+      // return redirect()->back()->with('success_message', $formdata);
       $validator = Validator::make(
         $formdata,
         $request->rules(),
@@ -49,25 +56,30 @@ class PointController extends Controller
       );
   
       if ($validator->fails()) {
-  
-        return redirect()->back()->withErrors($validator)
-          ->withInput();
-  
+        /*
+                          return  redirect()->back()->withErrors($validator)
+                          ->withInput();
+                          */
+        // return response()->withErrors($validator)->json();
+        return response()->json($validator);  
       } else {
-       
         $newObj = new Point;
         $newObj->count = $formdata['count'];
- $newObj->price = $formdata['price'];
- $newObj->pricebefor = $formdata['pricebefor'];
- $newObj->countbefor = $formdata['countbefor'];
- $newObj->createuser_id =Auth::user()->id;
- $newObj->updateuser_id = Auth::user()->id;
- $newObj->is_active = $formdata['is_active'];
-
+        $newObj->price = $formdata['price'];
+        $newObj->pricebefor =  $formdata['price'];
+        $newObj->countbefor =  $formdata['count'];     
+        $newObj->is_active = isset($formdata["is_active"]) ? 1 : 0;
+        //$newObj->token = $formdata['token'];
         $newObj->save();
-        
-  
-        return redirect()->back()->with('success_message', 'user has been Added!');
+  /*
+        if ($request->hasFile('image')) {
+          $file = $request->file('image');
+          // $filename= $file->getClientOriginalName();               
+          $this->storeImage($file, $newObj->id);
+          //  $this->storeImage( $file,2);
+        }
+  */
+        return response()->json("ok");
       }
     }
   
@@ -79,24 +91,29 @@ class PointController extends Controller
       //
     }
   
-    /** 
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-      $object = DB::table('points')->find($id);
-  
-      //
+    //  $url =url(Storage::url($this->path)).'/';
+      $object = Point::find($id);
+       /*
+      if( $object->image !="" ){
+        $object->fullpathimg= $url.$object->image;
+      }
+      */
+      
       return view('admin.point.edit', ['point' => $object]);
     }
   
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePointRequest $request, $id)
     {
       $formdata = $request->all();
-      //validate      
+      //validate
       $validator = Validator::make(
         $formdata,
         $request->rules(),
@@ -112,21 +129,26 @@ class PointController extends Controller
           ->withInput();
   
       } else {
-        // $imagemodel = Point::find($id);
-        // $oldimage = $imagemodel->image;
+       // $imagemodel = Expert::find($id);
+       /*
+        if ($request->hasFile('image')) {
+          $file= $request->file('image');
+                 // $filename= $file->getClientOriginalName();                
+       $this->storeImage( $file,$id);
+         }
+         */ 
         Point::find($id)->update([
-            'count' => $formdata['count'],
-            'price' => $formdata['price'],
-            'pricebefor' => $formdata['pricebefor'],
-            'countbefor' => $formdata['countbefor'],
-           // 'createuser_id' => Auth::user()->id,
-            'updateuser_id' =>Auth::user()->id,
-            'is_active' => $formdata['is_active'],
-            
+          'count'=>  $formdata['count'],
+          'price'=>  $formdata['price'],
+          'pricebefor' => $formdata['price'],    
+          'countbefor' => $formdata['count'],            
+        'is_active' => isset($formdata['is_active']) ? 1 : 0         
         ]);
       
+        //save image
+        return response()->json("ok");
+        
       }
-      return redirect()->back()->with('success_message', 'user has been Updated!');
     }
     /**
      * Remove the specified resource from storage.
@@ -150,7 +172,7 @@ class PointController extends Controller
   
         }
       }
-      return redirect()->route('admin.point.show');
+      return redirect()->route('point.index');
       // return  $this->index();
       //   return redirect()->route('users.index');
   

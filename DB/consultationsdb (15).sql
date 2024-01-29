@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 28, 2024 at 01:45 PM
+-- Generation Time: Jan 28, 2024 at 04:50 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.2.0
 
@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS `experts` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `experts_user_name_unique` (`user_name`),
   UNIQUE KEY `experts_mobile_unique` (`mobile`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `experts`
@@ -125,7 +125,8 @@ CREATE TABLE IF NOT EXISTS `experts` (
 INSERT INTO `experts` (`id`, `user_name`, `mobile`, `email`, `nationality`, `birthdate`, `gender`, `marital_status`, `image`, `points_balance`, `cash_balance`, `cash_balance_todate`, `rates`, `desc`, `call_cost`, `token`, `password`, `created_at`, `updated_at`, `is_active`, `answer_speed`, `first_name`, `last_name`, `record`) VALUES
 (1, 'expert1', '0969459459', 'expert@gmail.com', 'Syrian', '2000-01-01 00:00:00', 1, 'm', '1.webpb', 0, '0.00', '0.00', '0.00', NULL, 0, NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, '2024-01-28 11:44:54', 1, NULL, NULL, NULL, NULL),
 (2, 'expert2', '096959459451', 'expert2012@gmail.com', 'Syrian', '2000-01-01 17:59:22', 1, 'm', NULL, 0, '0.00', '0.00', '0.00', NULL, 0, NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, NULL, 1, NULL, NULL, NULL, NULL),
-(3, 'expert3', '0969459441', 'expert2011@gmail.com', 'Syrian', '2000-01-01 00:00:00', 1, 'm', NULL, 0, '0.00', '0.00', '0.00', NULL, 0, NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, '2024-01-28 11:45:31', 1, NULL, NULL, NULL, NULL);
+(3, 'expert3', '0969459441', 'expert2011@gmail.com', 'Syrian', '2000-01-01 00:00:00', 1, 'm', NULL, 0, '0.00', '0.00', '0.00', 'asc', 0, NULL, '$2y$12$hmb198tlznpCuj4fUy3uW.9XBUdfNdbQe7JD52ok4VN3K8G.q3uJC', NULL, '2024-01-28 11:51:44', 1, NULL, NULL, NULL, NULL),
+(6, 'sdvsdv', '8111123456', 'dssfvw@ononon.com', NULL, '2024-01-01 00:00:00', 2, NULL, '984116.webp', 0, '0.00', '0.00', '0.00', 'gregregfv', 0, NULL, '$2y$12$z6uPd0zfxseoukPrIAUXXub2mVSI2/8IuGcnvnXGx7GYoWXJElw3.', '2024-01-28 11:55:25', '2024-01-28 12:22:53', 1, NULL, '1ahmad', '1ms', NULL);
 
 -- --------------------------------------------------------
 
@@ -290,7 +291,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -344,7 +345,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (45, '2024_01_28_125241_change_desc_in_services_table', 20),
 (46, '2024_01_28_132233_add_record_to_experts_table', 21),
 (47, '2024_01_28_132536_add_record_to_experts_table', 22),
-(48, '2024_01_28_134218_add_records_to_experts_table', 23);
+(48, '2024_01_28_134218_add_records_to_experts_table', 23),
+(49, '2024_01_28_162956_change_is_active_in_points_table', 24);
 
 -- --------------------------------------------------------
 
@@ -433,8 +435,16 @@ CREATE TABLE IF NOT EXISTS `points` (
   `updateuser_id` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `points`
+--
+
+INSERT INTO `points` (`id`, `count`, `price`, `pricebefor`, `countbefor`, `createuser_id`, `updateuser_id`, `created_at`, `updated_at`, `is_active`) VALUES
+(1, 20, '20.22', '20.22', 20, NULL, NULL, '2024-01-28 14:31:09', '2024-01-28 14:49:22', 0);
 
 -- --------------------------------------------------------
 
