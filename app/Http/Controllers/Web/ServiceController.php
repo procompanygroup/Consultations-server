@@ -21,6 +21,7 @@ use App\Models\ExpertService;
 use App\Models\InputService;
 use App\Models\Servicefavorite;
 use App\Models\Permission;
+use Illuminate\Support\Facades\Storage;
 /* 
 use App\Models\Expertfavorite;
 use App\Models\Servicefavorite;
@@ -35,6 +36,7 @@ Permission
 class ServiceController extends Controller
 {
   public $path = 'images/services';
+  public $iconpath = 'images/services/icons';
     /**
      * Display a listing of the resource.
      */
@@ -51,78 +53,65 @@ class ServiceController extends Controller
      */
     public function create()
     {
-      return view('admin.service.add');
+      return view('admin.service.create');
     }
   
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreServiceRequest $request)
     {
-      $formdata = $request->all();
-      $validator = Validator::make(
-        $formdata,
-        $request->rules(),
-        $request->messages()
-      );
-  
-      if ($validator->fails()) {
-  
-        return redirect()->back()->withErrors($validator)
-          ->withInput();
-  
-      } else {
-       
-        $newObj = new Service;
- 
-        $newObj->name = $formdata['name'];
-        $newObj->desc = $formdata['desc'];
-      //  $newObj->image = $formdata['image'];
-        $newObj->createuser_id =  Auth::user()->id;
-        $newObj->updateuser_id = Auth::user()->id;
-        $newObj->is_active = $formdata['is_active'];
-  
-        $newObj->save();
-        //save image
-      //  $this->path = 'media/services';
-        $separator = '/';
-        if ($request->hasFile('image')) {
-          // $imagemodel->save();
-          $image_tmp = $request->file('image');
-          if ($image_tmp->isValid()) {
-            $folderpath = $this->path . $separator;
-            //Get image Extension
-            $extension = $image_tmp->getClientOriginalExtension();
-            //Generate new Image Name
-  
-            $now = Carbon::now();
-            $imageName = rand(10000, 99999) . $newObj->id . '.' . $extension;
-  
-            if (!File::isDirectory($folderpath)) {
-              File::makeDirectory($folderpath, 0777, true, true);
-            }
-            $imagePath = $folderpath . $imageName;
-            //Upload the Image
-            $manager = new ImageManager(new Driver());
-  
-            // read image from filesystem
-            $image = $manager->read($image_tmp);
-            //$image= $image->toWebp(75);
-            $image->save($imagePath);
-            //$fullpath= url($imagePath);
-  
-            Service::find($newObj->id)->update([
-              "image" => $imageName
-            ]);
-  
-            // if(File::exists($oldimagepath )){
-            //   File::delete($oldimagepath );
-            // }
-          }
-        }
-  
-        return redirect()->back()->with('success_message', 'user has been Added!');
+     
+    $formdata = $request->all();
+    // return redirect()->back()->with('success_message', $formdata);
+    $validator = Validator::make(
+      $formdata,
+      $request->rules(),
+      $request->messages()
+    );
+
+    if ($validator->fails()) {
+      /*
+                        return  redirect()->back()->withErrors($validator)
+                        ->withInput();
+                        */
+      // return response()->withErrors($validator)->json();
+      return response()->json($validator);
+
+    } else {
+      /*
+      'name',
+        'desc',
+        'image',
+        'createuser_id',
+        'updateuser_id',
+        'is_active',
+        'icon',
+      */
+      $newObj = new Service;
+      $newObj->name = $formdata['name'];
+      $newObj->desc = $formdata['desc'];
+     
+      $newObj->createuser_id = Auth::user()->id;
+      $newObj->updateuser_id =Auth::user()->id;
+      $newObj->is_active = isset($formdata["is_active"]) ? 1 : 0;
+      
+      $newObj->save();
+
+      if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        // $filename= $file->getClientOriginalName();               
+        $this->storeImage($file, $newObj->id);
+        //  $this->storeImage( $file,2);
       }
+      if ($request->hasFile('icon')) {
+        $file = $request->file('icon');
+        // $filename= $file->getClientOriginalName();               
+        $this->storeSvg($file, $newObj->id);
+        //  $this->storeImage( $file,2);
+      }
+      return response()->json("ok");
+    }
     }
   
     /**
@@ -147,72 +136,66 @@ class ServiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdateServiceRequest $request, $id)
     {
-      $formdata = $request->all();
-      //validate      
-      $validator = Validator::make(
-        $formdata,
-        $request->rules(),
-        $request->messages()
-      );
-      if ($validator->fails()) {
-        /*
-          return redirect('/cpanel/users/add')
-          ->withErrors($validator)
-                      ->withInput();
-                      */
-        return redirect()->back()->withErrors($validator)
-          ->withInput();
-  
-      } else {
-        $imagemodel = Service::find($id);
-        $oldimage = $imagemodel->image;
+      
+    $formdata = $request->all();
+    //validate
+    $validator = Validator::make(
+      $formdata,
+      $request->rules(),
+      $request->messages()
+    );
+    if ($validator->fails()) {
+      /*
+        return redirect('/cpanel/users/add')
+        ->withErrors($validator)
+                    ->withInput();
+                    */
+      return redirect()->back()->withErrors($validator)
+        ->withInput();
+
+    } else {
+     // $imagemodel = Expert::find($id);
+      if ($request->hasFile('image')) {
+        $file= $request->file('image');
+               // $filename= $file->getClientOriginalName();                
+     $this->storeImage( $file,$id);
+       }
+      Service::find($id)->update([
+        'first_name'=>  $formdata['first_name'],
+        'last_name'=>  $formdata['last_name'],
+        'user_name' => $formdata['user_name'],
+      //  'password' => $formdata['password'],
+        'mobile' => $formdata['mobile'],
+        'email' => $formdata['email'],
+       // 'nationality' => $formdata['nationality'],
+        'birthdate' =>Carbon::createFromFormat('m/d/Y', $formdata['birthdate'])->format('Y-m-d'),
+        'gender' =>(int) $formdata['gender'],
+       
+     //   'marital_status' => $formdata['marital_status'],
+        //   'image' => $formdata['image'],
+        //    'points_balance' => $formdata['points_balance'],
+        //   'cash_balance' => $formdata['cash_balance'],
+        //  'cash_balance_todate' => $formdata['cash_balance_todate'],
+        //  'rates' => $formdata['rates'],
+     //   'record' => $formdata['record'],
+        'desc' => $formdata['desc'],
+      'is_active' => isset($formdata['is_active']) ? 1 : 0
+      //  'call_cost' => $formdata['call_cost'],
+        //   'token' => $formdata['token'],
+
+      ]);
+      if(isset($formdata['password'])){
+        $password = trim($formdata['password']);
         Service::find($id)->update([
-            'name' => $formdata['name'],
-            'desc' => $formdata['desc'],
-          //  'image' => $formdata['image'],
-          
-            'updateuser_id' =>Auth::user()->id,
-            'is_active' => $formdata['is_active'],
-            
+          'password' => bcrypt($password),
         ]);
-        //save image
-  
-        $separator = '/';
-        if ($request->hasFile('image')) {
-          // $imagemodel->save();
-          $image_tmp = $request->file('image');
-          if ($image_tmp->isValid()) {
-            $folderpath = $this->path . $separator;
-            //Get image Extension
-            $extension = $image_tmp->getClientOriginalExtension();
-            //Generate new Image Name
-            $now = Carbon::now();
-            $imageName = rand(10000, 99999) . $id . '.' . $extension;
-            if (!File::isDirectory($folderpath)) {
-              File::makeDirectory($folderpath, 0777, true, true);
-            }
-            $imagePath = $folderpath . $imageName;
-            //Upload the Image
-            $manager = new ImageManager(new Driver());
-            // read image from filesystem
-            $image = $manager->read($image_tmp);
-            //$image= $image->toWebp(75);
-            $image->save($imagePath);
-            Service::find($id)->update([
-              "image" => $imageName
-            ]);
-  
-            //  delete old image
-            $oldimagepath = $this->path . $separator . $oldimage;
-            if (File::exists($oldimagepath)) {
-              File::delete($oldimagepath);
-            }
-            return redirect()->back()->with('success_message', 'user has been Updated!');
-          }
-        }
       }
+      //save image
+      return response()->json("ok");
+      
+    }
     }
     /**
      * Remove the specified resource from storage.
@@ -257,5 +240,61 @@ class ServiceController extends Controller
    
       //   return redirect()->route('users.index');
   
+    }
+    public function storeImage($file, $id)
+    {
+      $imagemodel = Service::find($id);
+      $oldimage = $imagemodel->image;
+      $oldimagename = basename($oldimage);
+      $oldimagepath = $this->path . '/' . $oldimagename;
+      //save photo
+  
+      if ($file !== null) {
+        //  $filename= rand(10000, 99999).".".$file->getClientOriginalExtension();
+        $filename = rand(10000, 99999) . $id . ".webp";
+        $manager = new ImageManager(new Driver());
+        $image = $manager->read($file);
+        $image = $image->toWebp(75);
+        if (!File::isDirectory(Storage::url('/' . $this->path))) {
+          Storage::makeDirectory('public/' . $this->path);
+        }
+        $image->save(storage_path('app/public') . '/' . $this->path . '/' . $filename);
+        //   $url = url('storage/app/public' . '/' . $this->path . '/' . $filename);
+        Service::find($id)->update([
+          "image" => $filename
+        ]);
+        Storage::delete("public/" . $this->path . '/' . $oldimagename);
+      }
+      return 1;
+    }
+    public function storeSvg($file, $id)
+    {
+      $imagemodel = Service::find($id);
+      $oldimage = $imagemodel->icon;
+      $oldimagename = basename($oldimage);
+      $oldimagepath = $this->iconpath . '/' . $oldimagename;
+      //save photo
+  
+      if ($file !== null) {
+        $filename= rand(10000, 99999). $id .".".$file->getClientOriginalExtension();
+   
+     //   $manager = new ImageManager(new Driver());
+     //   $image = $manager->read($file);
+        
+        if (!File::isDirectory(Storage::url('/' . $this->iconpath))) {
+          Storage::makeDirectory('public/' . $this->iconpath);
+        }
+        $path =$file->storeAs(
+           $this->iconpath , $filename,'public'
+      );
+
+       // $image->save(storage_path('app/public') . '/' . $this->iconpath . '/' . $filename);
+        //   $url = url('storage/app/public' . '/' . $this->path . '/' . $filename);
+        Service::find($id)->update([
+          "image" => $filename
+        ]);
+        Storage::delete("public/" . $this->iconpath . '/' . $oldimagename);
+      }
+      return 1;
     }
 }

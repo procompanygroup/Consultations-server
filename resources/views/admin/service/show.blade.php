@@ -13,7 +13,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto">{{ __('general.experts') }}</h4> 
+							<h4 class="content-title mb-0 my-auto">{{ __('general.services') }}</h4> 
 						</div>
 					</div>
 					 
@@ -30,8 +30,8 @@
 						<div class="card mg-b-20">
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
-									<h4 class="card-title mg-b-0">{{ __('general.manage experts') }}</h4>
-									<a href="{{ route('expert.create') }}" class="btn btn-primary btn-small">{{ __('general.new expert') }}</a>
+									<h4 class="card-title mg-b-0">{{ __('general.manage services') }}</h4>
+									<a href="{{ route('service.create') }}" class="btn btn-primary btn-small">{{ __('general.new service') }}</a>
 								</div>
 									</div>
 							<div class="card-body">
@@ -40,8 +40,8 @@
 										<thead>
 											<tr>
 
-												<th class="border-bottom-0">{{ __('general.user_name') }}</th>
-												<th class="border-bottom-0">{{ __('general.email') }}</th>
+												<th class="border-bottom-0">{{ __('general.service') }}</th>
+												<th class="border-bottom-0">{{ __('general.descreption') }}</th>
 											
                                                 <th class="border-bottom-0">{{ __('general.action') }}</th>
 
@@ -55,9 +55,9 @@
 												<td>{{ $service->desc }}</td>
 												
                                                 <td>
-													<a href="{{route('expert.edit', $service->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a> 
+													<a href="{{route('service.edit', $service->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a> 
                                                      
-                                                    <form action="{{route('expert.destroy', $service->id)}}" method="POST" class="d-inline">
+                                                    <form action="{{route('service.destroy', $service->id)}}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger btn-sm" title="Delete"><i class="fa fa-trash"></i></button>

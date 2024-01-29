@@ -21,7 +21,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto"><a href="{{ route('expert.index') }}">{{ __('general.services') }}</a></h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ {{ __('general.new service') }}</span>
+							<h4 class="content-title mb-0 my-auto"><a href="{{ route('service.index') }}">{{ __('general.services') }}</a></h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ {{ __('general.new service') }}</span>
 						</div>
 					</div>
 				</div>
@@ -37,7 +37,7 @@
 								<p class="mb-2"> </p>
 							</div>
 							<div class="card-body pt-0">
-								<form class="form-horizontal" name="create_form" action="{{url('admin/expert')}}" method="POST" enctype="multipart/form-data" id="create_form">
+								<form class="form-horizontal" name="create_form" action="{{url('admin/service')}}" method="POST" enctype="multipart/form-data" id="create_form">
 									@csrf
 									<div class="form-group">
 										<input type="text" class="form-control " id="name" placeholder="{{ __('general.service_name') }}" name="name">
@@ -59,6 +59,14 @@
 											<input class="custom-file-input" id="image" name="image" type="file"> <label class="custom-file-label" for="customFile"  id="image_label">{{ __('general.choose image') }}</label>
 											<ul class="parsley-errors-list filled" >
 												<li class="parsley-required" id="image_error"></li>
+											</ul>
+										</div>
+									</div>
+                                    <div class="form-group mb-4 justify-content-end">
+										<div class="custom-file">
+											<input class="custom-file-input" id="icon" name="icon" type="file"> <label class="custom-file-label" for="customFile"  id="icon_label">{{ __('general.choose svg') }}</label>
+											<ul class="parsley-errors-list filled" >
+												<li class="parsley-required" id="icon_error"></li>
 											</ul>
 										</div>
 									</div>

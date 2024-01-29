@@ -41,6 +41,7 @@ return [
   'supervisor info'=>'بيانات المشرف',
   'expert info'=>'بيانات الخبير',
   'service info'=>'بيانات الخدمة',
+  'service'=>'الخدمة',
   //
   'Edit_Profile'=>'تعديل المعلومات الشخصية',
   'choose yes/no'=> 'حقل نعم/لا',
@@ -56,6 +57,7 @@ return [
   'mobile' => 'رقم الهاتف الجوال',
   'birthdate' => 'تاريخ الميلاد',
   'choose image' => 'اختر ملف الصورة',
+  'choose svg' => 'اختر ملف SVG',
   'is_active' => 'تفعيل',
   'save' => 'حفظ',
   'cancel' => 'إلغاء',
@@ -79,6 +81,7 @@ return [
 'manage points'=>'ادارة النقاط',
 'point info'=>'بيانات النقاط',
 'pointscount'=>'عدد النقاط',
+'manage services'=>'ادارة الخدمات',
 ];
 /*
   {{ __('general.welcome_name',['Name'=>'احمد']) }}

@@ -13,7 +13,7 @@ use App\Models\ExpertFavorite;
 use App\Models\SelectedService;
 use File;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -89,6 +89,10 @@ class ExpertController extends Controller
       $newObj->call_cost = 0;
       $newObj->is_active = isset($formdata["is_active"]) ? 1 : 0;
       //$newObj->token = $formdata['token'];
+         /*
+      $newObj->createuser_id = Auth::user()->id;
+      $newObj->updateuser_id =Auth::user()->id;
+      */
       $newObj->save();
 
       if ($request->hasFile('image')) {
