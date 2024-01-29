@@ -162,37 +162,19 @@ class ServiceController extends Controller
                // $filename= $file->getClientOriginalName();                
      $this->storeImage( $file,$id);
        }
-      Service::find($id)->update([
-        'first_name'=>  $formdata['first_name'],
-        'last_name'=>  $formdata['last_name'],
-        'user_name' => $formdata['user_name'],
-      //  'password' => $formdata['password'],
-        'mobile' => $formdata['mobile'],
-        'email' => $formdata['email'],
-       // 'nationality' => $formdata['nationality'],
-        'birthdate' =>Carbon::createFromFormat('m/d/Y', $formdata['birthdate'])->format('Y-m-d'),
-        'gender' =>(int) $formdata['gender'],
-       
-     //   'marital_status' => $formdata['marital_status'],
-        //   'image' => $formdata['image'],
-        //    'points_balance' => $formdata['points_balance'],
-        //   'cash_balance' => $formdata['cash_balance'],
-        //  'cash_balance_todate' => $formdata['cash_balance_todate'],
-        //  'rates' => $formdata['rates'],
-     //   'record' => $formdata['record'],
-        'desc' => $formdata['desc'],
-      'is_active' => isset($formdata['is_active']) ? 1 : 0
-      //  'call_cost' => $formdata['call_cost'],
-        //   'token' => $formdata['token'],
-
-      ]);
-      if(isset($formdata['password'])){
-        $password = trim($formdata['password']);
-        Service::find($id)->update([
-          'password' => bcrypt($password),
-        ]);
+       if ($request->hasFile('icon')) {
+        $file = $request->file('icon');
+        // $filename= $file->getClientOriginalName();               
+        $this->storeSvg($file,$id);
+        //  $this->storeImage( $file,2);
       }
-      //save image
+      Service::find($id)->update([
+        'name'=>  $formdata['name'],
+        'desc'=>  $formdata['desc'],
+        'updateuser_id' =>Auth::user()->id,      
+      'is_active' => isset($formdata['is_active']) ? 1 : 0
+      ]);
+     
       return response()->json("ok");
       
     }
