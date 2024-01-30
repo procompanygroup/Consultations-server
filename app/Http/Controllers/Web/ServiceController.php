@@ -14,7 +14,7 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use App\Http\Requests\Web\Service\StoreServiceRequest;
 use App\Http\Requests\Web\Service\UpdateServiceRequest;
-
+use App\Models\Input;
 use App\Models\Pointtransfer;
 use App\Models\Selectedservice;
 use App\Models\ExpertService;
@@ -129,7 +129,38 @@ class ServiceController extends Controller
     {
       $url =url(Storage::url($this->path)).'/';
       $iconurl =url(Storage::url($this->iconpath)).'/';
-      $object = Service::find($id);
+      $object = Service::find($id) ;
+ 
+   $personalinput=$object->inputservices()->with('input')->get() ;
+   $personal_array=['user_name'=>0,
+   'nationality'=>0,
+   'gender'=>0,
+   'birthdate'=>0,
+   'marital_status'=>0,
+    ];
+   foreach( $personalinput as $inputservice){
+  //  return $inputservice['input']['name'];
+if( $inputservice['input']['name']=='user_name' && $inputservice['input']['ispersonal']==1){
+  $personal_array['user_name']=1;
+} 
+if( $inputservice['input']['name']=='nationality' && $inputservice['input']['ispersonal']==1){
+  $personal_array['nationality']=1;
+}
+if( $inputservice['input']['name']=='gender' && $inputservice['input']['ispersonal']==1){
+  $personal_array['gender']=1;
+}
+if( $inputservice['input']['name']=='birthdate' && $inputservice['input']['ispersonal']==1){
+  $personal_array['birthdate']=1;
+}
+if( $inputservice['input']['name']=='marital_status' && $inputservice['input']['ispersonal']==1){
+  $personal_array['marital_status']=1;
+}
+ 
+   }
+ //return  $personal_array;
+//   $personalinputf= $object->inputservices()->first()->input()->get();
+   //   return    $personalinput ;
+    //  $object->inputservices->Input;
       if( $object->image !="" ){
         $object->fullpathimg= $url.$object->image;
       }
@@ -137,7 +168,7 @@ class ServiceController extends Controller
         $object->fullpathsvg= $iconurl.$object->icon;
       }
       //
-      return view('admin.service.edit', ['service' => $object]);
+      return view('admin.service.edit', ['service' => $object,'personal_array'=>$personal_array]);
     }
   
     /**
@@ -285,5 +316,60 @@ class ServiceController extends Controller
         Storage::delete("public/" . $this->iconpath . '/' . $oldimagename);
       }
       return 1;
+    }
+
+    public function savepersonal(Request $request, $id)
+    {
+      
+    $formdata = $request->all();
+    // isset($formdata['user_name'])
+ $this->savepersonalrow('user_name',isset($formdata['user_name']), $id);
+ $this->savepersonalrow('nationality',isset($formdata['nationality']), $id);
+ $this->savepersonalrow('gender',isset($formdata['gender']), $id);
+ $this->savepersonalrow('birthdate',isset($formdata['birthdate']), $id);
+ $this->savepersonalrow('marital_status',isset($formdata['marital_status']), $id);
+ 
+ /*
+     DB::transaction(function ( ) use( $formdata ,$id){
+    $input=Input::where('name','user_name')->where('ispersonal',1)->first();
+
+   if(isset($formdata['user_name']) ){
+   // return response()->json($formdata['user_name']);
+    $inputservice = InputService::updateOrCreate(
+      ['service_id' => $id, 'input_id' => $input->id] 
+  );
+   }else{
+   // return response()->json("no");
+    $deleted = InputService::where('service_id', $id)->where('input_id', $input->id)->delete();
+   }
+  
+  });
+     */
+      return response()->json("ok");
+      
+    
+    }
+
+    public function savepersonalrow($fieldname,$formValue, $service_id)
+    {   
+    // 
+     DB::transaction(function ( ) use( $fieldname,$formValue , $service_id){
+    $input=Input::where('name',$fieldname)->where('ispersonal',1)->first();
+
+   if($formValue){
+   
+    $inputservice = InputService::updateOrCreate(
+      ['service_id' =>$service_id, 'input_id' => $input->id] 
+  );
+   }else{
+   
+    $deleted = InputService::where('service_id',$service_id)->where('input_id', $input->id)->delete();
+   }
+  
+  });
+     
+      return 1;
+      
+    
     }
 }

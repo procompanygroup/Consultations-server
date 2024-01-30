@@ -78,6 +78,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         Route::resource('service', ServiceController::class, ['except' => ['update']]);
         Route::prefix('service')->group(function () {
             Route::post('/update/{id}', [ServiceController::class, 'update'])->name('service.update');
+            Route::post('/savepersonal/{id}', [ServiceController::class, 'savepersonal']);
         });
        
     });

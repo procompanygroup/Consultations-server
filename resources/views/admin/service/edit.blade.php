@@ -111,52 +111,53 @@
                                         <div>
                                             <h6 class="card-title">البيانات الشخصية</h6>
                                         </div>
-                                        <form class="form-horizontal" name="personal_form" action="{{route('service.update', $service->id)}}" method="POST" enctype="multipart/form-data" id="personal_form" >
+                                        <form class="form-horizontal" name="personal_form" action="{{url('admin/service/savepersonal', $service->id)}}" method="POST" enctype="multipart/form-data" id="personal_form" >
+                                            @csrf
                                             <div class="row">
                                                 <div class="form-group mb-0 justify-content-end col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" value="" name="name"data-checkboxes="mygroup" class="custom-control-input" id="checkbox-3">
-                                                            <label for="checkbox-3" class="custom-control-label mt-1">الاسم</label>
+                                                            <input type="checkbox"  @if ( $personal_array['user_name']==1) @checked(true) @endif  value="{{ $personal_array['user_name'] }}"   name="user_name" data-checkboxes="mygroup" class="custom-control-input" id="user_name">
+                                                            <label for="user_name" class="custom-control-label mt-1">الاسم</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group mb-0 justify-content-end col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-9">
-                                                            <label for="checkbox-9" class="custom-control-label mt-1">الجنسية</label>
+                                                            <input type="checkbox" name="nationality" @if ( $personal_array['nationality']==1) @checked(true) @endif  value="{{ $personal_array['nationality'] }}" data-checkboxes="mygroup" class="custom-control-input" id="nationality">
+                                                            <label for="nationality" class="custom-control-label mt-1">الجنسية</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group mb-0 justify-content-end col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-4">
-                                                            <label for="checkbox-4" class="custom-control-label mt-1">الجنس</label>
+                                                            <input type="checkbox" name="gender" @if ( $personal_array['gender']==1) @checked(true) @endif  value="{{ $personal_array['gender'] }}" data-checkboxes="mygroup" class="custom-control-input" id="gender">
+                                                            <label for="gender" class="custom-control-label mt-1">الجنس</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group mb-0 justify-content-end col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-5">
-                                                            <label for="checkbox-5" class="custom-control-label mt-1">تاريخ الميلاد</label>
+                                                            <input type="checkbox" name="birthdate" @if ( $personal_array['birthdate']==1) @checked(true) @endif  value="{{ $personal_array['birthdate'] }}"  data-checkboxes="mygroup" class="custom-control-input" id="birthdate">
+                                                            <label for="birthdate" class="custom-control-label mt-1">تاريخ الميلاد</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group mb-0 justify-content-end col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-6">
-                                                            <label for="checkbox-6" class="custom-control-label mt-1">الحالة الاجتماعية</label>
+                                                            <input type="checkbox" name="marital_status" @if ( $personal_array['marital_status']==1) @checked(true) @endif  value="{{ $personal_array['marital_status'] }}" data-checkboxes="mygroup" class="custom-control-input" id="marital_status">
+                                                            <label for="marital_status" class="custom-control-label mt-1">الحالة الاجتماعية</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group mb-0 mt-3 justify-content-end">
                                                 <div>
-                                                    <button type="submit" class="btn btn-primary">حفظ</button>
+                                                    <button type="submit" name="btn_save_personal" id="btn_save_personal" class="btn btn-primary">{{ __('general.save') }}</button>
                                                 </div>
                                             </div>
                                         </form>

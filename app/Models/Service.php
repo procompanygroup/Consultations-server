@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
  
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
+ 
 class Service extends Model
 {
     use HasFactory;
@@ -34,7 +34,7 @@ class Service extends Model
     }
     public function inputservices(): HasMany
     {
-        return $this->hasMany(InputService::class);
+        return $this->hasMany(InputService::class) ;
     }
     public function pointtransfers(): HasMany
     {
