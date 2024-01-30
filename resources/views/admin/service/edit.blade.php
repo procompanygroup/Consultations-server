@@ -36,7 +36,8 @@
 								<h4 class="card-title mb-1">{{ __('general.service info') }}</h4>
 								<p class="mb-2"> </p>
 							</div>
-							<div class="card-body pt-0">
+							<div class="card-body row  pt-0">
+                                <div class="col-lg-8">
 								<form class="form-horizontal" name="create_form" action="{{route('service.update', $service->id)}}" method="POST" enctype="multipart/form-data" id="create_form">
 									@csrf
 									<div class="form-group">
@@ -89,17 +90,20 @@
 										</div>
 									</div>
 								</form>
-                                <div class="row">
-								<div class=" pd-20 clearfix col-sm-6">
-									<img alt="" id="imgshow" class="rounded img-thumbnail wd-100p wd-sm-200 float-sm-right  mg-t-10 mg-sm-t-0"
+       
+                            </div>
+                            <div class="col-lg-4 mt-sm-3 mt-lg-0">
+							 
+									<img alt="" id="imgshow" class="rounded img-thumbnail wd-100p float-sm-right  mg-t-10 mg-sm-t-0"
 									src="@if($service->image==""){{URL::asset('assets/img/photos/1.jpg')}}@else {{ $service->fullpathimg }} @endif" >
-								</div>
-                                <div class="pd-20 clearfix col-sm-6">
-									<img alt="" id="iconshow" class="rounded img-thumbnail wd-100p wd-sm-200 float-sm-right  mg-t-10 mg-sm-t-0"
+								 
+                              
+									<img alt="" id="iconshow" class="rounded img-thumbnail wd-100p float-sm-right  mg-t-10 mg-sm-t-0"
 									src="@if($service->icon==""){{URL::asset('assets/img/photos/1.jpg')}} @else {{ $service->fullpathsvg }} @endif" >
-								</div>
+							 
                             </div>
 							</div>
+
 
                             <div class="col">
                                 <div class="card custom-card">
@@ -107,13 +111,21 @@
                                         <div>
                                             <h6 class="card-title">البيانات الشخصية</h6>
                                         </div>
-                                        <form class="form-horizontal" >
+                                        <form class="form-horizontal" name="personal_form" action="{{route('service.update', $service->id)}}" method="POST" enctype="multipart/form-data" id="personal_form" >
                                             <div class="row">
                                                 <div class="form-group mb-0 justify-content-end col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-3">
+                                                            <input type="checkbox" value="" name="name"data-checkboxes="mygroup" class="custom-control-input" id="checkbox-3">
                                                             <label for="checkbox-3" class="custom-control-label mt-1">الاسم</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group mb-0 justify-content-end col-6 col-lg-3">
+                                                    <div class="checkbox">
+                                                        <div class="custom-checkbox custom-control">
+                                                            <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-9">
+                                                            <label for="checkbox-9" class="custom-control-label mt-1">الجنسية</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -158,8 +170,8 @@
                                             <h6 class="card-title">بيانات إضافية</h6>
                                         </div>
                                         <form class="form-horizontal" >
-                                            <div class="row mb-4">
-                                                <div class="form-group mb-0 justify-content-end col-6 col-lg-3">
+                                            <div class="row mb-2">
+                                                <div class="form-group mb-3 d-flex justify-content-center col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
                                                             <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-7">
@@ -167,7 +179,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group mb-0 justify-content-end col-6 col-lg-3">
+                                                <div class="form-group mb-3 d-flex justify-content-center col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
                                                             <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-8">
@@ -175,56 +187,67 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="form-group mb-0 col-6 col-lg-3">
+                                                    <div class="number-input">
+                                                        <div class="form-group">
+                                                            <input type="number" class="form-control" min="1" max="4" id="number-input" placeholder="عدد الصور">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0 col-6 col-lg-3">
+                                                    <a class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" href=""><i class="fa fa-plus"></i> إضافة حقل</a>
+                                                </div>
                                             </div>
                                         </form>
-                                        <a class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" href=""><i class="fa fa-plus"></i> إضافة حقل</a>
+                                        <div class="">
+                                            <div>
+                                                <h6 class="card-title">حقول الخدمة المختارة</h6>
+                                            </div>
+                                            <div class="service-field row">
+                                                <div class="form-group col-8">
+                                                    <input type="text" class="form-control " id="first_name" placeholder="{{ __('general.first_name') }}" name="first_name">
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group d-inline-block">
+                                                        <button class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" href=""><i class="fa fa-edit"></i></button>
+                                                    </div>
+                                                    <form class="form-horizontal d-inline-block" >
+                                                        <div class="form-group">
+                                                            <button type="submit" class="btn ripple btn-danger"><i class="fa fa-trash"></i></button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <div class="service-field row">
+                                                <div class="form-group col-8">
+                                                    <select name="role"   id="role" class="form-control SlectBox" onclick="console.log($(this).val())" onchange="console.log('change is firing')">
+                                                        <!--placeholder-->
+                                                        <option title=""   class="text-muted">{{ __('general.choose yes/no') }}</option>
+                                                        <option value="yes">{{ __('general.yes') }}</option>
+                                                        <option value="no">{{ __('general.no') }}</option>
+                                                    </select>                                            </div>
+                                                <div class="col-4">
+                                                    <div class="form-group d-inline-block">
+                                                        <button type="submit" class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" href=""><i class="fa fa-edit"></i></button>
+                                                    </div>
+                                                    <form class="form-horizontal d-inline-block" >
+                                                        @csrf
+                                                        <div class="form-group">
+                                                            <button class="btn ripple btn-danger"><i class="fa fa-trash"></i></button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <div>
+                                                <button type="submit" class="btn btn-primary">حفظ</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col">
-                                <div class="card custom-card">
-                                    <div class="card-body">
-                                        <div>
-                                            <h6 class="card-title">حقول الخدمة المختارة</h6>
-                                        </div>
-                                        <div class="service-field row">
-                                            <div class="form-group col-8">
-                                                <input type="text" class="form-control " id="first_name" placeholder="{{ __('general.first_name') }}" name="first_name">
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group d-inline-block">
-                                                    <button class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" href=""><i class="fa fa-edit"></i></button>
-                                                </div>
-                                                <form class="form-horizontal d-inline-block" >
-                                                    <div class="form-group">
-                                                        <button type="submit" class="btn ripple btn-danger"><i class="fa fa-trash"></i></button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div class="service-field row">
-                                            <div class="form-group col-8">
-                                                <select name="role"   id="role" class="form-control SlectBox" onclick="console.log($(this).val())" onchange="console.log('change is firing')">
-                                                    <!--placeholder-->
-                                                    <option title=""   class="text-muted">{{ __('general.choose yes/no') }}</option>
-                                                    <option value="yes">{{ __('general.yes') }}</option>
-                                                    <option value="no">{{ __('general.no') }}</option>
-                                                </select>                                            </div>
-                                            <div class="col-4">
-                                                <div class="form-group d-inline-block">
-                                                    <button type="submit" class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" href=""><i class="fa fa-edit"></i></button>
-                                                </div>
-                                                <form class="form-horizontal d-inline-block" >
-                                                    @csrf
-                                                    <div class="form-group">
-                                                        <button class="btn ripple btn-danger"><i class="fa fa-trash"></i></button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
 						</div>
 					</div>
 				</div>
@@ -234,6 +257,7 @@
 		</div>
 		<!-- main-content closed -->
 
+  
         <!-- Basic modal -->
 		<div class="modal" id="select2modal">
 			<div class="modal-dialog" role="document">
@@ -379,6 +403,7 @@
 			</div>
 		</div>
 		<!-- End Basic modal -->
+		
 @endsection
 @section('js')
 <!--Internal  Datepicker js -->
