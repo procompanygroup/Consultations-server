@@ -22,7 +22,8 @@ class Service extends Model
              
     ];
 
- 
+    public $fullpathimg = "";
+    public $fullpathsvg = "";
     public function selectedservices(): HasMany
     {
         return $this->hasMany(Selectedservice::class);

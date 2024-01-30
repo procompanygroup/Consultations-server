@@ -127,8 +127,15 @@ class ServiceController extends Controller
      */
     public function edit(string $id)
     {
-      $object = DB::table('services')->find($id);
-  
+      $url =url(Storage::url($this->path)).'/';
+      $iconurl =url(Storage::url($this->iconpath)).'/';
+      $object = Service::find($id);
+      if( $object->image !="" ){
+        $object->fullpathimg= $url.$object->image;
+      }
+      if( $object->icon !="" ){
+        $object->fullpathsvg= $iconurl.$object->icon;
+      }
       //
       return view('admin.service.edit', ['service' => $object]);
     }
@@ -216,7 +223,7 @@ class ServiceController extends Controller
   Service::find($id)->delete();
         }
       }
-      return redirect()->route('admin.service.show');
+      return redirect()->route('service.index');
       //   return  $this->index();
       // 
    
@@ -273,7 +280,7 @@ class ServiceController extends Controller
        // $image->save(storage_path('app/public') . '/' . $this->iconpath . '/' . $filename);
         //   $url = url('storage/app/public' . '/' . $this->path . '/' . $filename);
         Service::find($id)->update([
-          "image" => $filename
+          "icon" => $filename
         ]);
         Storage::delete("public/" . $this->iconpath . '/' . $oldimagename);
       }

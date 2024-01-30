@@ -64,7 +64,7 @@
 									<div class="form-group mb-0 mt-3 justify-content-end">
 										<div>
 											<button type="submit" name="btn_update_user" id="btn_update_user" class="btn btn-primary">{{ __('general.save') }}</button>
-											<button type="button" name="btn_cancel" id="btn_cancel"  class="btn btn-secondary">{{ __('general.cancel') }}</button>				
+											<a href="{{ route('point.index') }}"><button type="button" name="btn_cancel_edit" id="btn_cancel_edit"  class="btn btn-secondary">{{ __('general.cancel') }}</button></a>
 										</div>
 									</div>
 								</form>

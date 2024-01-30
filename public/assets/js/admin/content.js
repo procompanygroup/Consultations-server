@@ -148,7 +148,9 @@ $(document).ready(function () {
 	$("#image").on("change", function () {
 		imageChangeForm("#image", "#image_label", "#imgshow");
 	});
-
+	$("#icon").on("change", function () {
+		imageChangeForm("#icon", "#icon_label", "#iconshow");
+	});
 	function imageChangeForm(btn_id, upload_label, imageId) {
 		/* Current this object refer to input element */
 		var $input = $(btn_id);
@@ -312,6 +314,8 @@ function noteError() {
 function resetForm() {
 	jQuery('#create_form')[0].reset();
 	$('#image_label').text("اختر ملف الصورة");
+	$('#icon_label').text('اختر ملف SVG');
 	$('#imgshow').attr("src", emptyimg);
+	$('#iconshow').attr("src", emptyimg);
 }
 

@@ -30,5 +30,6 @@ return [
     'file must be image'=>'الملف يجب ان يكون صورة',
     'this field must be date'=>'هذا الحقل يجب ان يكون تاريخ',
     'must be integer' => 'هذا الحقل يجب ان يكون عدد',
+    'file must be svg'=>'الملف يجب ان يكون من نوع SVG.',
 ];
 //{{ __('general.welcome_name',['Name'=>'احمد']) }}

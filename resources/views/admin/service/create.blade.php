@@ -48,6 +48,7 @@
 
                                         </div>
 
+<<<<<<< Updated upstream
                                         <div class="form-group">
                                             <div class="my-4">
                                                 <textarea class="form-control" placeholder="{{ __('general.descreption') }}" rows="3" id="desc" name="desc"></textarea>
@@ -94,6 +95,60 @@
                                 <div class="col-lg-4 mt-sm-3 mt-lg-0">
                                     <img alt="" id="imgshow" class="rounded img-thumbnail wd-100p float-sm-right  mg-t-10 mg-sm-t-0" src="{{URL::asset('assets/img/photos/1.jpg')}}" >
                                 </div>
+=======
+                                    <div class="form-group">
+                                        <div class="my-4">
+                                            <textarea class="form-control" placeholder="{{ __('general.descreption') }}" rows="3" id="desc" name="desc"></textarea>
+                                        </div>									    <ul class="parsley-errors-list filled" >
+											<li class="parsley-required" id="desc_error"></li>
+										</ul>
+									</div>
+                                    <div class="form-group mb-4 justify-content-end">
+										<div class="custom-file">
+											<input class="custom-file-input" id="image" name="image" type="file"> <label class="custom-file-label" for="customFile"  id="image_label">{{ __('general.choose image') }}</label>
+											<ul class="parsley-errors-list filled" >
+												<li class="parsley-required" id="image_error"></li>
+											</ul>
+										</div>
+									</div>
+                                    <div class="form-group mb-4 justify-content-end">
+										<div class="custom-file">
+											<input class="custom-file-input" id="icon" name="icon" type="file"> <label class="custom-file-label" for="customFile"  id="icon_label">{{ __('general.choose svg') }}</label>
+											<ul class="parsley-errors-list filled" >
+												<li class="parsley-required" id="icon_error"></li>
+											</ul>
+										</div>
+									</div>
+									<div class="form-group justify-content-end">
+										<div class="checkbox">
+											<div class="custom-checkbox custom-control">
+												<input type="checkbox" data-checkboxes="mygroup" checked="" class="custom-control-input" id="checkbox-2" value="0" name="is_active">
+												<label for="checkbox-2" class="custom-control-label mt-1"  >{{ __('general.is_active') }}</label>
+											</div>
+
+										</div>
+										<ul class="parsley-errors-list filled" >
+											<li class="parsley-required" id="is_active_error"></li>
+										</ul>
+									</div>
+									<div class="form-group mb-0 mt-3 justify-content-end">
+										<div>
+											<button type="submit" name="btn_save" id="btn_save" class="btn btn-primary">{{ __('general.save') }}</button>
+											<button type="button" name="btn_cancel" id="btn_cancel"  class="btn btn-secondary">{{ __('general.cancel') }}</button>
+										</div>
+									</div>
+								</form>
+                                <div class="row">
+								<div class=" pd-20 clearfix col-sm-6">
+									<img alt="" id="imgshow" class="rounded img-thumbnail wd-100p wd-sm-200 float-sm-right  mg-t-10 mg-sm-t-0"
+									src="{{URL::asset('assets/img/photos/1.jpg')}}" >
+								</div>
+                                <div class="pd-20 clearfix col-sm-6">
+									<img alt="" id="iconshow" class="rounded img-thumbnail wd-100p wd-sm-200 float-sm-right  mg-t-10 mg-sm-t-0"
+									src="{{URL::asset('assets/img/photos/1.jpg')}}" >
+								</div>
+                            </div>
+>>>>>>> Stashed changes
 							</div>
 
                             <div class="col">
