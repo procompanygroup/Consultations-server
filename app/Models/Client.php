@@ -78,10 +78,7 @@ class Client extends Authenticatable implements JWTSubject
         return $this->hasMany(Expertfavorite::class);
     }
     
-    public function servicesfavorites(): HasMany
-    {
-        return $this->hasMany(Servicefavorite::class);
-    }
+
     public function selectedservices(): HasMany
     {
         return $this->hasMany(Selectedservice::class);

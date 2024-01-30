@@ -217,7 +217,7 @@ class ServiceController extends Controller
 
   ExpertService::where('service_id', $id)->delete();
   InputService::where('service_id', $id)->delete();
-  Servicefavorite::where('service_id', $id)->delete();
+
   Permission::where('service_id', $id)->delete();
   //delete object
   Service::find($id)->delete();

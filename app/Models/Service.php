@@ -40,10 +40,7 @@ class Service extends Model
     {
         return $this->hasMany(Pointtransfer::class);
     }
-    public function servicefavorites(): HasMany
-    {
-        return $this->hasMany(Servicefavorite::class);
-    }
+ 
     public function permissions(): HasMany
     {
         return $this->hasMany(Permission::class);
