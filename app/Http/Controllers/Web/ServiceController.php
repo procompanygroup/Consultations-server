@@ -138,6 +138,11 @@ class ServiceController extends Controller
    'birthdate'=>0,
    'marital_status'=>0,
     ];
+    $recimg_array=['record'=>0,
+    'image'=>0,
+    'image_count'=>0,
+     
+     ];
    foreach( $personalinput as $inputservice){
   //  return $inputservice['input']['name'];
 if( $inputservice['input']['name']=='user_name' && $inputservice['input']['ispersonal']==1){
@@ -155,7 +160,14 @@ if( $inputservice['input']['name']=='birthdate' && $inputservice['input']['isper
 if( $inputservice['input']['name']=='marital_status' && $inputservice['input']['ispersonal']==1){
   $personal_array['marital_status']=1;
 }
- 
+/// record image form
+if( $inputservice['input']['type']=='record' && $inputservice['input']['ispersonal']==0){
+  $recimg_array['record']=1;
+}
+if( $inputservice['input']['type']=='image' && $inputservice['input']['ispersonal']==0){
+  $recimg_array['image']=1;
+  $recimg_array['image_count']=$inputservice['input']['image_count'];
+}
    }
  //return  $personal_array;
 //   $personalinputf= $object->inputservices()->first()->input()->get();
@@ -168,7 +180,7 @@ if( $inputservice['input']['name']=='marital_status' && $inputservice['input']['
         $object->fullpathsvg= $iconurl.$object->icon;
       }
       //
-      return view('admin.service.edit', ['service' => $object,'personal_array'=>$personal_array]);
+      return view('admin.service.edit', ['service' => $object,'personal_array'=>$personal_array,'recimg_array'=>$recimg_array]);
     }
   
     /**

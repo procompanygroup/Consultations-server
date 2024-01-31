@@ -176,7 +176,7 @@
                                                 <div class="form-group mb-3 d-flex justify-content-center col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" name="record"  value="0" data-checkboxes="mygroup" class="custom-control-input" id="record">
+                                                            <input type="checkbox" name="record"  @if ( $recimg_array['record']==1) @checked(true) @endif  value="{{ $recimg_array['record'] }}"  data-checkboxes="mygroup" class="custom-control-input" id="record">
                                                             <label for="record" class="custom-control-label mt-1">تسجيل صوتي</label>
                                                         </div>
                                                     </div>
@@ -184,7 +184,7 @@
                                                 <div class="form-group mb-3 d-flex justify-content-center col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" name="image" value="0" data-checkboxes="mygroup" class="custom-control-input" id="image_check">
+                                                            <input type="checkbox" name="image" @if ( $recimg_array['image']==1) @checked(true) @endif  value="{{ $recimg_array['image'] }}"  data-checkboxes="mygroup" class="custom-control-input" id="image_check">
                                                             <label for="image_check" class="custom-control-label mt-1">صور</label>
                                                         </div>
                                                     </div>
@@ -192,7 +192,7 @@
                                                 <div class="form-group mb-0 col-6 col-lg-3">
                                                     <div class="number-input" id="image_count_div">
                                                         <div class="form-group">
-                                                            <input type="number" name="image_count" class="form-control" min="1" max="4" id="image_count" placeholder="عدد الصور">
+                                                            <input type="number" name="image_count" class="form-control" min="1" max="4" value="@if($recimg_array['image']==1){{$recimg_array['image_count']}}@else{{'1'}}@endif" id="image_count" placeholder="عدد الصور">
                                                         </div>
                                                     </div>
                                                 </div>

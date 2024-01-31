@@ -262,14 +262,18 @@ $(document).ready(function () {
 		$('.parsley-required').html('');
 		$(":input").removeClass('parsley-error');
 	}
+	function showimgcount(imgcheck,imgcount) {
+		if(imgcheck.is(':checked')){
+		
+			imgcount.show();
+		 }else{
+			imgcount.hide();
+	}
+}
 
 	$("#image_check").on("change", function () {
-	 if($('#image_check').is(':checked')){
-		
-		$('#image_count').show();
-	 }else{
-		$('#image_count').hide();
-	 }
+		showimgcount($("#image_check"),$('#image_count')) ;
+	  
 	});
 	$("#image").on("change", function () {
 		imageChangeForm("#image", "#image_label", "#imgshow");
@@ -405,7 +409,7 @@ $(document).ready(function () {
 			return true;
 		}
 	});
-	
+	showimgcount($("#image_check"),$('#image_count')) ;
 });
 $("#count").focusout(function (e) {
 	if (!validatempty($(this))) {
