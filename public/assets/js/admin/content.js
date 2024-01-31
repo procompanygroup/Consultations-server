@@ -198,12 +198,79 @@ $(document).ready(function () {
 
 
 	});
+		//save image record
+		$('#btn_save_imgrecord').on('click', function (e) {
+			e.preventDefault();
+			startLoading();
+		//	ClearErrors();
+			//var fdata = $( "#create_form" ).serialize();
+			var form = $('#imgrecord_form')[0];
+			var formData = new FormData(form);
+			urlval=	$('#imgrecord_form').attr("action")
+			//var urlval ='{{url("admin/user")}}';
+			//const formData = new FormData("#create_form");
+			//  alert(formData.toString());
+	
+			$.ajax({
+				url: urlval,
+				type: "POST",
+				
+				data: formData,
+				contentType: false,
+				processData: false,
+				//contentType: 'application/json',
+				success: function (data) {
+					//	alert(data);
+					endLoading();
+					//$('#errormsg').html('');
+					//$('#sortbody').html('');
+					if (data.length == 0) {
+						noteError();
+					} else if (data == "ok") {
+						noteSuccess();
+				 
+						//ClearErrors();
+					}
+	
+					// $('.alert').html(result.success);
+				}, error: function (errorresult) {
+					endLoading();
+					var response = $.parseJSON(errorresult.responseText);
+					// $('#errormsg').html( errorresult );
+					noteError();
+					/*
+					$.each(response.errors, function (key, val) {
+						$("#" + key + "_error").text(val[0]);
+						$("#" + key).addClass('parsley-error');
+						//$('#error').append(key+"-"+ val[0] +"/");
+					});
+	*/
+				},finally:function () {
+					endLoading();
+	
+				}
+				 
+	
+			});
+	
+	
+	
+		});
+		
 	function ClearErrors() {
 
 		$('.parsley-required').html('');
 		$(":input").removeClass('parsley-error');
 	}
 
+	$("#image_check").on("change", function () {
+	 if($('#image_check').is(':checked')){
+		
+		$('#image_count').show();
+	 }else{
+		$('#image_count').hide();
+	 }
+	});
 	$("#image").on("change", function () {
 		imageChangeForm("#image", "#image_label", "#imgshow");
 	});

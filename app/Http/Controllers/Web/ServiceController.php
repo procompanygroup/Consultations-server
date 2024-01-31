@@ -349,7 +349,54 @@ if( $inputservice['input']['name']=='marital_status' && $inputservice['input']['
       
     
     }
+    public function saveimgrecord(Request $request, $id)
+    {
+      
+    $formdata = $request->all();
+    /*
+    // isset($formdata['user_name'])
+ $this->savepersonalrow('user_name',isset($formdata['user_name']), $id);
+ $this->savepersonalrow('nationality',isset($formdata['nationality']), $id);
+ */
+ 
+ 
+    // DB::transaction(function ( ) use( $formdata ,$id){
+    
+   
+     
 
+   if(isset($formdata['record']) ){
+   // return $formdata['record'];
+   // return response()->json($formdata['user_name']);
+   $inputservices = InputService::where('service_id',$id)->whereHas('input', function ( $query) {
+    $query->where('type', 'record');
+})->get();
+if($inputservices->isEmpty()){
+  $input=new Input();
+  $input->type='record';
+  $input->name='record';
+  $input->ispersonal=0;
+  $input->tooltipe="";
+  $input->icon="";
+  $input->save();
+  $inputservice = new InputService();
+  $inputservice->service_id=$id;
+  $inputservice->input_id= $input->id;
+  $inputservice->save();
+  return "norow";
+}
+
+   }else{
+   // return response()->json("no");
+  //  $deleted = InputService::where('service_id', $id)->where('input_id', $input->id)->delete();
+   }
+  
+ // });
+    
+     // return response()->json("ok");
+      
+    
+    }
     public function savepersonalrow($fieldname,$formValue, $service_id)
     {   
     // 

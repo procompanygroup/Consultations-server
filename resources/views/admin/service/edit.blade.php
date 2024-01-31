@@ -117,7 +117,7 @@
                                                 <div class="form-group mb-0 justify-content-end col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox"  @if ( $personal_array['user_name']==1) @checked(true) @endif  value="{{ $personal_array['user_name'] }}"   name="user_name" data-checkboxes="mygroup" class="custom-control-input" id="user_name">
+                                                            <input type="checkbox"  @if ( $personal_array['user_name']==1) @checked(true) @endif  value="{{ $personal_array['user_name'] }}"   name="user_name" data-checkboxes="mygroup" class="custom-control-input" id="puser_name">
                                                             <label for="user_name" class="custom-control-label mt-1">الاسم</label>
                                                         </div>
                                                     </div>
@@ -125,7 +125,7 @@
                                                 <div class="form-group mb-0 justify-content-end col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" name="nationality" @if ( $personal_array['nationality']==1) @checked(true) @endif  value="{{ $personal_array['nationality'] }}" data-checkboxes="mygroup" class="custom-control-input" id="nationality">
+                                                            <input type="checkbox" name="nationality" @if ( $personal_array['nationality']==1) @checked(true) @endif  value="{{ $personal_array['nationality'] }}" data-checkboxes="mygroup" class="custom-control-input" id="pnationality">
                                                             <label for="nationality" class="custom-control-label mt-1">الجنسية</label>
                                                         </div>
                                                     </div>
@@ -133,7 +133,7 @@
                                                 <div class="form-group mb-0 justify-content-end col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" name="gender" @if ( $personal_array['gender']==1) @checked(true) @endif  value="{{ $personal_array['gender'] }}" data-checkboxes="mygroup" class="custom-control-input" id="gender">
+                                                            <input type="checkbox" name="gender" @if ( $personal_array['gender']==1) @checked(true) @endif  value="{{ $personal_array['gender'] }}" data-checkboxes="mygroup" class="custom-control-input" id="pgender">
                                                             <label for="gender" class="custom-control-label mt-1">الجنس</label>
                                                         </div>
                                                     </div>
@@ -141,7 +141,7 @@
                                                 <div class="form-group mb-0 justify-content-end col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" name="birthdate" @if ( $personal_array['birthdate']==1) @checked(true) @endif  value="{{ $personal_array['birthdate'] }}"  data-checkboxes="mygroup" class="custom-control-input" id="birthdate">
+                                                            <input type="checkbox" name="birthdate" @if ( $personal_array['birthdate']==1) @checked(true) @endif  value="{{ $personal_array['birthdate'] }}"  data-checkboxes="mygroup" class="custom-control-input" id="pbirthdate">
                                                             <label for="birthdate" class="custom-control-label mt-1">تاريخ الميلاد</label>
                                                         </div>
                                                     </div>
@@ -149,7 +149,7 @@
                                                 <div class="form-group mb-0 justify-content-end col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" name="marital_status" @if ( $personal_array['marital_status']==1) @checked(true) @endif  value="{{ $personal_array['marital_status'] }}" data-checkboxes="mygroup" class="custom-control-input" id="marital_status">
+                                                            <input type="checkbox" name="marital_status" @if ( $personal_array['marital_status']==1) @checked(true) @endif  value="{{ $personal_array['marital_status'] }}" data-checkboxes="mygroup" class="custom-control-input" id="pmarital_status">
                                                             <label for="marital_status" class="custom-control-label mt-1">الحالة الاجتماعية</label>
                                                         </div>
                                                     </div>
@@ -157,7 +157,7 @@
                                             </div>
                                             <div class="form-group mb-0 mt-3 justify-content-end">
                                                 <div>
-                                                    <button type="submit" name="btn_save_personal" id="btn_save_personal" class="btn btn-primary">{{ __('general.save') }}</button>
+                                                    <button type="submit"  name="btn_save_personal" id="btn_save_personal" class="btn btn-primary">{{ __('general.save') }}</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -170,28 +170,29 @@
                                         <div>
                                             <h6 class="card-title">بيانات إضافية</h6>
                                         </div>
-                                        <form class="form-horizontal" >
+                                        <form class="form-horizontal" name="imgrecord_form" action="{{url('admin/service/saveimgrecord', $service->id)}}" method="POST" enctype="multipart/form-data" id="imgrecord_form" >
+                                            @csrf
                                             <div class="row mb-2">
                                                 <div class="form-group mb-3 d-flex justify-content-center col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-7">
-                                                            <label for="checkbox-7" class="custom-control-label mt-1">تسجيل صوتي</label>
+                                                            <input type="checkbox" name="record"  value="0" data-checkboxes="mygroup" class="custom-control-input" id="record">
+                                                            <label for="record" class="custom-control-label mt-1">تسجيل صوتي</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group mb-3 d-flex justify-content-center col-6 col-lg-3">
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-8">
-                                                            <label for="checkbox-8" class="custom-control-label mt-1">صور</label>
+                                                            <input type="checkbox" name="image" value="0" data-checkboxes="mygroup" class="custom-control-input" id="image_check">
+                                                            <label for="image_check" class="custom-control-label mt-1">صور</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-group mb-0 col-6 col-lg-3">
-                                                    <div class="number-input">
+                                                    <div class="number-input" id="image_count_div">
                                                         <div class="form-group">
-                                                            <input type="number" class="form-control" min="1" max="4" id="number-input" placeholder="عدد الصور">
+                                                            <input type="number" name="image_count" class="form-control" min="1" max="4" id="image_count" placeholder="عدد الصور">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -242,7 +243,7 @@
                                         </div>
                                         <div class="form-group mb-0">
                                             <div>
-                                                <button type="submit" class="btn btn-primary">حفظ</button>
+                                                <button type="submit" form ="imgrecord_form" name="btn_save_imgrecord" id="btn_save_imgrecord" class="btn btn-primary">حفظ</button>
                                             </div>
                                         </div>
                                     </div>
