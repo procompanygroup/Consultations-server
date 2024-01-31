@@ -358,20 +358,33 @@ if( $inputservice['input']['name']=='marital_status' && $inputservice['input']['
  $this->savepersonalrow('user_name',isset($formdata['user_name']), $id);
  $this->savepersonalrow('nationality',isset($formdata['nationality']), $id);
  */
- 
- 
+    // DB::transaction(function ( ) use( $formdata ,$id){
+    $this->saverecordcheck(isset($formdata['record']), $id);
+    $imgcount=0;
+if(isset($formdata['image_count'])){
+$imgcount=$formdata['image_count'];
+}
+    $this->saveimgcheck(isset($formdata['image']), $id, $imgcount);
+
+     
+ // });
+    
+      return response()->json("ok");
+      
+    
+    }
+    public function saverecordcheck( $formValue, $service_id)
+    {   
     // DB::transaction(function ( ) use( $formdata ,$id){
     
-   
-     
+      $recinputservices = InputService::where('service_id',$service_id)->whereHas('input', function ( $query) {
+        $query->where('type', 'record');
+    })->get();    
 
-   if(isset($formdata['record']) ){
-   // return $formdata['record'];
-   // return response()->json($formdata['user_name']);
-   $inputservices = InputService::where('service_id',$id)->whereHas('input', function ( $query) {
-    $query->where('type', 'record');
-})->get();
-if($inputservices->isEmpty()){
+   if($formValue ){
+//record selected
+
+if($recinputservices->isEmpty()){
   $input=new Input();
   $input->type='record';
   $input->name='record';
@@ -380,20 +393,81 @@ if($inputservices->isEmpty()){
   $input->icon="";
   $input->save();
   $inputservice = new InputService();
-  $inputservice->service_id=$id;
+  $inputservice->service_id=$service_id;
   $inputservice->input_id= $input->id;
   $inputservice->save();
-  return "norow";
+ 
 }
 
    }else{
-   // return response()->json("no");
-  //  $deleted = InputService::where('service_id', $id)->where('input_id', $input->id)->delete();
+    //record not selected 
+   if( !$recinputservices->isEmpty()){
+
+    $deleted =InputService::find($recinputservices->first()->id)->delete();
+    $deleted =Input::find($recinputservices->first()->input_id)->delete();
    }
   
+   }
+   return 1;
+  
+    
+    }
+    public function saveimgcheck($formValue, $service_id,$imgcount)
+    {
+      
+   
+    /*
+    // isset($formdata['user_name'])
+ $this->savepersonalrow('user_name',isset($formdata['user_name']), $id);
+ $this->savepersonalrow('nationality',isset($formdata['nationality']), $id);
+ */
+    // DB::transaction(function ( ) use( $formdata ,$id){
+     
+  //image 
+   
+  $imginputservices = InputService::where('service_id',$service_id)->whereHas('input', function ( $query) {
+    $query->where('type', 'image');
+})->get();    
+
+if($formValue){
+//image selected
+
+if($imginputservices->isEmpty()){
+//create new
+$input=new Input();
+$input->type='image';
+$input->name='image'; 
+$input->image_count=$imgcount;
+
+$input->ispersonal=0;
+$input->tooltipe="";
+$input->icon="";
+$input->save(); 
+
+$inputservice = new InputService();
+$inputservice->service_id=$service_id;
+$inputservice->input_id= $input->id;
+$inputservice->save();
+
+}else{
+ //update old new
+  Input::find( $imginputservices->first()->input_id)->update([
+    'image_count'=>  $imgcount,      
+  ]);
+}
+
+}else{
+//image not selected 
+if( !$imginputservices->isEmpty()){
+  $deleted =InputService::find($imginputservices->first()->id)->delete();
+$deleted =Input::find($imginputservices->first()->input_id)->delete();
+
+}
+
+}
  // });
     
-     // return response()->json("ok");
+      return response()->json("ok");
       
     
     }

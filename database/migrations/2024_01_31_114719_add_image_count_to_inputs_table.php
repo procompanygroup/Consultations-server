@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.2024_01_28_134218_add_image_count_to_inputs_table
+     * Run the migrations.
      */
     public function up(): void
     {
-        Schema::table('services', function (Blueprint $table) {
-            $table->text('desc')->nullable()->change();
+        Schema::table('inputs', function (Blueprint $table) {
+            $table->integer('image_count')->nullable()->default(0);
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('services', function (Blueprint $table) {
-            $table->dropColum('desc');
+        Schema::table('inputs', function (Blueprint $table) {
+            $table->dropColum('image_count');
         });
     }
 };

@@ -16,7 +16,7 @@ class Input extends Model
 'icon',
 'ispersonal',
 'is_active',
-             
+        'image_count' ,    
     ];
     public function inputvalues(): HasMany
     {
