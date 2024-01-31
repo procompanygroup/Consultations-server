@@ -26,7 +26,7 @@ class UpdatePointRequest extends FormRequest
        return[
          'count'=>'required|integer', 
          'price'=>'required|decimal:0,2', 
-          
+         'countbefor'=>'nullable|integer', 
        ];   
     
     }
@@ -42,6 +42,7 @@ public function messages(): array
    return[   
       'count.required'=> __('messages.this field is required') ,
       'count.integer'=> __('messages.must be integer') ,
+      'countbefor.integer'=> __('messages.must be integer') ,
       'price.required'=>__('messages.this field is required') ,  
       'price.decimal'=>__('messages.must be integer') ,   
   

@@ -65,9 +65,10 @@ class PointController extends Controller
       } else {
         $newObj = new Point;
         $newObj->count = $formdata['count'];
+        $newObj->countbefor = isset($formdata["countbefor"]) ? $formdata["countbefor"] : 0;
         $newObj->price = $formdata['price'];
-        $newObj->pricebefor =  $formdata['price'];
-        $newObj->countbefor =  $formdata['count'];     
+       // $newObj->pricebefor =  $formdata['price'];
+        
         $newObj->is_active = isset($formdata["is_active"]) ? 1 : 0;
         //$newObj->token = $formdata['token'];
         $newObj->save();
@@ -141,7 +142,7 @@ class PointController extends Controller
           'count'=>  $formdata['count'],
           'price'=>  $formdata['price'],
           'pricebefor' => $formdata['price'],    
-          'countbefor' => $formdata['count'],            
+          'countbefor' => isset($formdata["countbefor"]) ? $formdata["countbefor"] : 0,            
         'is_active' => isset($formdata['is_active']) ? 1 : 0         
         ]);
       

@@ -35,13 +35,19 @@
 								<form class="form-horizontal" name="create_form" action="{{url('admin/point')}}" method="POST" enctype="multipart/form-data" id="create_form">
 									@csrf
 									<div class="form-group">
-										<input type="text" class="form-control " id="count" placeholder="{{ __('general.pointscount') }}" name="count">
+										<input type="text" class="form-control " id="count"  placeholder="{{ __('general.pointscount') }}" name="count">
 										<ul class="parsley-errors-list filled" >
 											<li class="parsley-required" id="count_error"></li>
 										</ul>
 										 
 									</div>
-
+									<div class="form-group">
+										<input type="text" class="form-control " id="countbefor" placeholder="{{ __('general.pointsbefor') }}" name="countbefor">
+										<ul class="parsley-errors-list filled" >
+											<li class="parsley-required" id="countbefor_error"></li>
+										</ul>
+										 
+									</div>
                                     <div class="form-group">
 										<input type="text" class="form-control" id="price" placeholder="{{ __('general.price') }}" name="price">
 										<ul class="parsley-errors-list filled" >

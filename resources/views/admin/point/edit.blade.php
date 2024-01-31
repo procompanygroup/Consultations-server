@@ -41,7 +41,13 @@
 										</ul>
 										 
 									</div>
-
+									<div class="form-group">
+										<input type="text" class="form-control " id="countbefor" placeholder="{{ __('general.pointsbefor') }}" name="countbefor" value="{{$point->countbefor }}">
+										<ul class="parsley-errors-list filled" >
+											<li class="parsley-required" id="countbefor_error"></li>
+										</ul>
+										 
+									</div>
                                     <div class="form-group">
 										<input type="text" class="form-control" id="price" placeholder="{{ __('general.price') }}" name="price"  value="{{$point->price }}">
 										<ul class="parsley-errors-list filled" >

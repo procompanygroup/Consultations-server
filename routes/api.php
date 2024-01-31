@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\ExpertController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\SelectedServiceController;
+use App\Http\Controllers\Api\PointController;
  //use App\Http\Middleware\Api\AuthenticateClient;
 
 /*
@@ -51,6 +52,10 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::prefix('/expert')->group(function () {
             Route::post('/getexpertsbyserviceid', [ExpertController::class, 'getexpertsbyserviceid']); 
             Route::post('/getwithfav', [ExpertController::class, 'getwithfav']); 
+        });
+        Route::prefix('/point')->group(function () {
+            Route::post('/getall', [PointController::class, 'index']); 
+      
         });
     });
   

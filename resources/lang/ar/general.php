@@ -81,6 +81,7 @@ return [
 'manage points'=>'ادارة النقاط',
 'point info'=>'بيانات النقاط',
 'pointscount'=>'عدد النقاط',
+'pointsbefor'=>'النقاط قبل العرض',
 'manage services'=>'ادارة الخدمات',
 ];
 /*

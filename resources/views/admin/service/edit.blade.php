@@ -364,7 +364,7 @@
                                             </div>
                                             <div id="option_append">
                                             <div class="form-group" id="divoption">
-                                                <input type="text" class="form-control" id="list_option" placeholder="ادخل الاختيار" name="list_option">
+                                                <input type="text" class="form-control" id="list_option" value="" placeholder="ادخل الاختيار" name="list_option">
                                                 <ul class="parsley-errors-list filled" >
                                                     <li class="parsley-required" id="list_option_error"></li>
                                                 </ul>
