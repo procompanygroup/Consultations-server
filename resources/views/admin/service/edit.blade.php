@@ -314,8 +314,8 @@
                             <div class="col">
                                 <div class="card  box-shadow-0">
                                     <div class="card-body pt-4">
-                                        <form class="form-horizontal" name="create_form" method="POST" action="{{url('admin/user')}}" enctype="multipart/form-data" id="create_form">
-                                            @csrf
+                                        <form class="form-horizontal" name="field_form" action="{{url('admin/service/savefield', $service->id)}}" method="POST" enctype="multipart/form-data" id="field_form" >
+                                          @csrf
 
                                             <div class="form-group">
                                                 <input type="text" class="form-control " id="field_name" placeholder="{{ __('general.field_name') }}" name="field_name">
@@ -323,48 +323,56 @@
                                                     <li class="parsley-required" id="field_name_error"></li>
                                                 </ul>
                                             </div>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control " id="field_tooltipe" placeholder="التلميح" name="field_tooltipe">
+                                                <ul class="parsley-errors-list filled" >
+                                                    <li class="parsley-required" id="field_tooltipe_error"></li>
+                                                </ul>
+                                            </div>
                                             {{-- image --}}
                                             <div class="form-group mb-4 justify-content-end">
                                                 <div class="custom-file">
-                                                    <input class="custom-file-input" id="image" name="image" type="file"> <label class="custom-file-label" id="image_label" for="customFile">{{ __('general.choose image') }}</label>
+                                                    <input class="custom-file-input" id="field_icon" name="field_icon" type="file"> <label class="custom-file-label" id="field_icon_label" for="customFile">{{ __('general.choose svg') }}</label>
                                                     <ul class="parsley-errors-list filled" >
-                                                        <li class="parsley-required" id="image_error"></li>
+                                                        <li class="parsley-required" id="field_image_error"></li>
                                                     </ul>
                                                 </div>
 
                                             </div>
                                             <div class="form-group mb-3">
-                                                <select name="role"   id="role" class="form-control SlectBox" onclick="console.log($(this).val())" onchange="console.log('change is firing')">
+                                                <select name="field_type"   id="field_type" class="form-control SlectBox"  >
                                                     <!--placeholder-->
                                                     <option title=""   class="text-muted">نوع الحقل</option>
-                                                    <option value="">حقل نصي</option>
-                                                    <option value="">قائمة نعم/لا</option>
-                                                    <option value="">قائمة متعدد</option>
-                                                    <option value="">حقل تاريخ</option>
-                                                    <option value="">حقل نصي طويل</option>
+                                                    <option value="text">حقل نصي</option>
+                                                    <option value="bool">قائمة نعم/لا</option>
+                                                    <option value="list">قائمة متعدد</option>
+                                                    <option value="date">حقل تاريخ</option>
+                                                    <option value="longtext">حقل نصي طويل</option>
                                                 </select>
                                             </div>
 
                                             <div class="mb-4">
-                                                <select name="role"   id="role" class="form-control SlectBox" onclick="console.log($(this).val())" onchange="console.log('change is firing')">
+                                                <select name="bool_field"   id="bool_field" class="form-control SlectBox"  >
                                                     <!--placeholder-->
                                                     <option title=""   class="text-muted">{{ __('general.choose yes/no') }}</option>
                                                     <option value="yes">{{ __('general.yes') }}</option>
                                                     <option value="no">{{ __('general.no') }}</option>
                                                 </select>
                                                 <ul class="parsley-errors-list filled">
-                                                    <li class="parsley-required"  id="role_error"></li>
+                                                    <li class="parsley-required"  id="bool_field_error"></li>
                                                 </ul>
                                             </div>
-                                            <div class="form-group">
-                                                <input type="text" class="form-control" id="name" placeholder="name" name="name">
+                                            <div id="option_append">
+                                            <div class="form-group" id="divoption">
+                                                <input type="text" class="form-control" id="list_option" placeholder="ادخل الاختيار" name="list_option">
                                                 <ul class="parsley-errors-list filled" >
-                                                    <li class="parsley-required" id="name_error"></li>
+                                                    <li class="parsley-required" id="list_option_error"></li>
                                                 </ul>
+                                            </div>
                                             </div>
                                             <div class="form-group mb-4 justify-content-end">
                                                 <div>
-                                                    <button type="submit" name="btn_add_field" id="btn_add_field" class="btn btn-light btn-block"><i class="fa fa-plus"></i></button>
+                                                    <button type="button" name="btn_add_option" id="btn_add_option" class="btn btn-light btn-block"><i class="fa fa-plus"></i></button>
                                                 </div>
                                             </div>
                                         </form>
@@ -378,33 +386,14 @@
                         <!-- row -->
 					</div>
 					<div class="modal-footer">
-						<button class="btn ripple btn-primary" type="button">حفظ</button>
-						<button class="btn ripple btn-secondary" data-dismiss="modal" type="button"> إلغاء</button>
+						<button class="btn ripple btn-primary" name="btn_save_field" id="btn_save_field" type="submit">حفظ</button>
+						<button class="btn ripple btn-secondary" data-dismiss="modal"  name="btn_cancel_field" id="btn_cancel_field" type="button"> إلغاء</button>
 					</div>
 				</div>
 			</div>
 		</div>
 		<!--End Scroll with content modal -->
-
-        		<!-- Basic modal -->
-		<div class="modal" id="modaldemo1">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content modal-content-demo">
-					<div class="modal-header">
-						<h6 class="modal-title">Basic Modal</h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
-					</div>
-					<div class="modal-body">
-						<h6>Modal Body</h6>
-						<p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
-					</div>
-					<div class="modal-footer">
-						<button class="btn ripple btn-primary" type="button">Save changes</button>
-						<button class="btn ripple btn-secondary" data-dismiss="modal" type="button">Close</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- End Basic modal -->
+ 
 		
 @endsection
 @section('js')

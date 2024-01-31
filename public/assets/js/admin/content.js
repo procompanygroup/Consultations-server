@@ -256,7 +256,64 @@ $(document).ready(function () {
 	
 	
 		});
-		
+		//save field
+		$('#btn_save_field').on('click', function (e) {
+			e.preventDefault();
+			startLoading();
+		//	ClearErrors();
+			//var fdata = $( "#create_form" ).serialize();
+			var form = $('#field_form')[0];
+			var formData = new FormData(form);
+			urlval=	$('#field_form').attr("action")
+			//var urlval ='{{url("admin/user")}}';
+			//const formData = new FormData("#create_form");
+			//  alert(formData.toString());
+	
+			$.ajax({
+				url: urlval,
+				type: "POST",
+				
+				data: formData,
+				contentType: false,
+				processData: false,
+				//contentType: 'application/json',
+				success: function (data) {
+					//	alert(data);
+					endLoading();
+					//$('#errormsg').html('');
+					//$('#sortbody').html('');
+					if (data.length == 0) {
+						noteError();
+					} else if (data == "ok") {
+						noteSuccess();
+				 
+						//ClearErrors();
+					}
+	
+					// $('.alert').html(result.success);
+				}, error: function (errorresult) {
+					endLoading();
+					var response = $.parseJSON(errorresult.responseText);
+					// $('#errormsg').html( errorresult );
+					noteError();
+					/*
+					$.each(response.errors, function (key, val) {
+						$("#" + key + "_error").text(val[0]);
+						$("#" + key).addClass('parsley-error');
+						//$('#error').append(key+"-"+ val[0] +"/");
+					});
+	*/
+				},finally:function () {
+					endLoading();
+	
+				}
+				 
+	
+			});
+	
+	
+	
+		});
 	function ClearErrors() {
 
 		$('.parsley-required').html('');
@@ -280,6 +337,9 @@ $(document).ready(function () {
 	});
 	$("#icon").on("change", function () {
 		imageChangeForm("#icon", "#icon_label", "#iconshow");
+	});
+	$("#field_icon").on("change", function () {
+		imageChangeForm("#field_icon", "#field_icon_label", "#field_iconshow");
 	});
 	function imageChangeForm(btn_id, upload_label, imageId) {
 		/* Current this object refer to input element */
@@ -409,8 +469,55 @@ $(document).ready(function () {
 			return true;
 		}
 	});
+
+	$('#field_type').on('change', function() {
+		var option=$(this).find(":selected").val() ;
+		 if( option=='text'){
+			$('#bool_field').hide();
+			$('#list_option').hide();
+			$('#btn_add_option').hide();
+		 }else if(option=='bool'){
+			$('#bool_field').show();
+			$('#list_option').hide();
+			$('#btn_add_option').hide();
+
+		 }else if(option=='list'){
+			$('#list_option').show();
+			$('#btn_add_option').show();
+			$('#bool_field').hide();
+
+		 }else if(option=='date'){
+	$('#bool_field').hide();
+			$('#list_option').hide();
+			$('#btn_add_option').hide();
+		 }else if(option=='longtext'){
+			$('#bool_field').hide();
+			$('#list_option').hide();
+			$('#btn_add_option').hide();
+		 }else{
+			$('#bool_field').hide();
+			$('#list_option').hide();
+			$('#btn_add_option').hide();
+		 }
+		  
+	});
+//add input text dynamicly
+var i=0;
+$('#btn_add_option').on('click', function () {
+	 
+var $divclon=	$('#divoption').clone().prop('id', 'divoption_'+i);
+ 
+$divclon.children(':input').first().prop('id', 'list_option_'+i).prop('value','');
+//$('#divoption').after( $divclon);
+$('#option_append').append( $divclon);
+
+i++;
+});
 	showimgcount($("#image_check"),$('#image_count')) ;
 });
+
+
+
 $("#count").focusout(function (e) {
 	if (!validatempty($(this))) {
 		return false;
