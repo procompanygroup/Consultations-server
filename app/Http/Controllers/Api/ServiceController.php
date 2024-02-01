@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Api\InputController;
 /*
 use App\Http\Requests\Web\Service\StoreServiceRequest;
 use App\Http\Requests\Web\Service\UpdateServiceRequest;
@@ -73,7 +74,9 @@ DB::raw("(CASE
         $service = Service::find($data['id'])->with('inputservices.input')
         ->first();
          */
-      
+      $inputctrlr=new InputController();
+     // $urlinput =url(Storage::url($inputctrlr->path)).'/';
+      $iconurlinput =url(Storage::url($inputctrlr->iconpath)).'/';
 $service = Service::find($data['id'])->select('id',
 'name',
 'desc',
@@ -89,11 +92,15 @@ END) AS icon"),)->first()->load(
     ['inputservices'=>function($q){
 $q->select('id','input_id','service_id');
         }    ,
-        'inputservices.input'=>function($q){
+        'inputservices.input'=>function($q)use($iconurlinput){
         $q->select('id','name',
         'type',
         'tooltipe',
-        'icon',
+       // 'icon',       
+DB::raw("(CASE 
+WHEN icon = '' THEN ''                     
+ELSE CONCAT('$iconurlinput',icon)
+END) AS icon"),
         'image_count',
         'ispersonal');
             }  ,

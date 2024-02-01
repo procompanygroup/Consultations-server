@@ -10,6 +10,8 @@ class InputController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public $path = 'images/inputs';
+    public $iconpath = 'images/inputs/icons';
     public function index()
     {
         //
