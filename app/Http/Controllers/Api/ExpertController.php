@@ -202,11 +202,121 @@ class ExpertController extends Controller
     public function getwithfav()
     {
         $authuser = auth()->user();
-        //  return response()->json(['form' =>  $credentials]);       
+            
         $data = request(['client_id']);
         $id = $data['client_id'];
         if ($authuser->id == $id) {
-            //  $url = url('storage/app/public' . '/' . $this->path  ).'/';
+          
+            $url = url(Storage::url($this->path)) . '/';
+            $recurl = url(Storage::url($this->recordpath)) . '/';
+            $servicectrlr = new ServiceController();
+            $servicepath = $servicectrlr->path;
+            $serviceiconpath = $servicectrlr->iconpath;
+            $service_url = url(Storage::url($servicepath)) . '/';
+            $service_icon_url = url(Storage::url($serviceiconpath)) . '/';
+
+            $DBList = Expert::
+                with([
+                   //'expertsServices.service',
+                 //  'expertsServices',
+                    'expertsFavorites' => function ($q) use ($id) {
+                        $q->where('client_id', $id)->select('id', 'client_id', 'expert_id');
+                    },
+                    'expertsServices.service' => function ($q)   {
+                        $q->select( 'id' ,
+                        'name',
+                        'desc',
+                        'image' ,
+                        'icon' ,
+                        'is_active',
+                        'is_callservice');
+                    }
+                ])->get();
+            $collList=collect($DBList);
+ 
+            $List = $DBList ->map(function ($expert) use ($url, $recurl, $service_url, $service_icon_url) {
+               //expertsServicesMap
+                $expertsServicesMap = $expert->expertsServices
+                ->map(function ($expertsServices) use ( $service_url, $service_icon_url) {
+               
+               //ServiceMap 
+              // $ServiceMap1 = $expertsServices ->service->find($expertsServices->service_id)->first()->get();
+                    
+                    //end   ServiceMap 
+                    return 
+                    /*[
+                        'id' => $expertsServices->id,
+                        'expert_id' => $expertsServices->expert_id,
+                        'service_id' => $expertsServices->service_id,
+                        'points'=> $expertsServices->points,
+                        'expert_cost'=>$expertsServices->expert_cost,
+                        'cost_type'=> $expertsServices->cost_type,
+                        'expert_cost_value'=>$expertsServices->expert_cost_value,
+                     //   'service' => $expertsServices->service,
+                     */
+                   //  'service' =>
+                     $this->servicetoArray( $expertsServices->service,$service_url, $service_icon_url);
+                   // ];
+
+                });
+// end expertsServicesMap
+                return [
+                    'id' => $expert->id,
+                    'user_name' => $expert->user_name,
+                    'mobile'=> $expert->mobile,
+                    'email'=> $expert->email,
+                    'birthdate'=> $expert->birthdate,
+                    'gender'=> $expert->gender,
+                  
+                    'is_active'=> $expert->is_active,
+                    'points_balance'=> $expert->points_balance,
+                    'cash_balance'=> $expert->cash_balance,
+                    'cash_balance_todate'=> $expert->cash_balance_todate,
+                    'rates'=> $expert->rates,
+                    'desc'=> $expert->desc,
+                    'call_cost'=> $expert->call_cost,
+                    'answer_speed'=> $expert->answer_speed,
+                    'record'=>$expert->record==""?"":$recurl.$expert->record,
+                    'image'=>$expert->image==""?"":$url.$expert->image,
+                    'is_favorite' => $expert->expertsFavorites->isEmpty() ? 0 : 1,
+
+
+                  //  'expertsFavorites' => $expert->expertsFavorites,
+                    //  'expertsServices'=>$item->expertsServices,
+                    'services' => $expertsServicesMap,
+
+                ];
+            });
+
+            
+            return response()->json( $List );
+
+
+
+        } else {
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
+    }
+    public function servicetoArray($service,$service_url, $service_icon_url)
+    {
+        return [
+            "id" => $service->id,
+            "name"=> $service->name,
+            'desc'=> $service->desc,
+            'image' =>$service->image==""?"":$service_url.$service->image,
+            'icon' => $service->icon==""?"":$service_icon_url.$service->icon,
+            'is_active'=> $service->is_active,
+            'is_callservice'=> $service->is_callservice,            
+        ];
+    }
+    public function getwithfavandExpServ()
+    {
+        $authuser = auth()->user();
+          
+        $data = request(['client_id']);
+        $id = $data['client_id'];
+        if ($authuser->id == $id) {
+           
             $url = url(Storage::url($this->path)) . '/';
             $recurl = url(Storage::url($this->recordpath)) . '/';
             $servicectrlr = new ServiceController();
@@ -276,10 +386,7 @@ class ExpertController extends Controller
                     'record'=>$expert->record==""?"":$recurl.$expert->record,
                     'image'=>$expert->image==""?"":$url.$expert->image,
                     'is_favorite' => $expert->expertsFavorites->isEmpty() ? 0 : 1,
-
-
-                  //  'expertsFavorites' => $expert->expertsFavorites,
-                    //  'expertsServices'=>$item->expertsServices,
+ 
                     'expertsServices' => $expertsServicesMap,
 
                 ];
