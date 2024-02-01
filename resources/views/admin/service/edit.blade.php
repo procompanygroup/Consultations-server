@@ -118,7 +118,7 @@
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
                                                             <input type="checkbox"  @if ( $personal_array['user_name']==1) @checked(true) @endif  value="{{ $personal_array['user_name'] }}"   name="user_name" data-checkboxes="mygroup" class="custom-control-input" id="puser_name">
-                                                            <label for="user_name" class="custom-control-label mt-1">الاسم</label>
+                                                            <label for="puser_name" class="custom-control-label mt-1">الاسم</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -126,7 +126,7 @@
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
                                                             <input type="checkbox" name="nationality" @if ( $personal_array['nationality']==1) @checked(true) @endif  value="{{ $personal_array['nationality'] }}" data-checkboxes="mygroup" class="custom-control-input" id="pnationality">
-                                                            <label for="nationality" class="custom-control-label mt-1">الجنسية</label>
+                                                            <label for="pnationality" class="custom-control-label mt-1">الجنسية</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -134,7 +134,7 @@
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
                                                             <input type="checkbox" name="gender" @if ( $personal_array['gender']==1) @checked(true) @endif  value="{{ $personal_array['gender'] }}" data-checkboxes="mygroup" class="custom-control-input" id="pgender">
-                                                            <label for="gender" class="custom-control-label mt-1">الجنس</label>
+                                                            <label for="pgender" class="custom-control-label mt-1">الجنس</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -142,7 +142,7 @@
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
                                                             <input type="checkbox" name="birthdate" @if ( $personal_array['birthdate']==1) @checked(true) @endif  value="{{ $personal_array['birthdate'] }}"  data-checkboxes="mygroup" class="custom-control-input" id="pbirthdate">
-                                                            <label for="birthdate" class="custom-control-label mt-1">تاريخ الميلاد</label>
+                                                            <label for="pbirthdate" class="custom-control-label mt-1">تاريخ الميلاد</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -150,7 +150,7 @@
                                                     <div class="checkbox">
                                                         <div class="custom-checkbox custom-control">
                                                             <input type="checkbox" name="marital_status" @if ( $personal_array['marital_status']==1) @checked(true) @endif  value="{{ $personal_array['marital_status'] }}" data-checkboxes="mygroup" class="custom-control-input" id="pmarital_status">
-                                                            <label for="marital_status" class="custom-control-label mt-1">الحالة الاجتماعية</label>
+                                                            <label for="pmarital_status" class="custom-control-label mt-1">الحالة الاجتماعية</label>
                                                         </div>
                                                     </div>
                                                 </div>
