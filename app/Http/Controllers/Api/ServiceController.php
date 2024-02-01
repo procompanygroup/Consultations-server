@@ -94,6 +94,7 @@ $q->select('id','input_id','service_id');
         'type',
         'tooltipe',
         'icon',
+        'image_count',
         'ispersonal');
             }  ,
             'inputservices.input.inputvalues'=>function($q){
