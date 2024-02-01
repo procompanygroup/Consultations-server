@@ -19,7 +19,7 @@ class Service extends Model
         'updateuser_id',
         'is_active',
         'icon',
-             
+          'is_callservice',   
     ];
 
     public $fullpathimg = "";

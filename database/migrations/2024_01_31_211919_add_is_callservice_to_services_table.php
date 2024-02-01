@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('inputs', function (Blueprint $table) {
-            $table->integer('image_count')->nullable()->default(0);
+        Schema::table('services', function (Blueprint $table) {
+            $table->integer('is_callservice')->nullable()->default(0);
         });
     }
 
     /**
-     * Reverse the migrations.services add_is_callservice_to_services_table
+     * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('inputs', function (Blueprint $table) {
-            $table->dropColum('image_count');
+        Schema::table('services', function (Blueprint $table) {
+            $table->dropColum('is_callservice');
         });
     }
 };

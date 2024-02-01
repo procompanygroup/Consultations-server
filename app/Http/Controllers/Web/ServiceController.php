@@ -42,7 +42,7 @@ class ServiceController extends Controller
      */
     public function index()
     {
-      $list = DB::table('services')->get();
+      $list = DB::table('services')->whereNot('is_callservice',1)->get();
       return view('admin.service.show', ['services' => $list]);
       //return response()->json($users);
   

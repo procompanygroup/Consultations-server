@@ -31,22 +31,28 @@ class ServiceController extends Controller
      * Display a listing of the resource.
      */
     public $path = 'images/services';
-
+    public $iconpath = 'images/services/icons';
     public function index()
     {
         $url =url(Storage::url($this->path)).'/';
+        $iconurl =url(Storage::url($this->iconpath)).'/';
       //  $url = url('storage/app/public' . '/' . $this->path) . '/';
         $list = DB::table('services')->where('is_active',1)->select(
             'name',
             'desc',
             'is_active',
-            'icon',
+            'is_callservice',
+           
            // DB::raw("CONCAT('$url',image)  AS image1"),
             DB::raw("(CASE 
             WHEN services.image = '' THEN ''                     
             ELSE CONCAT('$url',image)
-            END) AS image")
-        )->get();
+            END) AS image"),
+            DB::raw("(CASE 
+            WHEN services.icon = '' THEN ''                     
+            ELSE CONCAT('$iconurl',icon)
+            END) AS icon")
+        )->orderBy('is_callservice')->get();
 /*
 DB::raw("(CASE 
             WHEN services.image = ''THEN ''   
@@ -61,6 +67,7 @@ DB::raw("(CASE
     {
         $data = request(['id']);
         $url =url(Storage::url($this->path)).'/';
+        $iconurl =url(Storage::url($this->iconpath)).'/';
        // $url = url('storage/app/public' . '/' . $this->path) . '/';
          /*
         $service = Service::find($data['id'])->with('inputservices.input')
@@ -74,7 +81,11 @@ DB::raw("(CASE
 WHEN services.image = '' THEN ''                     
 ELSE CONCAT('$url',image)
 END) AS image"),
-'icon')->first()->load(
+'icon',
+DB::raw("(CASE 
+WHEN services.icon = '' THEN ''                     
+ELSE CONCAT('$iconurl',icon)
+END) AS icon"),)->first()->load(
     ['inputservices'=>function($q){
 $q->select('id','input_id','service_id');
         }    ,
