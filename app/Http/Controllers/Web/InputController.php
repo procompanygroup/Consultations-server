@@ -17,9 +17,12 @@ use App\Http\Requests\Web\Input\StoreInputRequest;
 use App\Http\Requests\Web\Input\UpdateInputRequest;
 use App\Models\Inputvalue;
 use App\Models\InputService;
+
+use Illuminate\Support\Facades\Storage;
 class InputController extends Controller
 {
-    public $path = 'media/inputs';
+  public $path = 'images/inputs';
+  public $iconpath = 'images/inputs/icons';
     /**
      * Display a listing of the resource.
      */
@@ -200,5 +203,35 @@ class InputController extends Controller
    
       //   return redirect()->route('users.index');
   
+    }
+    public function storeSvg($file, $id)
+    {
+      $imagemodel = Input::find($id);
+      $oldimage = $imagemodel->icon;
+      $oldimagename = basename($oldimage);
+      $oldimagepath = $this->iconpath . '/' . $oldimagename;
+      //save photo
+  
+      if ($file !== null) {
+        $filename= rand(10000, 99999). $id .".".$file->getClientOriginalExtension();
+   
+     //   $manager = new ImageManager(new Driver());
+     //   $image = $manager->read($file);
+        
+        if (!File::isDirectory(Storage::url('/' . $this->iconpath))) {
+          Storage::makeDirectory('public/' . $this->iconpath);
+        }
+        $path =$file->storeAs(
+           $this->iconpath , $filename,'public'
+      );
+
+       // $image->save(storage_path('app/public') . '/' . $this->iconpath . '/' . $filename);
+        //   $url = url('storage/app/public' . '/' . $this->path . '/' . $filename);
+        Input::find($id)->update([
+          "icon" => $filename
+        ]);
+        Storage::delete("public/" . $this->iconpath . '/' . $oldimagename);
+      }
+      return 1;
     }
 }

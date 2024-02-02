@@ -196,9 +196,12 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+
                                                 <div class="mb-0 col-6 col-lg-3">
-                                                    <a class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" href=""><i class="fa fa-plus"></i> إضافة حقل</a>
+                                                    <a class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" id="btn_showinput" ><i class="fa fa-plus"></i> إضافة حقل</a>
                                                 </div>
+
                                             </div>
                                         </form>
                                         <div class="">
@@ -211,7 +214,7 @@
                                                 </div>
                                                 <div class="col-4">
                                                     <div class="form-group d-inline-block">
-                                                        <button class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" href=""><i class="fa fa-edit"></i></button>
+                                                        <button class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" ><i class="fa fa-edit"></i></button>
                                                     </div>
                                                     <form class="form-horizontal d-inline-block" >
                                                         <div class="form-group">
@@ -260,46 +263,8 @@
 		<!-- main-content closed -->
 
   
-        <!-- Basic modal -->
-		<div class="modal" id="select2modal">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content modal-content-demo">
-					<div class="modal-header">
-						<h6 class="modal-title">Select2 Modal</h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
-					</div>
-					<div class="modal-body">
-						<h6>Modal Body</h6>
-						<!-- Select2 -->
-						<select class="form-control select2-show-search select2-dropdown">
-							<option label="Choose one">
-							</option>
-							<option value="Firefox">
-							Firefox
-							</option>
-							<option value="Chrome">
-							Chrome
-							</option>
-							<option value="Safari">
-							Safari
-							</option>
-							<option value="Opera">
-							Opera
-							</option>
-							<option value="Internet Explorer">
-							Internet Explorer
-							</option>
-						</select>
-						<!-- Select2 -->
-						<p class="mt-3">Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
-					</div>
-					<div class="modal-footer">
-						<button class="btn ripple btn-primary" type="button">Save changes</button>
-						<button class="btn ripple btn-secondary" data-dismiss="modal" type="button">Close</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- End Basic modal -->
+   
+	
 
 		<!-- Scroll with content modal -->
 		<div class="modal" id="scrollmodal">
@@ -334,7 +299,7 @@
                                                 <div class="custom-file">
                                                     <input class="custom-file-input" id="field_icon" name="field_icon" type="file"> <label class="custom-file-label" id="field_icon_label" for="customFile">{{ __('general.choose svg') }}</label>
                                                     <ul class="parsley-errors-list filled" >
-                                                        <li class="parsley-required" id="field_image_error"></li>
+                                                        <li class="parsley-required" id="field_icon_error"></li>
                                                     </ul>
                                                 </div>
 
@@ -342,13 +307,16 @@
                                             <div class="form-group mb-3">
                                                 <select name="field_type"   id="field_type" class="form-control SlectBox"  >
                                                     <!--placeholder-->
-                                                    <option title=""   class="text-muted">نوع الحقل</option>
+                                                    <option title="" selected  class="text-muted">نوع الحقل</option>
                                                     <option value="text">حقل نصي</option>
                                                     <option value="bool">قائمة نعم/لا</option>
                                                     <option value="list">قائمة متعدد</option>
                                                     <option value="date">حقل تاريخ</option>
                                                     <option value="longtext">حقل نصي طويل</option>
                                                 </select>
+                                                <ul class="parsley-errors-list filled">
+                                                    <li class="parsley-required"  id="field_type_error"></li>
+                                                </ul>
                                             </div>
 
                                             <div class="mb-4">
@@ -364,7 +332,7 @@
                                             </div>
                                             <div id="option_append">
                                             <div class="form-group" id="divoption">
-                                                <input type="text" class="form-control" id="list_option" value="" placeholder="ادخل الاختيار" name="list_option">
+                                                <input type="text" class="form-control" id="list_option" value="" placeholder="ادخل الاختيار" name="list_option[0]">
                                                 <ul class="parsley-errors-list filled" >
                                                     <li class="parsley-required" id="list_option_error"></li>
                                                 </ul>

@@ -17,7 +17,8 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse the migrations.2024_01_18_203735_ add_is_active_to_inputs_table
+     * add_is_active_to_inputvalues_table
      */
     public function down(): void
     {

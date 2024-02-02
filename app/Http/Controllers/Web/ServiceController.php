@@ -14,6 +14,7 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use App\Http\Requests\Web\Service\StoreServiceRequest;
 use App\Http\Requests\Web\Service\UpdateServiceRequest;
+use App\Http\Requests\Web\Input\StoreInputRequest;
 use App\Models\Input;
 use App\Models\Pointtransfer;
 use App\Models\Selectedservice;
@@ -22,6 +23,8 @@ use App\Models\InputService;
 use App\Models\Servicefavorite;
 use App\Models\Permission;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Web\InputController;
+use App\Models\Inputvalue;
 /* 
 use App\Models\Expertfavorite;
 use App\Models\Servicefavorite;
@@ -202,8 +205,7 @@ if( $inputservice['input']['type']=='image' && $inputservice['input']['ispersona
         ->withErrors($validator)
                     ->withInput();
                     */
-      return redirect()->back()->withErrors($validator)
-        ->withInput();
+     return response()->json($validator);
 
     } else {
      // $imagemodel = Expert::find($id);
@@ -506,47 +508,73 @@ $deleted =Input::find($imginputservices->first()->input_id)->delete();
     
     }
 
-    public function savefield(Request $request, $id)
+    public function savefield(StoreInputRequest $request, $id)
     {
-      
+     
     $formdata = $request->all();
+
     //validate
     $validator = Validator::make(
       $formdata,
       $request->rules(),
       $request->messages()
     );
-    if ($validator->fails()) {
-      /*
-        return redirect('/cpanel/users/add')
-        ->withErrors($validator)
-                    ->withInput();
-                    */
-      return redirect()->back()->withErrors($validator)
-        ->withInput();
+    if ($validator->fails()) {  
+      return response()->json($validator);
 
-    } else {
-     // $imagemodel = Expert::find($id);
-      if ($request->hasFile('image')) {
-        $file= $request->file('image');
-               // $filename= $file->getClientOriginalName();                
-     $this->storeImage( $file,$id);
+    } else
+     {
+      DB::transaction(function ()use($formdata,$request,$id) {     
+   $inpctrlr=new   InputController();
+     // $imagemodel = Expert::find($id);php artisan make:request Admin/Category/StoreCategory TransRequest
+/*
+  'name',
+'type',
+'tooltipe',
+'icon',
+'ispersonal',
+'is_active',
+        'image_count' , 
+*/
+//save input
+     $newObj = new Input;
+     $newObj->name = $formdata['field_name'];
+     $newObj->type = $formdata['field_type'];
+     $newObj->tooltipe = $formdata['field_tooltipe'];
+     $newObj->ispersonal =0;
+     $newObj->is_active = 1;
+     $newObj->image_count=0;   
+     $newObj->save();  
+
+     if ($request->hasFile('field_icon')) {
+       $file = $request->file('field_icon');                    
+      $inpctrlr->storeSvg($file, $newObj->id);       
+     }
+         //save options
+         if($formdata['field_type']=='list'){     
+          foreach($formdata['list_option'] as $option){
+            if(!is_null($option)){
+              $inputvalue=new Inputvalue();
+              $inputvalue->value= $option;
+              $inputvalue->input_id=$newObj->id;
+              $inputvalue->is_active=1;
+              $inputvalue->save();
+            }      
+               } 
        }
-       if ($request->hasFile('icon')) {
-        $file = $request->file('icon');
-        // $filename= $file->getClientOriginalName();               
-        $this->storeSvg($file,$id);
-        //  $this->storeImage( $file,2);
-      }
-      Service::find($id)->update([
-        'name'=>  $formdata['name'],
-        'desc'=>  $formdata['desc'],
-        'updateuser_id' =>Auth::user()->id,      
-      'is_active' => isset($formdata['is_active']) ? 1 : 0
-      ]);
-     
-      return response()->json("ok");
-      
-    }
+       //end save options
+     //end save input
+     //save inputs_services
+$inputservice=new InputService();
+$inputservice->service_id=$id;
+$inputservice->input_id=$newObj->id;
+$inputservice->save();
+     //end save inputs_services 
+       
+  // return response()->json(  $x);
+
+});
+return response()->json("ok");
+    }//end else
     }
 }

@@ -260,7 +260,7 @@ $(document).ready(function () {
 		$('#btn_save_field').on('click', function (e) {
 			e.preventDefault();
 			startLoading();
-		//	ClearErrors();
+	 	ClearErrors();
 			//var fdata = $( "#create_form" ).serialize();
 			var form = $('#field_form')[0];
 			var formData = new FormData(form);
@@ -287,7 +287,8 @@ $(document).ready(function () {
 					} else if (data == "ok") {
 						noteSuccess();
 				 
-						//ClearErrors();
+						 ClearErrors();
+						 resetfieldForm();
 					}
 	
 					// $('.alert').html(result.success);
@@ -296,13 +297,13 @@ $(document).ready(function () {
 					var response = $.parseJSON(errorresult.responseText);
 					// $('#errormsg').html( errorresult );
 					noteError();
-					/*
+					 
 					$.each(response.errors, function (key, val) {
 						$("#" + key + "_error").text(val[0]);
 						$("#" + key).addClass('parsley-error');
 						//$('#error').append(key+"-"+ val[0] +"/");
 					});
-	*/
+	 
 				},finally:function () {
 					endLoading();
 	
@@ -313,6 +314,20 @@ $(document).ready(function () {
 	
 	
 	
+		});
+
+		
+		$('#btn_showinput').on('click', function () {
+			//e.preventDefault();
+			resetfieldForm();
+			//$("#cars").prop('selectedIndex', 2);
+			$(".dynamicdiv").remove();
+			$('#list_option').hide();
+			$('#btn_add_option').hide();
+			clearInputError($('#field_name'));
+			clearInputError($('#field_tooltipe'));
+			clearInputError($('#field_icon'));
+			clearInputError($('#field_type'));
 		});
 	function ClearErrors() {
 
@@ -327,7 +342,12 @@ $(document).ready(function () {
 			imgcount.hide();
 	}
 }
+function clearTypeinputs() {
+	$('#bool_field').hide();
+			$('#list_option').hide();
+			$('#btn_add_option').hide();
 
+}
 	$("#image_check").on("change", function () {
 		showimgcount($("#image_check"),$('#image_count')) ;
 	  
@@ -502,18 +522,21 @@ $(document).ready(function () {
 		  
 	});
 //add input text dynamicly
-var i=0;
+var i=1;
 $('#btn_add_option').on('click', function () {
 	 
-var $divclon=	$('#divoption').clone().prop('id', 'divoption_'+i);
+var $divclon=	$('#divoption').clone().prop('id', 'divoption_'+i).addClass('dynamicdiv');
  
-$divclon.children(':input').first().prop('id', 'list_option_'+i).prop('value','');
+$divclon.children(':input').first().prop('id', 'list_option_'+i)
+.prop('name', 'list_option'+'['+i+']')
+.prop('value','');
 //$('#divoption').after( $divclon);
 $('#option_append').append( $divclon);
 
 i++;
 });
 	showimgcount($("#image_check"),$('#image_count')) ;
+	clearTypeinputs();
 });
 
 
@@ -527,6 +550,31 @@ $("#count").focusout(function (e) {
 	}
 });
 $("#price").focusout(function (e) {
+	if (!validatempty($(this))) {
+		return false;
+	} else {
+
+		return true;
+	}
+});
+//input
+$("#field_name").focusout(function (e) {
+	if (!validatempty($(this))) {
+		return false;
+	} else {
+
+		return true;
+	}
+});
+$("#field_tooltipe").focusout(function (e) {
+	if (!validatempty($(this))) {
+		return false;
+	} else {
+
+		return true;
+	}
+});
+$("#field_type").focusout(function (e) {
 	if (!validatempty($(this))) {
 		return false;
 	} else {
@@ -554,5 +602,14 @@ function resetForm() {
 	$('#icon_label').text('اختر ملف SVG');
 	$('#imgshow').attr("src", emptyimg);
 	$('#iconshow').attr("src", emptyimg);
+}
+function resetfieldForm() {
+	jQuery('#field_form')[0].reset();
+	 
+	$('#field_icon_label').text('اختر ملف SVG');
+	/*
+	$('#imgshow').attr("src", emptyimg);
+	$('#iconshow').attr("src", emptyimg);
+	*/
 }
 
