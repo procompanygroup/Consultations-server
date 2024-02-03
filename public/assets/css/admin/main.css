@@ -51,18 +51,14 @@
 
 }
 
-.delete-input {
+.add-input {
     position: relative;
 }
 
-.delete-input button span {
+.add-input button span {
     position: absolute;
     top: 15px;
     left: 15px;
-}
-
-.delete-input button:mouseUp {
-    display: hidden;
 }
 
 
