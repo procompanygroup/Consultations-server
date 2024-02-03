@@ -81,6 +81,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
             Route::post('/savepersonal/{id}', [ServiceController::class, 'savepersonal']);
             Route::post('/saveimgrecord/{id}', [ServiceController::class, 'saveimgrecord']);
             Route::post('/savefield/{id}', [ServiceController::class, 'savefield']);
+            Route::get('/showinputs/{id}', [ServiceController::class, 'showinputs']);
         });
        
     });

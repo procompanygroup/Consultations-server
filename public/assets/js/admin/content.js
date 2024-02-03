@@ -1,5 +1,5 @@
 var urlval="";
- 
+ var  urlshowinput="";
 $(document).ready(function () {
 
 	// $('#sortbody').html('');
@@ -316,7 +316,55 @@ $(document).ready(function () {
 	
 		});
 
-		
+		$('#btn_loadinputs').on('click', function ( ) {
+			 
+		//	startLoading();
+	 	//ClearErrors();
+			//var fdata = $( "#create_form" ).serialize();
+			
+			//var formData = 21;
+			
+			//var urlval ='{{url("admin/user")}}';
+			//const formData = new FormData("#create_form");
+			//  alert(formData.toString());
+	
+			$.ajax({
+				url: urlshowinput,
+				type: "GET",
+				
+			//	data: formData,
+			//	contentType: false,
+				//processData: false,
+				//contentType: 'application/json',
+				success: function (data) {
+					//	alert(data);
+					//endLoading();
+					//$('#errormsg').html('');
+					//$('#sortbody').html('');
+					if (data.length == 0) {
+						noteError();
+					} else  {
+					$('#div_extrainputs').html(data);
+						
+					}
+	
+					// $('.alert').html(result.success);
+				}, error: function (errorresult) {
+					//endLoading();
+					var response = $.parseJSON(errorresult.responseText);
+					// $('#errormsg').html( errorresult );
+				
+	 
+				},finally:function () {
+					//endLoading();
+	
+				}
+			});
+	
+	
+	
+		});
+
 		$('#btn_showinput').on('click', function () {
 			//e.preventDefault();
 			resetfieldForm();
@@ -537,9 +585,10 @@ i++;
 });
 	showimgcount($("#image_check"),$('#image_count')) ;
 	clearTypeinputs();
+	loadinputsview();
 });
 
-
+///////////////////////////////////////////////////////
 
 $("#count").focusout(function (e) {
 	if (!validatempty($(this))) {
@@ -613,3 +662,43 @@ function resetfieldForm() {
 	*/
 }
 
+function loadinputsview() {
+			 
+	 
+		//var formData = 21;
+		
+		//var urlval ='{{url("admin/user")}}';
+		 
+
+		$.ajax({
+			url: urlshowinput,
+			type: "GET",
+			
+		//	data: formData,
+		//	contentType: false,
+			//processData: false,
+			//contentType: 'application/json',
+			success: function (data) {
+				 
+				//$('#errormsg').html('');
+				//$('#sortbody').html('');
+				if (data.length == 0) {
+				//	noteError();
+				} else  {
+				$('#div_extrainputs').html(data);
+					
+				}
+
+				// $('.alert').html(result.success);
+			}, error: function (errorresult) {
+				//endLoading();
+				var response = $.parseJSON(errorresult.responseText);
+				// $('#errormsg').html( errorresult );
+			
+ 
+			},finally:function () {
+				//endLoading();
+
+			}
+		});
+	}

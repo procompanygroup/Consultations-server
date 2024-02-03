@@ -208,10 +208,9 @@
                                             <div>
                                                 <h6 class="card-title">حقول الخدمة المختارة</h6>
                                             </div>
-                                            <div id="div_extrainputs" ></div>
                                             <div class="service-field row">
                                                 <div class="form-group col-8">
-                                                    <input type="text" class="form-control " id="f1" placeholder="{{ __('general.first_name') }}" name="first_name">
+                                                    <input type="text" class="form-control " id="first_name" placeholder="{{ __('general.first_name') }}" name="first_name">
                                                 </div>
                                                 <div class="col-4">
                                                     <div class="form-group d-inline-block">
@@ -224,7 +223,7 @@
                                                     </form>
                                                 </div>
                                             </div>
-                                            <div class="service-field row" >
+                                            <div class="service-field row">
                                                 <div class="form-group col-8">
                                                     <select name="role"   id="role" class="form-control SlectBox" onclick="console.log($(this).val())" onchange="console.log('change is firing')">
                                                         <!--placeholder-->
@@ -258,11 +257,6 @@
 					</div>
 				</div>
 				<!-- row -->
-                <div>
-                    <button type="button"  name="btn_load" id="btn_loadinputs" class="btn btn-primary">عرض الحقول</button>
-                </div>
-                <div id="testdiv">
-                </div>
 			</div>
 			<!-- Container closed -->
 		</div>
@@ -397,5 +391,5 @@
 <script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
 <script  >
 var emptyimg ="{{URL::asset('assets/img/photos/1.jpg')}}"</script>
-<script  > urlshowinput ="{{url('admin/service/showinputs',$service->id)}}"; </script>
+
 @endsection

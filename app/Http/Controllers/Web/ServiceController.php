@@ -128,7 +128,7 @@ class ServiceController extends Controller
     /** 
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
       $url =url(Storage::url($this->path)).'/';
       $iconurl =url(Storage::url($this->iconpath)).'/';
@@ -577,4 +577,66 @@ $inputservice->save();
 return response()->json("ok");
     }//end else
     }
+    public function showinputs($id)
+    {
+      $inpctrlr=new   InputController();
+    
+      $iconurlinput =url(Storage::url($inpctrlr->iconpath)).'/';
+/*
+      $object = Service::find($id) ;
+ 
+   $personalinput=$object->inputservices()->with('input')->get() ;
+   $personal_array=['user_name'=>0,
+   'nationality'=>0,
+   'gender'=>0,
+   'birthdate'=>0,
+   'marital_status'=>0,
+    ];
+    $recimg_array=['record'=>0,
+    'image'=>0,
+    'image_count'=>0,
+     
+     ];
+ 
+ //return  $personal_array;
+//   $personalinputf= $object->inputservices()->first()->input()->get();
+   //   return    $personalinput ;
+    //  $object->inputservices->Input;
+      if( $object->image !="" ){
+        $object->fullpathimg= $url.$object->image;
+      }
+      if( $object->icon !="" ){
+        $object->fullpathsvg= $iconurl.$object->icon;
+      }
+      */
+      //
+      $object = Service::find($id) ;
+ 
+  // $personalinput=$object->inputservices()->with('input')->get() ;
+   
+ 
+   $fieldinputs = Service::find($id)->inputservices->load([
+        'input'=>function($q)use($iconurlinput){
+        $q->where('ispersonal',0)->whereNotIn('type', ['record','image'])
+        ->select('id','name',
+        'type',
+        'tooltipe',
+       // 'icon',       
+DB::raw("(CASE 
+WHEN icon = '' THEN ''                     
+ELSE CONCAT('$iconurlinput',icon)
+END) AS icon"),
+        'image_count',
+        'ispersonal');
+            }  ,
+            'input.inputvalues'=>function($q){
+                $q->select('id', 'value','input_id');
+                    }  
+]
+);
+ 
+//return response()->json($fieldinputs);
+     return view('admin.input.inputservice', ['fieldinputs'=>$fieldinputs]);
+    }
+
 }
