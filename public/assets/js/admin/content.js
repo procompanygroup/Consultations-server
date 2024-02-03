@@ -291,6 +291,7 @@ $(document).ready(function () {
 						 ClearErrors();
 						 resetfieldForm();
 						 loadinputsview();
+						 $( "#btn_cancel_field" ).trigger( "click" );
 					}
 	
 					// $('.alert').html(result.success);
@@ -326,6 +327,9 @@ $(document).ready(function () {
 			//$("#cars").prop('selectedIndex', 2);
 			$(".dynamicdiv").remove();
 			$('#list_option').hide();
+			$('#list_option').hide();
+			$('#option_append').hide();
+			$('#divoptionhide').hide();
 			$('#btn_add_option').hide();
 			clearInputError($('#field_name'));
 			clearInputError($('#field_tooltipe'));
@@ -553,28 +557,33 @@ function clearTypeinputs() {
 			$('#bool_field').hide();
 			$('#list_option').hide();
 			$('#btn_add_option').hide();
+			
+			$('#option_append').hide();
 		 }else if(option=='bool'){
 			$('#bool_field').show();
 			$('#list_option').hide();
 			$('#btn_add_option').hide();
-
+			$('#option_append').hide();
 		 }else if(option=='list'){
 			$('#list_option').show();
 			$('#btn_add_option').show();
 			$('#bool_field').hide();
-
+			$('#option_append').show();
 		 }else if(option=='date'){
 	$('#bool_field').hide();
 			$('#list_option').hide();
 			$('#btn_add_option').hide();
+			$('#option_append').hide();
 		 }else if(option=='longtext'){
 			$('#bool_field').hide();
 			$('#list_option').hide();
 			$('#btn_add_option').hide();
+			$('#option_append').hide();
 		 }else{
 			$('#bool_field').hide();
 			$('#list_option').hide();
 			$('#btn_add_option').hide();
+			$('#option_append').hide();
 		 }
 		  
 	});
@@ -582,14 +591,13 @@ function clearTypeinputs() {
 var i=1;
 $('#btn_add_option').on('click', function () {
 	 
-var $divclon=	$('#divoption').clone().prop('id', 'divoption_'+i).addClass('dynamicdiv');
+var $divclon=	$('#divoptionhide').clone().prop('id', 'divoption_'+i).addClass('dynamicdiv').show();
  
 $divclon.children(':input').first().prop('id', 'list_option_'+i)
 .prop('name', 'list_option'+'['+i+']')
 .prop('value','');
 //$('#divoption').after( $divclon);
-$('#option_append').append( $divclon);
-
+$('#option_append').append($divclon);
 i++;
 });
 	showimgcount($("#image_check"),$('#image_count')) ;

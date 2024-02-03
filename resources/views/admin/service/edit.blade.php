@@ -287,20 +287,17 @@
                                                 </ul>
                                             </div>
 
-                                            <div class="mb-4">
-                                                <select name="bool_field"   id="bool_field" class="form-control SlectBox"  >
-                                                    <!--placeholder-->
-                                                    <option title=""   class="text-muted">{{ __('general.choose yes/no') }}</option>
-                                                    <option value="yes">{{ __('general.yes') }}</option>
-                                                    <option value="no">{{ __('general.no') }}</option>
-                                                </select>
-                                                <ul class="parsley-errors-list filled">
-                                                    <li class="parsley-required"  id="bool_field_error"></li>
+                                            <div id="option_append">
+                                            <div class="form-group add-input" id="divoption">
+                                                <input type="text" class="form-control" id="list_option" value="" placeholder="ادخل الاختيار" name="list_option[0]">
+                                                <button class="close" type="button" onclick="this.parentElement.remove();" ><span>×</span></button>
+                                                <ul class="parsley-errors-list filled" >
+                                                    <li class="parsley-required" id="list_option_error"></li>
                                                 </ul>
                                             </div>
-                                            <div id="option_append">
-                                            <div class="form-group" id="divoption">
-                                                <input type="text" class="form-control" id="list_option" value="" placeholder="ادخل الاختيار" name="list_option[0]">
+                                            <div class="form-group add-input" id="divoptionhide">
+                                                <input type="text" class="form-control" id="list_optionhide" value="" placeholder="ادخل الاختيار" name="list_optionhide">
+                                                <button class="close" type="button" onclick="this.parentElement.remove();" ><span>×</span></button>
                                                 <ul class="parsley-errors-list filled" >
                                                     <li class="parsley-required" id="list_option_error"></li>
                                                 </ul>
