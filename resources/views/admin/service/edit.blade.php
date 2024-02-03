@@ -209,43 +209,6 @@
                                                 <h6 class="card-title">حقول الخدمة المختارة</h6>
                                             </div>
                                             <div id="div_extrainputs" ></div>
-                                            <div class="service-field row">
-                                                <div class="form-group col-8">
-                                                    <input type="text" class="form-control " id="f1" placeholder="{{ __('general.first_name') }}" name="first_name">
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group d-inline-block">
-                                                        <button class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" ><i class="fa fa-edit"></i></button>
-                                                    </div>
-                                                    <form class="form-horizontal d-inline-block" >
-                                                        <div class="form-group">
-                                                            <button type="submit" class="btn ripple btn-danger"><i class="fa fa-trash"></i></button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                            <div class="service-field row" >
-                                                <div class="form-group col-8">
-                                                    <select name="role"   id="role" class="form-control SlectBox" onclick="console.log($(this).val())" onchange="console.log('change is firing')">
-                                                        <!--placeholder-->
-                                                        <option title=""   class="text-muted">{{ __('general.choose yes/no') }}</option>
-                                                        <option value="yes">{{ __('general.yes') }}</option>
-                                                        <option value="no">{{ __('general.no') }}</option>
-                                                    </select>                                            </div>
-                                                <div class="col-4">
-                                                    <div class="form-group d-inline-block">
-                                                        <button type="submit" class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" href=""><i class="fa fa-edit"></i></button>
-                                                    </div>
-                                                    <form class="form-horizontal d-inline-block" >
-                                                        @csrf
-                                                        <div class="form-group">
-                                                            <button class="btn ripple btn-danger"><i class="fa fa-trash"></i></button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-
-                                  
                                         </div>
                                         <div class="form-group mb-0">
                                             <div>
@@ -260,11 +223,8 @@
 					</div>
 				</div>
 				<!-- row -->
-                <div>
-                    <button type="button"  name="btn_load" id="btn_loadinputs" class="btn btn-primary">عرض الحقول</button>
-                </div>
-                <div id="testdiv">
-                </div>
+                
+                 
 			</div>
 			<!-- Container closed -->
 		</div>
