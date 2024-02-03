@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jan 28, 2024 at 09:52 PM
+-- Generation Time: Feb 03, 2024 at 04:19 PM
 -- Server version: 8.0.31
 -- PHP Version: 8.2.0
 
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `clients` (
   `is_active` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `clients_mobile_unique` (`mobile`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `clients`
@@ -79,7 +79,8 @@ INSERT INTO `clients` (`id`, `user_name`, `password`, `mobile`, `email`, `nation
 (10, 'احمد', NULL, '0533494872', 'dfc@uy.com', 'syr', '2000-01-20 00:00:00', 1, 'single', '5947810.webp', NULL, 20000, '2024-01-18 20:06:28', '2024-01-28 19:38:32', NULL, 1),
 (11, 'احمد1', NULL, '0533494877', 'dfc@uy.com', 'syr', '2000-01-20 00:00:00', 1, 'single', '2779511.webp', NULL, 0, '2024-01-18 20:26:34', '2024-01-18 20:26:34', NULL, 1),
 (12, 'احمد2', NULL, '0533494777', 'dfc@uy.com', 'syr', '2005-01-05 00:00:00', 1, 'single', '8576212.webp', NULL, 0, '2024-01-18 20:27:48', '2024-01-18 20:27:48', NULL, 1),
-(13, 'احمد3', NULL, '0533497777', 'dfc@uy.com', 'syr', '2005-05-01 00:00:00', 1, 'single', '9227313.webp', NULL, 0, '2024-01-18 20:29:12', '2024-01-18 20:29:12', NULL, 1);
+(13, 'احمد3', NULL, '0533497777', 'dfc@uy.com', 'syr', '2005-05-01 00:00:00', 1, 'single', '9227313.webp', NULL, 0, '2024-01-18 20:29:12', '2024-01-18 20:29:12', NULL, 1),
+(14, 'raghad', NULL, '021458700000', 'ra@email.com', 'syria', '2000-05-18 00:00:00', 2, 'single', '9782114.webp', NULL, 0, '2024-02-01 07:12:20', '2024-02-01 07:12:21', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -142,7 +143,17 @@ CREATE TABLE IF NOT EXISTS `expertsfavorites` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `expertsfavorites`
+--
+
+INSERT INTO `expertsfavorites` (`id`, `client_id`, `expert_id`, `created_at`, `updated_at`) VALUES
+(1, 13, 1, NULL, NULL),
+(2, 13, 2, NULL, NULL),
+(3, 13, 6, NULL, NULL),
+(4, 10, 6, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -162,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `experts_services` (
   `cost_type` int DEFAULT '0',
   `expert_cost_value` decimal(8,2) DEFAULT '0.00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `experts_services`
@@ -170,7 +181,10 @@ CREATE TABLE IF NOT EXISTS `experts_services` (
 
 INSERT INTO `experts_services` (`id`, `expert_id`, `service_id`, `created_at`, `updated_at`, `points`, `expert_cost`, `cost_type`, `expert_cost_value`) VALUES
 (1, 1, 1, NULL, NULL, 200, '50.00', 1, '50.00'),
-(2, 2, 1, NULL, NULL, 300, '10.00', 2, '30.00');
+(2, 2, 1, NULL, NULL, 300, '10.00', 2, '30.00'),
+(3, 1, 20, NULL, NULL, 100, '0.00', 0, '0.00'),
+(4, 1, 21, NULL, NULL, 200, '0.00', 0, '0.00'),
+(5, 2, 20, NULL, NULL, 200, '0.00', 0, '0.00');
 
 -- --------------------------------------------------------
 
@@ -207,23 +221,34 @@ CREATE TABLE IF NOT EXISTS `inputs` (
   `ispersonal` tinyint(1) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `image_count` int DEFAULT '0',
+  `is_active` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `inputs`
 --
 
-INSERT INTO `inputs` (`id`, `name`, `type`, `tooltipe`, `icon`, `ispersonal`, `created_at`, `updated_at`) VALUES
-(1, 'user_name', 'text', 'الاسم', NULL, 1, NULL, NULL),
-(2, 'mobile', 'text', 'الموبيل', NULL, 1, NULL, NULL),
-(3, 'nationality', 'text', 'الجنسية', NULL, 1, NULL, NULL),
-(4, 'birthdate', 'date', 'تاريخ الميلاد', NULL, 1, NULL, NULL),
-(5, 'gender', 'text', 'الجنس', NULL, 1, NULL, NULL),
-(6, 'marital_status', 'text', 'الحالة الاجتماعية', NULL, 1, NULL, NULL),
-(7, 'الوضع الدراسي', 'list', 'الوضع الدراسي', NULL, 0, NULL, NULL),
-(8, 'العمل الحالي', 'text', 'العمل الحالي', NULL, 0, NULL, NULL),
-(9, 'هل يوجد مرض مزمن', 'bool', 'هل يوجد مرض مزمن', NULL, 0, NULL, NULL);
+INSERT INTO `inputs` (`id`, `name`, `type`, `tooltipe`, `icon`, `ispersonal`, `created_at`, `updated_at`, `image_count`, `is_active`) VALUES
+(1, 'user_name', 'text', 'الاسم', 'username.svg', 1, NULL, NULL, 0, 1),
+(2, 'mobile', 'text', 'الموبيل', NULL, 1, NULL, NULL, 0, 1),
+(3, 'nationality', 'text', 'الجنسية', NULL, 1, NULL, NULL, 0, 1),
+(4, 'birthdate', 'date', 'تاريخ الميلاد', NULL, 1, NULL, NULL, 0, 1),
+(5, 'gender', 'text', 'الجنس', NULL, 1, NULL, NULL, 0, 1),
+(6, 'marital_status', 'text', 'الحالة الاجتماعية', NULL, 1, NULL, NULL, 0, 1),
+(7, 'الوضع الدراسي', 'list', 'الوضع الدراسي', NULL, 0, NULL, NULL, 0, 1),
+(8, 'العمل الحالي', 'text', 'العمل الحالي', NULL, 0, NULL, NULL, 0, 1),
+(9, 'هل يوجد مرض مزمن', 'bool', 'هل يوجد مرض مزمن', NULL, 0, NULL, NULL, 0, 1),
+(24, 'record', 'record', '', '', 0, '2024-02-01 19:04:27', '2024-02-01 19:04:27', 0, 1),
+(25, 'image', 'image', '', '', 0, '2024-02-01 19:04:27', '2024-02-01 19:04:27', 4, 1),
+(48, 'record', 'record', '', '', 0, '2024-02-03 13:25:04', '2024-02-03 13:25:04', 0, 1),
+(49, 'image', 'image', '', '', 0, '2024-02-03 13:25:04', '2024-02-03 13:25:04', 1, 1),
+(50, 'نص', 'text', 'تلميح نص', '5764450.svg', 0, '2024-02-03 13:26:05', '2024-02-03 13:26:05', 0, 1),
+(52, 'تاريخ التخرج', 'date', 'تاريخ التخرج', NULL, 0, '2024-02-03 13:45:42', '2024-02-03 13:45:42', 0, 1),
+(54, 'نص طويل', 'longtext', 'نص طويل', '3909854.svg', 0, '2024-02-03 14:06:59', '2024-02-03 14:06:59', 0, 1),
+(55, 'اختر', 'list', 'اختر', NULL, 0, '2024-02-03 14:07:55', '2024-02-03 14:07:55', 0, 1),
+(56, 'هل', 'bool', 'هل', NULL, 0, '2024-02-03 14:08:17', '2024-02-03 14:08:17', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -239,7 +264,7 @@ CREATE TABLE IF NOT EXISTS `inputs_services` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `inputs_services`
@@ -250,7 +275,23 @@ INSERT INTO `inputs_services` (`id`, `service_id`, `input_id`, `created_at`, `up
 (2, 1, 4, NULL, NULL),
 (3, 1, 5, NULL, NULL),
 (4, 1, 7, NULL, NULL),
-(5, 1, 9, NULL, NULL);
+(5, 1, 9, NULL, NULL),
+(30, 1, 3, '2024-02-01 19:04:20', '2024-02-01 19:04:20'),
+(31, 1, 6, '2024-02-01 19:04:20', '2024-02-01 19:04:20'),
+(32, 1, 24, '2024-02-01 19:04:27', '2024-02-01 19:04:27'),
+(33, 1, 25, '2024-02-01 19:04:27', '2024-02-01 19:04:27'),
+(50, 21, 1, '2024-02-03 13:24:58', '2024-02-03 13:24:58'),
+(51, 21, 3, '2024-02-03 13:24:58', '2024-02-03 13:24:58'),
+(52, 21, 5, '2024-02-03 13:24:58', '2024-02-03 13:24:58'),
+(53, 21, 4, '2024-02-03 13:24:58', '2024-02-03 13:24:58'),
+(54, 21, 6, '2024-02-03 13:24:58', '2024-02-03 13:24:58'),
+(55, 21, 48, '2024-02-03 13:25:04', '2024-02-03 13:25:04'),
+(56, 21, 49, '2024-02-03 13:25:04', '2024-02-03 13:25:04'),
+(57, 21, 50, '2024-02-03 13:26:05', '2024-02-03 13:26:05'),
+(59, 21, 52, '2024-02-03 13:45:42', '2024-02-03 13:45:42'),
+(61, 21, 54, '2024-02-03 14:06:59', '2024-02-03 14:06:59'),
+(62, 21, 55, '2024-02-03 14:07:55', '2024-02-03 14:07:55'),
+(63, 21, 56, '2024-02-03 14:08:17', '2024-02-03 14:08:17');
 
 -- --------------------------------------------------------
 
@@ -265,19 +306,26 @@ CREATE TABLE IF NOT EXISTS `inputvalues` (
   `input_id` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `inputvalues`
 --
 
-INSERT INTO `inputvalues` (`id`, `value`, `input_id`, `created_at`, `updated_at`) VALUES
-(1, 'اعدادي', 7, NULL, NULL),
-(2, 'ثانوي', 7, NULL, NULL),
-(3, 'معهد', 7, NULL, NULL),
-(4, 'اجازة جامعية', 7, NULL, NULL),
-(5, 'دراسات عليا', 7, NULL, NULL);
+INSERT INTO `inputvalues` (`id`, `value`, `input_id`, `created_at`, `updated_at`, `is_active`) VALUES
+(1, 'اعدادي', 7, NULL, NULL, 1),
+(2, 'ثانوي', 7, NULL, NULL, 1),
+(3, 'معهد', 7, NULL, NULL, 1),
+(4, 'اجازة جامعية', 7, NULL, NULL, 1),
+(5, 'دراسات عليا', 7, NULL, NULL, 1),
+(6, 'aa', 28, '2024-02-02 16:19:29', '2024-02-02 16:19:29', 1),
+(7, 'ds', 31, '2024-02-02 16:22:30', '2024-02-02 16:22:30', 1),
+(15, 'اختيار 1', 55, '2024-02-03 14:07:55', '2024-02-03 14:07:55', 1),
+(16, 'اختيار 2', 55, '2024-02-03 14:07:55', '2024-02-03 14:07:55', 1),
+(17, 'اختيار 3', 55, '2024-02-03 14:07:55', '2024-02-03 14:07:55', 1),
+(18, 'اختيار 4', 55, '2024-02-03 14:07:55', '2024-02-03 14:07:55', 1);
 
 -- --------------------------------------------------------
 
@@ -291,7 +339,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
   `migration` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `migrations`
@@ -346,7 +394,13 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (46, '2024_01_28_132233_add_record_to_experts_table', 21),
 (47, '2024_01_28_132536_add_record_to_experts_table', 22),
 (48, '2024_01_28_134218_add_records_to_experts_table', 23),
-(49, '2024_01_28_162956_change_is_active_in_points_table', 24);
+(49, '2024_01_28_162956_change_is_active_in_points_table', 24),
+(50, '2024_01_29_151056_change_image_in_services_table', 25),
+(51, '2024_01_29_201247_change_desc_in_services_table', 26),
+(52, '2024_01_31_114719_add_image_count_to_inputs_table', 27),
+(53, '2024_01_31_211919_add_is_callservice_to_services_table', 28),
+(54, '2024_02_02_181449_add_is_active_to_inputs_table', 29),
+(55, '2024_02_02_181513_add_is_active_to_inputvalues_table', 29);
 
 -- --------------------------------------------------------
 
@@ -437,15 +491,16 @@ CREATE TABLE IF NOT EXISTS `points` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `points`
 --
 
 INSERT INTO `points` (`id`, `count`, `price`, `pricebefor`, `countbefor`, `createuser_id`, `updateuser_id`, `created_at`, `updated_at`, `is_active`) VALUES
-(1, 20, '20.22', '20.22', 20, NULL, NULL, '2024-01-28 14:31:09', '2024-01-28 18:59:43', 1),
-(2, 100, '100.00', '100.00', 100, NULL, NULL, '2024-01-28 19:05:30', '2024-01-28 19:05:30', 1);
+(1, 20, '20.22', '20.22', 0, NULL, NULL, '2024-01-28 14:31:09', '2024-01-31 19:06:48', 1),
+(2, 100, '100.00', '100.00', 0, NULL, NULL, '2024-01-28 19:05:30', '2024-01-31 19:07:09', 1),
+(5, 110, '100.00', '100.00', 90, NULL, NULL, '2024-01-31 18:59:15', '2024-01-31 18:59:52', 1);
 
 -- --------------------------------------------------------
 
@@ -526,24 +581,28 @@ DROP TABLE IF EXISTS `services`;
 CREATE TABLE IF NOT EXISTS `services` (
   `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `desc` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `desc` text COLLATE utf8mb4_unicode_ci,
+  `image` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `createuser_id` bigint UNSIGNED DEFAULT NULL,
   `updateuser_id` bigint UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `icon` text COLLATE utf8mb4_unicode_ci,
+  `icon` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_active` tinyint(1) DEFAULT '1',
+  `is_callservice` int DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `services`
 --
 
-INSERT INTO `services` (`id`, `name`, `desc`, `image`, `createuser_id`, `updateuser_id`, `created_at`, `updated_at`, `icon`, `is_active`) VALUES
-(1, 'طاقة الشفاء', 'نارلانلامن', '9227311.webp', NULL, NULL, NULL, NULL, 'aa.svg', 1),
-(2, 'الصحة', 'يري', '', NULL, NULL, NULL, NULL, NULL, 1);
+INSERT INTO `services` (`id`, `name`, `desc`, `image`, `createuser_id`, `updateuser_id`, `created_at`, `updated_at`, `icon`, `is_active`, `is_callservice`) VALUES
+(1, 'طاقة 1الشفاء', 'نارلانلامن', '9227311.webp', NULL, NULL, NULL, NULL, 'aa.svg', 1, 0),
+(2, 'الصحة', 'يري', '', NULL, NULL, NULL, NULL, NULL, 1, 0),
+(19, 'callservice', NULL, NULL, 1, 1, '2024-01-31 19:28:03', '2024-01-31 19:28:03', NULL, 1, 1),
+(20, 'طاقة الشفاء', 'العلاج بالطاقة', '2383720.webp', 1, 1, '2024-01-31 19:29:36', '2024-01-31 19:29:36', '9302820.svg', 1, 0),
+(21, 'استشارة طبية', NULL, NULL, 1, 1, '2024-01-31 19:30:52', '2024-01-31 19:30:52', NULL, 1, 0);
 
 -- --------------------------------------------------------
 
