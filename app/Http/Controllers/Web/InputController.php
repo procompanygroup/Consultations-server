@@ -175,14 +175,17 @@ class InputController extends Controller
      */
     public function destroy($id)
     {
-      $object = Input::find($id);
+     // return response()->json($id);
+     $object = Input::find($id);
       if (!($object === null)) {
- 
+        Input::find($id)->delete();
+ /*
         //delete check related tables
        
-        $item1 =  Inputvalue::where('input_id', $id)->first();       
+       // $item1 =  Inputvalue::where('input_id', $id)->first();       
         $item2 = InputService::where('input_id', $id)->first();
-        if (!($item1 === null) || !($item2 === null)) {
+        if (
+          !($item1 === null) || !($item2 === null)) {
           // disable input account
           Input::find($id)->update([
             "is_active" => 0
@@ -196,12 +199,10 @@ class InputController extends Controller
           //delete object
           Input::find($id)->delete();
         }
+        */
       }
-      return redirect()->route('admin.input.show');
-      //   return  $this->index();
-      // 
-   
-      //   return redirect()->route('users.index');
+      return response()->json("ok");
+ 
   
     }
     public function storeSvg($file, $id)

@@ -11,11 +11,11 @@
 			<div class="form-group d-inline-block">
 				<button class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" ><i class="fa fa-edit"></i></button>
 			</div>
-			<form class="form-horizontal d-inline-block" >
+			<div class="form-horizontal d-inline-block" >
 				<div class="form-group">
-					<button type="submit" class="btn ripple btn-danger" ><i class="fa fa-trash"></i></button>
+					<button type="button" class="btn ripple btn-danger deleteinput" id="{{$fieldinput->input->id}}" ><i class="fa fa-trash"></i></button>
 				</div>
-			</form>
+			</div>
 		</div>
 	
 	@elseif ($fieldinput->input->type=='bool')
@@ -34,7 +34,7 @@
 			<form class="form-horizontal d-inline-block" >
 				@csrf
 				<div class="form-group">
-					<button class="btn ripple btn-danger"><i class="fa fa-trash"></i></button>
+					<button class="btn ripple btn-danger deleteinput"><i class="fa fa-trash"></i></button>
 				</div>
 			</form>
 		</div>
@@ -58,7 +58,7 @@
 			<form class="form-horizontal d-inline-block" >
 				@csrf
 				<div class="form-group">
-					<button class="btn ripple btn-danger"><i class="fa fa-trash"></i></button>
+					<button class="btn ripple btn-danger deleteinput"><i class="fa fa-trash"></i></button>
 				</div>
 			</form>
 		</div>
@@ -106,3 +106,58 @@
 </div>
 	@endforeach
 	 -------------------------------------
+	 <script  >
+		$(document).ready(function () {
+	 $('.deleteinput').on('click',function (e) {
+		e.preventDefault();	
+		
+		//	startLoading();
+		 //ClearErrors();
+			//var fdata = $( "#create_form" ).serialize();
+			
+			//var formData = 21;
+			
+			//var urlval ='{{url("admin/user")}}';
+			//const formData = new FormData("#create_form");
+			//  alert(formData.toString());
+			var thisId = $(this).prop("id");
+			var fullurl=delinputurl.replace("[itemid]",thisId);
+		//	alert(fullurl) ;
+			$.ajax({
+				url: fullurl,
+				type: "GET",
+				
+			//	data: formData,
+			//	contentType: false,
+				//processData: false,
+				//contentType: 'application/json',
+				success: function (data) {
+					 	alert("dataok");
+					//endLoading();
+					//$('#errormsg').html('');
+					//$('#sortbody').html('');
+					if (data.length == 0) {
+						noteError();
+					} else  {
+					//$('#div_extrainputs').html(data);
+						
+					}
+	
+					// $('.alert').html(result.success);
+				}, error: function (errorresult) {
+					//endLoading();
+					var response = $.parseJSON(errorresult.responseText);
+
+					// $('#errormsg').html( errorresult );
+				//	alert("error"+errorresult) ;
+	 
+				},finally:function () {
+					//endLoading();
+	
+				}
+			});
+	
+		});
+	
+		});
+	</script>

@@ -244,6 +244,8 @@
                                                     </form>
                                                 </div>
                                             </div>
+
+                                  
                                         </div>
                                         <div class="form-group mb-0">
                                             <div>
@@ -397,5 +399,10 @@
 <script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
 <script  >
 var emptyimg ="{{URL::asset('assets/img/photos/1.jpg')}}"</script>
-<script  > urlshowinput ="{{url('admin/service/showinputs',$service->id)}}"; </script>
+<script  > urlshowinput ="{{url('admin/service/showinputs',$service->id)}}"; 
+    delinputurl ='{{url("admin/input/delete/[itemid]")}}'; 
+
+	</script>
+     
 @endsection
+

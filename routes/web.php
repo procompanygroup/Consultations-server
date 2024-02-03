@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Web\InputController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\Web\ExpertController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Web\ServiceController;
 use App\Http\Controllers\Web\PointController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -83,7 +85,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
             Route::post('/savefield/{id}', [ServiceController::class, 'savefield']);
             Route::get('/showinputs/{id}', [ServiceController::class, 'showinputs']);
         });
-       
+        Route::prefix('input')->group(function () {
+            Route::get('/delete/{id}', [InputController::class, 'destroy']);
+            
+        });
     });
     /*
     Route::middleware('role.admin:super')->group(function () {
