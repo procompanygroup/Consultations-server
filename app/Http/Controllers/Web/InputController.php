@@ -178,7 +178,14 @@ class InputController extends Controller
      // return response()->json($id);
      $object = Input::find($id);
       if (!($object === null)) {
+         //delete image
+         $oldiconname=$object->icon;
+         Storage::delete("public/" . $this->iconpath . '/' . $oldiconname);
+
+        InputService::where('input_id', $id)->delete();
+        Inputvalue::where('input_id', $id)->delete();
         Input::find($id)->delete();
+
  /*
         //delete check related tables
        

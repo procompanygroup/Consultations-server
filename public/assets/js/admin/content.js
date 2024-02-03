@@ -290,6 +290,7 @@ $(document).ready(function () {
 				 
 						 ClearErrors();
 						 resetfieldForm();
+						 loadinputsview();
 					}
 	
 					// $('.alert').html(result.success);
@@ -317,54 +318,7 @@ $(document).ready(function () {
 	
 		});
 
-		$('#btn_loadinputs').on('click', function ( ) {
-			 
-		//	startLoading();
-	 	//ClearErrors();
-			//var fdata = $( "#create_form" ).serialize();
-			
-			//var formData = 21;
-			
-			//var urlval ='{{url("admin/user")}}';
-			//const formData = new FormData("#create_form");
-			//  alert(formData.toString());
-	
-			$.ajax({
-				url: urlshowinput,
-				type: "GET",
-				
-			//	data: formData,
-			//	contentType: false,
-				//processData: false,
-				//contentType: 'application/json',
-				success: function (data) {
-					//	alert(data);
-					//endLoading();
-					//$('#errormsg').html('');
-					//$('#sortbody').html('');
-					if (data.length == 0) {
-						noteError();
-					} else  {
-					$('#div_extrainputs').html(data);
-						
-					}
-	
-					// $('.alert').html(result.success);
-				}, error: function (errorresult) {
-					//endLoading();
-					var response = $.parseJSON(errorresult.responseText);
-					// $('#errormsg').html( errorresult );
-				
-	 
-				},finally:function () {
-					//endLoading();
-	
-				}
-			});
-	
-	
-	
-		});
+		 
 
 		$('#btn_showinput').on('click', function () {
 			//e.preventDefault();
@@ -378,54 +332,7 @@ $(document).ready(function () {
 			clearInputError($('#field_icon'));
 			clearInputError($('#field_type'));
 		});
-		$('#btn_loadinputs').on('click', function ( ) {
-			 
-			//	startLoading();
-			 //ClearErrors();
-				//var fdata = $( "#create_form" ).serialize();
-				
-				//var formData = 21;
-				
-				//var urlval ='{{url("admin/user")}}';
-				//const formData = new FormData("#create_form");
-				//  alert(formData.toString());
-		
-				$.ajax({
-					url: urlshowinput,
-					type: "GET",
-					
-				//	data: formData,
-				//	contentType: false,
-					//processData: false,
-					//contentType: 'application/json',
-					success: function (data) {
-						//	alert(data);
-						//endLoading();
-						//$('#errormsg').html('');
-						//$('#sortbody').html('');
-						if (data.length == 0) {
-							noteError();
-						} else  {
-						$('#div_extrainputs').html(data);
-							
-						}
-		
-						// $('.alert').html(result.success);
-					}, error: function (errorresult) {
-						//endLoading();
-						var response = $.parseJSON(errorresult.responseText);
-						// $('#errormsg').html( errorresult );
-					
 		 
-					},finally:function () {
-						//endLoading();
-		
-					}
-				});
-		
-		
-		
-			});
 /*	
 //delete input .deleteinput
 $('.deleteinput').on('click',function (e) {
