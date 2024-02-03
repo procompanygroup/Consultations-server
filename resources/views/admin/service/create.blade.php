@@ -361,9 +361,9 @@
                                                     <li class="parsley-required"  id="role_error"></li>
                                                 </ul>
                                             </div>
-                                            <div class="form-group delete-input">
+                                            <div class="form-group add-input">
                                                 <input type="text" class="form-control" id="name" placeholder="name" name="name">
-                                                <button class="close" type="button" onclick="hideBox()" ><span>×</span></button>
+                                                <button class="close" type="button" onclick="this.parentElement.remove();" ><span>×</span></button>
                                                 <ul class="parsley-errors-list filled" >
                                                     <li class="parsley-required" id="name_error"></li>
                                                 </ul>
@@ -439,12 +439,5 @@
 <script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
 <script  >
 var emptyimg ="{{URL::asset('assets/img/photos/1.jpg')}}"</script>
-<script>
-    function hideBox() {
-        $(".delete-input button").on('click', function() {
-            $(".delete-input").css('display', 'hidden');
-        });
-    }
-</script>
 
 @endsection
