@@ -90,7 +90,7 @@
                                             </div>
                                         </div>
                                     </form>
-                                    
+
                                 </div>
                                 <div class="col-lg-4 mt-sm-3 mt-lg-0">
                                     <img alt="" id="imgshow" class="rounded img-thumbnail wd-100p float-sm-right  mg-t-10 mg-sm-t-0" src="{{URL::asset('assets/img/photos/1.jpg')}}" >
@@ -223,6 +223,30 @@
                                                     </form>
                                                 </div>
                                             </div>
+                                            <div class="service-field row">
+                                                <div class="col-8">
+                                                    <div class="input-group"  id="birthdate" >
+
+                                                        <div class="input-group-prepend" style="padding-right: 1px;">
+                                                            <div class="input-group-text">
+                                                                <i class="typcn typcn-calendar-outline tx-24 lh--9 op-6"></i>{{ __('general.birthdate') }}
+                                                            </div>
+                                                        </div><input class="form-control fc-datepicker" name="birthdate" id='expertdate'   placeholder="MM/DD/YYYY" type="text">
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group d-inline-block">
+                                                        <button type="submit" class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" href=""><i class="fa fa-edit"></i></button>
+                                                    </div>
+                                                    <form class="form-horizontal d-inline-block" >
+                                                        @csrf
+                                                        <div class="form-group">
+                                                            <button class="btn ripple btn-danger"><i class="fa fa-trash"></i></button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="form-group mb-0">
                                             <div>
@@ -337,8 +361,9 @@
                                                     <li class="parsley-required"  id="role_error"></li>
                                                 </ul>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group delete-input">
                                                 <input type="text" class="form-control" id="name" placeholder="name" name="name">
+                                                <button class="close" type="button" onclick="hideBox()" ><span>×</span></button>
                                                 <ul class="parsley-errors-list filled" >
                                                     <li class="parsley-required" id="name_error"></li>
                                                 </ul>
@@ -414,5 +439,12 @@
 <script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
 <script  >
 var emptyimg ="{{URL::asset('assets/img/photos/1.jpg')}}"</script>
+<script>
+    function hideBox() {
+        $(".delete-input button").on('click', function() {
+            $(".delete-input").css('display', 'hidden');
+        });
+    }
+</script>
 
 @endsection
