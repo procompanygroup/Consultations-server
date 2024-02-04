@@ -288,14 +288,8 @@
                                             </div>
 
                                             <div id="option_append">
-                                            <div class="form-group add-input" id="divoption">
-                                                <input type="text" class="form-control" id="list_option" value="" placeholder="ادخل الاختيار" name="list_option[0]">
-                                                <button class="close" type="button" onclick="this.parentElement.remove();" ><span>×</span></button>
-                                                <ul class="parsley-errors-list filled" >
-                                                    <li class="parsley-required" id="list_option_error"></li>
-                                                </ul>
-                                            </div>
-                                            <div class="form-group add-input" id="divoptionhide">
+                                        
+                                            <div class="form-group add-input" id="divoptionhide" style="display: none;">
                                                 <input type="text" class="form-control" id="list_optionhide" value="" placeholder="ادخل الاختيار" name="list_optionhide">
                                                 <button class="close" type="button" onclick="this.parentElement.remove();" ><span>×</span></button>
                                                 <ul class="parsley-errors-list filled" >
@@ -327,7 +321,11 @@
 		</div>
 		<!--End Scroll with content modal -->
  
-		
+		<!-- Scroll Edit with content modal -->
+		<div class="modal" id="scrollmodal-edit">
+			
+		</div>
+		<!--End Scroll with content modal -->
 @endsection
 @section('js')
 <!--Internal  Datepicker js -->

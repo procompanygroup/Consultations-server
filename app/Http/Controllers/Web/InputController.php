@@ -124,12 +124,14 @@ class InputController extends Controller
     /** 
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-      $object = DB::table('inputs')->find($id);
-  
+      $object = Input::with('inputvalues')->find($id);
+      //->with('inputvalues')->get();
+   // $object->inputvalues ;
       //
-      return view('admin.input.edit', ['input' => $object]);
+    //  return response()->json(  $object);
+ return view('admin.input.edit', ['input' => $object]);
     }
   
     /**

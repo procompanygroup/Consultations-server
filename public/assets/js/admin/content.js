@@ -326,8 +326,8 @@ $(document).ready(function () {
 			resetfieldForm();
 			//$("#cars").prop('selectedIndex', 2);
 			$(".dynamicdiv").remove();
-			$('#list_option').hide();
-			$('#list_option').hide();
+		//	$('#list_option').hide();
+		//	$('#list_option').hide();
 			$('#option_append').hide();
 			$('#divoptionhide').hide();
 			$('#btn_add_option').hide();
@@ -336,6 +336,7 @@ $(document).ready(function () {
 			clearInputError($('#field_icon'));
 			clearInputError($('#field_type'));
 		});
+	
 		 
 /*	
 //delete input .deleteinput
@@ -555,35 +556,72 @@ function clearTypeinputs() {
 		var option=$(this).find(":selected").val() ;
 		 if( option=='text'){
 			$('#bool_field').hide();
-			$('#list_option').hide();
+			//$('#list_option').hide();
 			$('#btn_add_option').hide();
 			
 			$('#option_append').hide();
 		 }else if(option=='bool'){
 			$('#bool_field').show();
-			$('#list_option').hide();
+			//$('#list_option').hide();
 			$('#btn_add_option').hide();
 			$('#option_append').hide();
 		 }else if(option=='list'){
-			$('#list_option').show();
+			//$('#list_option').show();
 			$('#btn_add_option').show();
 			$('#bool_field').hide();
 			$('#option_append').show();
 		 }else if(option=='date'){
 	$('#bool_field').hide();
-			$('#list_option').hide();
+			//$('#list_option').hide();
 			$('#btn_add_option').hide();
 			$('#option_append').hide();
 		 }else if(option=='longtext'){
 			$('#bool_field').hide();
-			$('#list_option').hide();
+		//	$('#list_option').hide();
 			$('#btn_add_option').hide();
 			$('#option_append').hide();
 		 }else{
 			$('#bool_field').hide();
-			$('#list_option').hide();
+			//$('#list_option').hide();
 			$('#btn_add_option').hide();
 			$('#option_append').hide();
+		 }
+		  
+	});
+
+	$('#field_type_edit').on('change', function() {
+		var option=$(this).find(":selected").val() ;
+		 if( option=='text'){
+		 
+		//	$('#list_option').hide();
+			$('#btn_edit_option').hide();
+			
+			$('#option_append_edit').hide();
+		 }else if(option=='bool'){
+			//$('#bool_field').show();
+			//$('#list_option').hide();
+			$('#btn_edit_option').hide();
+			$('#option_append_edit').hide();
+		 }else if(option=='list'){
+			//$('#list_option').show();
+			$('#btn_edit_option').show();
+			//$('#bool_field').hide();
+			$('#option_append_edit').show();
+		 }else if(option=='date'){
+//	$('#bool_field').hide();
+		//	$('#list_option').hide();
+			$('#btn_edit_option').hide();
+			$('#option_append_edit').hide();
+		 }else if(option=='longtext'){
+		//	$('#bool_field').hide();
+		//	$('#list_option').hide();
+			$('#btn_edit_option').hide();
+			$('#option_append_edit').hide();
+		 }else{
+		//	$('#bool_field').hide();
+		//	$('#list_option').hide();
+			$('#btn_edit_option').hide();
+			$('#option_append_edit').hide();
 		 }
 		  
 	});
@@ -600,6 +638,7 @@ $divclon.children(':input').first().prop('id', 'list_option_'+i)
 $('#option_append').append($divclon);
 i++;
 });
+
 	showimgcount($("#image_check"),$('#image_count')) ;
 	clearTypeinputs();
 	loadinputsview();

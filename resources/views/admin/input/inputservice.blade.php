@@ -8,7 +8,7 @@
             </div>
             <div class="col-4">
                 <div class="form-group d-inline-block">
-                    <button class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal"><i
+                    <button  type="button"  class="btn ripple btn-light editinput" id="edit-{{ $fieldinput->input->id }}" data-target="#scrollmodal-edit" data-toggle="modal"><i
                             class="fa fa-edit"></i></button>
                 </div>
                 <div class="form-horizontal d-inline-block">
@@ -30,12 +30,12 @@
                 </select>
             </div>
             <div class="col-4">
-                <div class="form-group d-inline-block">
-                    <button type="submit" class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal"
-                        href=""><i class="fa fa-edit"></i></button>
+				<div class="form-group d-inline-block">
+                    <button type="button" class="btn ripple btn-light editinput" id="edit-{{ $fieldinput->input->id }}" data-target="#scrollmodal-edit" data-toggle="modal"><i
+                            class="fa fa-edit"></i></button>
                 </div>
                 <div class="form-horizontal d-inline-block">
-                    @csrf
+                    
                     <div class="form-group">
                         <button type="button" class="btn ripple btn-danger deleteinput"
                             id="{{ $fieldinput->input->id }}"><i class="fa fa-trash"></i></button>
@@ -54,9 +54,9 @@
                 </select>
             </div>
             <div class="col-4">
-                <div class="form-group d-inline-block">
-                    <button type="submit" class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal"
-                        href=""><i class="fa fa-edit"></i></button>
+				<div class="form-group d-inline-block">
+                    <button  type="button"  class="btn ripple btn-light editinput" id="edit-{{ $fieldinput->input->id }}" data-target="#scrollmodal-edit" data-toggle="modal"><i
+                            class="fa fa-edit"></i></button>
                 </div>
                 <div class="form-horizontal d-inline-block">
 
@@ -81,7 +81,8 @@
 		</div>
 		<div class="col-4">
 			<div class="form-group d-inline-block">
-				<button type="submit" class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal" href=""><i class="fa fa-edit"></i></button>
+				<button  type="button"  class="btn ripple btn-light editinput" id="edit-{{ $fieldinput->input->id }}" data-target="#scrollmodal-edit" data-toggle="modal"><i
+						class="fa fa-edit"></i></button>
 			</div>
 			<div class="form-horizontal d-inline-block" >
 				 
@@ -97,8 +98,8 @@
             </div>
             <div class="col-4">
 				{{-- edit --}}
-                <div class="form-group d-inline-block">
-                    <button class="btn ripple btn-light" data-target="#scrollmodal" data-toggle="modal"><i
+				<div class="form-group d-inline-block">
+                    <button  type="button"  class="btn ripple btn-light editinput" id="edit-{{ $fieldinput->input->id }}" data-target="#scrollmodal-edit" data-toggle="modal"><i
                             class="fa fa-edit"></i></button>
                 </div>
 {{-- delete --}}
@@ -122,6 +123,7 @@
 
 
 <script>
+	var editinputurl='{{url("admin/input/edit/[itemid]")}}';
     $(document).ready(function() {
         $('.deleteinput').on('click', function(e) {
             e.preventDefault();
@@ -176,6 +178,92 @@
             });
 
         });
+		$('.editinput').on('click', function () {
+		//	startLoading();
+			//e.preventDefault();
+          
+			reseteditForm();
+			//$("#cars").prop('selectedIndex', 2);
+			$(".dynamicdiv").remove();
+			//$('#list_option').hide();
+			//$('#list_option').hide();
+			$('#option_append_edit').hide();
+		//	$('#divoptionhide').hide();
+			$('#btn_edit_option').hide();
+			clearInputError($('#field_name_edit'));
+			clearInputError($('#field_tooltipe_edit'));
+			clearInputError($('#field_icon_edit'));
+			clearInputError($('#field_type_edit'));
+
+			//load data
+
+		 
+            //ClearErrors();
+            //var fdata = $( "#create_form" ).serialize();
+
+            //var formData = 21;
+
+            //var urlval ='{{ url('admin/user') }}';
+            //const formData = new FormData("#create_form");
+            //  alert(formData.toString());
+            var thisId = $(this).prop("id");
+			thisId =thisId.replace("edit-", "");
+            var fullediturl = editinputurl.replace("[itemid]", thisId);
+            //	alert(fullurl) ;
+            $.ajax({
+                url: fullediturl,
+                type: "GET",
+
+                //	data: formData,
+                //	contentType: false,
+                //processData: false,
+                //contentType: 'application/json',
+                success: function(data) {
+                   // alert("dataok");
+					
+                  //   endLoading();
+                    //$('#errormsg').html('');
+                    //$('#sortbody').html('');
+                    if (data.length == 0) {
+                        noteError();
+                    } else {
+                     $('#scrollmodal-edit').html(data);
+
+                    }
+
+                    // $('.alert').html(result.success);
+                },
+                error: function(errorresult) {
+                  // endLoading();
+                  noteError();
+                  //  var response = $.parseJSON(errorresult.responseText);
+                    $("#btn_cancel_field_edit").trigger("click");
+                    // $('#errormsg').html( errorresult );
+                    //	alert("error"+errorresult) ;
+
+                },
+                finally: function() {
+                 //   endLoading();
+
+                }
+            });
+
+
+
+		});	
+      
 
     });
+	function reseteditForm() {
+	 //jQuery('#field_form_edit')[0].reset();
+	 $('#field_name_edit').val('');
+     $('#field_tooltipe_edit').val('');
+  
+     $("#field_type_edit").prop("selectedIndex", 0);
+	$('#field_icon_label').text('اختر ملف SVG');
+	/*
+	$('#imgshow').attr("src", emptyimg);
+	$('#iconshow').attr("src", emptyimg);
+	*/
+}
 </script>
