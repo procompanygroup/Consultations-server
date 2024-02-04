@@ -137,10 +137,11 @@ class InputController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdateInputRequest $request, $id)
     {
+     
       $formdata = $request->all();
-      //validate      
+      //validate
       $validator = Validator::make(
         $formdata,
         $request->rules(),
@@ -152,12 +153,51 @@ class InputController extends Controller
           ->withErrors($validator)
                       ->withInput();
                       */
-        return redirect()->back()->withErrors($validator)
-          ->withInput();
+       return response()->json($validator);
   
       } else {
-        $imagemodel = Input::find($id);
-        $oldimage = $imagemodel->image;
+
+        DB::transaction(function ()use($formdata,$request,$id) {  
+        $oldObj = Input::find($id);
+       $oldtype=$oldObj->type;
+       //delete  old options
+if(  $oldtype=="list"  ){
+ $res= Inputvalue::where('input_id',$id)->delete();
+}
+         if ($request->hasFile('field_icon_edit')) {
+          $file = $request->file('field_icon_edit');
+          // $filename= $file->getClientOriginalName();               
+          $this->storeSvg($file,$id);
+          //  $this->storeImage( $file,2);
+        }
+        Input::find($id)->update([
+          'name' => $formdata['field_name_edit'],
+          'type' => $formdata['field_type_edit'],
+          'tooltipe' => $formdata['field_tooltipe_edit'],
+         // 'icon' => $formdata['field_icon_edit'],
+       // 'ispersonal' =>0,
+         // 'is_active' =>1,
+          
+          
+      ]);
+
+      if($formdata['field_type_edit']=="list"){
+//creat or update
+foreach($formdata['list_option'] as $option){
+  if(!is_null($option)){
+    $inputvalue=new Inputvalue();
+    $inputvalue->value= $option;
+    $inputvalue->input_id=$id;
+    $inputvalue->is_active=1;
+    $inputvalue->save();
+  }      
+     } 
+      }
+       });
+        return response()->json("ok");
+        
+      }
+        /*
         Input::find($id)->update([
             'name' => $formdata['name'],
             'type' => $formdata['type'],
@@ -168,9 +208,8 @@ class InputController extends Controller
             
             
         ]);
-      
-      }
-      return redirect()->back()->with('success_message', 'user has been Updated!');
+      */
+     
     }
     /**
      * Remove the specified resource from storage.

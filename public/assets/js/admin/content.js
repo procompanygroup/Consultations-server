@@ -1,6 +1,6 @@
-var urlval="";
- var  urlshowinput="";
- var delinputurl="";
+var urlval = "";
+var urlshowinput = "";
+var delinputurl = "";
 $(document).ready(function () {
 
 	// $('#sortbody').html('');
@@ -11,7 +11,7 @@ $(document).ready(function () {
 		resetForm();
 		ClearErrors();
 	});
-	 
+
 	//{{ route('user.index') }}
 	$('#btn_save').on('click', function (e) {
 		e.preventDefault();
@@ -20,7 +20,7 @@ $(document).ready(function () {
 		//var fdata = $( "#create_form" ).serialize();
 		var form = $('#create_form')[0];
 		var formData = new FormData(form);
-		urlval=	$('#create_form').attr("action");
+		urlval = $('#create_form').attr("action");
 		//var urlval ='{{url("admin/user")}}';
 		//const formData = new FormData("#create_form");
 		//  alert(formData.toString());
@@ -58,7 +58,7 @@ $(document).ready(function () {
 					//$('#error').append(key+"-"+ val[0] +"/");
 				});
 
-			},finally:function () {
+			}, finally: function () {
 				endLoading();
 
 			}
@@ -84,7 +84,7 @@ $(document).ready(function () {
 		//var fdata = $( "#create_form" ).serialize();
 		var form = $('#create_form')[0];
 		var formData = new FormData(form);
-		urlval=	$('#create_form').attr("action")
+		urlval = $('#create_form').attr("action")
 		//var urlval ='{{url("admin/user")}}';
 		//const formData = new FormData("#create_form");
 		//  alert(formData.toString());
@@ -92,7 +92,7 @@ $(document).ready(function () {
 		$.ajax({
 			url: urlval,
 			type: "POST",
-			
+
 			data: formData,
 			contentType: false,
 			processData: false,
@@ -106,7 +106,7 @@ $(document).ready(function () {
 					noteError();
 				} else if (data == "ok") {
 					noteSuccess();
-			 
+
 					ClearErrors();
 				}
 
@@ -122,7 +122,7 @@ $(document).ready(function () {
 					//$('#error').append(key+"-"+ val[0] +"/");
 				});
 
-			},finally:function () {
+			}, finally: function () {
 				endLoading();
 
 			}
@@ -145,11 +145,11 @@ $(document).ready(function () {
 	$('#btn_save_personal').on('click', function (e) {
 		e.preventDefault();
 		startLoading();
-	//	ClearErrors();
+		//	ClearErrors();
 		//var fdata = $( "#create_form" ).serialize();
 		var form = $('#personal_form')[0];
 		var formData = new FormData(form);
-		urlval=	$('#personal_form').attr("action")
+		urlval = $('#personal_form').attr("action")
 		//var urlval ='{{url("admin/user")}}';
 		//const formData = new FormData("#create_form");
 		//  alert(formData.toString());
@@ -157,7 +157,7 @@ $(document).ready(function () {
 		$.ajax({
 			url: urlval,
 			type: "POST",
-			
+
 			data: formData,
 			contentType: false,
 			processData: false,
@@ -171,7 +171,7 @@ $(document).ready(function () {
 					noteError();
 				} else if (data == "ok") {
 					noteSuccess();
-			 
+
 					//ClearErrors();
 				}
 
@@ -188,231 +188,231 @@ $(document).ready(function () {
 					//$('#error').append(key+"-"+ val[0] +"/");
 				});
 */
-			},finally:function () {
+			}, finally: function () {
 				endLoading();
 
 			}
-			 
+
 
 		});
 
 
 
 	});
-		//save image record
-		$('#btn_save_imgrecord').on('click', function (e) {
-			e.preventDefault();
-			startLoading();
+	//save image record
+	$('#btn_save_imgrecord').on('click', function (e) {
+		e.preventDefault();
+		startLoading();
 		//	ClearErrors();
-			//var fdata = $( "#create_form" ).serialize();
-			var form = $('#imgrecord_form')[0];
-			var formData = new FormData(form);
-			urlval=	$('#imgrecord_form').attr("action")
-			//var urlval ='{{url("admin/user")}}';
-			//const formData = new FormData("#create_form");
-			//  alert(formData.toString());
-	
-			$.ajax({
-				url: urlval,
-				type: "POST",
-				
-				data: formData,
-				contentType: false,
-				processData: false,
-				//contentType: 'application/json',
-				success: function (data) {
-					//	alert(data);
-					endLoading();
-					//$('#errormsg').html('');
-					//$('#sortbody').html('');
-					if (data.length == 0) {
-						noteError();
-					} else if (data == "ok") {
-						noteSuccess();
-				 
-						//ClearErrors();
-					}
-	
-					// $('.alert').html(result.success);
-				}, error: function (errorresult) {
-					endLoading();
-					var response = $.parseJSON(errorresult.responseText);
-					// $('#errormsg').html( errorresult );
-					noteError();
-					/*
-					$.each(response.errors, function (key, val) {
-						$("#" + key + "_error").text(val[0]);
-						$("#" + key).addClass('parsley-error');
-						//$('#error').append(key+"-"+ val[0] +"/");
-					});
-	*/
-				},finally:function () {
-					endLoading();
-	
-				}
-				 
-	
-			});
-	
-	
-	
-		});
-		//save field
-		$('#btn_save_field').on('click', function (e) {
-			e.preventDefault();
-			startLoading();
-	 	ClearErrors();
-			//var fdata = $( "#create_form" ).serialize();
-			var form = $('#field_form')[0];
-			var formData = new FormData(form);
-			urlval=	$('#field_form').attr("action")
-			//var urlval ='{{url("admin/user")}}';
-			//const formData = new FormData("#create_form");
-			//  alert(formData.toString());
-	
-			$.ajax({
-				url: urlval,
-				type: "POST",
-				
-				data: formData,
-				contentType: false,
-				processData: false,
-				//contentType: 'application/json',
-				success: function (data) {
-					//	alert(data);
-					endLoading();
-					//$('#errormsg').html('');
-					//$('#sortbody').html('');
-					if (data.length == 0) {
-						noteError();
-					} else if (data == "ok") {
-						noteSuccess();
-				 
-						 ClearErrors();
-						 resetfieldForm();
-						 loadinputsview();
-						 $( "#btn_cancel_field" ).trigger( "click" );
-					}
-	
-					// $('.alert').html(result.success);
-				}, error: function (errorresult) {
-					endLoading();
-					var response = $.parseJSON(errorresult.responseText);
-					// $('#errormsg').html( errorresult );
-					noteError();
-					 
-					$.each(response.errors, function (key, val) {
-						$("#" + key + "_error").text(val[0]);
-						$("#" + key).addClass('parsley-error');
-						//$('#error').append(key+"-"+ val[0] +"/");
-					});
-	 
-				},finally:function () {
-					endLoading();
-	
-				}
-				 
-	
-			});
-	
-	
-	
-		});
-
-		 
-
-		$('#btn_showinput').on('click', function () {
-			//e.preventDefault();
-			resetfieldForm();
-			//$("#cars").prop('selectedIndex', 2);
-			$(".dynamicdiv").remove();
-		//	$('#list_option').hide();
-		//	$('#list_option').hide();
-			$('#option_append').hide();
-			$('#divoptionhide').hide();
-			$('#btn_add_option').hide();
-			clearInputError($('#field_name'));
-			clearInputError($('#field_tooltipe'));
-			clearInputError($('#field_icon'));
-			clearInputError($('#field_type'));
-		});
-	
-		 
-/*	
-//delete input .deleteinput
-$('.deleteinput').on('click',function (e) {
-	e.preventDefault();	 
-	//	startLoading();
-	 //ClearErrors();
 		//var fdata = $( "#create_form" ).serialize();
-		
-		//var formData = 21;
-		
+		var form = $('#imgrecord_form')[0];
+		var formData = new FormData(form);
+		urlval = $('#imgrecord_form').attr("action")
 		//var urlval ='{{url("admin/user")}}';
 		//const formData = new FormData("#create_form");
 		//  alert(formData.toString());
-		var thisId = $(this).prop("id");
-		var fullurl=delinputurl.replace("[itemid]",thisId);
+
 		$.ajax({
-			url: fullurl,
+			url: urlval,
 			type: "POST",
-			
-		//	data: formData,
-		//	contentType: false,
-			//processData: false,
+
+			data: formData,
+			contentType: false,
+			processData: false,
 			//contentType: 'application/json',
 			success: function (data) {
 				//	alert(data);
-				//endLoading();
+				endLoading();
 				//$('#errormsg').html('');
 				//$('#sortbody').html('');
 				if (data.length == 0) {
 					noteError();
-				} else  {
-				//$('#div_extrainputs').html(data);
-					
+				} else if (data == "ok") {
+					noteSuccess();
+
+					//ClearErrors();
 				}
 
 				// $('.alert').html(result.success);
 			}, error: function (errorresult) {
-				//endLoading();
+				endLoading();
 				var response = $.parseJSON(errorresult.responseText);
 				// $('#errormsg').html( errorresult );
-			
- 
-			},finally:function () {
-				//endLoading();
+				noteError();
+				/*
+				$.each(response.errors, function (key, val) {
+					$("#" + key + "_error").text(val[0]);
+					$("#" + key).addClass('parsley-error');
+					//$('#error').append(key+"-"+ val[0] +"/");
+				});
+*/
+			}, finally: function () {
+				endLoading();
 
 			}
+
+
 		});
 
 
 
 	});
-*/
+	//save field
+	$('#btn_save_field').on('click', function (e) {
+		e.preventDefault();
+		startLoading();
+		ClearErrors();
+		//var fdata = $( "#create_form" ).serialize();
+		var form = $('#field_form')[0];
+		var formData = new FormData(form);
+		urlval = $('#field_form').attr("action")
+		//var urlval ='{{url("admin/user")}}';
+		//const formData = new FormData("#create_form");
+		//  alert(formData.toString());
+
+		$.ajax({
+			url: urlval,
+			type: "POST",
+
+			data: formData,
+			contentType: false,
+			processData: false,
+			//contentType: 'application/json',
+			success: function (data) {
+				//	alert(data);
+				endLoading();
+				//$('#errormsg').html('');
+				//$('#sortbody').html('');
+				if (data.length == 0) {
+					noteError();
+				} else if (data == "ok") {
+					noteSuccess();
+
+					ClearErrors();
+					resetfieldForm();
+					loadinputsview();
+					$("#btn_cancel_field").trigger("click");
+				}
+
+				// $('.alert').html(result.success);
+			}, error: function (errorresult) {
+				endLoading();
+				var response = $.parseJSON(errorresult.responseText);
+				// $('#errormsg').html( errorresult );
+				noteError();
+
+				$.each(response.errors, function (key, val) {
+					$("#" + key + "_error").text(val[0]);
+					$("#" + key).addClass('parsley-error');
+					//$('#error').append(key+"-"+ val[0] +"/");
+				});
+
+			}, finally: function () {
+				endLoading();
+
+			}
+
+
+		});
+
+
+
+	});
+
+
+
+	$('#btn_showinput').on('click', function () {
+		//e.preventDefault();
+		resetfieldForm();
+		//$("#cars").prop('selectedIndex', 2);
+		$(".dynamicdiv").remove();
+		//	$('#list_option').hide();
+		//	$('#list_option').hide();
+		$('#option_append').hide();
+		$('#divoptionhide').hide();
+		$('#btn_add_option').hide();
+		clearInputError($('#field_name'));
+		clearInputError($('#field_tooltipe'));
+		clearInputError($('#field_icon'));
+		clearInputError($('#field_type'));
+	});
+
+
+	/*	
+	//delete input .deleteinput
+	$('.deleteinput').on('click',function (e) {
+		e.preventDefault();	 
+		//	startLoading();
+		 //ClearErrors();
+			//var fdata = $( "#create_form" ).serialize();
+			
+			//var formData = 21;
+			
+			//var urlval ='{{url("admin/user")}}';
+			//const formData = new FormData("#create_form");
+			//  alert(formData.toString());
+			var thisId = $(this).prop("id");
+			var fullurl=delinputurl.replace("[itemid]",thisId);
+			$.ajax({
+				url: fullurl,
+				type: "POST",
+				
+			//	data: formData,
+			//	contentType: false,
+				//processData: false,
+				//contentType: 'application/json',
+				success: function (data) {
+					//	alert(data);
+					//endLoading();
+					//$('#errormsg').html('');
+					//$('#sortbody').html('');
+					if (data.length == 0) {
+						noteError();
+					} else  {
+					//$('#div_extrainputs').html(data);
+						
+					}
+	
+					// $('.alert').html(result.success);
+				}, error: function (errorresult) {
+					//endLoading();
+					var response = $.parseJSON(errorresult.responseText);
+					// $('#errormsg').html( errorresult );
+				
+	 
+				},finally:function () {
+					//endLoading();
+	
+				}
+			});
+	
+	
+	
+		});
+	*/
 	function ClearErrors() {
 
 		$('.parsley-required').html('');
 		$(":input").removeClass('parsley-error');
 	}
-	function showimgcount(imgcheck,imgcount) {
-		if(imgcheck.is(':checked')){
-		
+	function showimgcount(imgcheck, imgcount) {
+		if (imgcheck.is(':checked')) {
+
 			imgcount.show();
-		 }else{
+		} else {
 			imgcount.hide();
+		}
 	}
-}
 
-function clearTypeinputs() {
-	$('#bool_field').hide();
-			$('#list_option').hide();
-			$('#btn_add_option').hide();
+	function clearTypeinputs() {
+		$('#bool_field').hide();
+		$('#list_option').hide();
+		$('#btn_add_option').hide();
 
-}
+	}
 	$("#image_check").on("change", function () {
-		showimgcount($("#image_check"),$('#image_count')) ;
-	  
+		showimgcount($("#image_check"), $('#image_count'));
+
 	});
 	$("#image").on("change", function () {
 		imageChangeForm("#image", "#image_label", "#imgshow");
@@ -423,6 +423,7 @@ function clearTypeinputs() {
 	$("#field_icon").on("change", function () {
 		imageChangeForm("#field_icon", "#field_icon_label", "#field_iconshow");
 	});
+	
 	function imageChangeForm(btn_id, upload_label, imageId) {
 		/* Current this object refer to input element */
 		var $input = $(btn_id);
@@ -483,15 +484,15 @@ function clearTypeinputs() {
 		}
 	});
 	$(".mobile").focusout(function (e) {
-	 
-	if (!validatempty($(this))) {	 
-		return false;
-	} else {
-	 
-		return true;
-	
-	}
-	
+
+		if (!validatempty($(this))) {
+			return false;
+		} else {
+
+			return true;
+
+		}
+
 	});
 	$("#name").focusout(function (e) {
 		if (!validatempty($(this))) {
@@ -528,10 +529,10 @@ function clearTypeinputs() {
 	$("#expertdate").focusout(function (e) {
 		if (!required($(this).val())) {
 			$("#birthdate").addClass("parsley-error");//emptyMsg
-		$("#birthdate_error").html(requiredmsg);
-		  
-			return false; 
-	 
+			$("#birthdate_error").html(requiredmsg);
+
+			return false;
+
 		} else {
 			$("#birthdate").removeClass("parsley-error");
 			$("#birthdate_error").html("");
@@ -541,10 +542,10 @@ function clearTypeinputs() {
 	$("#ui-datepicker-div").focusout(function (e) {
 		if (!required($('#expertdate').val())) {
 			$("#birthdate").addClass("parsley-error");//emptyMsg
-		$("#birthdate_error").html(requiredmsg);
-		  
-			return false; 
-	 
+			$("#birthdate_error").html(requiredmsg);
+
+			return false;
+
 		} else {
 			$("#birthdate").removeClass("parsley-error");
 			$("#birthdate_error").html("");
@@ -552,94 +553,71 @@ function clearTypeinputs() {
 		}
 	});
 
-	$('#field_type').on('change', function() {
-		var option=$(this).find(":selected").val() ;
-		 if( option=='text'){
-			$('#bool_field').hide();
-			//$('#list_option').hide();
-			$('#btn_add_option').hide();
-			
-			$('#option_append').hide();
-		 }else if(option=='bool'){
-			$('#bool_field').show();
-			//$('#list_option').hide();
-			$('#btn_add_option').hide();
-			$('#option_append').hide();
-		 }else if(option=='list'){
+	$('#field_type').on('change', function () {
+		var option = $(this).find(":selected").val();
+		if (option == 'list') {
 			//$('#list_option').show();
 			$('#btn_add_option').show();
-			$('#bool_field').hide();
+			//$('#bool_field').hide();
 			$('#option_append').show();
-		 }else if(option=='date'){
-	$('#bool_field').hide();
-			//$('#list_option').hide();
+		} else {
 			$('#btn_add_option').hide();
 			$('#option_append').hide();
-		 }else if(option=='longtext'){
-			$('#bool_field').hide();
-		//	$('#list_option').hide();
-			$('#btn_add_option').hide();
-			$('#option_append').hide();
-		 }else{
-			$('#bool_field').hide();
-			//$('#list_option').hide();
-			$('#btn_add_option').hide();
-			$('#option_append').hide();
-		 }
-		  
+		}
+
 	});
 
-	$('#field_type_edit').on('change', function() {
-		var option=$(this).find(":selected").val() ;
-		 if( option=='text'){
-		 
-		//	$('#list_option').hide();
+	$('#field_type_edit').on('change', function () {
+		var option = $(this).find(":selected").val();
+		if (option == 'text') {
+
+			//	$('#list_option').hide();
 			$('#btn_edit_option').hide();
-			
+
 			$('#option_append_edit').hide();
-		 }else if(option=='bool'){
+		} else if (option == 'bool') {
 			//$('#bool_field').show();
 			//$('#list_option').hide();
 			$('#btn_edit_option').hide();
 			$('#option_append_edit').hide();
-		 }else if(option=='list'){
+		} else if (option == 'list') {
 			//$('#list_option').show();
 			$('#btn_edit_option').show();
 			//$('#bool_field').hide();
 			$('#option_append_edit').show();
-		 }else if(option=='date'){
-//	$('#bool_field').hide();
-		//	$('#list_option').hide();
+		} else if (option == 'date') {
+			//	$('#bool_field').hide();
+			//	$('#list_option').hide();
 			$('#btn_edit_option').hide();
 			$('#option_append_edit').hide();
-		 }else if(option=='longtext'){
-		//	$('#bool_field').hide();
-		//	$('#list_option').hide();
+		} else if (option == 'longtext') {
+			//	$('#bool_field').hide();
+			//	$('#list_option').hide();
 			$('#btn_edit_option').hide();
 			$('#option_append_edit').hide();
-		 }else{
-		//	$('#bool_field').hide();
-		//	$('#list_option').hide();
+		} else {
+			//	$('#bool_field').hide();
+			//	$('#list_option').hide();
 			$('#btn_edit_option').hide();
 			$('#option_append_edit').hide();
-		 }
-		  
-	});
-//add input text dynamicly
-var i=1;
-$('#btn_add_option').on('click', function () {
-	 
-var $divclon=	$('#divoptionhide').clone().prop('id', 'divoption_'+i).addClass('dynamicdiv').show();
- 
-$divclon.children(':input').first().prop('id', 'list_option_'+i)
-.prop('name', 'list_option'+'['+i+']')
-.prop('value','');
-//$('#divoption').after( $divclon);
-$('#option_append').append($divclon);
-i++;
-});
+		}
 
-	showimgcount($("#image_check"),$('#image_count')) ;
+	});
+	//add input text dynamicly
+	var i = 1;
+	$('#btn_add_option').on('click', function () {
+
+		var $divclon = $('#divoptionhide').clone().prop('id', 'divoption_' + i).addClass('dynamicdiv').show();
+
+		$divclon.children(':input').first().prop('id', 'list_option_' + i)
+			.prop('name', 'list_option' + '[' + i + ']')
+			.prop('value', '');
+		//$('#divoption').after( $divclon);
+		$('#option_append').append($divclon);
+		i++;
+	});
+
+	showimgcount($("#image_check"), $('#image_count'));
 	clearTypeinputs();
 	loadinputsview();
 });
@@ -710,7 +688,7 @@ function resetForm() {
 }
 function resetfieldForm() {
 	jQuery('#field_form')[0].reset();
-	 
+
 	$('#field_icon_label').text('اختر ملف SVG');
 	/*
 	$('#imgshow').attr("src", emptyimg);
@@ -719,42 +697,42 @@ function resetfieldForm() {
 }
 
 function loadinputsview() {
-			 
-	 
-		//var formData = 21;
-		
-		//var urlval ='{{url("admin/user")}}';
-		 
 
-		$.ajax({
-			url: urlshowinput,
-			type: "GET",
-			
+
+	//var formData = 21;
+
+	//var urlval ='{{url("admin/user")}}';
+
+
+	$.ajax({
+		url: urlshowinput,
+		type: "GET",
+
 		//	data: formData,
 		//	contentType: false,
-			//processData: false,
-			//contentType: 'application/json',
-			success: function (data) {
-				 
-				//$('#errormsg').html('');
-				//$('#sortbody').html('');
-				if (data.length == 0) {
-				//	noteError();
-				} else  {
-				$('#div_extrainputs').html(data);
-					
-				}
+		//processData: false,
+		//contentType: 'application/json',
+		success: function (data) {
 
-				// $('.alert').html(result.success);
-			}, error: function (errorresult) {
-				//endLoading();
-				var response = $.parseJSON(errorresult.responseText);
-				// $('#errormsg').html( errorresult );
-			
- 
-			},finally:function () {
-				//endLoading();
+			//$('#errormsg').html('');
+			//$('#sortbody').html('');
+			if (data.length == 0) {
+				//	noteError();
+			} else {
+				$('#div_extrainputs').html(data);
 
 			}
-		});
-	}
+
+			// $('.alert').html(result.success);
+		}, error: function (errorresult) {
+			//endLoading();
+			var response = $.parseJSON(errorresult.responseText);
+			// $('#errormsg').html( errorresult );
+
+
+		}, finally: function () {
+			//endLoading();
+
+		}
+	});
+}

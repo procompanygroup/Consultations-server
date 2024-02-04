@@ -126,8 +126,7 @@ class PointController extends Controller
           ->withErrors($validator)
                       ->withInput();
                       */
-        return redirect()->back()->withErrors($validator)
-          ->withInput();
+                      return response()->json($validator);
   
       } else {
        // $imagemodel = Expert::find($id);

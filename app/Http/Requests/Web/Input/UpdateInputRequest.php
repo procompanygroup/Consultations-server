@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Web\Input;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Validation\Rules\File;
 class UpdateInputRequest extends FormRequest
 {
     /**
@@ -21,8 +21,40 @@ class UpdateInputRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+       
+      
+       return[
+         'field_name_edit'=>'required|string', 
+        'field_type_edit'=>'required|in:text,bool,list,date,longtext', 
+        
+        'field_tooltipe_edit'=>'required|string', 
+          'field_icon_edit' =>File::types(['svg']),   
+          
+       //   Rule::notIn(['sprinkles', 'cherries']),//not_in:shipsTo
+
+
+
+          ];   
+    
     }
+    /**
+ * Get the error messages for the defined validation rules. 'decimal:2'
+
+ *
+ * @return array<string, string>
+ */
+public function messages(): array
+{
+  
+   return[   
+      'field_name_edit.required'=> __('messages.this field is required') ,       
+      'field_type_edit.required'=> __('messages.this field is required') ,  
+     'field_type_edit.in' => __('messages.this field is required') , 
+      'field_tooltipe_edit.required'=> __('messages.this field is required') ,      
+      'field_icon_edit'=>__('messages.file must be svg') ,
+ 
+    ];
+    
+}
+
 }

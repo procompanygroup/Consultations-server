@@ -88,6 +88,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         Route::prefix('input')->group(function () {
             Route::get('/delete/{id}', [InputController::class, 'destroy']);
             Route::get('/edit/{id}', [InputController::class, 'edit']);
+            Route::post('/update/{id}', [InputController::class, 'update']);
         });
     });
     /*
