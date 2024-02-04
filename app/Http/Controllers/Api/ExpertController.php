@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Collection;
 use App\Http\Controllers\Api\ServiceController;
-
+use App\Models\Service;
 class ExpertController extends Controller
 {
 
@@ -93,52 +93,82 @@ class ExpertController extends Controller
         //  $url = url('storage/app/public' . '/' . $this->path  ).'/';
         $url = url(Storage::url($this->path)) . '/';
         $recurl = url(Storage::url($this->recordpath)) . '/';
-        //  $recurl = url('storage/app/public' . '/' . $this->recordpath  ).'/';
-        //  $pass=request(['password']);
-        //   $passval=$pass['password'];
-        // $passhash=bcrypt($passval);
+   
+//         $List = Expert::wherehas('expertsServices', function ($query) use ($id) {
+//             $query->where('service_id', $id);
+//             /*
+//             $query->select(
+//                 'id'
+//                 'service_id',
+//                 'expert_id',
+//                 'points',
+//                 'expert_cost',
+//                 'cost_type',
+//                 'expert_cost_value',
+//             );
+// */
+//         })->with('expertsServices:id,service_id,expert_id,points,expert_cost,cost_type,expert_cost_value')
+//             ->select(
+//                 'id',
+//                 'user_name',
+//                 'mobile',
+//                 'email',
+//                 'nationality',
+//                 'birthdate',
+//                 'gender',
+//                 'marital_status',
+//                 'is_active',
+//                 'points_balance',
+//                 'cash_balance',
+//                 'cash_balance_todate',
+//                 'rates',
 
-        $List = Expert::wherehas('expertsServices', function ($query) use ($id) {
-            $query->where('service_id', $id);
-            /*
-            $query->select(
-                'id'
-                'service_id',
-                'expert_id',
-                'points',
-                'expert_cost',
-                'cost_type',
-                'expert_cost_value',
-            );
-*/
-        })->with('expertsServices:id,service_id,expert_id,points,expert_cost,cost_type,expert_cost_value')
-            ->select(
-                'id',
-                'user_name',
-                'mobile',
-                'email',
-                'nationality',
-                'birthdate',
-                'gender',
-                'marital_status',
-                'is_active',
-                'points_balance',
-                'cash_balance',
-                'cash_balance_todate',
-                'rates',
+//                 DB::raw("(CASE 
+//                 WHEN record = '' THEN ''                     
+//                 ELSE CONCAT('$recurl',record)
+//                 END) AS record"),
+//                 'desc',
+//                 'call_cost',
+//                 'answer_speed',
+//                 DB::raw("(CASE 
+//                 WHEN image = '' THEN ''                     
+//                 ELSE CONCAT('$url',image)
+//                 END) AS image")
+//             )->get();
 
-                DB::raw("(CASE 
-                WHEN record = '' THEN ''                     
-                ELSE CONCAT('$recurl',record)
-                END) AS record"),
-                'desc',
-                'call_cost',
-                'answer_speed',
-                DB::raw("(CASE 
-                WHEN image = '' THEN ''                     
-                ELSE CONCAT('$url',image)
-                END) AS image")
-            )->get();
+
+        $List = Expert::with(['expertsServices'=>function($q)use($id){
+            $q->where('service_id',$id)
+            ->select('id','service_id','expert_id','points','expert_cost','cost_type','expert_cost_value');
+                    }])
+        ->select(
+            'id',
+            'user_name',
+            'mobile',
+            'email',
+            'nationality',
+            'birthdate',
+            'gender',
+            'marital_status',
+            'is_active',
+            'points_balance',
+            'cash_balance',
+            'cash_balance_todate',
+            'rates',
+            DB::raw("(CASE 
+            WHEN record = '' THEN ''                     
+            ELSE CONCAT('$recurl',record)
+            END) AS record"),
+            'desc',
+            'call_cost',
+            'answer_speed',
+            DB::raw("(CASE 
+            WHEN image = '' THEN ''                     
+            ELSE CONCAT('$url',image)
+            END) AS image")
+        )->wherehas('expertsServices', function ($query) use ($id) {
+            $query->where('service_id', $id);            
+        })->get();
 
 
         //  return response()->json(['form' =>  $credentials]);
