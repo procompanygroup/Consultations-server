@@ -14,6 +14,7 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Api\InputController;
+use App\Http\Controllers\Api\StorageController;
 /*
 use App\Http\Requests\Web\Service\StoreServiceRequest;
 use App\Http\Requests\Web\Service\UpdateServiceRequest;
@@ -35,22 +36,28 @@ class ServiceController extends Controller
     public $iconpath = 'images/services/icons';
     public function index()
     {
-        $url =url(Storage::url($this->path)).'/';
-        $iconurl =url(Storage::url($this->iconpath)).'/';
+       // $url =url(Storage::url($this->path)).'/';
+     //   $iconurl =url(Storage::url($this->iconpath)).'/';
+        $strgCtrlr=new StorageController();
+        $url=$strgCtrlr->ServicePath('image');
+        $iconurl=$strgCtrlr->ServicePath('icon');
+        $defaultimg=$strgCtrlr->DefaultPath('image');
+        $defaultsvg=$strgCtrlr->DefaultPath('icon');
       //  $url = url('storage/app/public' . '/' . $this->path) . '/';
-        $list = DB::table('services')->where('is_active',1)->select(
-            'name',
-            'desc',
+        $list = DB::table('services')->where('is_active',1)->select('id',
+            'name',    
+          DB::raw("(CASE 
+          WHEN services.desc is NULL THEN ''                  
+         ELSE services.desc END) AS 'desc'"),
             'is_active',
-            'is_callservice',
-           
+            'is_callservice',           
            // DB::raw("CONCAT('$url',image)  AS image1"),
             DB::raw("(CASE 
-            WHEN services.image = '' THEN ''                     
+            WHEN services.image is NULL THEN '$defaultimg'                  
             ELSE CONCAT('$url',image)
             END) AS image"),
             DB::raw("(CASE 
-            WHEN services.icon = '' THEN ''                     
+            WHEN services.icon is NULL THEN '$defaultsvg'                    
             ELSE CONCAT('$iconurl',icon)
             END) AS icon")
         )->orderBy('is_callservice')->get();
@@ -67,38 +74,47 @@ DB::raw("(CASE
     public function getinputserviceform()
     {
         $data = request(['id']);
-        $url =url(Storage::url($this->path)).'/';
-        $iconurl =url(Storage::url($this->iconpath)).'/';
+     //   $url =url(Storage::url($this->path)).'/';
+      //  $iconurl =url(Storage::url($this->iconpath)).'/';
+        $strgCtrlr=new StorageController();
+        $url=$strgCtrlr->ServicePath('image');
+        $iconurl=$strgCtrlr->ServicePath('icon');
+       
        // $url = url('storage/app/public' . '/' . $this->path) . '/';
          /*
         $service = Service::find($data['id'])->with('inputservices.input')
         ->first();
          */
-      $inputctrlr=new InputController();
+    //  $inputctrlr=new InputController();
      // $urlinput =url(Storage::url($inputctrlr->path)).'/';
-      $iconurlinput =url(Storage::url($inputctrlr->iconpath)).'/';
-$service = Service::find($data['id'])->select('id',
+   //   $iconurlinput =url(Storage::url($inputctrlr->iconpath)).'/';
+   $iconurlinput =$strgCtrlr->InputPath('icon');
+   $defaultimg=$strgCtrlr->DefaultPath('image');
+   $defaultsvg=$strgCtrlr->DefaultPath('icon');
+$service = Service::select('id',
 'name',
-'desc',
 DB::raw("(CASE 
-WHEN services.image = '' THEN ''                     
+WHEN services.desc is NULL THEN ''                  
+ELSE services.desc END) AS 'desc'"),
+DB::raw("(CASE 
+WHEN services.image is NULL THEN '$defaultimg'                 
 ELSE CONCAT('$url',image)
 END) AS image"),
-'icon',
+//'icon',
 DB::raw("(CASE 
-WHEN services.icon = '' THEN ''                     
+WHEN services.icon is NULL THEN '$defaultsvg'                     
 ELSE CONCAT('$iconurl',icon)
-END) AS icon"),)->first()->load(
+END) AS icon"),)->find($data['id'])->load(
     ['inputservices'=>function($q){
 $q->select('id','input_id','service_id');
         }    ,
-        'inputservices.input'=>function($q)use($iconurlinput){
+        'inputservices.input'=>function($q)use($iconurlinput,$defaultsvg){
         $q->select('id','name',
         'type',
         'tooltipe',
        // 'icon',       
 DB::raw("(CASE 
-WHEN icon = '' THEN ''                     
+WHEN icon is NULL THEN '$defaultsvg'                    
 ELSE CONCAT('$iconurlinput',icon)
 END) AS icon"),
         'image_count',
@@ -108,7 +124,8 @@ END) AS icon"),
                 $q->select('id', 'value','input_id');
                     }  
 ]
-);
+)
+ ;
 
   /*
    $service = Service::find($data['id'])->select('id',

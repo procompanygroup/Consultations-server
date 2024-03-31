@@ -14,7 +14,7 @@ $(function() {
 	});
 
 });
-
+/*
 	$(document).ready(function() {
 		$('.select2-show-search').select2({
 		 minimumResultsForSearch: '',
@@ -22,3 +22,4 @@ $(function() {
 		 width: '100%'
 	   });
 	});
+	*/

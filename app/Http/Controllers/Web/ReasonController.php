@@ -13,17 +13,17 @@ use Intervention\Image\Drivers\Gd\Driver;
 use App\Http\Requests\Web\Reason\StoreReasonRequest;
 use App\Http\Requests\Web\Reason\UpdateReasonRequest;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Str;
 
 class ReasonController extends Controller
 {
-    public $path = 'media/reasons';
+  
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $list = DB::table('reasons')->get();
+        $list = Reason::orderBy('type')->get();
         return view('admin.reason.show', ['reasons' => $list]);
         //return response()->json($users);
     }
@@ -33,39 +33,41 @@ class ReasonController extends Controller
      */
     public function create()
     {
-        return view('admin.reason.add');
+        return view('admin.reason.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreReasonRequest $request)//
     {
-        $formdata = $request->all();
-        $validator = Validator::make(
-            $formdata,
-            $request->rules(),
-            $request->messages()
-        );
-
-        if ($validator->fails()) {
-
-            return redirect()->back()->withErrors($validator)
-                ->withInput();
-
-        } else {
-
-            $newObj = new Reason;
-            $newObj->content = $formdata['content'];
-            $newObj->type = $formdata['type'];
-            $newObj->is_active = $formdata['is_active'];
-
-
-            $newObj->save();
-
-
-            return redirect()->back()->with('success_message', 'user has been Added!');
-        }
+      $formdata = $request->all();
+   
+      // return redirect()->back()->with('success_message', $formdata);
+      $validator = Validator::make(
+        $formdata,
+        $request->rules(),
+        $request->messages()
+      );  
+      if ($validator->fails()) {
+        /*
+                          return  redirect()->back()->withErrors($validator)
+                          ->withInput();
+                          */
+        // return response()->withErrors($validator)->json();
+        return response()->json($validator);  
+      } else {
+        $newObj = new Reason;
+        $newObj->content = $formdata['content'];   
+       $type= implode(",", $formdata['deptype']);      
+        $newObj->type =  $type;       
+        $newObj->is_active = 1;
+      
+        $newObj->save();
+    //$boolres= Str::contains( $type,'form') ;
+     
+        return response()->json("ok");
+      }
     }
 
     /**
@@ -79,10 +81,9 @@ class ReasonController extends Controller
     /** 
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        $object = DB::table('reasons')->find($id);
-
+        $object = Reason::find($id);
         //
         return view('admin.reason.edit', ['reason' => $object]);
     }
@@ -90,35 +91,30 @@ class ReasonController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(UpdateReasonRequest $request, $id)
     {
-        $formdata = $request->all();
-        //validate      
-        $validator = Validator::make(
-            $formdata,
-            $request->rules(),
-            $request->messages()
-        );
-        if ($validator->fails()) {
-            /*
-              return redirect('/cpanel/users/add')
-              ->withErrors($validator)
-                          ->withInput();
-                          */
-            return redirect()->back()->withErrors($validator)
-                ->withInput();
-
-        } else {
-            // $imagemodel = Reason::find($id);
-            // $oldimage = $imagemodel->image;
-            Reason::find($id)->update([
-                'content' => $formdata['content'],
-                'type' => $formdata['type'],
-                'is_active' => $formdata['is_active'],
-            ]);
-
-        }
-        return redirect()->back()->with('success_message', 'user has been Updated!');
+      $formdata = $request->all();
+      //validate
+      $validator = Validator::make(
+        $formdata,
+        $request->rules(),
+        $request->messages()
+      );
+      if ($validator->fails()) {
+       
+    return response()->json($validator);
+  
+      } else {
+        $type= implode(",", $formdata['deptype']);  
+        Reason::find($id)->update([
+          'content'=>  $formdata['content'],
+          'type'=>  $type,              
+        ]);
+      
+        //save image
+        return response()->json("ok");
+        
+      }
     }
     /**
      * Remove the specified resource from storage.
@@ -130,7 +126,7 @@ class ReasonController extends Controller
             //delete object
             Reason::find($id)->delete();
         }
-        return redirect()->route('admin.reason.show');
+        return redirect()->route('reason.index');
         // return  $this->index();
         //   return redirect()->route('users.index');
 

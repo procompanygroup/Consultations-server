@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\File;
 class StoreServiceRequest extends FormRequest
 {
+   protected $alphaexpr='/^[\pL\s\_\-\0-9]+$/u';
+    
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -25,7 +27,7 @@ class StoreServiceRequest extends FormRequest
         
        
         return[
-          'name'=>'required|string', 
+          'name'=>'required|string|regex:'.$this->alphaexpr, 
         //  'desc'=>'string', 
            'icon' =>File::types(['svg']), 
            'image'=>'file|image',  
@@ -47,6 +49,7 @@ class StoreServiceRequest extends FormRequest
        
        'image'=>__('messages.file must be image') ,
        'icon'=>__('messages.file must be svg') ,
+       'name.regex'=>__('messages.must be alpha') ,
   
      ];
      

@@ -1,4 +1,7 @@
 @extends('admin.layouts.master')
+@section('page-title')
+{{ __('general.experts') }}
+@endsection
 @section('css')
 <!-- Internal Select2 css -->
 <link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
@@ -31,7 +34,8 @@
 								<h4 class="card-title mb-1">{{ __('general.expert info') }}</h4>
 								<p class="mb-2"> </p>
 							</div>
-							<div class="card-body pt-0">
+							<div class="card-body row pt-0">
+								<div class="col-lg-8">
 								<form class="form-horizontal" name="create_form" action="{{url('admin/expert')}}" method="POST" enctype="multipart/form-data" id="create_form">
 									@csrf
 									<div class="form-group">
@@ -73,13 +77,28 @@
 										</ul>
 									</div>
 
-									<div class="form-group">
-										<input type="text" class="form-control mobile" id="mobile" placeholder="{{ __('general.mobile') }}" name="mobile">
-										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="mobile_error"></li>
-										</ul>
-									</div>
+								
                                    
+                                    <div class="input-group mb-4"  id="mobile_num" >
+									 
+										<div class="input-group-prepend" style="padding-right: 1px; padding-left: 4px;">
+											<div  >
+												<select name="country_num"   id="country_sel" class="form-control SlectBox"  >
+													<!--placeholder-->
+													<option title="" value="0"  class="text-muted">اختر رمز الدولة</option>
+												 
+												</select>
+											</div>
+										</div>
+										<input type="text" class="form-control mobile" id="mobile_2" placeholder="{{ __('general.mobile') }}" name="mobile_num">
+									
+									</div>
+									<ul class="parsley-errors-list filled" >
+										<li class="parsley-required" id="mobile_num_error"></li>
+									</ul>
+									<ul class="parsley-errors-list filled" >
+										<li class="parsley-required" id="country_num_error"></li>
+									</ul>
                                     <div class="mb-4">
                                         <select name="gender"   id="gender" class="form-control SlectBox" onclick="console.log($(this).val())" onchange="console.log('change is firing')">
                                             <!--placeholder-->
@@ -137,10 +156,15 @@
 										</div>
 									</div>
 								</form>
-								<div class="pd-20 clearfix">
-									<img alt="" id="imgshow" class="rounded img-thumbnail wd-100p wd-sm-200 float-sm-right  mg-t-10 mg-sm-t-0"
-									src="{{URL::asset('assets/img/photos/1.jpg')}}" >
-								</div> 
+							</div> 
+
+							<div class="col-lg-4 mt-sm-3 mt-lg-0">
+								<img alt="" id="imgshow" class="rounded img-thumbnail wd-100p float-sm-right  mg-t-10 mg-sm-t-0"
+								 src="{{URL::asset('assets/img/photos/1.jpg')}}" >							 	
+							</div>
+ 
+
+
 							</div>
 						</div>
 					</div>
@@ -173,8 +197,13 @@
 
 <script src="{{URL::asset('assets/js/admin/validate.js')}}"></script>
 <script src="{{URL::asset('assets/js/admin/content.js')}}"></script>
+<script src="{{URL::asset('assets/js/admin/country.js')}}"></script>
+<script src="{{URL::asset('assets/js/admin/focus.js')}}"></script>
 <script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
 <script  >  
-var emptyimg ="{{URL::asset('assets/img/photos/1.jpg')}}"</script>
- 
+var emptyimg ="{{URL::asset('assets/img/photos/1.jpg')}}";
+var countryurl = "{{URL::asset('assets/js/admin/countries.json')}}";
+var=selcntry="";
+</script>
+
 @endsection

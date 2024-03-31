@@ -11,6 +11,9 @@ use App\Http\Controllers\Api\ExpertController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\SelectedServiceController;
 use App\Http\Controllers\Api\PointController;
+use App\Http\Controllers\Api\PointTransferController;
+use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\MailController;
  //use App\Http\Middleware\Api\AuthenticateClient;
 
 /*
@@ -33,7 +36,20 @@ Route::middleware('authExpert:api')->group(function () {
   Route::prefix('/expert')->group(function () {
     Route::post('/view', [ExpertController::class, 'index']);
     Route::post('/getexpert', [ExpertController::class, 'getexpert']);
- //   Route::post('/getloguser', [ClientController::class, 'getloguser']);
+    Route::post('/deleteaccount', [ExpertController::class, 'deleteaccount']);
+    Route::post('/updateprofile', [ExpertController::class, 'updateprofile']);
+    Route::post('/uploadrecord', [ExpertController::class, 'uploadrecord']);
+    Route::post('/uploadanswer', [ExpertController::class, 'uploadanswer']);
+    Route::post('/getorders', [SelectedServiceController::class, 'getorders']);
+    Route::post('/getorderbyid', [SelectedServiceController::class, 'getorderbyid']);
+    Route::post('/getwaitanswer', [SelectedServiceController::class, 'getwaitanswer']);
+    Route::post('/getwithcomments', [ExpertController::class, 'getexpertwithcomments']); 
+    Route::post('/pullbalance', [ExpertController::class, 'pullbalance']);
+    Route::post('/savetoken', [ExpertController::class, 'savetoken']);
+    Route::post('/gettype', [ExpertController::class, 'gettype']);
+    Route::post('/convertfile', [MailController::class, 'convertfile']);
+ //   Route::post('/getloguser', [ClientController::class, 'getloguser']);uploadanswer
+
 });
 });
 //Route::get('getloguser', [ClientController::class, 'getloguser']);
@@ -43,18 +59,37 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/view', [ClientController::class, 'index']);
         Route::post('/getloguser', [ClientController::class, 'getloguser']);
         Route::post('/getbymobile', [ClientController::class, 'getbymobile']);
+        Route::post('/updateprofile', [ClientController::class, 'updateprofile']);
+        Route::post('/deleteaccount', [ClientController::class, 'deleteaccount']);
+        Route::post('/addcomment', [SelectedServiceController::class, 'addcomment']);
+        Route::post('/addrate', [SelectedServiceController::class, 'addrate']);
+        Route::post('/changebalance', [ClientController::class, 'changebalance']);
+        Route::post('/savetoken', [ClientController::class, 'savetoken']);
+        
+        Route::post('/store', [PointTransferController::class, 'store']);
+        
 //api/client/service
         Route::prefix('/service')->group(function () {
             Route::post('/viewall', [serviceController::class, 'index']); 
             Route::post('/getinputform', [serviceController::class, 'getinputserviceform']); 
-            Route::post('/savewithvalues', [SelectedServiceController::class, 'savewithvalues']);          
+            Route::post('/savewithvalues', [SelectedServiceController::class, 'savewithvalues']);
+            Route::post('/uploadfilesvalue', [SelectedServiceController::class, 'uploadfilesvalue']);       
+         //   Route::post('/diftime', [serviceController::class, 'diftime']);   
         });
         Route::prefix('/expert')->group(function () {
             Route::post('/getexpertsbyserviceid', [ExpertController::class, 'getexpertsbyserviceid']); 
             Route::post('/getwithfav', [ExpertController::class, 'getwithfav']); 
+            Route::post('/savefav', [ExpertController::class, 'savefav']); 
+            Route::post('/getwithcomments', [ExpertController::class, 'getwithcomments']); 
+            Route::post('/getavailable', [ExpertController::class, 'getavailable']); 
+            Route::post('/getorderwithanswer', [SelectedServiceController::class, 'getorderwithanswer']); 
         });
         Route::prefix('/point')->group(function () {
             Route::post('/getall', [PointController::class, 'index']); 
+      
+        });
+        Route::prefix('/setting')->group(function () {
+            Route::post('/getkeys', [SettingController::class, 'getkeys']); 
       
         });
     });

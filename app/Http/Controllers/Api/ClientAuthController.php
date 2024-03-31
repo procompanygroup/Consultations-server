@@ -36,7 +36,7 @@ class ClientAuthController extends Controller
     {
   
         $credentials = request(['mobile']);
-        $user= Client::where('mobile',  $credentials)->first();
+        $user= Client::where('mobile',  $credentials)->where('is_active',1)->first();
       //  return response()->json(['form' =>  $credentials]);
         if (  !is_null( $user)) {
             if(! $token = auth('api_clients')->fromUser($user)){
@@ -61,7 +61,15 @@ class ClientAuthController extends Controller
     {
         $clintCont=new clientController();
         $formdata = $filerequest->all();
-
+        $cnum ="";
+        $mnum = "";
+        if(isset($formdata["country_num"])){
+          $cnum = $formdata["country_num"];
+        }
+        if(isset($formdata["mobile_num"])){
+          $mnum = $formdata["mobile_num"];
+        }
+    
     //    $id = $formdata["id"];
         /*
         $formdata = request(['user_name',
@@ -83,7 +91,7 @@ class ClientAuthController extends Controller
     //  $storrequest->request()=$formdata ;
    //   $storrequest=  $formdata ;
       $validator = Validator::make($formdata,
-      $storrequest->rules(),
+      $storrequest->rules(  $cnum,$mnum),
       $storrequest->messages()
     );
     if ($validator->fails()) {
@@ -96,25 +104,30 @@ class ClientAuthController extends Controller
      //   return redirect()->back()->withErrors($validator)->withInput();
   
       } else {
-
+      
+     
         $newObj=new Client();
         $birthdate= Carbon::create($formdata["birthdate"])->format('Y-m-d');
    
         $newObj->user_name= $formdata["user_name"];
        // $newObj->password= $formdata["password"];
         $newObj->email= $formdata["email"];
-        $newObj->mobile= $formdata["mobile"];
+        $newObj->country_num = $cnum;
+        $newObj->mobile_num = $mnum;
+        $newObj->mobile = $cnum. $mnum;
         $newObj->nationality= $formdata["nationality"];
         $newObj->birthdate= $birthdate;
         $newObj->gender= $formdata["gender"];
         $newObj->marital_status= $formdata["marital_status"];
       //  $newObj->image= $formdata["image"];
         $newObj= $clintCont->addUser( $newObj);
+     //  if( isset($formdata["image"]))
+     //  {
         if ($filerequest->hasFile('image')) {
             $file= $filerequest->file('image');
             $clintCont->storeImage( $file,$newObj->id);
         }
-       
+  //    }
        // return response()->json(['formdata' => $formdata ]);
         // return response()->json(['userName' => $formdata["userName"]]);
          return response()->json($newObj->id);

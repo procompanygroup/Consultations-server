@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Http\Controllers\Api\StorageController;
 class Expert extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -35,7 +36,12 @@ class Expert extends Authenticatable implements JWTSubject
         'updated_at',
         'token',
         'answer_speed',
-        
+        'is_active',
+        'country_code',
+'country_num',
+'mobile_num',
+'is_available',
+
     ];
     public $fullpathimg = "";
     public $birthdateStr = "";
@@ -47,7 +53,7 @@ class Expert extends Authenticatable implements JWTSubject
      */
     protected $hidden = [
         'password',
-  
+        'record_path',
     ];
 
     /**
@@ -60,6 +66,24 @@ class Expert extends Authenticatable implements JWTSubject
         'password' => 'hashed',
     ];
 
+    protected $appends= ['full_name'];
+ public function getFullNameAttribute(){     
+        return  $this->first_name.' '. $this->last_name ;
+ }
+
+ public function getRecordPathAttribute(){     
+
+          $conv="";
+          if(!(is_null($this->record)||$this->record=="")){
+            $strgCtrlr = new StorageController();
+            $url = $strgCtrlr->ExpertPath('record');
+            $conv =  $url.$this->record;   
+          } 
+      
+            return  $conv;
+
+
+}
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -75,6 +99,8 @@ class Expert extends Authenticatable implements JWTSubject
         return [];
     }
     //
+
+
     public function expertsServices(): HasMany
     {
         return $this->hasMany(ExpertService::class);
@@ -94,5 +120,9 @@ class Expert extends Authenticatable implements JWTSubject
     public function selectedservices(): HasMany
     {
         return $this->hasMany(Selectedservice::class);
+    }
+    public function notificationUsers(): HasMany
+    {
+        return $this->hasMany(NotificationUser::class);
     }
 }

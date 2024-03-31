@@ -86,4 +86,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Permission::class);
     }
+    public function notificationUsers(): HasMany
+    {
+        return $this->hasMany(NotificationUser::class);
+    }
+    public function selectedservices(): HasMany
+    {
+        return $this->hasMany(Selectedservice::class,'comment_user_id');
+    }
 }

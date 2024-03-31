@@ -19,6 +19,7 @@ use App\Models\Inputvalue;
 use App\Models\InputService;
 
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Api\StorageController;
 class InputController extends Controller
 {
   public $path = 'images/inputs';
@@ -221,7 +222,9 @@ foreach($formdata['list_option'] as $option){
       if (!($object === null)) {
          //delete image
          $oldiconname=$object->icon;
-         Storage::delete("public/" . $this->iconpath . '/' . $oldiconname);
+         $strgCtrlr=new StorageController();
+         $path=$strgCtrlr->iconpath['inputs'];
+         Storage::delete("public/" . $path . '/' . $oldiconname);
 
         InputService::where('input_id', $id)->delete();
         Inputvalue::where('input_id', $id)->delete();
@@ -258,7 +261,9 @@ foreach($formdata['list_option'] as $option){
       $imagemodel = Input::find($id);
       $oldimage = $imagemodel->icon;
       $oldimagename = basename($oldimage);
-      $oldimagepath = $this->iconpath . '/' . $oldimagename;
+      $strgCtrlr=new StorageController();
+      $iconpath=$strgCtrlr->iconpath['inputs'];
+      $oldimagepath =  $iconpath . '/' . $oldimagename;
       //save photo
   
       if ($file !== null) {
@@ -267,11 +272,11 @@ foreach($formdata['list_option'] as $option){
      //   $manager = new ImageManager(new Driver());
      //   $image = $manager->read($file);
         
-        if (!File::isDirectory(Storage::url('/' . $this->iconpath))) {
-          Storage::makeDirectory('public/' . $this->iconpath);
+        if (!File::isDirectory(Storage::url('/' . $iconpath))) {
+          Storage::makeDirectory('public/' . $iconpath);
         }
         $path =$file->storeAs(
-           $this->iconpath , $filename,'public'
+          $iconpath, $filename,'public'
       );
 
        // $image->save(storage_path('app/public') . '/' . $this->iconpath . '/' . $filename);
@@ -279,7 +284,7 @@ foreach($formdata['list_option'] as $option){
         Input::find($id)->update([
           "icon" => $filename
         ]);
-        Storage::delete("public/" . $this->iconpath . '/' . $oldimagename);
+        Storage::delete("public/" . $iconpath . '/' . $oldimagename);
       }
       return 1;
     }

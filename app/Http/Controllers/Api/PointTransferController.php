@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Models\Pointtransfer;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Api\StorageController;
 class PointTransferController extends Controller
 {
     /**
@@ -28,8 +31,34 @@ class PointTransferController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $firstLetters = 'DCL-';
+        $code = $this->GenerateCode($firstLetters);
+        return response()->json($code);
+
     }
+    public function GenerateCode($firstLetters)
+    {     
+        $firstsubLen = strlen($firstLetters) + 1;
+        $numlist = Pointtransfer::where('num', 'like', $firstLetters . '%')->select(DB::raw((string) 'SUBSTR(num,' . $firstsubLen . ') as num'))->get();
+        $numzro = 0;
+        if ($numlist->isEmpty()) {
+
+            $numzro = StorageController::addZeros(1);
+        } else {
+            $num = $numlist->max('num');
+            $numzro = StorageController::addZeros((int) $num + 1);
+        }
+        //   $numlist = Pointtransfer::where('num', 'like', $firstLetters.'%')->select('num')->get();
+        //select(DB::raw('SUBSTR(num, LOCATE("-", num) +  1) as num'))   
+        //DB::raw('substr(num, 1, 4) as num')
+        //    $firstLetters=   Str::upper("d");
+        //   $firstLetters=  $firstLetters."CL-";
+        //   Str::upper("d");
+        // 
+        $finalcode = Str::upper($firstLetters) . $numzro;
+        return $finalcode;
+    }
+ 
 
     /**
      * Display the specified resource.

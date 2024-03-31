@@ -28,7 +28,8 @@ class ExpertsServiceController extends Controller
       return view('admin.expertservice.show', ['expertservices' => $list]);
       //return response()->json($users);
     }
-  
+     
+
     /**
      * Show the form for creating a new resource.
      */
@@ -129,6 +130,22 @@ class ExpertsServiceController extends Controller
           ExpertService::find($id)->delete();
         }      
       return redirect()->route('admin.expertservice.show'); 
+    }
+    
+    public function deleteselected($id)
+    {
+  $object = ExpertService::find($id);
+  $service_id=$object->service_id;
+ //  $object = ExpertServic::find("aa");
+      if (!($object === null)) {  
+          //delete object
+         ExpertService::find($id)->delete();//temp
+        }      
+      //  return response()->json("ok");
+       // return response()->url('admin/service/expert/edit' ,$service_id); 
+        return redirect()->route('service.expert.edit',$service_id); 
+   
+     //  {{url('admin/service/expert/edit',$service->id)}}
     }
 
 }

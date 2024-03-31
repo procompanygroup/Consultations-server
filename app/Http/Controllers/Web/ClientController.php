@@ -20,15 +20,17 @@ use App\Models\Cashtransfer;
 use App\Models\Expertfavorite;
 use App\Models\Servicefavorite;
 use App\Models\Selectedservice;
+use App\Http\Controllers\Api\StorageController;
 class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public $path = 'media/clients';
+  //  public $path = 'media/clients';
     /**
      * Display a listing of the resource.
      */
+    protected $path="";
     public function index()
     {
       $list = DB::table('clients')->get();
@@ -36,6 +38,35 @@ class ClientController extends Controller
       //return response()->json($users);
   
     }
+   
+    
+    public function showbalance()
+    {
+      $list = Client::get();
+      
+    return view('admin.balance.client', ['clients' => $list]);
+      //return response()->json($users);
+  
+    }
+    public function showoperations($id)
+    {
+      $list = Pointtransfer::with( 'cashtransfers', 'selectedservices')
+      ->where('client_id',$id)
+      ->where(function ($query) {
+        $query->where('side','from-client')
+              ->orWhere('side','to-client');
+    })->get();
+      
+      
+ 
+     //'cashtransfers',
+      $object = Client::find($id);
+// return $list ;
+   return view('admin.operation.client', ['transfers' => $list,'client' => $object]);
+      //return response()->json($users);
+  
+    }
+
   
     /**
      * Show the form for creating a new resource.
@@ -131,9 +162,20 @@ class ClientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
+      $strgCtrlr=new StorageController();
+      $url=$strgCtrlr->ExpertPath('image');
+     // $recurl=$strgCtrlr->ExpertPath('record');
+     // $url =url(Storage::url($this->path)).'/';
+      $object = Client::find($id);
+      $object->birthdateStr= (string)Carbon::create($object->birthdate)->format('d/m/Y');
+      if( $object->image !="" ){
+        $object->fullpathimg= $url.$object->image;
+      }
       //
+       //return  dd ($object);
+      return view('admin.client.showinfo', ['client' => $object]);
     }
   
     /** 
@@ -192,7 +234,7 @@ class ClientController extends Controller
           
         ]);
         //save image
-  
+ /*
         $separator = '/';
         if ($request->hasFile('image')) {
           // $imagemodel->save();
@@ -223,9 +265,12 @@ class ClientController extends Controller
             if (File::exists($oldimagepath)) {
               File::delete($oldimagepath);
             }
+             
             return redirect()->back()->with('success_message', 'user has been Updated!');
           }
         }
+*/
+return redirect()->back()->with('success_message', 'user has been Updated!');
       }
     }
     /**
@@ -252,7 +297,9 @@ class ClientController extends Controller
          
     //delete image
     if (!empty($object->image)) {
-      $imgpath = $this->path . '/' . $object->image;
+      $strgCtrlr=new StorageController();
+      $path=$strgCtrlr->path['clients'];
+      $imgpath =  $path . '/' . $object->image;
       if (File::exists($imgpath)) {
         File::delete($imgpath);
       }
@@ -260,12 +307,12 @@ class ClientController extends Controller
 //delete related rows
     
     Expertfavorite::where('client_id', $id)->delete();
-   Servicefavorite::where('client_id', $id)->delete();
+  // Servicefavorite::where('client_id', $id)->delete();
     //delete object
     Client::find($id)->delete();
         }
       }
-      return redirect()->route('admin.client.show');
+      return redirect()->route('client.index');
       // return  $this->index();
       //   return redirect()->route('users.index');
   

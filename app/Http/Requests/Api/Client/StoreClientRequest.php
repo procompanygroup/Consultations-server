@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Api\Client;
 
 use Illuminate\Foundation\Http\FormRequest;
-
+use Illuminate\Validation\Rule;
 class StoreClientRequest extends FormRequest
 {
     /**
@@ -19,11 +19,12 @@ class StoreClientRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    protected  $minMobileLength=4;
+protected $maxMobileLength=9;
+protected $maxlength=500;
+    public function rules( $cnum,$mnum): array
     {
-       $maxlength=500;
-       $minMobileLength=10;
-       $maxMobileLength=15;
+     
        return[
               'user_name'=>'required', 
         //   'user_name'=>'required|alpha_num:ascii|unique:clients,user_name',    
@@ -39,9 +40,13 @@ class StoreClientRequest extends FormRequest
      
          'nationality'=>'required',
        //  'city'=>'required|alpha_num',
-         'mobile'=>'nullable|unique:clients,mobile|digits_between:'. $minMobileLength.','.$maxMobileLength,          
+        // 'mobile'=>'nullable|unique:clients,mobile|digits_between:'. $minMobileLength.','.$maxMobileLength,  
+        // 'mobile'=>['required', Rule::unique('clients','mobile')->where('is_active',1),'digits_between:'. $minMobileLength.','.$maxMobileLength]  ,
       //   'phone'=>'nullable|numeric|digits_between:'. $minMobileLength.','.$maxMobileLength,
-        // 'role'=>'required',      
+        // 'role'=>'required',   
+        'country_num'=>['required','not_in:0',Rule::unique('clients','country_num')->where('country_num',  $cnum)->where('mobile_num',$mnum )->where('is_active',1)  ],          
+          'mobile_num'=>['required','numeric','digits_between:'. $this->minMobileLength.','.$this->maxMobileLength,Rule::unique('clients','mobile_num')->where('country_num', $cnum)->where('mobile_num',$mnum)->where('is_active',1)],          
+             
        ];   
     
     }
@@ -52,9 +57,7 @@ class StoreClientRequest extends FormRequest
  */
 public function messages(): array
 {
-   $maxlength=500;
-   $minMobileLength=10;
-   $maxMobileLength=15;
+ 
    return[     
      'user_name.required'=>'The name is required',
   //   'name.alpha_num'=>'The name format must be alphabet',
@@ -70,8 +73,8 @@ public function messages(): array
      'gender.required'=>'gender is required',
      'gender.numeric'=>'gender must contain only numbers',
      //'city.required'=>'city is required',
-     'mobile.numeric'=>'mobile must contain only numbers',
-     'mobile.digits_between'=>'mobile number must be between '. $minMobileLength.' and '.$maxMobileLength,
+     'mobile_num.numeric'=>'mobile must contain only numbers',
+     'mobile_num.digits_between'=>'mobile number must be '. $this->minMobileLength.' to '. $this->maxMobileLength,
    
     // 'phone.numeric'=>'phone must contain only numbers',
      //'phone.digits_between'=>'phone  number must be between '. $minMobileLength.' and '.$maxMobileLength,

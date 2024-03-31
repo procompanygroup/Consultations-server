@@ -6,6 +6,9 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\File;
 class UpdateInputRequest extends FormRequest
 {
+   protected $alphaexpr='/^[\pL\s\_\-\0-9]+$/u';
+    
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -24,10 +27,10 @@ class UpdateInputRequest extends FormRequest
        
       
        return[
-         'field_name_edit'=>'required|string', 
+         'field_name_edit'=>'required|string|regex:'.$this->alphaexpr, 
         'field_type_edit'=>'required|in:text,bool,list,date,longtext', 
         
-        'field_tooltipe_edit'=>'required|string', 
+        'field_tooltipe_edit'=>'required|string|regex:'.$this->alphaexpr,  
           'field_icon_edit' =>File::types(['svg']),   
           
        //   Rule::notIn(['sprinkles', 'cherries']),//not_in:shipsTo
@@ -52,7 +55,8 @@ public function messages(): array
      'field_type_edit.in' => __('messages.this field is required') , 
       'field_tooltipe_edit.required'=> __('messages.this field is required') ,      
       'field_icon_edit'=>__('messages.file must be svg') ,
- 
+      'field_name_edit.regex'=>__('messages.must be alpha') ,
+      'field_tooltipe_edit.regex'=>__('messages.must be alpha') ,
     ];
     
 }

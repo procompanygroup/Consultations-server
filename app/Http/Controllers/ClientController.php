@@ -51,7 +51,7 @@ class ClientController extends Controller
         // عمليات خاصة بـ User Model
         $customValue = 'Expert';
     }
-    elseif(auth()->user() instanceof \App\Models\Client){
+    elseif(auth()->user() instanceof Client){
         $customValue = 'Client';
     }else{
         $customValue = 'No auth';

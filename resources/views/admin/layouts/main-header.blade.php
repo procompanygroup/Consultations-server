@@ -3,10 +3,10 @@
 				<div class="container-fluid">
 					<div class="main-header-left ">
 						<div class="responsive-logo">
-							<a href="{{ url('/' . $page='index') }}"><img src="{{URL::asset('assets/img/brand/logo.png')}}" class="logo-1" alt="logo"></a>
-							<a href="{{ url('/' . $page='index') }}"><img src="{{URL::asset('assets/img/brand/logo-white.png')}}" class="dark-logo-1" alt="logo"></a>
-							<a href="{{ url('/' . $page='index') }}"><img src="{{URL::asset('assets/img/brand/favicon.png')}}" class="logo-2" alt="logo"></a>
-							<a href="{{ url('/' . $page='index') }}"><img src="{{URL::asset('assets/img/brand/favicon.png')}}" class="dark-logo-2" alt="logo"></a>
+							<a href="{{route('admin')}}"><img src="{{URL::asset('assets/img/brand/logo-title.svg')}}" class="logo-1" alt="logo"></a>
+							<a href="{{route('admin')}}"><img src="{{URL::asset('assets/img/brand/logo-title.svg')}}" class="dark-logo-1" alt="logo"></a>
+							<a href="{{route('admin')}}"><img src="{{URL::asset('assets/img/brand/logo-title.svg')}}" class="logo-2" alt="logo"></a>
+							<a href="{{route('admin')}}"><img src="{{URL::asset('assets/img/brand/logo-title.svg')}}" class="dark-logo-2" alt="logo"></a>
 						</div>
 						<div class="app-sidebar__toggle" data-toggle="sidebar">
 							<a class="open-toggle" href="#"><i class="header-icon fe fe-align-left" ></i></a>
@@ -31,7 +31,7 @@
 										</div>
 									</div>
 								
-									<a class="dropdown-item" href="{{route('user.edit',auth()->user()->id)}}"><i class="bx bx-cog"></i>{{ __('general.Edit_Profile') }}</a>
+									<a class="dropdown-item" href="{{route('user.editprofile',auth()->user()->id)}}"><i class="bx bx-cog"></i>{{ __('general.Edit_Profile') }}</a>
 							
 										<form method="POST" action="{{ route('logout') }}">
 										@csrf

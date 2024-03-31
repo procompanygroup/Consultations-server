@@ -15,6 +15,9 @@ use Intervention\Image\Drivers\Gd\Driver;
 use App\Http\Requests\Web\Service\StoreServiceRequest;
 use App\Http\Requests\Web\Service\UpdateServiceRequest;
 use App\Http\Requests\Web\Input\StoreInputRequest;
+use App\Http\Requests\Web\Service\StoreExpertServiceRequest;
+use  App\Http\Requests\Web\Service\UpdatePercentRequest;
+use  App\Http\Requests\Web\Service\UpdatePointRequest;
 use App\Models\Input;
 use App\Models\Pointtransfer;
 use App\Models\Selectedservice;
@@ -24,7 +27,10 @@ use App\Models\Servicefavorite;
 use App\Models\Permission;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Web\InputController;
+use App\Http\Controllers\Web\SettingController;
 use App\Models\Inputvalue;
+use App\Models\Expert;
+
 /* 
 use App\Models\Expertfavorite;
 use App\Models\Servicefavorite;
@@ -50,7 +56,172 @@ class ServiceController extends Controller
       //return response()->json($users);
   
     }
+    public function showpercent()
+    {
+      $list = DB::table('services')->whereNot('is_callservice',1)->get();
+     return view('admin.service.showpercents', ['services' => $list]);
+
+      //return  "sdsd";
   
+    }
+    public function showexpert()
+    {
+      $list =Service::whereNot('is_callservice',1)->with('expertservices:id,service_id,expert_id','expertservices.expert:id,user_name,first_name,last_name')->get();
+ $namesarray=[];  
+ 
+      foreach(  $list as $servicerow){
+        $namesarray=[];
+        foreach($servicerow->expertservices as $expertservicerow)
+{
+  $namesarray[]=$expertservicerow->expert->first_name." ".$expertservicerow->expert->last_name;
+  
+  $servicerow->experts_names= implode(",", $namesarray);
+}       
+ }
+    
+    //  return  dd($list);
+      return view('admin.service.showexperts', ['services' => $list]);
+
+      
+  
+    }
+    public function showselected($id)
+    {
+      $object = Service::find($id);
+      $selectedExpertList = $object->expertservices()->with('expert')->get();
+      return view('admin.expertservice.show', ['selectedexperts'=>$selectedExpertList]);
+      // return dd($list);
+  
+    }
+    
+    public function editexpert($id)
+    {
+      $object = Service::find($id);
+    $selectedExpertList = $object->expertservices()->with('expert')->get();
+      $expertList = Expert::get();
+       return view('admin.service.editxpert', ['service' => $object,'allexperts'=>$expertList ,'selectedexperts'=>$selectedExpertList]);
+     // return dd($list);
+  
+    }
+    public function pointedit($id)
+    {
+      //expert service id
+   
+    //  $expertservice = ExpertService::find($id)->with('expert','service')->first();    
+    $expertservice = ExpertService::with('expert','service')->find($id);  
+   //   return $expertservice;
+      return view('admin.expertservice.pointmodal', ['expertservice' => $expertservice]);
+     // return dd($list);
+  
+    }
+    public function pointsave(UpdatePointRequest $request, $id)
+    {
+      
+    $formdata = $request->all();
+    //validate
+    $validator = Validator::make(
+      $formdata,
+      $request->rules(),
+      $request->messages()
+    );
+    if ($validator->fails()) {
+ 
+     return response()->json($validator);
+
+    } else {     
+      ExpertService::find($id)->update([
+        'points'=>  $formdata['points'],       
+      ]);
+     
+      return response()->json("ok");
+      
+    }
+    }
+    public function percentsave(UpdatePercentRequest $request, $id)
+    {
+      
+    $formdata = $request->all();
+    //validate
+    $validator = Validator::make(
+      $formdata,
+      $request->rules(),
+      $request->messages()
+    );
+    if ($validator->fails()) {
+ 
+     return response()->json($validator);
+
+    } else {     
+     
+      Service::find($id)->update([
+        'expert_percent'=>  $formdata['expert_percent'],       
+      ]);
+     
+      return response()->json("ok");
+      
+    }
+    }
+
+    public function percentedit($id)
+    {
+      $object = Service::find($id);
+
+ return view('admin.expertservice.edit', ['service' => $object]);
+    }
+    
+    public function expertsave(StoreExpertServiceRequest $request, $id)
+    {
+     // return response()->json($id); 
+    $formdata = $request->all();
+    //validate
+    $validator = Validator::make(
+      $formdata,
+      $request->rules(),
+      $request->messages()
+    );
+    if ($validator->fails()) {
+      /*
+        return redirect('/cpanel/users/add')
+        ->withErrors($validator)
+                    ->withInput();
+                    */
+     return response()->json($validator);
+
+    } else {
+     
+ $exserList=ExpertService::where('service_id',$id)->where('expert_id',$formdata['select_expert'])->get();
+if($exserList->isEmpty())
+{
+  $setctrlr=new SettingController();
+$expertservice =new  ExpertService();
+$expertservice->expert_id=$formdata['select_expert'];
+$expertservice->service_id=$id;
+$expertservice->points=$setctrlr->findbyname('expert_service_points')->value;
+$expertservice->expert_cost=0;
+$expertservice->cost_type=0;
+$expertservice->expert_cost_value=0;
+$expertservice->save();
+}
+/*
+else{
+  $exserList->first()->update([
+    'expert_id'=>  $formdata['select_expert'],
+    'service_id'=> $id,  
+
+    'points'=>  0, 
+    'expert_cost'=>  0,      
+    'cost_type'=>0, 
+    'expert_cost_value'=>  0, 
+  ]);
+
+}
+*/
+     
+     
+      return response()->json("ok");
+      
+    }
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -91,6 +262,7 @@ class ServiceController extends Controller
         'is_active',
         'icon',
       */
+    $setctrlr=new SettingController();
       $newObj = new Service;
       $newObj->name = $formdata['name'];
       $newObj->desc = $formdata['desc'];
@@ -98,7 +270,7 @@ class ServiceController extends Controller
       $newObj->createuser_id = Auth::user()->id;
       $newObj->updateuser_id =Auth::user()->id;
       $newObj->is_active = isset($formdata["is_active"]) ? 1 : 0;
-      
+      $newObj->expert_percent=$setctrlr->findbyname('expert_percent')->value;
       $newObj->save();
 
       if ($request->hasFile('image')) {
@@ -231,6 +403,8 @@ if( $inputservice['input']['type']=='image' && $inputservice['input']['ispersona
       
     }
     }
+
+
     /**
      * Remove the specified resource from storage.
      */

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
  
 use Illuminate\Database\Eloquent\Relations\HasMany;
- 
+use App\Http\Controllers\Api\StorageController;
 class Service extends Model
 {
     use HasFactory;
@@ -19,11 +19,42 @@ class Service extends Model
         'updateuser_id',
         'is_active',
         'icon',
-          'is_callservice',   
+          'is_callservice',  
+           'expert_percent'
     ];
-
+    //protected $appends= ['image_path','svg_path'];
+    protected $hidden= ['image_path','svg_path'];
+    public function getSvgPathAttribute(){
+        $conv="";
+        $strgCtrlr = new StorageController(); 
+        if(is_null($this->icon) ){
+            $conv =$strgCtrlr->DefaultPath('icon'); 
+        }else if($this->icon==''){
+            $conv =$strgCtrlr->DefaultPath('icon'); 
+        } else {
+            $url = $strgCtrlr->ServicePath('icon');
+            $conv =  $url.$this->icon;
+        }     
+       
+            return  $conv;
+     }
+     public function getImagePathAttribute(){
+        $conv="";
+        $strgCtrlr = new StorageController(); 
+        if(is_null($this->image) ){
+            $conv =$strgCtrlr->DefaultPath('image'); 
+        }else if($this->image==''){
+            $conv =$strgCtrlr->DefaultPath('image'); 
+        } else {
+            $url = $strgCtrlr->ServicePath('image');
+            $conv =  $url.$this->image;
+        }     
+       
+            return  $conv;
+     }
     public $fullpathimg = "";
     public $fullpathsvg = "";
+    public $experts_names = "";
     public function selectedservices(): HasMany
     {
         return $this->hasMany(Selectedservice::class);

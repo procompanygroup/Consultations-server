@@ -25,7 +25,7 @@ interface PasswordBroker
      *
      * @var string
      */
-    const INVALID_USER = 'passwords.user';
+    const INVALID_USER = 'خطا في البريد الالكتروني'; //'passwords.user';
 
     /**
      * Constant representing an invalid token.

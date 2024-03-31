@@ -1,6 +1,9 @@
 var urlval = "";
 var urlshowinput = "";
+var urlshowexpert = "";
 var delinputurl = "";
+var urlshowpercent = "";
+var  urlpointmodal="";
 $(document).ready(function () {
 
 	// $('#sortbody').html('');
@@ -337,6 +340,14 @@ $(document).ready(function () {
 		clearInputError($('#field_type'));
 	});
 
+	$('#btn_show_expertmodal').on('click', function () {
+		//e.preventDefault();
+		resetexpertForm();
+
+		clearInputError($('#select_expert'));
+
+	});
+
 
 	/*	
 	//delete input .deleteinput
@@ -394,6 +405,8 @@ $(document).ready(function () {
 
 		$('.parsley-required').html('');
 		$(":input").removeClass('parsley-error');
+		$("#mobile_num").removeClass('parsley-error');
+		$("#deptype").removeClass('parsley-error');
 	}
 	function showimgcount(imgcheck, imgcount) {
 		if (imgcheck.is(':checked')) {
@@ -423,7 +436,7 @@ $(document).ready(function () {
 	$("#field_icon").on("change", function () {
 		imageChangeForm("#field_icon", "#field_icon_label", "#field_iconshow");
 	});
-	
+
 	function imageChangeForm(btn_id, upload_label, imageId) {
 		/* Current this object refer to input element */
 		var $input = $(btn_id);
@@ -455,18 +468,7 @@ $(document).ready(function () {
 			return true;
 		}
 	});
-	$("#email").focusout(function (e) {
-		if (!validatempty($(this))) {
-			return false;
-		}
-		else if (!validateinputemail($(this), emailmsg)) {
-			return false;
-
-		} else {
-
-			return true;
-		}
-	});
+	
 	$("#password").focusout(function (e) {
 		if (!validatempty($(this))) {
 			return false;
@@ -603,6 +605,31 @@ $(document).ready(function () {
 		}
 
 	});
+
+	$("#expert_percent").focusout(function (e) {
+		if (!validatempty($(this))) {
+			return false;
+		} else {
+
+			return true;
+		}
+	});
+	$("#content").focusout(function (e) {
+		if (!validatempty($(this))) {
+			return false;
+		} else {
+
+			return true;
+		}
+	});
+	$("#type").focusout(function (e) {
+		if (!validatempty($(this))) {
+			return false;
+		} else {
+
+			return true;
+		}
+	});
 	//add input text dynamicly
 	var i = 1;
 	$('#btn_add_option').on('click', function () {
@@ -617,9 +644,248 @@ $(document).ready(function () {
 		i++;
 	});
 
+	//save expert service
+
+
+
 	showimgcount($("#image_check"), $('#image_count'));
 	clearTypeinputs();
-	loadinputsview();
+
+	// loadinputsview();
+	//show percent modal
+	$('.edit-service-percent').on('click', function (e) {
+		e.preventDefault();
+		ClearErrors();
+		
+		var thisId = $(this).attr("id");
+		thisId = thisId.replace("edit-", "");
+		var urlval = urlshowpercent.replace("itemid", thisId);
+		//var formData = 21;
+		//var thisform =$(this).closest('form');
+		//var urlval ='{{url("admin/user")}}';
+		//var thisform = $(this).parents('form:first');
+		//var formData = new FormData(thisform);
+		//	var	urlval = thisform.attr("action");
+
+		$.ajax({
+			url: urlval,
+			type: "GET",
+
+			//	data: formData,
+			//	contentType: false,
+			//processData: false,
+			//contentType: 'application/json',
+			success: function (data) {
+
+				//$('#errormsg').html('');
+				//$('#sortbody').html('');
+				if (data.length == 0) {
+					//	noteError();
+				} else {
+					$('#scrollmodal-edit').html(data);
+
+				}
+
+				// $('.alert').html(result.success);
+			}, error: function (errorresult) {
+				//endLoading();
+				var response = $.parseJSON(errorresult.responseText);
+				// $('#errormsg').html( errorresult );
+
+
+			}, finally: function () {
+				//endLoading();
+
+			}
+		});
+	});
+
+	//save percent
+	$('#btn_save_percent').on('click', function (e) {
+		e.preventDefault();
+		//alert("hi");
+		//	startLoading();
+		ClearErrors();
+		//var fdata = $( "#create_form" ).serialize();
+
+		var form = $('#expert_percent_form')[0];
+		var formData = new FormData(form);
+		urlval = $('#expert_percent_form').attr("action")
+		//var urlval ='{{url("admin/user")}}';
+		//const formData = new FormData("#create_form");
+		//  alert(formData.toString());
+
+		$.ajax({
+			url: urlval,
+			type: "POST",
+
+			data: formData,
+			contentType: false,
+			processData: false,
+			//contentType: 'application/json',
+			success: function (data) {
+				//	alert(data);
+				//	endLoading();
+				//$('#errormsg').html('');
+				//$('#sortbody').html('');
+				if (data.length == 0) {
+					noteError();
+				} else if (data == "ok") {
+					noteSuccess();
+
+					ClearErrors();
+					//$("#btn_cancel_field").trigger("click");
+					//loadexperts();
+					$("#btn_cancel_field").trigger("click");
+				}
+
+				// $('.alert').html(result.success);
+			}, error: function (errorresult) {
+				//endLoading();
+				var response = $.parseJSON(errorresult.responseText);
+				// $('#errormsg').html( errorresult );
+				noteError();
+				$.each(response.errors, function (key, val) {
+					$("#" + key + "_error").text(val[0]);
+					$("#" + key).addClass('parsley-error');
+					//$('#error').append(key+"-"+ val[0] +"/");
+				});
+
+			}, finally: function () {
+				//	endLoading();
+
+			}
+			/*
+			error: function(jqXHR, textStatus, errorThrown) {
+			 alert(jqXHR.responseText);
+			  // $('#errormsg').html(jqXHR.responseText);
+			  //$('#errormsg').html("Error");
+			  $('#error').text(jqXHR.responseText);
+			}
+			*/
+
+		});
+
+
+
+	});
+
+//show point modal
+$('.btn-edit-point').on('click', function (e) {
+	e.preventDefault();
+	ClearErrors();
+	
+	var thisId = $(this).attr("id");
+	thisId = thisId.replace("expert-service-", "");
+	var url =urlpointmodal.replace("itemid", thisId);
+	//var formData = 21;
+	//var thisform =$(this).closest('form');
+	//var urlval ='{{url("admin/user")}}';
+	//var thisform = $(this).parents('form:first');
+	//var formData = new FormData(thisform);
+	//	var	urlval = thisform.attr("action");
+
+	$.ajax({
+		url: url,
+		type: "GET",
+
+		//	data: formData,
+		//	contentType: false,
+		//processData: false,
+		//contentType: 'application/json',
+		success: function (data) {
+
+			//$('#errormsg').html('');
+			//$('#sortbody').html('');
+			if (data.length == 0) {
+				//	noteError();
+			} else {
+				$('#scrollmodal-edit-point').html(data);
+
+			}
+
+			// $('.alert').html(result.success);
+		}, error: function (errorresult) {
+			//endLoading();
+			var response = $.parseJSON(errorresult.responseText);
+			// $('#errormsg').html( errorresult );
+
+
+		}, finally: function () {
+			//endLoading();
+
+		}
+	});
+});
+
+
+
+function sendformbyid(formid) {
+	startLoading();
+	ClearErrors();
+//	$formid='#create_form';
+	 
+	var form = $(formid)[0];
+	var formData = new FormData(form);
+	urlval = $(formid).attr("action")
+ 
+
+	$.ajax({
+		url: urlval,
+		type: "POST",
+
+		data: formData,
+		contentType: false,
+		processData: false,
+		//contentType: 'application/json',
+		success: function (data) {
+			//	alert(data);
+			endLoading();
+			//$('#errormsg').html('');
+			//$('#sortbody').html('');
+			if (data.length == 0) {
+				noteError();
+
+			} else   {
+				noteSuccess();
+				 
+				  $('#msg').html(data);
+			}
+
+			// $('.alert').html(result.success);
+		}, error: function (errorresult) {
+			endLoading();
+			var response = $.parseJSON(errorresult.responseText);
+			// $('#errormsg').html( errorresult );
+			noteError(); 
+
+		}, finally: function () {
+			endLoading();
+
+		}
+	 
+
+	});
+
+
+ 
+}
+ 
+$("input[name=is_active]").click(function() {
+	//  var checkBoxes = $(this).val();
+	var checkBoxes = $(this).prop("checked");
+if(checkBoxes==true){
+ //$("#lbl_is_active").text("مفعل");
+$("input[name=is_active]").prop("value",1);
+}else{
+//$("#lbl_is_active").text("غير مفعل");
+$("input[name=is_active]").prop("value",0);
+}
+	//  alert( $("#status").prop("value"));
+   //   checkBoxes.prop("checked", !checkBoxes.prop("checked"));
+  }); 
+  
+
 });
 
 ///////////////////////////////////////////////////////
@@ -667,7 +933,7 @@ $("#field_type").focusout(function (e) {
 });
 function noteSuccess() {
 	notif({
-		msg: "تمت الاضافة بنجاح ",
+		msg: "تمت العملية بنجاح",
 		type: "success"
 	});
 }
@@ -695,7 +961,14 @@ function resetfieldForm() {
 	$('#iconshow').attr("src", emptyimg);
 	*/
 }
-
+function resetexpertForm() {
+	jQuery('#expert_form')[0].reset();
+	/*
+	$('#imgshow').attr("src", emptyimg);
+	$('#iconshow').attr("src", emptyimg);
+	*/
+}
+ 
 function loadinputsview() {
 
 
@@ -736,3 +1009,47 @@ function loadinputsview() {
 		}
 	});
 }
+
+function loadexperts() {
+
+
+	//var formData = 21;
+
+	//var urlval ='{{url("admin/user")}}';
+
+
+	$.ajax({
+		url: urlshowexpert,
+		type: "GET",
+
+		//	data: formData,
+		//	contentType: false,
+		//processData: false,
+		//contentType: 'application/json',
+		success: function (data) {
+
+			//$('#errormsg').html('');
+			//$('#sortbody').html('');
+			if (data.length == 0) {
+				//	noteError();
+			} else {
+
+				$('#div_selectedexpert').html(data);
+
+			}
+
+			// $('.alert').html(result.success);
+		}, error: function (errorresult) {
+			//endLoading();
+			var response = $.parseJSON(errorresult.responseText);
+			// $('#errormsg').html( errorresult );
+
+
+		}, finally: function () {
+			//endLoading();
+
+		}
+	});
+}
+
+

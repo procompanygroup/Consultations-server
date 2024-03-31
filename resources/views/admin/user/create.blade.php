@@ -1,4 +1,7 @@
 @extends('admin.layouts.master')
+@section('page-title')
+{{ __('general.supervisors') }}
+@endsection
 @section('css')
 <!-- Internal Select2 css -->
 <link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
@@ -17,7 +20,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto"><a href="{{ route('user.index') }}">{{ __('general.supervisors') }}</a></h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ {{ __('general.new supervisor') }}</span>
+							<h4 class="content-title mb-0 my-auto"><a href="{{ route('user.index') }}">{{ __('general.supervisors') }}</a></h4><span class="text-muted mt-1 tx-13 mr-2 mb-0"></span>
 						</div>
 					</div>
 				</div>
@@ -34,7 +37,8 @@
 								<p class="mb-2"></p>
 								
 							</div>
-							<div class="card-body pt-0">
+							<div class="card-body row pt-0">
+								<div class="col-lg-8">
 								<form class="form-horizontal" name="create_form" method="POST" action="{{url('admin/user')}}" enctype="multipart/form-data" id="create_form">
 									@csrf
 									<div class="form-group">
@@ -121,10 +125,13 @@
 										</div>
 									</div>
 								</form>
-								<div class="pd-20 clearfix">
-									<img alt="" id="imgshow" class="rounded img-thumbnail wd-100p wd-sm-200 float-sm-right  mg-t-10 mg-sm-t-0"
-									src="{{URL::asset('assets/img/photos/1.jpg')}}" >
-								</div> 
+							</div>
+
+							<div class="col-lg-4 mt-sm-3 mt-lg-0">
+								<img alt="" id="imgshow" class="rounded img-thumbnail wd-100p float-sm-right  mg-t-10 mg-sm-t-0"
+								 src="{{URL::asset('assets/img/photos/1.jpg')}}" >							 	
+							</div>
+							  
 							</div>
 
 						</div>

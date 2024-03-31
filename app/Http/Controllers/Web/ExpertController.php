@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Expert;
 use App\Models\ExpertService;
-use App\Models\PointTransfer;
+use App\Models\Pointtransfer;
 use App\Models\CashTransfer;
 use App\Models\ExpertFavorite;
 use App\Models\SelectedService;
@@ -20,10 +20,10 @@ use Intervention\Image\Drivers\Gd\Driver;
 use App\Http\Requests\Web\Expert\StoreExpertRequest;
 use App\Http\Requests\Web\Expert\UpdateExpertRequest;
 use Illuminate\Support\Facades\Storage;
-
+use App\Http\Controllers\Api\StorageController;
 class ExpertController extends Controller
 {
-  public $path = 'images/experts';
+ // public $path = 'images/experts';
   public $recordpath = 'images/experts/records';
   /**
    * Display a listing of the resource.
@@ -35,6 +35,23 @@ class ExpertController extends Controller
     //return response()->json($users);
 
   }
+  public function showbalance()
+  {
+    $list = Expert::get();
+    return view('admin.balance.expert', ['experts' => $list]);
+     
+
+  }
+  public function showoperations($id)
+  {
+    $list = Pointtransfer::with( 'cashtransfers', 'selectedservices')
+    ->where('expert_id',$id)->where('side','to-expert')->get();      
+    $object = Expert::find($id); 
+ return view('admin.operation.expert', ['transfers' => $list,'expert' => $object]);
+ 
+
+  }
+  
 
   /**
    * Show the form for creating a new resource.
@@ -48,9 +65,23 @@ class ExpertController extends Controller
    * Store a newly created resource in storage.
    */
   public function store(StoreExpertRequest $request)
-  {
+  {//StoreExpertRequest
+     
     $formdata = $request->all();
-    // return redirect()->back()->with('success_message', $formdata);
+ /*
+    $cnum ="";
+    if (isset($formdata["country_num"])) {
+      $cnum = $formdata["country_num"];
+    }
+    $mnum ="";
+    if (isset($formdata["mobile_num"])) {
+      $mnum = $formdata["mobile_num"];
+    }
+    */
+   // $request->request->add(["mobile"=> $cnum.$mnum]);
+    $formdata = $request->all();
+   // return response()->json($formdata['mobile']);
+   
     $validator = Validator::make(
       $formdata,
       $request->rules(),
@@ -58,20 +89,22 @@ class ExpertController extends Controller
     );
 
     if ($validator->fails()) {
-      /*
-                        return  redirect()->back()->withErrors($validator)
-                        ->withInput();
-                        */
-      // return response()->withErrors($validator)->json();
-      return response()->json($validator);
-
+   //   return response()->json($validator->witherr);
+      return  response() ->json($validator,500);
+    //  ->withInput();
+    
     } else {
+      $cnum = $formdata["country_num"];
+      $mnum = $formdata["mobile_num"];
       $newObj = new Expert;
       $newObj->first_name = $formdata['first_name'];
       $newObj->last_name = $formdata['last_name'];
       $newObj->user_name = $formdata['user_name'];
       $newObj->password = bcrypt($formdata['password']);
-      $newObj->mobile = $formdata['mobile'];
+    //  $newObj->mobile = $formdata['mobile'];
+    $newObj->country_num = $cnum;
+    $newObj->mobile_num = $mnum;
+    $newObj->mobile = $cnum. $mnum;
       $newObj->email = $formdata['email'];
       //$newObj->nationality = $formdata['nationality'];
 
@@ -87,12 +120,13 @@ class ExpertController extends Controller
       //$newObj->record = $formdata['record'];
       $newObj->desc = $formdata['desc'];
       $newObj->call_cost = 0;
+      $newObj->answer_speed = 0;
       $newObj->is_active = isset($formdata["is_active"]) ? 1 : 0;
       //$newObj->token = $formdata['token'];
-         /*
-      $newObj->createuser_id = Auth::user()->id;
-      $newObj->updateuser_id =Auth::user()->id;
-      */
+         
+   //   $newObj->createuser_id = Auth::user()->id;
+    //  $newObj->updateuser_id =Auth::user()->id;
+      
       $newObj->save();
 
       if ($request->hasFile('image')) {
@@ -104,6 +138,7 @@ class ExpertController extends Controller
 
       return response()->json("ok");
     }
+    
   }
 
   /**
@@ -119,7 +154,10 @@ class ExpertController extends Controller
    */
   public function edit(string $id)
   {
-    $url =url(Storage::url($this->path)).'/';
+    $strgCtrlr=new StorageController();
+    $url=$strgCtrlr->ExpertPath('image');
+   // $recurl=$strgCtrlr->ExpertPath('record');
+   // $url =url(Storage::url($this->path)).'/';
     $object = Expert::find($id);
     $object->birthdateStr= (string)Carbon::create($object->birthdate)->format('m/d/Y');
     if( $object->image !="" ){
@@ -136,6 +174,7 @@ class ExpertController extends Controller
   public function update(UpdateExpertRequest $request, $id)
   {
     $formdata = $request->all();
+   
     //validate
     $validator = Validator::make(
       $formdata,
@@ -158,12 +197,16 @@ class ExpertController extends Controller
                // $filename= $file->getClientOriginalName();                
      $this->storeImage( $file,$id);
        }
+       $cnum = $formdata["country_num"];
+       $mnum = $formdata["mobile_num"];
       Expert::find($id)->update([
-        'first_name'=>  $formdata['first_name'],
+        'first_name'=>  strip_tags( $formdata['first_name']) ,
         'last_name'=>  $formdata['last_name'],
         'user_name' => $formdata['user_name'],
       //  'password' => $formdata['password'],
-        'mobile' => $formdata['mobile'],
+        'mobile' => $cnum. $mnum,
+        'country_num'=>$cnum,
+   'mobile_num'=>$mnum ,
         'email' => $formdata['email'],
        // 'nationality' => $formdata['nationality'],
         'birthdate' =>Carbon::createFromFormat('m/d/Y', $formdata['birthdate'])->format('Y-m-d'),
@@ -177,7 +220,7 @@ class ExpertController extends Controller
         //  'rates' => $formdata['rates'],
      //   'record' => $formdata['record'],
         'desc' => $formdata['desc'],
-      'is_active' => isset($formdata['is_active']) ? 1 : 0
+      'is_active' => isset($formdata['is_active'])?1:0,
       //  'call_cost' => $formdata['call_cost'],
         //   'token' => $formdata['token'],
 
@@ -190,7 +233,7 @@ class ExpertController extends Controller
       }
       //save image
       return response()->json("ok");
-      
+    
     }
   }
   /**
@@ -222,8 +265,10 @@ class ExpertController extends Controller
         Expertfavorite::where('expert_id', $id)->delete();
 
         //delete image
+        $strgCtrlr=new StorageController();
+        $path=$strgCtrlr->path['experts'];
         $oldimagename=$object->image;
-        Storage::delete("public/" . $this->path . '/' . $oldimagename);
+        Storage::delete("public/" . $path . '/' . $oldimagename);
         //delete object
         Expert::find($id)->delete();
 
@@ -240,7 +285,9 @@ class ExpertController extends Controller
     $imagemodel = Expert::find($id);
     $oldimage = $imagemodel->image;
     $oldimagename = basename($oldimage);
-    $oldimagepath = $this->path . '/' . $oldimagename;
+    $strgCtrlr=new StorageController();
+    $path=$strgCtrlr->path['experts'];
+    $oldimagepath = $path . '/' . $oldimagename;
     //save photo
 
     if ($file !== null) {
@@ -249,16 +296,47 @@ class ExpertController extends Controller
       $manager = new ImageManager(new Driver());
       $image = $manager->read($file);
       $image = $image->toWebp(75);
-      if (!File::isDirectory(Storage::url('/' . $this->path))) {
-        Storage::makeDirectory('public/' . $this->path);
+      if (!File::isDirectory(Storage::url('/' .  $path))) {
+        Storage::makeDirectory('public/' .  $path);
       }
-      $image->save(storage_path('app/public') . '/' . $this->path . '/' . $filename);
+      $image->save(storage_path('app/public') . '/' .  $path . '/' . $filename);
       //   $url = url('storage/app/public' . '/' . $this->path . '/' . $filename);
       Expert::find($id)->update([
         "image" => $filename
       ]);
-      Storage::delete("public/" . $this->path . '/' . $oldimagename);
+      Storage::delete("public/" .  $path . '/' . $oldimagename);
     }
     return 1;
+  }
+
+  public function delrecord($id)
+  {
+ 
+   if (isset($id))
+     {
+      $this->deleteExpertRecord( $id);
+      return response()->json("ok");
+     }  else{
+     return response()->json([
+        "errors" =>  ["record" => [__('messages.faild')]]          
+      ], 422); 
+     }
+   
+    
+    
+  }
+
+  public function deleteExpertRecord( $id)
+  {
+      $model = Expert::find($id);
+      $oldfile = $model->record;
+      $oldfilename = basename($oldfile);
+      $strgCtrlr = new StorageController();
+      $recpath = $strgCtrlr->recordpath['experts'];   
+                  Expert::find($id)->update([
+              "record" =>""
+          ]);
+          Storage::delete("public/" . $recpath . '/' . $oldfilename);     
+      return 1;
   }
 }
