@@ -70,6 +70,7 @@
 							<span class="side-menu__label"> {{ __('general.notifications') }}</span><i class="angle fe fe-chevron-down"></i></a>
 						<ul class="slide-menu">
 							<li><a class="slide-item" href="{{ route('notify.index') }}"> {{ __('general.show') }}</a></li>
+							<li><a class="slide-item" href="{{ url('admin/testnotify') }}"> Test</a></li>
 						
 
 						</ul>

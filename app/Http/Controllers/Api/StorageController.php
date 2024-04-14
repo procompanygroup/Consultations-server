@@ -21,6 +21,7 @@ class StorageController extends Controller
   public $path = [];
   public $iconpath = [];
   public $recordpath = [];
+  public $videopath = [];
   private $defaultimage = "default.png";
   private $defaultsvg = "default.svg";
   public function __construct()
@@ -49,10 +50,28 @@ class StorageController extends Controller
     //answer
      
     $this->recordpath['answers'] = 'images/answers/records';
+    //notify
+    $this->path['notify'] = 'images/notify';
+    $this->videopath['notify'] = 'images/notify/video';
   }
   /**
    * Display a listing of the resource.
    */
+
+   public function NotifyPath($type)
+   { //image video
+     $url = "";
+ 
+     if ($type == "image") {
+       $url = url(Storage::url($this->path['notify'])) . '/';
+     } else {
+       $url = url(Storage::url($this->videopath['notify'])) . '/';
+     }
+ 
+     return $url;
+ 
+ 
+   }
   public function ExpertPath($type)
   { //image record
     $url = "";
@@ -80,6 +99,7 @@ class StorageController extends Controller
 
 
   }
+
   public function ClientPath($type)
   { //image record
     $url = "";

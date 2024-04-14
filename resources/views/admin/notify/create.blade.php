@@ -1,4 +1,7 @@
 @extends('admin.layouts.master')
+@section('page-title')
+{{ __('general.notifications') }}
+@endsection
 @section('css')
 <!-- Internal Select2 css -->
 <link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
@@ -16,7 +19,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto"><a href="{{ route('point.index') }}">{{ __('general.points') }}</a></h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ {{ __('general.new point') }}</span>
+							<h4 class="content-title mb-0 my-auto"><a href="{{ route('notify.index') }}">{{ __('general.notifications') }}</a></h4><span class="text-muted mt-1 tx-13 mr-2 mb-0"></span>
 						</div>
 					</div>
 				</div>
@@ -28,48 +31,60 @@
 					<div class="col">
 						<div class="card  box-shadow-0">
 							<div class="card-header">
-								<h4 class="card-title mb-1">{{ __('general.point info') }}</h4>
+								<h4 class="card-title mb-1">{{ __('general.send_notify') }}</h4>
 								<p class="mb-2"> </p>
 							</div>
 							<div class="card-body pt-0">
-								<form class="form-horizontal" name="create_form" action="{{url('admin/point')}}" method="POST" enctype="multipart/form-data" id="create_form">
+								<form class="form-horizontal" name="create_form" action="{{url('admin/notify')}}" method="POST"  id="create_form">
 									@csrf
 									<div class="form-group">
-										<input type="text" class="form-control " id="count"  placeholder="{{ __('general.pointscount') }}" name="count">
+										<input type="text" class="form-control " id="title"  placeholder="{{ __('general.title') }}" name="title">
 										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="count_error"></li>
+											<li class="parsley-required" id="title_error"></li>
 										</ul>
 										 
 									</div>
-									<div class="form-group">
-										<input type="text" class="form-control " id="countbefor" placeholder="{{ __('general.pointsbefor') }}" name="countbefor">
-										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="countbefor_error"></li>
-										</ul>
-										 
+
+									<div class="my-4">
+										<textarea class="form-control" placeholder="{{ __('general.text') }}" rows="3" id="body" name="body"></textarea>
 									</div>
-                                    <div class="form-group">
-										<input type="text" class="form-control" id="price" placeholder="{{ __('general.price') }}" name="price">
-										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="price_error"></li>
-										</ul>
+
+                                    <div class="form-group mb-4 justify-content-end">
+										<div class="custom-file">
+											<input class="custom-file-input" id="image" name="image" type="file"> <label class="custom-file-label" for="customFile"  id="image_label">{{ __('general.choose file') }}</label>
+											<ul class="parsley-errors-list filled" >
+												<li class="parsley-required" id="image_error"></li>
+											</ul>
+										</div>
 									</div>
-								 
-									<div class="form-group justify-content-end">
-										<div class="checkbox">
+									<div class="form-group justify-content-end row"  id="side">
+										<div  class=" col-sm-4">
+											<div class="row">
+											
+										<div class="checkbox col-sm-3 ">
 											<div class="custom-checkbox custom-control">
-												<input type="checkbox" data-checkboxes="mygroup" checked="" class="custom-control-input" id="checkbox-2" value="0" name="is_active">
-												<label for="checkbox-2" class="custom-control-label mt-1"  >{{ __('general.is_active') }}</label>
+												<input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-2" value="expert" name="side[]">
+												<label for="checkbox-2" class="custom-control-label mt-1"  >{{ __('general.experts') }}</label>
 											</div>
 											
 										</div>
-										<ul class="parsley-errors-list filled" >
-											<li class="parsley-required" id="is_active_error"></li>
-										</ul>
+										<div class="checkbox  col-sm-9 ">
+											<div class="custom-checkbox custom-control">
+												<input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-3" value="client" name="side[]">
+												<label for="checkbox-3" class="custom-control-label mt-1"  >{{ __('general.clients') }}</label>
+											</div>
+										</div>
+										</div>
 									</div>
+										<div class="checkbox  col-sm-8">
+										</div>
+									</div>
+									<ul class="parsley-errors-list filled" >
+										<li class="parsley-required" id="side_error"></li>
+									</ul>
 									<div class="form-group mb-0 mt-3 justify-content-end">
 										<div>
-											<button type="submit" name="btn_save" id="btn_save" class="btn btn-primary">{{ __('general.save') }}</button>
+											<button type="submit" name="btn_save" id="btn_save" class="btn btn-primary">{{ __('general.send') }}</button>
 											<button type="button" name="btn_cancel" id="btn_cancel"  class="btn btn-secondary">{{ __('general.cancel') }}</button>				
 										</div>
 									</div>

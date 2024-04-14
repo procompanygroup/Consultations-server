@@ -50,10 +50,7 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin');
 
-    Route::resource('notify', NotificationController::class, ['except' => ['update']]);
-    Route::post('saveToken', [NotificationController::class, 'saveToken']);
-    Route::post('sendNotification', [NotificationController::class, 'sendNotification']);
-    Route::post('sendbytoken', [NotificationController::class, 'sendbytoken']);
+
    
     
     Route::middleware('role.admin:admin')->group(function () {
@@ -66,6 +63,12 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         //     Route::post('/update/{id}', [UserController::class, 'update']);
         //     Route::get('/delete/{id}', [UserController::class, 'destroy']);
         // });
+        //notific
+        Route::resource('notify', NotificationController::class, ['except' => ['update']]);
+        Route::post('saveToken', [NotificationController::class, 'saveToken']);
+        Route::post('sendNotification', [NotificationController::class, 'sendNotification']);
+        Route::post('sendbytoken', [NotificationController::class, 'sendbytoken']);
+        Route::get('testnotify', [NotificationController::class, 'testnotify']);
 
         Route::resource('user', UserController::class, ['except' => ['update']]);
         Route::prefix('user')->group(function () {

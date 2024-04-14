@@ -1,17 +1,22 @@
 @extends('admin.layouts.master')
 @section('page-title')
-الاشعارات
+{{ __('general.notifications') }}
 @endsection
 @section('css')
+<!-- Internal Data table css -->
+<link href="{{URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" />
+<link href="{{URL::asset('assets/plugins/datatable/css/buttons.bootstrap4.min.css')}}" rel="stylesheet">
+<link href="{{URL::asset('assets/plugins/datatable/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" />
+<link href="{{URL::asset('assets/plugins/datatable/css/jquery.dataTables.min.css')}}" rel="stylesheet">
+<link href="{{URL::asset('assets/plugins/datatable/css/responsive.dataTables.min.css')}}" rel="stylesheet">
+<link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
 @endsection
 @section('page-header')
-
-
 				<!-- breadcrumb -->
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto">Pages</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ Empty</span>
+							<h4 class="content-title mb-0 my-auto">{{ __('general.notifications') }}</h4> 
 						</div>
 					</div>
 					 
@@ -19,117 +24,81 @@
 				<!-- breadcrumb -->
 @endsection
 @section('content')
-<button class="btn  btn-primary" id="btn_sendToken"  >Save token</button>
-<br/>
-<div id="msg"></div>
-<form action="{{ url('admin/sendNotification') }}" name="send-notify-form" id="send-notify-form" method="POST">
-	@csrf
-	<div class="form-group">
-		<label>Message Title</label>
-		<input type="text" class="form-control" name="title">
-	</div>
-	<div class="form-group">
-		<label>Message Body</label>
-		<textarea class="form-control" name="body"></textarea>
-	</div>
-	<button type="submit" id="btn-send-notify" name="btn-send-notify" class="btn btn-success btn-block">Send Notification</button>
-</form>
- 
-		<div class="row row-sm">
-			<div class="col">
-				<div class="card  box-shadow-0">
-					<div class="card-header">
-						<h4 class="card-title mb-1">Send By Token</h4>
-						<p class="mb-2 text-danger" id="msgtoken"></p>
-					</div>
-					<div class="card-body row pt-0">
-						<div class="col-lg-8">
-							<form action="{{ url('admin/sendbytoken')}}" name="send-withtoken-form" id="send-withtoken-form" method="POST">
-								@csrf
-								<div class="form-group">
-									<label>Token</label>
-								 
-									 
-										<textarea class="form-control"   rows="3" name="input_token"></textarea>
-									 
-								</div>
-								<div class="form-group">
-									<label>Message Title</label>
-									<input type="text" class="form-control" name="title">
-								</div>
-								<div class="form-group">
-									<label>Message Body</label>
-									<textarea class="form-control" name="body"></textarea>
-								</div>
-								<button type="submit" id="btn-send-withtoken" name="btn-send-withtoken" class="btn btn-success btn-block">Send Notification</button>
-							</form>
-					</div> 
+				<!-- row opened -->
+				<div class="row row-sm">
 
+
+					<!--div-->
+					<div class="col-xl-12">
+						<div class="card mg-b-20">
+							<div class="card-header pb-0">
+								<div class="d-flex justify-content-between">
+									<h4 class="card-title mg-b-0"></h4>
+									<a href="{{ route('notify.create') }}" class="btn btn-primary btn-small">{{ __('general.new') }}</a>
+								</div>
+									</div>
+							<div class="card-body">
+								<div class="table-responsive">
+									<table id="example" class="table text-md-nowrap">
+										<thead>
+											<tr>
+												<th class="border-bottom-0">{{ __('general.title') }}</th>
+												<th class="border-bottom-0">{{ __('general.text') }}</th>
+												<th class="border-bottom-0">{{ __('general.notify_side') }}</th>
+                                                <th class="border-bottom-0">{{ __('general.action') }}</th>
+
+											</tr>
+										</thead>
+										<tbody>
+											@foreach ($list as $notify)
+											<tr>
+
+												<td>{{$notify->title }}</td>
+												<td>{{ $notify->body }}</td>
+												<td>{{ $notify->side_conv }}</td>
+                                                <td>
+													<a href="{{route('notify.edit', $notify->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.detail') }}"><i class="fa fa-edit"></i></a> 
+                                                     
+                                                    
+
+                                                </td>
+
+											</tr>
+											@endforeach
+									</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
 					</div>
+					<!--/div-->
+
+
 				</div>
+				<!-- /row -->
 			</div>
+			<!-- Container closed -->
 		</div>
-
-
+		<!-- main-content closed -->
 @endsection
 @section('js')
-<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
-<script>
-	$(document).ready(function () {
-	$('#btn_sendToken').on('click', function () {
-		sendToken();
-	});
-});
- // Import the functions you need from the SDKs you need
-// import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-	// Your web app's Firebase configuration
-	const firebaseConfig = {
-		apiKey: "AIzaSyAu00t4wAHnmdrPfFpbMhKvsaU96f-l-r4",
-    authDomain: "rouh-app.firebaseapp.com",
-    projectId: "rouh-app",
-    storageBucket: "rouh-app.appspot.com",
-    messagingSenderId: "1005936827413",
-    appId: "1:1005936827413:web:ff97a7ec1b190354f3421c",
-    measurementId: "G-DBQZ0Q3M8H"
-  };
-    firebase.initializeApp(firebaseConfig);
-    const messaging = firebase.messaging();
- function sendToken(){
-	messaging
-            .requestPermission()
-            .then(function() {
-                return messaging.getToken()
- }) .then(function(value) {
-
-	$.ajax({
-                    url: '{{ url("admin/saveToken") }}',
-                    type: 'POST',
-					headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    data: {token: value },
-                   
-                    success: function(res) {
-                        alert(res);
-                    },
-                    error: function(error) {
- 
-                        alert(error);
-                    },
-                });
-			}).catch(function(error) {
-                alert(error);
-            });
- }
- 
-    
- 
-</script>
-<script src="{{URL::asset('assets/js/admin/validate.js')}}"></script>
-<script src="{{URL::asset('assets/js/admin/notify.js')}}"></script>
- 
+<!-- Internal Data tables -->
+<script src="{{URL::asset('assets/plugins/datatable/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/dataTables.dataTables.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/responsive.dataTables.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/jquery.dataTables.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/dataTables.bootstrap4.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/buttons.bootstrap4.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/jszip.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/pdfmake.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/vfs_fonts.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/buttons.html5.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/buttons.print.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/buttons.colVis.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
+<!--Internal  Datatable js -->
+<script src="{{URL::asset('assets/js/table-data.js')}}"></script>
 @endsection

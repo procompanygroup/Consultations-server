@@ -407,6 +407,7 @@ $(document).ready(function () {
 		$(":input").removeClass('parsley-error');
 		$("#mobile_num").removeClass('parsley-error');
 		$("#deptype").removeClass('parsley-error');
+		$("#side").removeClass('parsley-error');
 	}
 	function showimgcount(imgcheck, imgcount) {
 		if (imgcheck.is(':checked')) {
@@ -451,7 +452,20 @@ $(document).ready(function () {
 		reader.readAsDataURL($input[0].files[0]);
 
 	}
+	title
+	$("#title").focusout(function (e) {
+		if (!validatempty($(this))) {
+			return false;
+		} else {
 
+			return true;
+		}
+	});
+	$("#side").focusout(function (e) {
+	 
+	$(this).removeClass('parsley-error');
+	$("#side"+ "_error").text('');
+	});
 	$("#first_name").focusout(function (e) {
 		if (!validatempty($(this))) {
 			return false;

@@ -21,7 +21,28 @@ class Notification extends Model
         'notes',
           
     ];
-
+    protected  $hidden=['side_conv'];
+    public function getSideConvAttribute()
+    {
+        $conv = "";
+        switch($this->side) {
+            case('client'):
+                $conv = __('general.clients');
+               break;
+               case('expert'):
+                $conv =__('general.experts');
+               break;
+               case('expert,client'):
+                $conv = __('general.clients').' , '.__('general.experts');
+               break;
+               case('client,expert'):
+                $conv = __('general.clients').' , '.__('general.experts');
+               break;
+            default:
+            $conv = $this->type;
+        }
+        return $conv;
+    }
     public function notificationUsers(): HasMany
     {
         return $this->hasMany(NotificationUser::class);

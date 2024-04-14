@@ -60,6 +60,7 @@ return [
   'mobile' => 'رقم الهاتف الجوال',
   'birthdate' => 'تاريخ الميلاد',
   'choose image' => 'اختر ملف الصورة',
+  'choose file' => 'اختر ملف',
   'choose svg' => 'اختر ملف SVG',
   'is_active' => 'تفعيل',
   'save' => 'حفظ',
@@ -142,6 +143,12 @@ return [
 'manage orders'=>'ادارة الطلبات',
 'general setting' => 'اعدادات عامة',
 'detail' => 'تفاصيل',
+'title' => 'العنوان',
+'text' => 'النص',
+'notify_type' => 'النوع',
+'notify_side' => 'الجهة',
+'send_notify' => 'ارسال تنبيه',
+'send' => 'ارسال',
 ];
 /*
 
