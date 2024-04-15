@@ -53,11 +53,43 @@ class StorageController extends Controller
     //notify
     $this->path['notify'] = 'images/notify';
     $this->videopath['notify'] = 'images/notify/video';
+      //users
+      $this->path['users'] = 'images/users';
   }
   /**
    * Display a listing of the resource.
    */
 
+   public function UserPath()
+   {  
+     $url = "";  
+     $url =$this->getlocalpath($this->path['users']);
+/*
+   //  $url = Storage::url($this->path['users'])  . '/';
+     // $url = url(Storage::url($this->path['users'])) . '/';
+      if(File::exists(base_path('public\index.php')))  {
+       $url = url(Storage::url($this->path['users'])) . '/';
+      }
+      else{
+       $url = url('public'.Storage::url($this->path['users'])) . '/';
+      }
+    //  $url = url('public'.Storage::url($this->path['users'])) . '/';//temp
+    //   $url = url(Storage::url( 'storage/app/public' ) ). '/'. $this->path['users']. '/';
+    */ 
+           return $url;
+   }
+   public function getlocalpath($subpath)
+   {  
+     $url = "";  
+ 
+      if(File::exists(base_path('public\index.php')))  {
+       $url = url(Storage::url($subpath)) . '/';
+      }
+      else{
+       $url = url('public'.Storage::url($subpath)) . '/';
+      }
+         return $url;
+   }
    public function NotifyPath($type)
    { //image video
      $url = "";
