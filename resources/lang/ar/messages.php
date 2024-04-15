@@ -41,5 +41,7 @@ return [
 'amount_bigger' =>'القيمة اكبر من الرصيد الحالي',
 'Not allowed'=>'ليس لديك سماحية',
 'faild'=>'فشلت العملية',
+'file must be video'=>'الملف يجب ان يكون فيديو',
+'file size is too larg'=>'حجم الملف كبير',
 ];
 //{{ __('general.welcome_name',['Name'=>'احمد']) }}

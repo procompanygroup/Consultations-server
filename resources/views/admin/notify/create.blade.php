@@ -32,11 +32,26 @@
 						<div class="card  box-shadow-0">
 							<div class="card-header">
 								<h4 class="card-title mb-1">{{ __('general.send_notify') }}</h4>
-								<p class="mb-2"> </p>
+								<p class="mb-2">@php
+								 echo ini_get('upload_max_filesize');
+								@endphp </p>
 							</div>
 							<div class="card-body pt-0">
 								<form class="form-horizontal" name="create_form" action="{{url('admin/notify')}}" method="POST"  id="create_form">
 									@csrf
+									<div class="form-group mb-3">
+										<select name="type" id="type"
+											class="form-control SlectBox">
+											<!--placeholder-->
+											<option title="" selected class="text-muted">اختر نوع التنبيه</option>										 
+												<option value="text">نص</option>
+												<option value="image">صورة</option>
+												<option value="video">فيديو</option>
+										</select>
+										<ul class="parsley-errors-list filled">
+											<li class="parsley-required" id="type_error"></li>
+										</ul>
+									</div>
 									<div class="form-group">
 										<input type="text" class="form-control " id="title"  placeholder="{{ __('general.title') }}" name="title">
 										<ul class="parsley-errors-list filled" >

@@ -27,7 +27,11 @@ class StoreNotifyRequest extends FormRequest
          'title'=>'required|string', 
          'body'=>'nullable|string', 
          'side'=>'required ', 
-     
+         'type'=> 'required|in:text,image,video', 
+      //  'image'=> 'required|mimetypes:video/avi,video/mpeg,video/quicktime',
+      //  'image'=>'required|file|mimes:jpg,bmp,png,jpeg,gif,svg',
+        'image'=>($this->input('type')=='image'?'required|mimes:jpg,bmp,png,jpeg,gif,svg':
+      ($this->input('type')=='video'? 'required|mimetypes:video/mp4,video/avi,video/mpeg,video/quicktime':'nullable')),
       //  'is_active'=>'required',  
           
        ];   
@@ -46,8 +50,12 @@ public function messages(): array
      // 'content.string'=> __('messages.this field is required') ,
       'side.required'=>__('messages.this field is required') ,   
   'side.in'=>__('messages.this field is required') ,
-      
- 
+  'type'=>__('messages.this field is required') ,
+  //'type.in'=>__('messages.this field is required') ,
+  'image.required'=>__('messages.this field is required') ,
+  'image.mimes'=>__('messages.file must be image') ,
+  'image.mimetypes'=>__('messages.file must be video') ,
+ 'image.uploaded'=>__('messages.file size is too larg') ,
     ];
     
 }
