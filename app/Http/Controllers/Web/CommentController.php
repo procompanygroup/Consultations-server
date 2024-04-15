@@ -91,9 +91,12 @@ class CommentController extends Controller
         $q->orderByDesc('created_at');
       }
     ])->find($id);
+    $strgCtrlr = new StorageController();
+    $sharp= $strgCtrlr->DefaultPath('sharp');
+    $usericon= $strgCtrlr->DefaultPath('user');
     $reasons = Reason::where('type', 'comment')->get();
     //return dd($object);
-    return view('admin.comment.edit', ['selectedservice' => $object, 'reasons' => $reasons]);
+    return view('admin.comment.edit', ['selectedservice' => $object, 'reasons' => $reasons,'sharpicon'=>$sharp,'usericon'=>$usericon]);
   }
 
   /**
