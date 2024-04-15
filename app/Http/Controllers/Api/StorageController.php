@@ -95,9 +95,11 @@ class StorageController extends Controller
      $url = "";
  
      if ($type == "image") {
-       $url = url(Storage::url($this->path['notify'])) . '/';
+       $url = $this->getlocalpath($this->path['notify']);
+      
      } else {
-       $url = url(Storage::url($this->videopath['notify'])) . '/';
+       $url = $this->getlocalpath($this->videopath['notify']);
+      
      }
  
      return $url;
@@ -109,9 +111,11 @@ class StorageController extends Controller
     $url = "";
 
     if ($type == "image") {
-      $url = url(Storage::url($this->path['experts'])) . '/';
+    
+      $url =  $this->getlocalpath($this->path['experts']);
     } else {
-      $url = url(Storage::url($this->recordpath['experts'])) . '/';
+     // $url = url(Storage::url($this->recordpath['experts'])) . '/';
+      $url =  $this->getlocalpath($this->recordpath['experts']);
     }
 
     return $url;
@@ -122,9 +126,11 @@ class StorageController extends Controller
     $url = "";
 
     if ($type == "image") {
-      $url = url(Storage::url($this->path['inputs'])) . '/';
+   //   $url = url(Storage::url($this->path['inputs'])) . '/';
+      $url =  $this->getlocalpath($this->path['inputs']);
     } else {
-      $url = url(Storage::url($this->iconpath['inputs'])) . '/';
+    //  $url = url(Storage::url($this->iconpath['inputs'])) . '/';
+      $url =  $this->getlocalpath($this->iconpath['inputs']);
     }
 
     return $url;
@@ -137,7 +143,8 @@ class StorageController extends Controller
     $url = "";
 
     if ($type == "image") {
-      $url = url(Storage::url($this->path['clients'])) . '/';
+   //   $url = url(Storage::url($this->path['clients'])) . '/';
+      $url =  $this->getlocalpath($this->path['clients']);
     }
     return $url;
 
@@ -148,9 +155,11 @@ class StorageController extends Controller
     $url = "";
 
     if ($type == "image") {
-      $url = url(Storage::url($this->path['services'])) . '/';
+    //  $url = url(Storage::url($this->path['services'])) . '/';
+      $url =  $this->getlocalpath($this->path['services']);
     } else {
-      $url = url(Storage::url($this->iconpath['services'])) . '/';
+    //  $url = url(Storage::url($this->iconpath['services'])) . '/';
+      $url =  $this->getlocalpath($this->iconpath['services']);
     }
 
     return $url;
@@ -162,9 +171,11 @@ class StorageController extends Controller
   { //image icon
     $url = "";
     if ($type == "image") {
-      $url = url(Storage::url($this->path['default'])) . '/' . $this->defaultimage;
+      $url =  $this->getlocalpath($this->path['default']) . $this->defaultimage;
+     // $url = url(Storage::url($this->path['default'])) . '/' . $this->defaultimage;
     } else {
-      $url = url(Storage::url($this->iconpath['default'])) . '/' . $this->defaultsvg;
+      $url =  $this->getlocalpath($this->iconpath['default']). $this->defaultsvg;
+     // $url = url(Storage::url($this->iconpath['default'])) . '/' . $this->defaultsvg;
     }
     return $url;
 
@@ -174,9 +185,11 @@ class StorageController extends Controller
   { //image record
     $url = "";
     if ($type == "image") {
-      $url = url(Storage::url($this->path['values_services'])) . '/';
+     // $url = url(Storage::url($this->path['values_services'])) . '/';
+      $url =  $this->getlocalpath($this->path['values_services']);
     } else {
-      $url = url(Storage::url($this->recordpath['values_services'])) . '/';
+     // $url = url(Storage::url($this->recordpath['values_services'])) . '/';
+      $url =  $this->getlocalpath($this->recordpath['values_services']);
     }
     return $url;
   }
@@ -184,7 +197,8 @@ class StorageController extends Controller
   { //image record
     $url = "";
     if ($type == "record") {
-      $url = url(Storage::url($this->recordpath['answers'])) . '/';
+     // $url = url(Storage::url($this->recordpath['answers'])) . '/';
+      $url =  $this->getlocalpath($this->recordpath['answers']);
     }
     return $url;
   }
