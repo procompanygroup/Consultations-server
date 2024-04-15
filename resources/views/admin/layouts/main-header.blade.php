@@ -20,11 +20,11 @@
 					<div class="main-header-right">
 						<div class="nav nav-item  navbar-nav-right ml-auto">
 							<div class="dropdown main-profile-menu nav nav-item nav-link">
-								<a class="profile-user d-flex" href=""><img alt="" src="@if(auth()->user()->image==''){{URL::asset('assets/img/faces/6.jpg')}}@else{{ url('storage/images/users/'.auth()->user()->image) }}@endif"></a>
+								<a class="profile-user d-flex" href=""><img alt="" src="{{auth()->user()->image_path}}"></a>
 								<div class="dropdown-menu">
 									<div class="main-header-profile bg-primary p-3">
 										<div class="d-flex wd-100p">
-											<div class="main-img-user"><img alt="" src="@if(auth()->user()->image==''){{URL::asset('assets/img/faces/6.jpg')}}@else{{ url('storage/images/users/'.auth()->user()->image) }}@endif" class=""></div>
+											<div class="main-img-user"><img alt="" src="{{auth()->user()->image_path}}" class=""></div>
 											<div class="mr-3 my-auto">
 												<h6>{{ auth()->user()->name }}</h6><span>{{auth()->user()->role=='admin'? __('general.admin') :(auth()->user()->role=='super'?__('general.super'):auth()->user()->role)}}</span>
 											</div>
