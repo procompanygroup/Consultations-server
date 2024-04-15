@@ -51,7 +51,7 @@
                 <div class="card-body pt-0">
                     <p><span class="badge badge-light badge-lg px-3 py-2"><img alt="Icon SVG Vector Icon"
                                 fetchpriority="high" decoding="async" data-nimg="1" style="width:20px;height:20px"
-                                src="{{ asset('storage/images/default/icons/sharp.svg') }}">
+                                src="{{$sharpicon}}">
                             {{ ' ' . __('general.order num') }}</span>{{ ' ' . $selectedservice->order_num }}</p>
 
                     <p><span class="badge badge-light badge-lg px-3 py-2"><img alt="User Icon SVG Vector Icon"
@@ -60,7 +60,7 @@
                             {{ ' ' . __('general.service') }}</span>{{ ' ' . $selectedservice->service->name }}</p>
                     <p><span class="badge badge-light px-3 py-2"><img alt="User Icon SVG Vector Icon" fetchpriority="high"
                                 decoding="async" data-nimg="1" style="width:20px;height:20px"
-                                src="{{ asset('storage/images/inputs/icons/username.svg') }}">
+                                src="{{$usericon}}">
                             {{ ' ' . __('general.expert') }}</span>{{ ' ' . $selectedservice->expert->full_name }}</p>
 
                     @foreach ($selectedservice->valueServices->whereNotIn('type', ['image', 'record']) as $valueService)

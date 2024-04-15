@@ -24,6 +24,9 @@ class StorageController extends Controller
   public $videopath = [];
   private $defaultimage = "default.png";
   private $defaultsvg = "default.svg";
+  
+  private $defaultsharp = "sharp.svg"; 
+  private $defaultuser = "username.svg";
   public function __construct()
   {
     //inputs
@@ -168,14 +171,19 @@ class StorageController extends Controller
   }
 
   public function DefaultPath($type)
-  { //image icon
+  { //image icon sharp user
     $url = "";
     if ($type == "image") {
       $url =  $this->getlocalpath($this->path['default']) . $this->defaultimage;
      // $url = url(Storage::url($this->path['default'])) . '/' . $this->defaultimage;
-    } else {
+    } else if($type == "icon"){
       $url =  $this->getlocalpath($this->iconpath['default']). $this->defaultsvg;
      // $url = url(Storage::url($this->iconpath['default'])) . '/' . $this->defaultsvg;
+    }else if($type == "sharp"){
+      $url =  $this->getlocalpath($this->iconpath['default']). $this->defaultsharp;
+    }else 
+    {
+      $url =  $this->getlocalpath($this->iconpath['inputs']). $this->defaultuser;
     }
     return $url;
 

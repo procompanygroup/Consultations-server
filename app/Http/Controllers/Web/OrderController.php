@@ -18,7 +18,7 @@ use App\Models\Pointtransfer;
 use App\Models\Client;
 //use Illuminate\Support\Facades\Auth;
 // use Illuminate\Support\Facades\Storage;
-// use App\Http\Controllers\Api\StorageController;
+ use App\Http\Controllers\Api\StorageController;
 use App\Http\Controllers\Api\PointTransferController;
 class OrderController extends Controller
 { 
@@ -73,9 +73,12 @@ class OrderController extends Controller
         $q->orderByDesc('ispersonal');
     }
      ] )->find($id);
+     $strgCtrlr = new StorageController();
+     $sharp= $strgCtrlr->DefaultPath('sharp');
+     $usericon= $strgCtrlr->DefaultPath('user');
       $reasons=Reason::where('type', 'LIKE', '%'.'form'.'%')->get();
      //return dd($object);
-      return view('admin.order.edit', ['selectedservice' => $object,'reasons'=> $reasons]);
+      return view('admin.order.edit', ['selectedservice' => $object,'reasons'=> $reasons,'sharpicon'=>$sharp,'usericon'=>$usericon]);
     }
   
     /**
