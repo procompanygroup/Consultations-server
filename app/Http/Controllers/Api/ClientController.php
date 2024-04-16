@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\StorageController;
 use App\Http\Requests\Api\Client\UpdateClientRequest;
 use App\Http\Requests\Api\Client\ChangeBalanceRequest;
 use App\Http\Requests\Api\Client\SaveTokenRequest;
+use  App\Http\Controllers\Api\NotificationController;
 
 /*
 use App\Http\Requests\Web\Client\StoreClientRequest;
@@ -41,6 +42,7 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public  $pointtransfer_id = 0;
     public function index()
     {
         //
@@ -324,8 +326,15 @@ class ClientController extends Controller
                     ]
                 );
 
-            });
+              $this->pointtransfer_id = $pointtransfer->id;
 
+            });
+            //send auto notification
+            $notctrlr=new NotificationController();
+            $pointsval=$formdata['points'];
+            $title= __('general.1addpoint_title');
+            $body= __('general.1addpoint_body',['Points'=> $pointsval]);
+            $notctrlr->sendautonotify($title, $body,'auto','text','','finance',$client->id,0,0,$this->pointtransfer_id);
             return response()->json("ok");
 
             //   } else {

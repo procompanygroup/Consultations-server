@@ -582,7 +582,7 @@ $(document).ready(function () {
 		}
 
 	});
-
+ 
 	$('#field_type_edit').on('change', function () {
 		var option = $(this).find(":selected").val();
 		if (option == 'text') {
@@ -898,7 +898,19 @@ $("input[name=is_active]").prop("value",0);
 	//  alert( $("#status").prop("value"));
    //   checkBoxes.prop("checked", !checkBoxes.prop("checked"));
   }); 
-  
+  //notify
+  $('#type').on('change', function () {
+	var option = $(this).find(":selected").val();
+	$('#image').val(null);
+	$('#image_label').text("اختر ملف ");
+	ClearErrors();
+	if (option == 'text') {		 
+		$('#div_file').hide();	  
+	} else {
+		$('#div_file').show();		 
+	}
+
+});
 
 });
 

@@ -41,8 +41,40 @@ if(option!="0"){
 	});
 }	
 		});
+		function loadexperts() {
+		 
+		//	resetForm();
+			ClearErrors();
+			var choose="";
+			choose="اختر الخبير";
+			option="expert";
+		 
+		 	$('#sel_side_val').html('<option title="اختر" value="0"  class="text-muted">'+choose+'</option>');
+if(option!="0"){	 
+	var formData = 'sel_side='+option;
+	urlval = blncesidurl;
+		$.ajax({
+		url: urlval,
+		type: "GET",
+	 	data: formData,
+	//	contentType: false,
+	//	processData: false,
+		//contentType: 'application/json',
+		success: function (data) {			 
+			if (data.length == 0) {			 
+			} else   {
+				datalist=data;
+				$(data).each(function(index, item) {
+					$('#sel_side_val').append('<option value="'+ item.id +'" >'+ item.name +'</option>');
+			});		 
+			}		 
+		}, error: function (errorresult) {			 
+		} 
+	});
+}	
+		};
 
-		
+		loadexperts() ;
 		$('#sel_side_val').on('change', function () {
 			var option = $(this).find(":selected").val();
 		//	resetForm();

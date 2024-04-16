@@ -25,11 +25,15 @@ use App\Models\Company;
 use App\Http\Controllers\Api\CashTransferController;
 use App\Http\Controllers\Api\PointTransferController;
 use Illuminate\Support\Str;
+use  App\Http\Controllers\Api\NotificationController;
 class AnswerController extends Controller
 {
   /**
    * Display a listing of the resource.
    */
+  public  $pointtransfer_id = 0;
+  public  $reasonval ="";
+   
   public function index()
   {
     // $list = User::latest()->first();
@@ -264,6 +268,7 @@ class AnswerController extends Controller
       $pointtransfer->type =  $type;
       $pointtransfer->num = $newpnum;
       $pointtransfer->save();
+      $this->pointtransfer_id= $pointtransfer->id;
       //
       /*
       //add cash to company balance
@@ -296,6 +301,7 @@ class AnswerController extends Controller
 
       $expertObj = Expert::find($selectedObj->expert_id);
      $answespeedavg=StorageController::calcAnswerspeedAvg( $selectedObj->expert_id);
+
       Expert::find($selectedObj->expert_id)->update(
         [
           'cash_balance' => $expertObj->cash_balance + $selectedObj->expert_cost_value,
@@ -304,14 +310,30 @@ class AnswerController extends Controller
           ]
       );
     });
+//  //send auto notification 3
+$notctrlr=new NotificationController();
+$selectedObj= Selectedservice::with('service:id,name','expert:id,first_name,last_name','client:id,user_name')->find($id);
+ $Servicename=$selectedObj->service->name;
+ $Expertname=$selectedObj->expert->full_name;           
+$title= __('general.3orderanswerd_title',['Expertname'=> $Expertname]);
+$body= __('general.3orderanswerd_body',['Servicename'=> $Servicename,'Expertname'=> $Expertname]);     
+$notctrlr->sendautonotify($title, $body,'auto','order','','order',$selectedObj->client_id,0,$id,0);   
 
+//  //send auto notification 4 increase balance
+$notctrlr2=new NotificationController();
+ 
+ $Servicename=$selectedObj->service->name;
+ $Expertname=$selectedObj->expert->full_name; 
+ $Clientname=$selectedObj->client->user_name;    
+$title2= __('general.4addbalancetoexpert_title');
+$body2= __('general.4addbalancetoexpert_body',['Cash'=> $selectedObj->expert_cost_value,'Clientname'=> $Clientname]);     
+$notctrlr2->sendautonotify($title2, $body2,'auto','text','','finance',0,$selectedObj->expert_id,$id,$this->pointtransfer_id);
 
     return response()->json("ok");
 
   }
   public function rejectmethod(UpdateAnswerStateRequest $request, $id)
   {
-
     $formdata = $request->all();
     //validate
     $validator = Validator::make(
@@ -320,11 +342,8 @@ class AnswerController extends Controller
       $request->messages()
     );
     if ($validator->fails()) {
-
       return response()->json($validator);
-
     } else {
-
       DB::transaction(function () use ($formdata, $id) {
         /*
         $pointobj = Pointtransfer::where('selectedservice_id', $id)
@@ -334,10 +353,9 @@ class AnswerController extends Controller
         $selectedObj = Selectedservice::find($id);
         */
         $answerObj = Answer::where('selectedservice_id', $id)->where('answer_state', 'wait')->first();
-
-
         //reject
         $reason = Reason::find($formdata['answer_reject_reason']);
+       $this->reasonval=$reason->content;
         $now = Carbon::now();
         Answer::find($answerObj->id)->update([
           'answer_state' => 'reject',
@@ -346,6 +364,15 @@ class AnswerController extends Controller
           'answer_admin_date' => $now,
         ]);
       });
+      //send auto notification 7
+      $notctrlr=new NotificationController();
+      $selectedObj= Selectedservice::with('service:id,name','client:id,user_name')->find($id);
+       $Servicename=$selectedObj->service->name; 
+       $Clientname=$selectedObj->client->user_name;                
+      $Reason= $this->reasonval;     
+      $title=  __('general.7answerreject_title',['Clientname'=> $Clientname]);
+      $body= __('general.7answerreject_body',['Reason'=> $Reason]);     
+   $notctrlr->sendautonotify($title, $body,'auto','text','','order-answer-reject',0,$selectedObj->expert_id,$id,0);         
 
       return response()->json("ok");
     }

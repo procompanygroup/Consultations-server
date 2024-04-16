@@ -149,6 +149,25 @@ return [
 'notify_side' => 'الجهة',
 'send_notify' => 'ارسال تنبيه',
 'send' => 'ارسال',
+
+'1addpoint_title'=>'اضافة نقاط من المتجر',
+'1addpoint_body'=>'تمت اضافة'.' '. ':Points'.' '.'نقطة الى رصيدك',
+'2ordercome_title'=>'طلب من'.' '.':Clientname',
+'2ordercome_body'=>'طلب خدمة'.' '.':Servicename'.' '.'من قبل'.' '.':Clientname'.' '.'بانتظار الرد',
+'3orderanswerd_title'=>'رد من الخبير'.' '.':Expertname',
+'3orderanswerd_body'=>'رد على طلب خدمة'.' '.':Servicename'.' '.'من قبل الخبير'.' '.':Expertname',
+'4addbalancetoexpert_title'=>'اضافة رصيد',
+'4addbalancetoexpert_body'=>'تم اضافة'.' '.':Cash'.'$'.' '.'الى رصيدك مقابل الرد على طلب'.' '.':Clientname',
+'5expertpullbalance_title'=>'سحب رصيد',
+'5expertpullbalance_body'=>'تم سحب'.' '.':Cash'.'$'.' '.'من اجمالي الرصيد الحالي',
+'6orderreject_title'=>'رفض طلب خدمة'.' '.':Servicename',
+'6orderreject_body'=>'تم رفض الطلب بسبب'.' '.'(:Reason)',
+'7answerreject_title'=>'رفض الرد على طلب'.' '.':Clientname',
+'7answerreject_body'=>'تم رفض الرد بسبب'.' '.'(:Reason)',
+'8commentcome_title'=>'تعليق على خدمة',
+'8commentcome_body'=>'تم التعليق على خدمة'.' '.':Servicename'.' '.'من قبل'.' '.':Clientname',
+'9commentreject_title'=>'رفض التعليق',
+'9commentreject_body'=>'تم رفض التعليق بسبب'.' '.'(:Reason)',
 ];
 /*
 

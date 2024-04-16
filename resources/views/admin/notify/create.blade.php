@@ -32,9 +32,7 @@
 						<div class="card  box-shadow-0">
 							<div class="card-header">
 								<h4 class="card-title mb-1">{{ __('general.send_notify') }}</h4>
-								<p class="mb-2">@php
-								 echo ini_get('upload_max_filesize');
-								@endphp </p>
+								<p class="mb-2"></p>
 							</div>
 							<div class="card-body pt-0">
 								<form class="form-horizontal" name="create_form" action="{{url('admin/notify')}}" method="POST"  id="create_form">
@@ -64,11 +62,11 @@
 										<textarea class="form-control" placeholder="{{ __('general.text') }}" rows="3" id="body" name="body"></textarea>
 									</div>
 
-                                    <div class="form-group mb-4 justify-content-end">
+                                    <div class="form-group mb-4 justify-content-end" id="div_file">
 										<div class="custom-file">
 											<input class="custom-file-input" id="image" name="image" type="file"> <label class="custom-file-label" for="customFile"  id="image_label">{{ __('general.choose file') }}</label>
 											<ul class="parsley-errors-list filled" >
-												<li class="parsley-required" id="image_error"></li>
+												<li class="parsley-required" id="image_error">@php echo ini_get('upload_max_filesize');@endphp</li>
 											</ul>
 										</div>
 									</div>

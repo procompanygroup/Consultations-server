@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Api\StorageController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Web\Order\UpdateCommentRateRequest;
+use  App\Http\Controllers\Api\NotificationController;
 
 class CommentController extends Controller
 {
@@ -117,6 +118,16 @@ class CommentController extends Controller
       }
     });
 
+    //  //send auto notification 8
+$notctrlr=new NotificationController();
+$selectedObj= Selectedservice::with('service:id,name','expert:id,first_name,last_name','client:id,user_name')->find($id);
+ $Servicename=$selectedObj->service->name;
+ $Clientname=$selectedObj->client->user_name;       
+   
+$title= __('general.8commentcome_title');
+$body= __('general.8commentcome_body',['Servicename'=> $Servicename,'Clientname'=>$Clientname]);     
+$notctrlr->sendautonotify($title, $body,'auto','order-comment','','order-comment',0,$selectedObj->expert_id,$id,0);   
+
     return response()->json("ok");
 
   }
@@ -148,6 +159,14 @@ class CommentController extends Controller
           ]);
         }
       });
+     //send auto notification 9
+     $notctrlr=new NotificationController();
+     $selectedObj= Selectedservice::find($id);
+                      
+     $Reason=$selectedObj->comment_reject_reason;     
+     $title= __('general.9commentreject_title');
+     $body= __('general.9commentreject_body',['Reason'=> $Reason]);     
+  $notctrlr->sendautonotify($title, $body,'auto','text','','order-comment-reject',$selectedObj->client_id,0,$id,0);         
 
       return response()->json("ok");
     }

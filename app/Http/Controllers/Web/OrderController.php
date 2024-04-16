@@ -20,11 +20,13 @@ use App\Models\Client;
 // use Illuminate\Support\Facades\Storage;
  use App\Http\Controllers\Api\StorageController;
 use App\Http\Controllers\Api\PointTransferController;
+use  App\Http\Controllers\Api\NotificationController;
 class OrderController extends Controller
 { 
     /**
      * Display a listing of the resource.
      */
+   
     public function index()
     {
  
@@ -85,10 +87,12 @@ class OrderController extends Controller
      * Update the specified resource in storage.
      */
     public function agreemethod(Request $request, $id)
-    {     
+    {    
+
         DB::transaction(function ()use($id) {
          
           $selectedObj= Selectedservice::find($id);
+
           if(  $selectedObj->form_state=='wait'){
             $now= Carbon::now();
           $pointobj=Pointtransfer::where('selectedservice_id',$id)
@@ -116,7 +120,16 @@ Company::find(1)->update([
   ]              
 );
 }
-        });     
+        });    
+           //send auto notification 2
+           $notctrlr=new NotificationController();
+           $selectedObj= Selectedservice::with('service:id,name','client:id,user_name')->find($id);
+            $Servicename=$selectedObj->service->name;
+            $Clientname=$selectedObj->client->user_name;           
+           $title=  __('general.2ordercome_title',['Clientname'=> $Clientname]);
+           $body= __('general.2ordercome_body',['Servicename'=> $Servicename,'Clientname'=> $Clientname]);     
+        $notctrlr->sendautonotify($title, $body,'auto','order-come','','order',0,$selectedObj->expert_id,$id,0);         
+
         return response()->json("ok");       
       
     }
@@ -181,7 +194,15 @@ $client->points_balance = $client->points_balance + $pointobj->count;
 $client->save();
 }
         });   
-          
+                  //send auto notification 6
+                  $notctrlr=new NotificationController();
+                  $selectedObj= Selectedservice::with('service:id,name')->find($id);
+                   $Servicename=$selectedObj->service->name;                    
+                  $Reason=$selectedObj->form_reject_reason;     
+                  $title=  __('general.6orderreject_title',['Servicename'=> $Servicename]);
+                  $body= __('general.6orderreject_body',['Reason'=> $Reason]);     
+               $notctrlr->sendautonotify($title, $body,'auto','text','','order-reject',$selectedObj->client_id,0,$id,0);         
+       
         return response()->json("ok");
         
      

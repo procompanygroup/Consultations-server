@@ -184,4 +184,8 @@ class Selectedservice extends Model
     {
         return $this->belongsTo(User::class,'comment_user_id')->withDefault();
     }
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class,'selectedservice_id');
+    }
 }

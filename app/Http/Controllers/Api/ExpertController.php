@@ -41,6 +41,8 @@ class ExpertController extends Controller
      * Display a listing of the resource.
      */
     public $id = 0;
+    public $pointtransfer_id = 0;
+
     public function index()
     {
         $users = DB::table('experts')->get();
@@ -1029,15 +1031,15 @@ class ExpertController extends Controller
     {
         $formdata = $filerequest->all();
         $id = 0;
-        if (isset ($formdata["id"])) {
+        if (isset($formdata["id"])) {
             $id = $formdata["id"];
         }
         $cnum = "";
         $mnum = "";
-        if (isset ($formdata["country_num"])) {
+        if (isset($formdata["country_num"])) {
             $cnum = $formdata["country_num"];
         }
-        if (isset ($formdata["mobile_num"])) {
+        if (isset($formdata["mobile_num"])) {
             $mnum = $formdata["mobile_num"];
         }
 
@@ -1076,7 +1078,7 @@ class ExpertController extends Controller
                     $file = $filerequest->file('image');
                     $this->storeImage($file, $id);
                 }
-                if (isset ($formdata['password'])) {
+                if (isset($formdata['password'])) {
                     $password = trim($formdata['password']);
                     Expert::find($id)->update([
                         'password' => bcrypt($password),
@@ -1172,9 +1174,7 @@ class ExpertController extends Controller
     {
         //
         $formdata = $request->all();
-
         $storrequest = new UploadAnswerRequest();
-
         $validator = Validator::make(
             $formdata,
             $storrequest->rules(),
@@ -1183,26 +1183,33 @@ class ExpertController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors());
         } else {
-            DB::transaction(function () use ($request, $formdata) {
+            $sleservice = Selectedservice::find($formdata['selectedservice_id']);
+            if ($sleservice->expert_id == auth()->user()->id) {
+                DB::transaction(function () use ($request, $formdata) {
+                    if ($request->hasFile('record')) {
+                        $newObj = new Answer();
+                        $newObj->answer_reject_reason = "";
+                        $newObj->selectedservice_id = $formdata['selectedservice_id'];
+                        $newObj->answer_state = 'wait';
+                        $newObj->save();
+                        $file = $request->file('record');
+                        $this->storeAnswerRecord($file, $newObj->id);
+                        $this->id = $newObj->id;
+                    }
+                });
+                return response()->json([
+                    "message" => $this->id
+                ]);
 
-                if ($request->hasFile('record')) {
-                    $newObj = new Answer();
-                    $newObj->answer_reject_reason = "";
-                    $newObj->selectedservice_id = $formdata['selectedservice_id'];
-                    $newObj->answer_state = 'wait';
-                    $newObj->save();
-                    $file = $request->file('record');
-                    $this->storeAnswerRecord($file, $newObj->id);
-                    $this->id = $newObj->id;
-                }
-            });
+        } else {
+            return response()->json(['error' => 'Unauthenticated'], 401);
         }
-        return response()->json([
-            "message" => $this->id
 
-        ]);
+       
+        }
+      
     }
-    
+
     public function uploadrecord(Request $request)
     {
         //
@@ -1216,39 +1223,44 @@ class ExpertController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors());
         } else {
-            DB::transaction(function () use ($request, $formdata) {
 
-                if ($request->hasFile('record')) {
-                    $file = $request->file('record');
-                    $this->storeExpertRecord($file, $formdata['id']);
-                    $this->id = $formdata['id'];
-                }
-            });
+          
+                DB::transaction(function () use ($request, $formdata) {
+
+                    if ($request->hasFile('record')) {
+                        $file = $request->file('record');
+                        $this->storeExpertRecord($file, $formdata['id']);
+                        $this->id = $formdata['id'];
+                    }
+                });
+
+                return response()->json([
+                    "message" => $this->id
+                ]);
+          
         }
-        return response()->json([
-            "message" => $this->id
-        ]);
+
     }
     public function gettype(Request $request)
     {
         //
         $formdata = $request->all();
-     
-             
-        
-                if ($request->hasFile('record')) {
-                    $file = $request->file('record');
-                    $mimeType = File::mimeType( $file);
-  
-                  
-                    //dd($mimeType);
-                }
-            
-        
+
+
+
+        if ($request->hasFile('record')) {
+            $file = $request->file('record');
+            $mimeType = File::mimeType($file);
+
+
+            //dd($mimeType);
+        }
+
+
         return response()->json([
-          
+
             "message" => $mimeType,
-             
+
         ]);
     }
     public function pullbalance()
@@ -1281,7 +1293,7 @@ class ExpertController extends Controller
                     "error" => "not_enough_balance",
                 ]);
             } else {
-               $this->expertpullbalance($expert, $amount);
+                $this->expertpullbalance($expert, $amount);
                 return response()->json([
                     "message" => $expert->id
                 ]);
@@ -1318,7 +1330,7 @@ class ExpertController extends Controller
             $pointtransfer->num = $newpnum;
 
             $pointtransfer->save();
-
+            $this->pointtransfer_id = $pointtransfer->id;
             ///////////////////////////
             //add cach transfer for Expert
             $cashtype1 = 'p';
@@ -1350,6 +1362,12 @@ class ExpertController extends Controller
 
         });
 
+        //send auto notification 5 pull balance
+        $notctrlr = new NotificationController();
+
+        $title = __('general.5expertpullbalance_title');
+        $body = __('general.5expertpullbalance_body', ['Cash' => $amount]);
+        $notctrlr->sendautonotify($title, $body, 'auto', 'text', '', 'finance', 0, $expert->id, 0, $this->pointtransfer_id);
 
         return 1;
     }

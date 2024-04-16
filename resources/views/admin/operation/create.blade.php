@@ -37,12 +37,12 @@
 							<div class="card-body pt-0">
 								<form class="form-horizontal" name="save_pull_form" action="{{url('admin/balance/savepull' )}}" method="POST"   id="save_pull_form">
 									@csrf
-									<div class="mb-4">
+									<div class="mb-4" style="display: none;">
                                         <select name="sel_side"   id="sel_side" class="form-control SlectBox"   >
                                             <!--placeholder-->
-                                            <option title="اختر" value="0"  class="text-muted">اختر</option>
-                                            <option value="expert" >{{ __('general.expert select') }}</option>
-                                            <option value="client"  >{{ __('general.client select') }}</option>
+                                          
+                                            <option value="expert" selected>{{ __('general.expert select') }}</option>
+                                        
                                         </select>
 										<ul class="parsley-errors-list filled">
 											<li class="parsley-required"  id="sel_side_error"></li>

@@ -82,6 +82,8 @@ class NotificationController extends Controller
 
     //  ->sendNotification($tokenList);
     }
+
+ 
     /**
      * Display a listing of the resource.
      */
@@ -107,22 +109,14 @@ $List=Notification::where('side', 'LIKE', '%'.'client'.'%')->orWhere('side', 'LI
      * Store a newly created resource in storage.
      */
     public function store(StoreNotifyRequest $request)//StoreNotifyRequest
-    {
-       
-      $formdata = $request->all();
- 
-      // return redirect()->back()->with('success_message', $formdata);
+    {       
+      $formdata = $request->all();  
       $validator = Validator::make(
         $formdata,
         $request->rules(),
         $request->messages()
       );  
-      if ($validator->fails()) {
-        /*
-                          return  redirect()->back()->withErrors($validator)
-                          ->withInput();
-                          */
-        // return response()->withErrors($validator)->json();
+      if ($validator->fails()) {         
         return response()->json($validator);  
       } else {
         $newObj = new Notification;
@@ -130,26 +124,19 @@ $List=Notification::where('side', 'LIKE', '%'.'client'.'%')->orWhere('side', 'LI
         $newObj->body =isset($formdata['body'])?$formdata['body']:'';   
        $side= implode(",", $formdata['side']);      
         $newObj->side =  $side;    
-        $newObj->type = 'text';  
-
-     //   $newObj->is_active = 1;
-      
+        $newObj->type =$formdata['type'];  
+     //   $newObj->is_active = 1;      
         $newObj->save();
         if ($request->hasFile('image')) {
-          $file= $request->file('image');
-                              
-       $this->storeImage( $file, $newObj->id);
+          $file= $request->file('image');            
+       $this->storeImage( $file, $newObj->id,$formdata['type']);
          }
-
          //create rows in noti user table 
          $notification_id=$newObj->id;
          //expert
-if(Str::contains($side,'expert')){
- 
-$expertids=Expert::where('is_active',1)->select('id')->get();
- 
+if(Str::contains($side,'expert')){ 
+$expertids=Expert::where('is_active',1)->select('id')->get(); 
 $now= Carbon::now();
-
  $insertList = $expertids->map(function ($notifyuser) use($notification_id,$now) {
    return [
      'expert_id' => $notifyuser->id,
@@ -161,13 +148,10 @@ $now= Carbon::now();
    ];
  });
  NotificationUser::insert($insertList->toArray()); 
-
 }
 //client
 if(Str::contains($side,'client')){
-
-  $clientids=Client::where('is_active',1)->select('id')->get();
-   
+  $clientids=Client::where('is_active',1)->select('id')->get();   
   $now= Carbon::now();  
    $insertList = $clientids->map(function ($notifyuser) use($notification_id,$now) {
      return [
@@ -176,19 +160,23 @@ if(Str::contains($side,'client')){
        'isread'=>0,
        'created_at'=>$now,
        'updated_at'=>$now,
-  //'expert_id',
-  //'user_id',
-  
-  //'read_at',
-  'state'=>'sent',
-  //'notes',
+  'state'=>'sent', 
      ];
    });
    NotificationUser::insert($insertList->toArray()); 
 }
-    //$boolres= Str::contains( $type,'form') ;
-     
-        return response()->json("ok");
+//send firebase notify
+ 
+if(Str::contains($side,'expert')){
+  $experttokenList=Expert::where('is_active',1)->whereNotNull('token')->pluck('token')->all();
+  $this->send_fire_notify_from_panel($newObj,$experttokenList);
+}
+if(Str::contains($side,'client')){
+  $clienttokenList=User::where('is_active',1)->whereNotNull('token')->pluck('token')->all();
+    $this->send_fire_notify_from_panel($newObj,$clienttokenList);
+}    //$boolres= Str::contains( $type,'form') ;     
+       return response()->json("ok");
+   
       }
     }
 
@@ -223,11 +211,17 @@ if(Str::contains($side,'client')){
     {
         //
     }
-    public function storeImage($file, $id)
+    public function storeImage($file, $id,$type)
     {
       $imagemodel = Notification::find($id);
       $strgCtrlr = new StorageController();
-      $path = $strgCtrlr->videopath['notify'];
+      if($type=='image'){
+        $path = $strgCtrlr->path['notify'];
+      }else{
+        //vedio
+        $path = $strgCtrlr->videopath['notify'];
+      }
+  
       $oldimage = $imagemodel->data;
       $oldimagename = basename($oldimage);
     //  $oldimagepath = $path . '/' . $oldimagename;
@@ -254,10 +248,128 @@ if(Str::contains($side,'client')){
         //   $url = url('storage/app/public' . '/' . $path . '/' . $filename);
         Notification::find($id)->update([
           "data" => $filename,
-          "type" => 'video',
+          "type" =>$type,
         ]);
       //  Storage::delete("public/" .$path . '/' . $oldimagename);
       }
       return 1;
+    }
+
+    public function sendautonotify($title,$body,$side
+    ,$type,$data,$notes,$client_id,$expert_id,
+    $selectedservice_id,$pointtransfer_id) 
+    {  
+        $newObj = new Notification;
+        $newObj->title =$title;   
+        $newObj->body =$body;  
+        $newObj->side=$side;           
+        $newObj->type =$type; 
+        $newObj->data =''; 
+        $newObj->notes =$notes;       
+        $newObj->selectedservice_id =$selectedservice_id; 
+        $newObj->pointtransfer_id =$pointtransfer_id; 
+        $newObj->save();
+ 
+         //create rows in noti user table 
+         $notification_id=$newObj->id;
+      
+ $notifyuser=new NotificationUser();
+
+$now= Carbon::now();
+$notifyuser->client_id=$client_id; 
+$notifyuser->expert_id=$expert_id; 
+$notifyuser->notification_id=$notification_id;
+$notifyuser->isread=0; 
+$notifyuser->state='sent'; 
+$notifyuser->notes=''; 
+$notifyuser->created_at = $now;
+$notifyuser->updated_at= $now;
+$notifyuser->save();
+//send firebase notify
+$res=$this->sendfirenotify($newObj,$notifyuser ) ;
+
+        return  ("1");
+      
+    }
+    public function sendfirenotify(Notification $notify,NotificationUser $notifyuser)
+    {
+      $strgCtrlr=new StorageController();
+      $defaultimg=$strgCtrlr->DefaultPath('image');
+      $defaultsvg=$strgCtrlr->DefaultPath('icon');
+      $token="";
+      if($notifyuser->expert_id>0){
+        $expert=Expert::find($notifyuser->expert_id);
+        if($expert){
+        if($expert->is_active==1 && (!is_null($expert->token)&& $expert->token!='')){
+          $tokenList =[$expert->token];
+          return Larafirebase::withTitle($notify->title)
+          ->withBody($notify->body)
+          ->withImage($defaultimg)
+          ->withIcon($defaultsvg)
+          ->withSound('default')
+         // ->withClickAction('https://www.google.com')
+          ->withPriority('high')        
+          ->withAdditionalData([         
+             // 'date'=>$notifyuser->created_at,
+              'image'=>$defaultimg,
+          ])
+        ->sendMessage($tokenList);
+        }else{
+          return 'empty token';
+        }
+        }else{
+          return 'empty token'  ;
+        }
+      }else if($notifyuser->client_id>0){
+        $client=Client::find($notifyuser->client_id);
+        if($client){
+        if($client->is_active==1 && (!is_null($client->token)&& $client->token!='')){
+
+          $tokenList =[$client->token];
+          return Larafirebase::withTitle($notify->title)
+          ->withBody($notify->body)
+          ->withImage($defaultimg)
+          ->withIcon($defaultsvg)
+          ->withSound('default')
+         // ->withClickAction('https://www.google.com')
+          ->withPriority('high')        
+          ->withAdditionalData([         
+             // 'date'=>$notifyuser->created_at,
+              'image'=>$defaultimg,
+          ])
+        ->sendMessage($tokenList);
+      }else{
+   return 'empty token';
+      }
+    }else{
+      return 'empty token';
+         }
+  }else{
+    return 'empty';
+       } 
+    }
+    public function send_fire_notify_from_panel(Notification $notify, $tokenList)
+    {
+      $strgCtrlr=new StorageController();
+      $defaultimg=$strgCtrlr->DefaultPath('image');
+      $defaultsvg=$strgCtrlr->DefaultPath('icon');
+      $token="";
+      if($tokenList){    
+        //  $tokenList =[$tokenList];
+          return Larafirebase::withTitle($notify->title)
+          ->withBody($notify->body)
+          ->withImage($defaultimg)
+          ->withIcon($defaultsvg)
+          ->withSound('default')
+         // ->withClickAction('https://www.google.com')
+          ->withPriority('high')        
+          ->withAdditionalData([         
+             // 'date'=>$notify->created_at,
+              'image'=>$defaultimg,
+          ])
+        ->sendMessage($tokenList);
+        }else{
+          return 'empty token';
+        }  
     }
 }

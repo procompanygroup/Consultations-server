@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\NotificationUser;
 class Notification extends Model
 {
@@ -19,7 +20,8 @@ class Notification extends Model
         'created_at',
         'updated_at',
         'notes',
-          
+        'selectedservice_id',
+        'pointtransfer_id',
     ];
     protected  $hidden=['side_conv'];
     public function getSideConvAttribute()
@@ -46,6 +48,11 @@ class Notification extends Model
     public function notificationUsers(): HasMany
     {
         return $this->hasMany(NotificationUser::class);
+    }
+
+    public function selectedservice(): BelongsTo
+    {
+        return $this->belongsTo(Selectedservice::class, 'selectedservice_id')->withDefault();
     }
 }
 
