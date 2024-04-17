@@ -16,6 +16,7 @@ use App\Http\Requests\Web\Notify\StoreNotifyRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Http\Requests\Api\Client\NotifyListRequest;
 //use Notification;
 use App\Models\Notification;
 
@@ -108,7 +109,7 @@ $List=Notification::where('side', 'LIKE', '%'.'client'.'%')->orWhere('side', 'LI
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreNotifyRequest $request)//StoreNotifyRequest
+    public function store(StoreNotifyRequest $request)//from panel
     {       
       $formdata = $request->all();  
       $validator = Validator::make(
@@ -125,6 +126,8 @@ $List=Notification::where('side', 'LIKE', '%'.'client'.'%')->orWhere('side', 'LI
        $side= implode(",", $formdata['side']);      
         $newObj->side =  $side;    
         $newObj->type =$formdata['type'];  
+        $newObj->selectedservice_id =0; 
+        $newObj->pointtransfer_id =0; 
      //   $newObj->is_active = 1;      
         $newObj->save();
         if ($request->hasFile('image')) {
@@ -371,5 +374,70 @@ $res=$this->sendfirenotify($newObj,$notifyuser ) ;
         }else{
           return 'empty token';
         }  
+    }
+
+    //get
+
+    public function getclientnotifylist()
+    {
+        $authuser = auth()->user();
+        $request = request();
+
+        $formdata = $request->all();
+        //client_id
+//points
+        $storrequest = new NotifyListRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+
+            return response()->json($validator->errors());
+            //   return redirect()->back()->withErrors($validator)->withInput();
+
+        } else {
+$client_id=$formdata['id'];
+         
+            $Dblist = Notification::wherehas('notificationUsers', function ($query)use($client_id) {
+                $query->where('client_id',$client_id);
+            })->with([
+              'notificationUsers' => function ($q) use ($client_id) {
+                  $q->where('client_id', $client_id)
+                  ->select('id','notification_id', 'client_id', 'expert_id','isread','read_at','created_at');
+              }]
+          )->select('id', 'title',
+          'body',
+          'type',
+          'side',
+          'data',
+          'read_at',
+          'created_at',        
+          'notes',
+          'selectedservice_id',
+          )->orderByDesc('created_at')->get();
+          $list = $Dblist->map(function ($notify)  {
+            $readat=$notify->notificationUsers->first()->read_at;
+            return [
+              'id'=>$notify->notificationUsers->first()->id,
+              'notification_id' => $notify->id,
+              'title'=>$notify->title,
+              'body'=>$notify->body,
+              'type'=>$notify->type,
+              'side'=>$notify->side,          
+              'selectedservice_id'=>$notify->selectedservice_id,             
+              'client_id'=>$notify->notificationUsers->first()->client_id,             
+              'isread'=>$notify->notificationUsers->first()->isread,
+              'read_at'=>is_null($readat)?'': $readat,
+              'created_at'=>$notify->notificationUsers->first()->created_at,
+'path'=>$notify->path_conv,
+            ];
+          });
+           return response()->json($list);
+
+          
+        }
     }
 }

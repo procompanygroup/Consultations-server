@@ -30,7 +30,7 @@ class StoreNotifyRequest extends FormRequest
          'type'=> 'required|in:text,image,video', 
       //  'image'=> 'required|mimetypes:video/avi,video/mpeg,video/quicktime',
       //  'image'=>'required|file|mimes:jpg,bmp,png,jpeg,gif,svg',
-        'image'=>($this->input('type')=='image'?'required|mimes:jpg,bmp,png,jpeg,gif,svg':
+        'image'=>($this->input('type')=='image'?'required|mimes:jpg,bmp,png,jpeg,gif,svg,webp':
       ($this->input('type')=='video'? 'required|mimetypes:video/mp4,video/avi,video/mpeg,video/quicktime':'nullable')),
       //  'is_active'=>'required',  
           

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\NotificationUser;
+use App\Http\Controllers\Api\StorageController;
 class Notification extends Model
 {
     use HasFactory;
@@ -23,7 +24,7 @@ class Notification extends Model
         'selectedservice_id',
         'pointtransfer_id',
     ];
-    protected  $hidden=['side_conv'];
+    protected  $hidden=['side_conv','path_conv'];
     public function getSideConvAttribute()
     {
         $conv = "";
@@ -42,6 +43,25 @@ class Notification extends Model
                break;
             default:
             $conv = $this->type;
+        }
+        return $conv;
+    }
+    public function getPathConvAttribute()
+    {
+        $conv = "";
+        switch($this->type) {
+            case('image'):              
+                $strgCtrlr = new StorageController();
+                $url = $strgCtrlr->NotifyPath($this->type);
+                $conv =  $url.$this->data;            
+               break;
+               case('video'):
+                $strgCtrlr = new StorageController();
+                $url = $strgCtrlr->NotifyPath($this->type);
+                $conv =  $url.$this->data; 
+               break;             
+            default:
+            $conv ='';
         }
         return $conv;
     }

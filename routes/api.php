@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\PointController;
 use App\Http\Controllers\Api\PointTransferController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\MailController;
+use App\Http\Controllers\Api\NotificationController;
  //use App\Http\Middleware\Api\AuthenticateClient;
 
 /*
@@ -67,6 +68,7 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/savetoken', [ClientController::class, 'savetoken']);
         
         Route::post('/store', [PointTransferController::class, 'store']);
+        Route::post('/getnotifylist', [NotificationController::class, 'getclientnotifylist']);
         
 //api/client/service
         Route::prefix('/service')->group(function () {
