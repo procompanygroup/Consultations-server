@@ -194,9 +194,10 @@ if(Str::contains($side,'client')){
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit( $id)
     {
-        //
+      $item=Notification::find($id);
+      return view('admin.notify.edit',['item'=>$item]);
     }
 
     /**

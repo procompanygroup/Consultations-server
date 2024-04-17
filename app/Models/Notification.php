@@ -24,7 +24,7 @@ class Notification extends Model
         'selectedservice_id',
         'pointtransfer_id',
     ];
-    protected  $hidden=['side_conv','path_conv'];
+    protected  $hidden=['side_conv','path_conv','type_conv'];
     public function getSideConvAttribute()
     {
         $conv = "";
@@ -46,7 +46,25 @@ class Notification extends Model
         }
         return $conv;
     }
-    public function getPathConvAttribute()
+    public function getTypeConvAttribute()
+    {
+        $conv = "";
+        switch($this->type) {
+            case('text'):
+                $conv = __('general.type_text');
+               break;
+               case('image'):
+                $conv =__('general.type_image');
+               break;
+               case('video'):
+                $conv = __('general.type_video') ;
+               break;
+                
+            default:
+            $conv = $this->type;
+        }
+        return $conv;
+    }    public function getPathConvAttribute()
     {
         $conv = "";
         switch($this->type) {
