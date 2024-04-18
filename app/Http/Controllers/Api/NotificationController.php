@@ -17,26 +17,28 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Http\Requests\Api\Client\NotifyListRequest;
+use App\Http\Requests\Api\Client\SetToReadRequest;
+
 //use Notification;
 use App\Models\Notification;
 
 class NotificationController extends Controller
 {
 
-    public function saveToken(Request $request)
-    {
-   //  print_r($request->all());
-     auth()->user()->update(['token'=>$request->token]);
-   return response()->json(['Token Saved!']);
-    }
-    public function sendNotification(Request $request)
-    {
-      $strgCtrlr=new StorageController();
-      $defaultimg=$strgCtrlr->DefaultPath('image');
-      $defaultsvg=$strgCtrlr->DefaultPath('icon');
-      
-      $tokenList=User::whereNotNull('token')->pluck('token')->all();
-      return Larafirebase::withTitle($request->title)
+  public function saveToken(Request $request)
+  {
+    //  print_r($request->all());
+    auth()->user()->update(['token' => $request->token]);
+    return response()->json(['Token Saved!']);
+  }
+  public function sendNotification(Request $request)
+  {
+    $strgCtrlr = new StorageController();
+    $defaultimg = $strgCtrlr->DefaultPath('image');
+    $defaultsvg = $strgCtrlr->DefaultPath('icon');
+
+    $tokenList = User::whereNotNull('token')->pluck('token')->all();
+    return Larafirebase::withTitle($request->title)
       ->withBody($request->body)
       ->withImage($defaultimg)
       ->withIcon($defaultsvg)
@@ -44,401 +46,440 @@ class NotificationController extends Controller
       ->withClickAction('https://www.google.com')
       ->withPriority('high')
       ->withAdditionalData([
-          'color' => '#000000',
-          'badge' => 0,
-          'username'=>"Ahmad",
-          'image'=>$defaultimg,
+        'color' => '#000000',
+        'badge' => 0,
+        'username' => "Ahmad",
+        'image' => $defaultimg,
       ])
-    ->  sendMessage($tokenList);
+      ->sendMessage($tokenList);
     //  ->sendNotification($tokenList);
-    }
-    public function sendbytoken(Request $request)
-    {
-      $strgCtrlr=new StorageController();
-      $defaultimg=$strgCtrlr->DefaultPath('image');
-      $defaultsvg=$strgCtrlr->DefaultPath('icon');
-      $formdata = $request->all();
-      $token="";
-      if(isset($formdata['input_token'])){
-        $token=$formdata['input_token'];
+  }
+  public function sendbytoken(Request $request)
+  {
+    $strgCtrlr = new StorageController();
+    $defaultimg = $strgCtrlr->DefaultPath('image');
+    $defaultsvg = $strgCtrlr->DefaultPath('icon');
+    $formdata = $request->all();
+    $token = "";
+    if (isset($formdata['input_token'])) {
+      $token = $formdata['input_token'];
 
-        $tokenList =[$token];
-        
-        return Larafirebase::withTitle($request->title)
+      $tokenList = [$token];
+
+      return Larafirebase::withTitle($request->title)
         ->withBody($request->body)
         ->withImage($defaultimg)
         ->withIcon($defaultsvg)
         ->withSound('default')
         ->withClickAction('https://www.google.com')
-        ->withPriority('high')        
-        ->withAdditionalData([         
-            'username'=>"Ahmad",
-            'image'=>$defaultimg,
+        ->withPriority('high')
+        ->withAdditionalData([
+          'username' => "Ahmad",
+          'image' => $defaultimg,
         ])
-      ->  sendMessage($tokenList);
-      }else{
-        return 'empty token'  ;
-      }
-     
+        ->sendMessage($tokenList);
+    } else {
+      return 'empty token';
+    }
+
 
     //  ->sendNotification($tokenList);
-    }
+  }
 
- 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-$List=Notification::where('side', 'LIKE', '%'.'client'.'%')->orWhere('side', 'LIKE', '%'.'expert'.'%')->get();
-        return view('admin.notify.show', ['list' => $List] );
-    }
-    public function testnotify()
-    {
-        return view('admin.notify.test');
-    }
-    
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-      return view('admin.notify.create'  );
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreNotifyRequest $request)//from panel
-    {       
-      $formdata = $request->all();  
-      $validator = Validator::make(
-        $formdata,
-        $request->rules(),
-        $request->messages()
-      );  
-      if ($validator->fails()) {         
-        return response()->json($validator);  
-      } else {
-        $newObj = new Notification;
-        $newObj->title = $formdata['title'];   
-        $newObj->body =isset($formdata['body'])?$formdata['body']:'';   
-       $side= implode(",", $formdata['side']);      
-        $newObj->side =  $side;    
-        $newObj->type =$formdata['type'];  
-        $newObj->selectedservice_id =0; 
-        $newObj->pointtransfer_id =0; 
-     //   $newObj->is_active = 1;      
-        $newObj->save();
-        if ($request->hasFile('image')) {
-          $file= $request->file('image');            
-       $this->storeImage( $file, $newObj->id,$formdata['type']);
-         }
-         //create rows in noti user table 
-         $notification_id=$newObj->id;
-         //expert
-if(Str::contains($side,'expert')){ 
-$expertids=Expert::where('is_active',1)->select('id')->get(); 
-$now= Carbon::now();
- $insertList = $expertids->map(function ($notifyuser) use($notification_id,$now) {
-   return [
-     'expert_id' => $notifyuser->id,
-     'notification_id'=>$notification_id,
-     'isread'=>0,
-     'created_at'=>$now,
-     'updated_at'=>$now, 
-      'state'=>'sent', 
-   ];
- });
- NotificationUser::insert($insertList->toArray()); 
-}
-//client
-if(Str::contains($side,'client')){
-  $clientids=Client::where('is_active',1)->select('id')->get();   
-  $now= Carbon::now();  
-   $insertList = $clientids->map(function ($notifyuser) use($notification_id,$now) {
-     return [
-       'client_id' => $notifyuser->id,
-       'notification_id'=>$notification_id,
-       'isread'=>0,
-       'created_at'=>$now,
-       'updated_at'=>$now,
-  'state'=>'sent', 
-     ];
-   });
-   NotificationUser::insert($insertList->toArray()); 
-}
-//send firebase notify
- 
-if(Str::contains($side,'expert')){
-  $experttokenList=Expert::where('is_active',1)->whereNotNull('token')->pluck('token')->all();
-  $this->send_fire_notify_from_panel($newObj,$experttokenList);
-}
-if(Str::contains($side,'client')){
-  $clienttokenList=User::where('is_active',1)->whereNotNull('token')->pluck('token')->all();
-    $this->send_fire_notify_from_panel($newObj,$clienttokenList);
-}    //$boolres= Str::contains( $type,'form') ;     
-       return response()->json("ok");
-   
+  /**
+   * Display a listing of the resource.
+   */
+  public function index()
+  {
+    $List = Notification::where('side', 'LIKE', '%' . 'client' . '%')->orWhere('side', 'LIKE', '%' . 'expert' . '%')->get();
+    return view('admin.notify.show', ['list' => $List]);
+  }
+  public function testnotify()
+  {
+    return view('admin.notify.test');
+  }
+
+  /**
+   * Show the form for creating a new resource.
+   */
+  public function create()
+  {
+    return view('admin.notify.create');
+  }
+
+  /**
+   * Store a newly created resource in storage.
+   */
+  public function store(StoreNotifyRequest $request)//from panel
+  {
+    $formdata = $request->all();
+    $validator = Validator::make(
+      $formdata,
+      $request->rules(),
+      $request->messages()
+    );
+    if ($validator->fails()) {
+      return response()->json($validator);
+    } else {
+      $newObj = new Notification;
+      $newObj->title = $formdata['title'];
+      $newObj->body = isset($formdata['body']) ? $formdata['body'] : '';
+      $side = implode(",", $formdata['side']);
+      $newObj->side = $side;
+      $newObj->type = $formdata['type'];
+      $newObj->selectedservice_id = 0;
+      $newObj->pointtransfer_id = 0;
+      //   $newObj->is_active = 1;      
+      $newObj->save();
+      if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        $this->storeImage($file, $newObj->id, $formdata['type']);
       }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit( $id)
-    {
-      $item=Notification::find($id);
-      return view('admin.notify.edit',['item'=>$item]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-    public function storeImage($file, $id,$type)
-    {
-      $imagemodel = Notification::find($id);
-      $strgCtrlr = new StorageController();
-      if($type=='image'){
-        $path = $strgCtrlr->path['notify'];
-      }else{
-        //vedio
-        $path = $strgCtrlr->videopath['notify'];
+      //create rows in noti user table 
+      $notification_id = $newObj->id;
+      //expert
+      if (Str::contains($side, 'expert')) {
+        $expertids = Expert::where('is_active', 1)->select('id')->get();
+        $now = Carbon::now();
+        $insertList = $expertids->map(function ($notifyuser) use ($notification_id, $now) {
+          return [
+            'expert_id' => $notifyuser->id,
+            'notification_id' => $notification_id,
+            'isread' => 0,
+            'created_at' => $now,
+            'updated_at' => $now,
+            'state' => 'sent',
+          ];
+        });
+        NotificationUser::insert($insertList->toArray());
       }
-  
-      $oldimage = $imagemodel->data;
-      $oldimagename = basename($oldimage);
+      //client
+      if (Str::contains($side, 'client')) {
+        $clientids = Client::where('is_active', 1)->select('id')->get();
+        $now = Carbon::now();
+        $insertList = $clientids->map(function ($notifyuser) use ($notification_id, $now) {
+          return [
+            'client_id' => $notifyuser->id,
+            'notification_id' => $notification_id,
+            'isread' => 0,
+            'created_at' => $now,
+            'updated_at' => $now,
+            'state' => 'sent',
+          ];
+        });
+        NotificationUser::insert($insertList->toArray());
+      }
+      //send firebase notify
+
+      if (Str::contains($side, 'expert')) {
+        $experttokenList = Expert::where('is_active', 1)->whereNotNull('token')->pluck('token')->all();
+        $this->send_fire_notify_from_panel($newObj, $experttokenList);
+      }
+      if (Str::contains($side, 'client')) {
+        $clienttokenList = User::where('is_active', 1)->whereNotNull('token')->pluck('token')->all();
+        $this->send_fire_notify_from_panel($newObj, $clienttokenList);
+      }    //$boolres= Str::contains( $type,'form') ;     
+      return response()->json("ok");
+
+    }
+  }
+
+  /**
+   * Display the specified resource.
+   */
+  public function show(string $id)
+  {
+    //
+  }
+
+  /**
+   * Show the form for editing the specified resource.
+   */
+  public function edit($id)
+  {
+    $item = Notification::find($id);
+    return view('admin.notify.edit', ['item' => $item]);
+  }
+
+  /**
+   * Update the specified resource in storage.
+   */
+  public function update(Request $request, string $id)
+  {
+    //
+  }
+
+  /**
+   * Remove the specified resource from storage.
+   */
+  public function destroy(string $id)
+  {
+    //
+  }
+  public function storeImage($file, $id, $type)
+  {
+    $imagemodel = Notification::find($id);
+    $strgCtrlr = new StorageController();
+    if ($type == 'image') {
+      $path = $strgCtrlr->path['notify'];
+    } else {
+      //vedio
+      $path = $strgCtrlr->videopath['notify'];
+    }
+
+    $oldimage = $imagemodel->data;
+    $oldimagename = basename($oldimage);
     //  $oldimagepath = $path . '/' . $oldimagename;
-      //save photo
-  
-      if ($file !== null) {
-        //  $filename= rand(10000, 99999).".".$file->getClientOriginalExtension();
-        $ext=$file->getClientOriginalExtension();
-     //  $filename =  $imagemodel->code . $id . ".webp";
-        $filename =  rand(10000, 99999) . $id .'.'.$ext;
-        /*
-        $manager = new ImageManager(new Driver());
-        $image = $manager->read($file);
-        $image = $image->toWebp(75);
-        */
-        Storage::delete("public/" .$path . '/' . $oldimagename);
-/*
-        if (!File::isDirectory(Storage::url('/' .$path))) {
-          Storage::makeDirectory('public/' . $path);
-        }
-        */
+    //save photo
+
+    if ($file !== null) {
+      //  $filename= rand(10000, 99999).".".$file->getClientOriginalExtension();
+      $ext = $file->getClientOriginalExtension();
+      //  $filename =  $imagemodel->code . $id . ".webp";
+      $filename = rand(10000, 99999) . $id . '.' . $ext;
+      /*
+      $manager = new ImageManager(new Driver());
+      $image = $manager->read($file);
+      $image = $image->toWebp(75);
+      */
+      Storage::delete("public/" . $path . '/' . $oldimagename);
+      /*
+              if (!File::isDirectory(Storage::url('/' .$path))) {
+                Storage::makeDirectory('public/' . $path);
+              }
+              */
       //  $image->save(storage_path('app/public') . '/' . $path . '/' . $filename);
-        $path = $file->storeAs($path ,$filename,'public');
-        //   $url = url('storage/app/public' . '/' . $path . '/' . $filename);
-        Notification::find($id)->update([
-          "data" => $filename,
-          "type" =>$type,
-        ]);
+      $path = $file->storeAs($path, $filename, 'public');
+      //   $url = url('storage/app/public' . '/' . $path . '/' . $filename);
+      Notification::find($id)->update([
+        "data" => $filename,
+        "type" => $type,
+      ]);
       //  Storage::delete("public/" .$path . '/' . $oldimagename);
-      }
-      return 1;
     }
+    return 1;
+  }
 
-    public function sendautonotify($title,$body,$side
-    ,$type,$data,$notes,$client_id,$expert_id,
-    $selectedservice_id,$pointtransfer_id) 
-    {  
-        $newObj = new Notification;
-        $newObj->title =$title;   
-        $newObj->body =$body;  
-        $newObj->side=$side;           
-        $newObj->type =$type; 
-        $newObj->data =''; 
-        $newObj->notes =$notes;       
-        $newObj->selectedservice_id =$selectedservice_id; 
-        $newObj->pointtransfer_id =$pointtransfer_id; 
-        $newObj->save();
- 
-         //create rows in noti user table 
-         $notification_id=$newObj->id;
-      
- $notifyuser=new NotificationUser();
+  public function sendautonotify(
+    $title,
+    $body,
+    $side
+    ,
+    $type,
+    $data,
+    $notes,
+    $client_id,
+    $expert_id,
+    $selectedservice_id,
+    $pointtransfer_id
+  ) {
+    $newObj = new Notification;
+    $newObj->title = $title;
+    $newObj->body = $body;
+    $newObj->side = $side;
+    $newObj->type = $type;
+    $newObj->data = '';
+    $newObj->notes = $notes;
+    $newObj->selectedservice_id = $selectedservice_id;
+    $newObj->pointtransfer_id = $pointtransfer_id;
+    $newObj->save();
 
-$now= Carbon::now();
-$notifyuser->client_id=$client_id; 
-$notifyuser->expert_id=$expert_id; 
-$notifyuser->notification_id=$notification_id;
-$notifyuser->isread=0; 
-$notifyuser->state='sent'; 
-$notifyuser->notes=''; 
-$notifyuser->created_at = $now;
-$notifyuser->updated_at= $now;
-$notifyuser->save();
-//send firebase notify
-$res=$this->sendfirenotify($newObj,$notifyuser ) ;
+    //create rows in noti user table 
+    $notification_id = $newObj->id;
 
-        return  ("1");
-      
-    }
-    public function sendfirenotify(Notification $notify,NotificationUser $notifyuser)
-    {
-      $strgCtrlr=new StorageController();
-      $defaultimg=$strgCtrlr->DefaultPath('image');
-      $defaultsvg=$strgCtrlr->DefaultPath('icon');
-      $token="";
-      if($notifyuser->expert_id>0){
-        $expert=Expert::find($notifyuser->expert_id);
-        if($expert){
-        if($expert->is_active==1 && (!is_null($expert->token)&& $expert->token!='')){
-          $tokenList =[$expert->token];
+    $notifyuser = new NotificationUser();
+
+    $now = Carbon::now();
+    $notifyuser->client_id = $client_id;
+    $notifyuser->expert_id = $expert_id;
+    $notifyuser->notification_id = $notification_id;
+    $notifyuser->isread = 0;
+    $notifyuser->state = 'sent';
+    $notifyuser->notes = '';
+    $notifyuser->created_at = $now;
+    $notifyuser->updated_at = $now;
+    $notifyuser->save();
+    //send firebase notify
+    $res = $this->sendfirenotify($newObj, $notifyuser);
+
+    return ("1");
+
+  }
+  public function sendfirenotify(Notification $notify, NotificationUser $notifyuser)
+  {
+    $strgCtrlr = new StorageController();
+    $defaultimg = $strgCtrlr->DefaultPath('image');
+    $defaultsvg = $strgCtrlr->DefaultPath('icon');
+    $token = "";
+    if ($notifyuser->expert_id > 0) {
+      $expert = Expert::find($notifyuser->expert_id);
+      if ($expert) {
+        if ($expert->is_active == 1 && (!is_null($expert->token) && $expert->token != '')) {
+          $tokenList = [$expert->token];
           return Larafirebase::withTitle($notify->title)
-          ->withBody($notify->body)
-          ->withImage($defaultimg)
-          ->withIcon($defaultsvg)
-          ->withSound('default')
-         // ->withClickAction('https://www.google.com')
-          ->withPriority('high')        
-          ->withAdditionalData([         
-             // 'date'=>$notifyuser->created_at,
-              'image'=>$defaultimg,
-          ])
-        ->sendMessage($tokenList);
-        }else{
-          return 'empty token';
-        }
-        }else{
-          return 'empty token'  ;
-        }
-      }else if($notifyuser->client_id>0){
-        $client=Client::find($notifyuser->client_id);
-        if($client){
-        if($client->is_active==1 && (!is_null($client->token)&& $client->token!='')){
-
-          $tokenList =[$client->token];
-          return Larafirebase::withTitle($notify->title)
-          ->withBody($notify->body)
-          ->withImage($defaultimg)
-          ->withIcon($defaultsvg)
-          ->withSound('default')
-         // ->withClickAction('https://www.google.com')
-          ->withPriority('high')        
-          ->withAdditionalData([         
-             // 'date'=>$notifyuser->created_at,
-              'image'=>$defaultimg,
-          ])
-        ->sendMessage($tokenList);
-      }else{
-   return 'empty token';
-      }
-    }else{
-      return 'empty token';
-         }
-  }else{
-    return 'empty';
-       } 
-    }
-    public function send_fire_notify_from_panel(Notification $notify, $tokenList)
-    {
-      $strgCtrlr=new StorageController();
-      $defaultimg=$strgCtrlr->DefaultPath('image');
-      $defaultsvg=$strgCtrlr->DefaultPath('icon');
-      $token="";
-      if($tokenList){    
-        //  $tokenList =[$tokenList];
-          return Larafirebase::withTitle($notify->title)
-          ->withBody($notify->body)
-          ->withImage($defaultimg)
-          ->withIcon($defaultsvg)
-          ->withSound('default')
-         // ->withClickAction('https://www.google.com')
-          ->withPriority('high')        
-          ->withAdditionalData([         
-             // 'date'=>$notify->created_at,
-              'image'=>$defaultimg,
-          ])
-        ->sendMessage($tokenList);
-        }else{
-          return 'empty token';
-        }  
-    }
-
-    //get
-
-    public function getclientnotifylist()
-    {
-        $authuser = auth()->user();
-        $request = request();
-
-        $formdata = $request->all();
-        //client_id
-//points
-        $storrequest = new NotifyListRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
-
-        $validator = Validator::make(
-            $formdata,
-            $storrequest->rules(),
-            $storrequest->messages()
-        );
-        if ($validator->fails()) {
-
-            return response()->json($validator->errors());
-            //   return redirect()->back()->withErrors($validator)->withInput();
-
+            ->withBody($notify->body)
+            ->withImage($defaultimg)
+            ->withIcon($defaultsvg)
+            ->withSound('default')
+            // ->withClickAction('https://www.google.com')
+            ->withPriority('high')
+            ->withAdditionalData([
+              // 'date'=>$notifyuser->created_at,
+              'image' => $defaultimg,
+            ])
+            ->sendMessage($tokenList);
         } else {
-$client_id=$formdata['id'];
-         
-            $Dblist = Notification::wherehas('notificationUsers', function ($query)use($client_id) {
-                $query->where('client_id',$client_id);
-            })->with([
-              'notificationUsers' => function ($q) use ($client_id) {
-                  $q->where('client_id', $client_id)
-                  ->select('id','notification_id', 'client_id', 'expert_id','isread','read_at','created_at');
-              }]
-          )->select('id', 'title',
+          return 'empty token';
+        }
+      } else {
+        return 'empty token';
+      }
+    } else if ($notifyuser->client_id > 0) {
+      $client = Client::find($notifyuser->client_id);
+      if ($client) {
+        if ($client->is_active == 1 && (!is_null($client->token) && $client->token != '')) {
+
+          $tokenList = [$client->token];
+          return Larafirebase::withTitle($notify->title)
+            ->withBody($notify->body)
+            ->withImage($defaultimg)
+            ->withIcon($defaultsvg)
+            ->withSound('default')
+            // ->withClickAction('https://www.google.com')
+            ->withPriority('high')
+            ->withAdditionalData([
+              // 'date'=>$notifyuser->created_at,
+              'image' => $defaultimg,
+            ])
+            ->sendMessage($tokenList);
+        } else {
+          return 'empty token';
+        }
+      } else {
+        return 'empty token';
+      }
+    } else {
+      return 'empty';
+    }
+  }
+  public function send_fire_notify_from_panel(Notification $notify, $tokenList)
+  {
+    $strgCtrlr = new StorageController();
+    $defaultimg = $strgCtrlr->DefaultPath('image');
+    $defaultsvg = $strgCtrlr->DefaultPath('icon');
+    $token = "";
+    if ($tokenList) {
+      //  $tokenList =[$tokenList];
+      return Larafirebase::withTitle($notify->title)
+        ->withBody($notify->body)
+        ->withImage($defaultimg)
+        ->withIcon($defaultsvg)
+        ->withSound('default')
+        // ->withClickAction('https://www.google.com')
+        ->withPriority('high')
+        ->withAdditionalData([
+          // 'date'=>$notify->created_at,
+          'image' => $defaultimg,
+        ])
+        ->sendMessage($tokenList);
+    } else {
+      return 'empty token';
+    }
+  }
+
+  //get
+
+  public function getclientnotifylist()
+  {
+    $authuser = auth()->user();
+    $request = request();
+
+    $formdata = $request->all();
+    //client_id
+//points
+    $storrequest = new NotifyListRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+    $validator = Validator::make(
+      $formdata,
+      $storrequest->rules(),
+      $storrequest->messages()
+    );
+    if ($validator->fails()) {
+
+      return response()->json($validator->errors());
+      //   return redirect()->back()->withErrors($validator)->withInput();
+
+    } else {
+      $client_id = $formdata['id'];
+
+      $Dblist = Notification::wherehas('notificationUsers', function ($query) use ($client_id) {
+        $query->where('client_id', $client_id);
+      })->with(
+          [
+            'notificationUsers' => function ($q) use ($client_id) {
+              $q->where('client_id', $client_id)
+                ->select('id', 'notification_id', 'client_id', 'expert_id', 'isread', 'read_at', 'created_at');
+            }
+          ]
+        )->select(
+          'id',
+          'title',
           'body',
           'type',
           'side',
           'data',
           'read_at',
-          'created_at',        
+          'created_at',
           'notes',
           'selectedservice_id',
-          )->orderByDesc('created_at')->get();
-          $list = $Dblist->map(function ($notify)  {
-            $readat=$notify->notificationUsers->first()->read_at;
-            return [
-              'id'=>$notify->notificationUsers->first()->id,
-              'notification_id' => $notify->id,
-              'title'=>$notify->title,
-              'body'=>$notify->body,
-              'type'=>$notify->type,
-              'side'=>$notify->side,          
-              'selectedservice_id'=>$notify->selectedservice_id,             
-              'client_id'=>$notify->notificationUsers->first()->client_id,             
-              'isread'=>$notify->notificationUsers->first()->isread,
-              'read_at'=>is_null($readat)?'': $readat,
-              'created_at'=>$notify->notificationUsers->first()->created_at,
-'path'=>$notify->path_conv,
-            ];
-          });
-           return response()->json($list);
+        )->orderByDesc('created_at')->get();
+      $list = $Dblist->map(function ($notify) {
+        $readat = $notify->notificationUsers->first()->read_at;
+        return [
+          'id' => $notify->notificationUsers->first()->id,
+          'notification_id' => $notify->id,
+          'title' => $notify->title,
+          'body' => $notify->body,
+          'type' => $notify->type,
+          'side' => $notify->side,
+          'selectedservice_id' => $notify->selectedservice_id,
+          'client_id' => $notify->notificationUsers->first()->client_id,
+          'isread' => $notify->notificationUsers->first()->isread,
+          'read_at' => is_null($readat) ? '' : $readat,
+          'created_at' => $notify->notificationUsers->first()->created_at,
+          'path' => $notify->path_conv,
+        ];
+      });
+      return response()->json($list);
 
-          
-        }
+
     }
+  }
+  public function settoread()
+  {
+    $request = request();
+    $formdata = $request->all();
+    $storrequest = new SetToReadRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+    $validator = Validator::make(
+      $formdata,
+      $storrequest->rules(),
+      $storrequest->messages()
+    );
+    if ($validator->fails()) {
+      return response()->json($validator->errors());
+    } else {
+    
+      $Notifyuser = NotificationUser::find($formdata['id']);
+      if (auth()->user()->id == $Notifyuser->client_id) {
+        $Notifyuser->isread = 1;
+        $Notifyuser->read_at =Carbon::now();
+        $Notifyuser->save();
+        return response()->json("ok");
+      } else {
+        return response()->json(['error' => 'Unauthenticated'], 401);
+      }
+    }
+  }
 }

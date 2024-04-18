@@ -69,7 +69,7 @@ Route::middleware('authClient:api_clients')->group(function () {
         
         Route::post('/store', [PointTransferController::class, 'store']);
         Route::post('/getnotifylist', [NotificationController::class, 'getclientnotifylist']);
-        
+        Route::post('/settoread', [NotificationController::class, 'settoread']);
 //api/client/service
         Route::prefix('/service')->group(function () {
             Route::post('/viewall', [serviceController::class, 'index']); 
