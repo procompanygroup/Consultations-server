@@ -165,17 +165,34 @@ class ClientController extends Controller
     public function show($id)
     {
       $strgCtrlr=new StorageController();
-      $url=$strgCtrlr->ExpertPath('image');
+      //$url=$strgCtrlr->ExpertPath('image');
      // $recurl=$strgCtrlr->ExpertPath('record');
      // $url =url(Storage::url($this->path)).'/';
       $object = Client::find($id);
       $object->birthdateStr= (string)Carbon::create($object->birthdate)->format('d/m/Y');
-      if( $object->image !="" ){
-        $object->fullpathimg= $url.$object->image;
-      }
+      $url=$strgCtrlr->InputPath('icon');
+      $usericon= $url.'username.svg';
+     $mobileicon=$url.'mobile-phone-icon.svg';
+     $emailicon=$url.'email.svg';
+     $nationalityicon=$url.'nationality.svg';
+     $birthicon=$url.'birthdate.svg';
+     $gendericon=$url.'gender.svg';
+     $martialicon=$url.'martial.svg';
+ 
+      // if( $object->image !="" ){
+      //   $object->fullpathimg= $url.$object->image;
+      // }
       //
        //return  dd ($object);
-      return view('admin.client.showinfo', ['client' => $object]);
+      return view('admin.client.showinfo', ['client' => $object,
+      'usericon' =>$usericon ,
+      'mobileicon' =>$mobileicon,
+      'emailicon' =>$emailicon,
+      'nationalityicon' =>$nationalityicon, 
+      'birthicon' =>$birthicon, 
+      'gendericon' =>$gendericon, 
+      'martialicon' =>$martialicon
+    ]);
     }
   
     /** 

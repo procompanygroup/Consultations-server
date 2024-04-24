@@ -39,49 +39,53 @@
 						<p><span class="badge badge-light badge-lg px-3 py-2">
                             <img alt="Icon SVG Vector Icon" fetchpriority="high" decoding="async" data-nimg="1"
                                 style="width:20px;height:20px"
-                                src="{{ asset('storage/images/inputs/icons/username.svg') }}">
+                                src="{{$usericon}}">
                             {{ ' ' . __('general.name') }}
                         </span>{{ ' ' . $client->user_name }}
                     </p> 
 					<p><span class="badge badge-light badge-lg px-3 py-2">
 						<img alt="Icon SVG Vector Icon" fetchpriority="high" decoding="async" data-nimg="1"
 							style="width:20px;height:20px"
-							src="{{ asset('storage/images/inputs/icons/mobile-phone-icon.svg') }}">
+							src="{{ $mobileicon }}">
 						{{ ' ' . __('general.mobile') }}
 					</span>{{ ' ' . $client->mobile }}
 				</p>
 				<p><span class="badge badge-light badge-lg px-3 py-2">
 					<img alt="Icon SVG Vector Icon" fetchpriority="high" decoding="async" data-nimg="1"
 						style="width:20px;height:20px"
-						src="{{ asset('storage/images/inputs/icons/email.svg') }}">
+						src="{{$emailicon }}">
 					{{ ' ' . __('general.email') }}
 				</span>{{ ' ' . $client->email }}
 			</p>
+            
+            
+            
+            
 			<p><span class="badge badge-light badge-lg px-3 py-2">
 				<img alt="Icon SVG Vector Icon" fetchpriority="high" decoding="async" data-nimg="1"
 					style="width:20px;height:20px"
-					src="{{ asset('storage/images/inputs/icons/nationality.svg') }}">
+					src="{{$nationalityicon}}">
 				{{ ' ' . __('general.nationality') }}
 			</span>{{ ' ' . $client->nationality }}
 		</p>
 		<p><span class="badge badge-light badge-lg px-3 py-2">
 			<img alt="Icon SVG Vector Icon" fetchpriority="high" decoding="async" data-nimg="1"
 				style="width:20px;height:20px"
-				src="{{ asset('storage/images/inputs/icons/birthdate.svg') }}">
+				src="{{ $birthicon }}">
 			{{ ' ' . __('general.birthdate') }}
 		</span>{{ ' ' . $client->birthdateStr }}
 	</p>
 	<p><span class="badge badge-light badge-lg px-3 py-2">
 		<img alt="Icon SVG Vector Icon" fetchpriority="high" decoding="async" data-nimg="1"
 			style="width:20px;height:20px"
-			src="{{ asset('storage/images/inputs/icons/gender.svg') }}">
+			src="{{ $gendericon}}">
 		{{ ' ' . __('general.gender') }}
 	</span>{{ ' ' . $client->gender_conv }}
 </p>
 <p><span class="badge badge-light badge-lg px-3 py-2">
 	<img alt="Icon SVG Vector Icon" fetchpriority="high" decoding="async" data-nimg="1"
 		style="width:20px;height:20px"
-		src="{{ asset('storage/images/inputs/icons/martial.svg') }}">
+		src="{{ $martialicon }}">
 	{{ ' ' . __('general.marital_status') }}
 </span>{{ ' ' . $client->marital_status_conv }}
 </p>
@@ -91,7 +95,7 @@
 					<div class="col-lg-4 mt-sm-3 mt-lg-0">
 						<img alt="" id="imgshow"
 							class="rounded img-thumbnail wd-100p float-sm-right  mg-t-10 mg-sm-t-0"
-							src="@if ($client->image == '') {{ URL::asset('storage/images/default/default.png') }}@else {{ $client->image_path }} @endif">
+							src="{{ $client->image_path }}">
 						</div>
 						
  
