@@ -452,7 +452,7 @@ $(document).ready(function () {
 		reader.readAsDataURL($input[0].files[0]);
 
 	}
-	title
+	 
 	$("#title").focusout(function (e) {
 		if (!validatempty($(this))) {
 			return false;
