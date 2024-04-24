@@ -1570,7 +1570,7 @@ class ExpertController extends Controller
             $iconurl = $strgCtrlr->ServicePath('icon');
             $defaultsvg = $strgCtrlr->DefaultPath('icon');
             $expert = Expert::select('id', 'cash_balance', 'cash_balance_todate')->find($formdata['expert_id']);
-
+            $expert->makeHidden(['full_name']);
             return response()->json($expert);
 
         }
