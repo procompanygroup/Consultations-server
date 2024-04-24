@@ -49,6 +49,9 @@ Route::middleware('authExpert:api')->group(function () {
     Route::post('/savetoken', [ExpertController::class, 'savetoken']);
     Route::post('/gettype', [ExpertController::class, 'gettype']);
     Route::post('/convertfile', [MailController::class, 'convertfile']);
+
+    Route::post('/getstatistics', [ExpertController::class, 'getstatistics']);
+    Route::post('/getwallet', [ExpertController::class, 'getwallet']);
  //   Route::post('/getloguser', [ClientController::class, 'getloguser']);uploadanswer
 
 });
@@ -70,6 +73,8 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/store', [PointTransferController::class, 'store']);
         Route::post('/getnotifylist', [NotificationController::class, 'getclientnotifylist']);
         Route::post('/settoread', [NotificationController::class, 'settoread']);
+    
+        
 //api/client/service
         Route::prefix('/service')->group(function () {
             Route::post('/viewall', [serviceController::class, 'index']); 

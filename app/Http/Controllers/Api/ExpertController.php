@@ -31,6 +31,8 @@ use App\Http\Requests\Api\Expert\UploadAnswerRequest;
 use App\Http\Requests\Api\Expert\UploadRecordRequest;
 use App\Http\Requests\Api\Expert\PullBalanceRequest;
 use App\Http\Requests\Api\Expert\SaveTokenRequest;
+use App\Http\Requests\Api\Expert\StatisticRequest;
+
 
 class ExpertController extends Controller
 {
@@ -115,6 +117,8 @@ class ExpertController extends Controller
 
         return response()->json($user);
     }
+
+
     public function getwithcomments()
     {
         $data = request(['id']);
@@ -1201,13 +1205,13 @@ class ExpertController extends Controller
                     "message" => $this->id
                 ]);
 
-        } else {
-            return response()->json(['error' => 'Unauthenticated'], 401);
+            } else {
+                return response()->json(['error' => 'Unauthenticated'], 401);
+            }
+
+
         }
 
-       
-        }
-      
     }
 
     public function uploadrecord(Request $request)
@@ -1224,20 +1228,20 @@ class ExpertController extends Controller
             return response()->json($validator->errors());
         } else {
 
-          
-                DB::transaction(function () use ($request, $formdata) {
 
-                    if ($request->hasFile('record')) {
-                        $file = $request->file('record');
-                        $this->storeExpertRecord($file, $formdata['id']);
-                        $this->id = $formdata['id'];
-                    }
-                });
+            DB::transaction(function () use ($request, $formdata) {
 
-                return response()->json([
-                    "message" => $this->id
-                ]);
-          
+                if ($request->hasFile('record')) {
+                    $file = $request->file('record');
+                    $this->storeExpertRecord($file, $formdata['id']);
+                    $this->id = $formdata['id'];
+                }
+            });
+
+            return response()->json([
+                "message" => $this->id
+            ]);
+
         }
 
     }
@@ -1265,7 +1269,7 @@ class ExpertController extends Controller
     }
     public function pullbalance()
     {
-        $authuser = auth()->user();
+        //   $authuser = auth()->user();
         $request = request();
 
         $formdata = $request->all();
@@ -1429,6 +1433,145 @@ class ExpertController extends Controller
                 ]
             );
             return response()->json("ok");
+
+        }
+    }
+
+    public function getstatistics()
+    {
+
+        //  return response()->json(['form' =>  $credentials]);
+        $request = request();
+
+        $formdata = $request->all();
+
+        $storrequest = new StatisticRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+
+            return response()->json($validator->errors());
+            //   return redirect()->back()->withErrors($validator)->withInput();
+
+        } else {
+            $expert_id = $formdata['expert_id'];
+            $strgCtrlr = new StorageController();
+            $iconurl = $strgCtrlr->ServicePath('icon');
+            $defaultsvg = $strgCtrlr->DefaultPath('icon');
+            //group services
+            $serviceIds = Selectedservice::where('expert_id', $expert_id)->
+                where(function ($query) {
+                    $query->where('comment_state', 'agree')
+                        ->orWhere('rate', '>', 0);
+                })->groupBy('service_id')->select('service_id')->get();
+            //group service client for comment and rate
+            $service_clientIds = Selectedservice::where('expert_id', $expert_id)->
+                where(function ($query) {
+                    $query->where('comment_state', 'agree')
+                        ->orWhere('rate', '>', 0);
+                })->groupBy('service_id', 'client_id')->select('service_id', 'client_id')->get();
+            $rate_id_list = [];
+            $admin_rate_id_list = [];
+            $comment_id_list = [];
+            foreach ($service_clientIds as $service_clint_row) {
+                //group service client rate
+                //rate 
+                $rate_Id = Selectedservice::where('expert_id', $expert_id)->
+                    where('service_id', $service_clint_row->service_id)->
+                    where('client_id', $service_clint_row->client_id)->
+                    where('rate', '>', 0)->orderByDesc('rate_date')->select('id')->first();
+                if ($rate_Id) {
+                    $rate_id_list[] = $rate_Id->id;
+                }
+                //admin rate 
+                $admin_rate_Id = Selectedservice::where('expert_id', $expert_id)->
+                    where('service_id', $service_clint_row->service_id)->
+                    where('client_id', $service_clint_row->client_id)->
+                    where('comment_state', 'agree')->
+                    where('comment_rate', '>', 0)
+                    ->orderByDesc('comment_rate_date')->select('id')->first();
+                if ($admin_rate_Id) {
+                    $admin_rate_id_list[] = $admin_rate_Id->id;
+                }
+
+            }
+            $last_service_list = [];
+            foreach ($serviceIds as $service_row) {
+                //rate
+                $rateavg = Selectedservice::where('expert_id', $expert_id)
+                    ->where('service_id', $service_row->service_id)
+                    ->whereIn('id', $rate_id_list)->select('rate')->average('rate');
+                //admin rate avg
+                $adminrateavg = Selectedservice::where('expert_id', $expert_id)
+                    ->where('service_id', $service_row->service_id)
+                    ->whereIn('id', $admin_rate_id_list)->select('comment_rate')->average('comment_rate');
+                $finalrate = 0;
+                if ($rateavg == 0 || $adminrateavg == 0) {
+                    $finalrate = ($rateavg + $adminrateavg);
+                } else {
+                    $finalrate = ($rateavg + $adminrateavg) / 2;
+                }
+                //2.1 ->3
+                $finalrate = ceil($finalrate);
+                //comment
+                $commentrow = Selectedservice::where('expert_id', $expert_id)
+                    ->where('service_id', $service_row->service_id)
+                    ->where('comment_state', 'agree')->orderByDesc('comment_date')->select('comment')->first();
+                $finalcomment = '';
+                if ($commentrow) {
+                    $finalcomment = $commentrow->comment;
+                }
+
+                $service = Service::select(
+                    'id',
+                    'name',
+                    DB::raw("(CASE 
+                    WHEN services.icon is NULL THEN '$defaultsvg'                    
+                    ELSE CONCAT('$iconurl',icon)
+                    END) AS icon")
+                )->find($service_row->service_id);
+                $arrayservice = [
+                    'service_id' => $service->id,
+                    'name' => $service->name,
+                    'icon' => $service->icon,
+                    'rate' => $finalrate,
+                    'comment' => $finalcomment,
+                ];
+                $last_service_list[] = $arrayservice;
+            }
+            $expert = Expert::select('id', 'answer_speed')->find($expert_id);
+            $answerspeed = $expert->answer_speed;
+
+            return response()->json(['answer_speed' => $answerspeed, 'service_statistics' => $last_service_list]);
+
+        }
+    }
+    public function getwallet()
+    {
+        //  return response()->json(['form' =>  $credentials]);
+        $request = request();
+        $formdata = $request->all();
+        $storrequest = new StatisticRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+            //   return redirect()->back()->withErrors($validator)->withInput();
+
+        } else {
+            $strgCtrlr = new StorageController();
+            $iconurl = $strgCtrlr->ServicePath('icon');
+            $defaultsvg = $strgCtrlr->DefaultPath('icon');
+            $expert = Expert::select('id', 'cash_balance', 'cash_balance_todate')->find($formdata['expert_id']);
+
+            return response()->json($expert);
 
         }
     }
