@@ -658,6 +658,10 @@ if( !is_null($item)){
                          'rate_date',
                          'answer_speed',
                          'comment_state',
+                         'comment',                          
+                         'comment_date',
+                          'comment_admin_date',                                  
+                        
                      )->where('id',$selectedservice_id)->get()
                     ->where('answer_state','agree')
                      ;
