@@ -53,7 +53,9 @@ Route::middleware('authExpert:api')->group(function () {
     Route::post('/getstatistics', [ExpertController::class, 'getstatistics']);
     Route::post('/getwallet', [ExpertController::class, 'getwallet']);
  //   Route::post('/getloguser', [ClientController::class, 'getloguser']);uploadanswer
-
+ Route::post('/getwithfav', [ExpertController::class, 'getexpertwithfav']); 
+ Route::post('/savefav', [ExpertController::class, 'saveexpertfav']); 
+ 
 });
 });
 //Route::get('getloguser', [ClientController::class, 'getloguser']);

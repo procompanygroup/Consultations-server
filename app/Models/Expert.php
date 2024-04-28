@@ -117,6 +117,11 @@ class Expert extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Expertfavorite::class);
     }
+
+    public function loginexpertFavorites(): HasMany
+    {
+        return $this->hasMany(Expertfavorite::class,'login_expert_id');
+    }
     public function selectedservices(): HasMany
     {
         return $this->hasMany(Selectedservice::class);

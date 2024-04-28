@@ -13,7 +13,7 @@ class Expertfavorite extends Model
     protected $fillable = [
         'client_id',
         'expert_id',
-           
+        'login_expert_id',
              
     ];
     public function expert(): BelongsTo
@@ -23,5 +23,9 @@ class Expertfavorite extends Model
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class)->withDefault();
+    }
+    public function loginexpert(): BelongsTo
+    {
+        return $this->belongsTo(Expert::class,'login_expert_id')->withDefault();
     }
 }

@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('notifications', function (Blueprint $table) {
-            $table->foreignId('selectedservice_id')->nullable();  
-            $table->foreignId('pointtransfer_id')->nullable();  
+        Schema::table('expertsfavorites', function (Blueprint $table) {
+            $table->foreignId('login_expert_id')->nullable();
         });
     }
 
@@ -22,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('notifications', function (Blueprint $table) {
+        Schema::table('expertsfavorites', function (Blueprint $table) {
             //
         });
     }
