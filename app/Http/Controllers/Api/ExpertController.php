@@ -734,6 +734,9 @@ class ExpertController extends Controller
                 return [
                     'id' => $expert->id,
                     'user_name' => $expert->user_name,
+                    'first_name' => $expert->first_name ,
+                    'last_name' => $expert->last_name ,
+                    'full_name' => $expert->full_name ,
                     'mobile' => $expert->mobile,
                     'country_num' => $expert->country_num,
                     'mobile_num' => $expert->mobile_num,
@@ -752,11 +755,12 @@ class ExpertController extends Controller
                     'record' => $expert->record == null ? " " : $recurl . $expert->record,
                     'image' => $expert->image == null ? $defaultimg : $url . $expert->image,
                     'is_favorite' => $expert->expertsFavorites->isEmpty() ? 0 : 1,
-
+                    
 
                     //  'expertsFavorites' => $expert->expertsFavorites,
                     //  'expertsServices'=>$item->expertsServices,
                     'services' => $expertsServicesMap,
+                    
 
                 ];
             });
