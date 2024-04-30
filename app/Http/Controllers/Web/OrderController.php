@@ -128,7 +128,7 @@ Company::find(1)->update([
             $Clientname=$selectedObj->client->user_name;           
            $title=  __('general.2ordercome_title',['Clientname'=> $Clientname]);
            $body= __('general.2ordercome_body',['Servicename'=> $Servicename,'Clientname'=> $Clientname]);     
-        $notctrlr->sendautonotify($title, $body,'auto','order-come','','order',0,$selectedObj->expert_id,$id,0);         
+        $notctrlr->sendautonotify($title, $body,'auto','order','','answer-wait',0,$selectedObj->expert_id,$id,0);         
 
         return response()->json("ok");       
       

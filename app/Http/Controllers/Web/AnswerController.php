@@ -327,7 +327,7 @@ $notctrlr2=new NotificationController();
  $Clientname=$selectedObj->client->user_name;    
 $title2= __('general.4addbalancetoexpert_title');
 $body2= __('general.4addbalancetoexpert_body',['Cash'=> $selectedObj->expert_cost_value,'Clientname'=> $Clientname]);     
-$notctrlr2->sendautonotify($title2, $body2,'auto','text','','finance',0,$selectedObj->expert_id,$id,$this->pointtransfer_id);
+$notctrlr2->sendautonotify($title2, $body2,'auto','order','','answer-agree',0,$selectedObj->expert_id,$id,$this->pointtransfer_id);
 
     return response()->json("ok");
 
@@ -372,7 +372,7 @@ $notctrlr2->sendautonotify($title2, $body2,'auto','text','','finance',0,$selecte
       $Reason= $this->reasonval;     
       $title=  __('general.7answerreject_title',['Clientname'=> $Clientname]);
       $body= __('general.7answerreject_body',['Reason'=> $Reason]);     
-   $notctrlr->sendautonotify($title, $body,'auto','text','','order-answer-reject',0,$selectedObj->expert_id,$id,0);         
+   $notctrlr->sendautonotify($title, $body,'auto','order','','answer-reject',0,$selectedObj->expert_id,$id,0);         
 
       return response()->json("ok");
     }

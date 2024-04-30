@@ -456,6 +456,75 @@ class NotificationController extends Controller
 
     }
   }
+  
+  public function getexpertnotifylist()
+  {
+    $authuser = auth()->user();
+    $request = request();
+
+    $formdata = $request->all();
+    //client_id
+//points
+    $storrequest = new NotifyListRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+    $validator = Validator::make(
+      $formdata,
+      $storrequest->rules(),
+      $storrequest->messages()
+    );
+    if ($validator->fails()) {
+
+      return response()->json($validator->errors());
+      //   return redirect()->back()->withErrors($validator)->withInput();
+
+    } else {
+      $expert_id= $formdata['id'];
+
+      $Dblist = Notification::wherehas('notificationUsers', function ($query) use ($expert_id) {
+        $query->where('expert_id', $expert_id);
+      })->with(
+          [
+            'notificationUsers' => function ($q) use ($expert_id) {
+              $q->where('expert_id', $expert_id)
+                ->select('id', 'notification_id', 'client_id', 'expert_id', 'isread', 'read_at', 'created_at');
+            }
+          ]
+        )->select(
+          'id',
+          'title',
+          'body',
+          'type',
+          'side',
+          'data',
+          'read_at',
+          'created_at',
+          'notes',
+          'selectedservice_id',
+        )->orderByDesc('created_at')->get();
+      $list = $Dblist->map(function ($notify) {
+        $readat = $notify->notificationUsers->first()->read_at;
+        return [
+          'id' => $notify->notificationUsers->first()->id,
+          'notification_id' => $notify->id,
+          'title' => $notify->title,
+          'body' => $notify->body,
+          'type' => $notify->type,
+          'order_type' => $notify->notes,
+          'side' => $notify->side,
+          'selectedservice_id' => $notify->selectedservice_id,
+          'client_id' => $notify->notificationUsers->first()->client_id,
+          'expert_id' => $notify->notificationUsers->first()->expert_id,
+          'isread' => $notify->notificationUsers->first()->isread,
+          'read_at' => is_null($readat) ? '' : $readat,
+          'created_at' => $notify->notificationUsers->first()->created_at,
+          'path' => $notify->path_conv,
+        ];
+      });
+      return response()->json($list);
+
+
+    }
+  }
   public function settoread()
   {
     $request = request();
@@ -473,6 +542,32 @@ class NotificationController extends Controller
     
       $Notifyuser = NotificationUser::find($formdata['id']);
       if (auth()->user()->id == $Notifyuser->client_id) {
+        $Notifyuser->isread = 1;
+        $Notifyuser->read_at =Carbon::now();
+        $Notifyuser->save();
+        return response()->json("ok");
+      } else {
+        return response()->json(['error' => 'Unauthenticated'], 401);
+      }
+    }
+  }
+  public function settoreadexpert()
+  {
+    $request = request();
+    $formdata = $request->all();
+    $storrequest = new SetToReadRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+    $validator = Validator::make(
+      $formdata,
+      $storrequest->rules(),
+      $storrequest->messages()
+    );
+    if ($validator->fails()) {
+      return response()->json($validator->errors());
+    } else {
+    
+      $Notifyuser = NotificationUser::find($formdata['id']);
+      if (auth()->user()->id == $Notifyuser->expert_id) {
         $Notifyuser->isread = 1;
         $Notifyuser->read_at =Carbon::now();
         $Notifyuser->save();

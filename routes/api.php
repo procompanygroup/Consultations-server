@@ -55,7 +55,10 @@ Route::middleware('authExpert:api')->group(function () {
  //   Route::post('/getloguser', [ClientController::class, 'getloguser']);uploadanswer
  Route::post('/getwithfav', [ExpertController::class, 'getexpertwithfav']); 
  Route::post('/savefav', [ExpertController::class, 'saveexpertfav']); 
- 
+ //notification
+ Route::post('/getnotifylist', [NotificationController::class, 'getexpertnotifylist']);
+ Route::post('/settoread', [NotificationController::class, 'settoreadexpert']);
+
  Route::prefix('/service')->group(function () {
     Route::post('/viewall', [serviceController::class, 'index']); 
 });

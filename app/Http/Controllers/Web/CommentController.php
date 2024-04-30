@@ -126,7 +126,7 @@ $selectedObj= Selectedservice::with('service:id,name','expert:id,first_name,last
    
 $title= __('general.8commentcome_title');
 $body= __('general.8commentcome_body',['Servicename'=> $Servicename,'Clientname'=>$Clientname]);     
-$notctrlr->sendautonotify($title, $body,'auto','order-comment','','order-comment',0,$selectedObj->expert_id,$id,0);   
+$notctrlr->sendautonotify($title, $body,'auto','order','','comment',0,$selectedObj->expert_id,$id,0);   
 
     return response()->json("ok");
 
