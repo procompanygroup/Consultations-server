@@ -56,6 +56,9 @@ Route::middleware('authExpert:api')->group(function () {
  Route::post('/getwithfav', [ExpertController::class, 'getexpertwithfav']); 
  Route::post('/savefav', [ExpertController::class, 'saveexpertfav']); 
  
+ Route::prefix('/service')->group(function () {
+    Route::post('/viewall', [serviceController::class, 'index']); 
+});
 });
 });
 //Route::get('getloguser', [ClientController::class, 'getloguser']);
