@@ -64,8 +64,33 @@ class ExpertController extends Controller
         $url = $strgCtrlr->ExpertPath('image');
         $recurl = $strgCtrlr->ExpertPath('record');
         $defaultimg = $strgCtrlr->DefaultPath('image');
-        $user = Expert::where('user_name', request(['user_name']))->
-            where('is_active', 1)->
+        $serviceUrl = $strgCtrlr->ServicePath('image');
+        $defaultsvg = $strgCtrlr->DefaultPath('icon');
+
+        $url = $strgCtrlr->ExpertPath('image');
+        $recurl = $strgCtrlr->ExpertPath('record');
+        $defaultimg = $strgCtrlr->DefaultPath('image');
+        $iconurl = $strgCtrlr->ServicePath('icon');
+
+        $expertDB = Expert::with(
+            [
+                'expertsServices:id,expert_id,service_id',
+                'expertsServices.service' => function ($q) use ($defaultimg, $serviceUrl, $defaultsvg, $iconurl) {
+                    $q->select(
+                        'id',
+                        'name',
+                        DB::raw("(CASE 
+                WHEN services.image is NULL THEN '$defaultimg'                  
+                ELSE CONCAT('$serviceUrl',image)
+                END) AS image"),
+                        DB::raw("(CASE 
+                WHEN services.icon is NULL THEN '$defaultsvg'                    
+                ELSE CONCAT('$iconurl',icon)
+                END) AS icon")
+                    );
+                }
+            ]
+        )->
             select(
                 'id',
                 'user_name',
@@ -99,13 +124,15 @@ class ExpertController extends Controller
             END) AS image"),
                 'first_name',
                 'last_name',
-            )->first();
-
+            )->where('user_name', request(['user_name']))->
+            where('is_active', 1)->first();
+        /// map 
+        $user = $this->convtoArrForgetexpert($expertDB);
         $authuser = auth()->user();
         //  return response()->json(['form' =>  $credentials]);
-        if (!is_null($user)) {
+        if (!is_null($expertDB)) {
             if (
-                !(($user->user_name == $authuser->user_name)
+                !(($expertDB->user_name == $authuser->user_name)
                     // && (Hash::check( $passval, $user->password))
                 )
             ) {
@@ -590,7 +617,7 @@ class ExpertController extends Controller
                             'is_callservice'
                         );
                     }
-                ])->where('is_active',1)->get();
+                ])->where('is_active', 1)->get();
             $collList = collect($DBList);
 
             $List = $DBList->map(function ($expert) use ($url, $recurl, $service_url, $service_icon_url, $defaultimg, $defaultsvg) {
@@ -702,7 +729,7 @@ class ExpertController extends Controller
                             'is_callservice'
                         );
                     }
-                ])->whereNot('id',$id)->where('is_active',1)->get();
+                ])->whereNot('id', $id)->where('is_active', 1)->get();
             $collList = collect($DBList);
 
             $List = $DBList->map(function ($expert) use ($url, $recurl, $service_url, $service_icon_url, $defaultimg, $defaultsvg) {
@@ -734,9 +761,9 @@ class ExpertController extends Controller
                 return [
                     'id' => $expert->id,
                     'user_name' => $expert->user_name,
-                    'first_name' => $expert->first_name ,
-                    'last_name' => $expert->last_name ,
-                    'full_name' => $expert->full_name ,
+                    'first_name' => $expert->first_name,
+                    'last_name' => $expert->last_name,
+                    'full_name' => $expert->full_name,
                     'mobile' => $expert->mobile,
                     'country_num' => $expert->country_num,
                     'mobile_num' => $expert->mobile_num,
@@ -755,12 +782,12 @@ class ExpertController extends Controller
                     'record' => $expert->record == null ? " " : $recurl . $expert->record,
                     'image' => $expert->image == null ? $defaultimg : $url . $expert->image,
                     'is_favorite' => $expert->expertsFavorites->isEmpty() ? 0 : 1,
-                    
+
 
                     //  'expertsFavorites' => $expert->expertsFavorites,
                     //  'expertsServices'=>$item->expertsServices,
                     'services' => $expertsServicesMap,
-                    
+
 
                 ];
             });
@@ -936,6 +963,46 @@ class ExpertController extends Controller
                 'image' => $expert->image,
                 'full_name' => $expert->full_name,
                 'is_favorite' => $expert->expertsFavorites->isEmpty() ? 0 : 1,
+            ];
+        }
+    }
+    //getexpert
+    public function convtoArrForgetexpert($expert)
+    {
+        if (is_null($expert)) {
+            return $expert;
+        } else {
+            //start services
+            $ServicesMap = $expert->expertsServices
+                ->map(function ($expertsServices) {
+                    //ServiceMap 
+                    return $this->servicetoArr($expertsServices->service);
+                });
+            //end services
+
+            return [
+                'id' => $expert->id,
+                'user_name' => $expert->user_name,
+                'mobile' => $expert->mobile,
+                'country_num' => $expert->country_num,
+                'mobile_num' => $expert->mobile_num,
+                'email' => $expert->email,
+                'birthdate' => $expert->birthdate,
+                'gender' => $expert->gender,
+                'is_active' => $expert->is_active,
+                'points_balance' => $expert->points_balance,
+                'cash_balance' => $expert->cash_balance,
+                'cash_balance_todate' => $expert->cash_balance_todate,
+                'rates' => $expert->rates,
+                'record' => $expert->record,
+                'desc' => $expert->desc,
+                'call_cost' => $expert->call_cost,
+                'answer_speed' => $expert->answer_speed,
+                'image' => $expert->image,
+                'first_name' => $expert->first_name,
+                'last_name' => $expert->last_name,
+                'full_name' => $expert->full_name,
+                'services' => $ServicesMap,
             ];
         }
     }
@@ -1127,50 +1194,50 @@ class ExpertController extends Controller
             }
         }
     }
-//expert app
-public function saveexpertfav()
-{
-    $authuser = auth()->user();
-    $request = request();
+    //expert app
+    public function saveexpertfav()
+    {
+        $authuser = auth()->user();
+        $request = request();
 
-    $formdata = $request->all();
+        $formdata = $request->all();
 
-    $storrequest = new StoreExpertRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+        $storrequest = new StoreExpertRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
 
-    $validator = Validator::make(
-        $formdata,
-        $storrequest->rules(),
-        $storrequest->messages()
-    );
-    if ($validator->fails()) {
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
 
-        return response()->json($validator->errors());
-        //   return redirect()->back()->withErrors($validator)->withInput();
+            return response()->json($validator->errors());
+            //   return redirect()->back()->withErrors($validator)->withInput();
 
-    } else {
-
-        //   $data = json_decode($request->getContent(), true);            
-        //   return response()->json([$client_id,$authuser->id]);
-        if ($authuser->id == $formdata['login_expert_id']) {
-
-            if ($formdata['is_favorite'] == true) {
-                //updateOrCreate
-                $expertfavorit = Expertfavorite::updateOrCreate(
-                    ['login_expert_id' => $formdata['login_expert_id'], 'expert_id' => $formdata['expert_id']]
-                );
-            } else {
-                //delete
-                $deleted = Expertfavorite::where('login_expert_id', $formdata['login_expert_id'])->where('expert_id', $formdata['expert_id'])->delete();
-
-            }
-            return response()->json("ok");
-            //   return response()->json( $client_id );
         } else {
-            return response()->json(['error' => 'Unauthenticated'], 401);
+
+            //   $data = json_decode($request->getContent(), true);            
+            //   return response()->json([$client_id,$authuser->id]);
+            if ($authuser->id == $formdata['login_expert_id']) {
+
+                if ($formdata['is_favorite'] == true) {
+                    //updateOrCreate
+                    $expertfavorit = Expertfavorite::updateOrCreate(
+                        ['login_expert_id' => $formdata['login_expert_id'], 'expert_id' => $formdata['expert_id']]
+                    );
+                } else {
+                    //delete
+                    $deleted = Expertfavorite::where('login_expert_id', $formdata['login_expert_id'])->where('expert_id', $formdata['expert_id'])->delete();
+
+                }
+                return response()->json("ok");
+                //   return response()->json( $client_id );
+            } else {
+                return response()->json(['error' => 'Unauthenticated'], 401);
+            }
         }
     }
-}
-//end
+    //end
     public function deleteaccount()
     {
         $formdata = request(['id']);
