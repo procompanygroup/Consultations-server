@@ -61,6 +61,7 @@ Route::middleware('authExpert:api')->group(function () {
 
  Route::prefix('/service')->group(function () {
     Route::post('/viewall', [serviceController::class, 'index']); 
+    Route::post('/getinputform', [serviceController::class, 'getinputserviceform']); 
 });
 });
 });
