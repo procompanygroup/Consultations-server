@@ -203,7 +203,7 @@
 <script  >  
 var emptyimg ="{{URL::asset('assets/img/photos/1.jpg')}}";
 var countryurl = "{{URL::asset('assets/js/admin/countries.json')}}";
-var=selcntry="";
+var selcntry="";
 </script>
 
 @endsection
