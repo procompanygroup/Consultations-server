@@ -77,7 +77,8 @@ class NotificationController extends Controller
           'username' => "Ahmad",
           'image' => $defaultimg,
         ])
-        ->sendMessage($tokenList);
+       // ->sendMessage($tokenList)
+        ->sendNotification($tokenList);
     } else {
       return 'empty token';
     }
