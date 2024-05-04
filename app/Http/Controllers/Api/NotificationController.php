@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Http\Requests\Api\Client\NotifyListRequest;
 use App\Http\Requests\Api\Client\SetToReadRequest;
+use App\Http\Requests\Api\Client\NotifyByIdRequest;
 
 //use Notification;
 use App\Models\Notification;
@@ -435,27 +436,77 @@ class NotificationController extends Controller
           'notes',
           'selectedservice_id',
         )->orderByDesc('created_at')->get();
-      $list = $Dblist->map(function ($notify) {
-        $readat = $notify->notificationUsers->first()->read_at;
-        return [
-          'id' => $notify->notificationUsers->first()->id,
-          'notification_id' => $notify->id,
-          'title' => $notify->title,
-          'body' => $notify->body,
-          'type' => $notify->type,
-          'side' => $notify->side,
-          'selectedservice_id' => $notify->selectedservice_id,
-          'client_id' => $notify->notificationUsers->first()->client_id,
-          'isread' => $notify->notificationUsers->first()->isread,
-          'read_at' => is_null($readat) ? '' : $readat,
-          'created_at' => $notify->notificationUsers->first()->created_at,
-          'path' => $notify->path_conv,
-        ];
-      });
+        $list=   $this->mapnotifylist( $Dblist);     
       return response()->json($list);
-
-
     }
+  }
+
+  public function getnotifybyid()
+  {
+    //client
+    $request = request();
+    $formdata = $request->all();
+    //client_id
+//points
+    $storrequest = new NotifyByIdRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+    $validator = Validator::make(
+      $formdata,
+      $storrequest->rules(),
+      $storrequest->messages()
+    );
+    if ($validator->fails()) {
+
+      return response()->json($validator->errors());
+      //   return redirect()->back()->withErrors($validator)->withInput();
+
+    } else {
+      $notify_users_id = $formdata['id'];
+
+      $Dblist = Notification::wherehas('notificationUsers', function ($query) use ($notify_users_id) {
+        $query->where('id', $notify_users_id);
+      })->with(
+          [
+            'notificationUsers' => function ($q) use ($notify_users_id) {
+              $q->where('id', $notify_users_id)
+                ->select('id', 'notification_id', 'client_id', 'expert_id', 'isread', 'read_at', 'created_at');
+            }
+          ]
+        )->select(
+          'id',
+          'title',
+          'body',
+          'type',
+          'side',
+          'data',
+          'read_at',
+          'created_at',
+          'notes',
+          'selectedservice_id',
+        )->orderByDesc('created_at')->get();
+        $list=   $this->mapnotifylist( $Dblist);     
+      return response()->json($list);
+    }
+  }
+  public function mapnotifylist($Dblist)
+  {
+    $list = $Dblist->map(function ($notify) {
+      $readat = $notify->notificationUsers->first()->read_at;
+      return [
+        'id' => $notify->notificationUsers->first()->id,
+        'notification_id' => $notify->id,
+        'title' => $notify->title,
+        'body' => $notify->body,
+        'type' => $notify->type,
+        'side' => $notify->side,
+        'selectedservice_id' => $notify->selectedservice_id,
+        'client_id' => $notify->notificationUsers->first()->client_id,
+        'isread' => $notify->notificationUsers->first()->isread,
+        'read_at' => is_null($readat) ? '' : $readat,
+        'created_at' => $notify->notificationUsers->first()->created_at,
+        'path' => $notify->path_conv,
+      ];
+    });
+    return $list;
   }
   
   public function getexpertnotifylist()
@@ -502,29 +553,83 @@ class NotificationController extends Controller
           'notes',
           'selectedservice_id',
         )->orderByDesc('created_at')->get();
-      $list = $Dblist->map(function ($notify) {
-        $readat = $notify->notificationUsers->first()->read_at;
-        return [
-          'id' => $notify->notificationUsers->first()->id,
-          'notification_id' => $notify->id,
-          'title' => $notify->title,
-          'body' => $notify->body,
-          'type' => $notify->type,
-          'order_type' => $notify->notes,
-          'side' => $notify->side,
-          'selectedservice_id' => $notify->selectedservice_id,
-          'client_id' => $notify->notificationUsers->first()->client_id,
-          'expert_id' => $notify->notificationUsers->first()->expert_id,
-          'isread' => $notify->notificationUsers->first()->isread,
-          'read_at' => is_null($readat) ? '' : $readat,
-          'created_at' => $notify->notificationUsers->first()->created_at,
-          'path' => $notify->path_conv,
-        ];
-      });
+        $list=   $this->mapnotifylist( $Dblist);  
       return response()->json($list);
 
 
     }
+  }
+
+  public function getexpertnotifybyid()
+  {
+    
+    $request = request();
+
+    $formdata = $request->all();
+    //client_id
+//points
+    $storrequest = new NotifyByIdRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+    $validator = Validator::make(
+      $formdata,
+      $storrequest->rules(),
+      $storrequest->messages()
+    );
+    if ($validator->fails()) {
+
+      return response()->json($validator->errors());
+      //   return redirect()->back()->withErrors($validator)->withInput();
+
+    } else {
+      $notify_users_id = $formdata['id'];
+
+      $Dblist = Notification::wherehas('notificationUsers', function ($query) use ($notify_users_id ) {
+        $query->where('id',$notify_users_id );
+      })->with(
+          [
+            'notificationUsers' => function ($q) use ($notify_users_id ) {
+              $q->where('id', $notify_users_id )
+                ->select('id', 'notification_id', 'client_id', 'expert_id', 'isread', 'read_at', 'created_at');
+            }
+          ]
+        )->select(
+          'id',
+          'title',
+          'body',
+          'type',
+          'side',
+          'data',
+          'read_at',
+          'created_at',
+          'notes',
+          'selectedservice_id',
+        )->orderByDesc('created_at')->get();
+        $list=   $this->mapnotifylist( $Dblist);  
+      return response()->json($list);
+    }
+  }
+  public function mapexpertnotifylist($Dblist)
+  {
+    $list = $Dblist->map(function ($notify) {
+      $readat = $notify->notificationUsers->first()->read_at;
+      return [
+        'id' => $notify->notificationUsers->first()->id,
+        'notification_id' => $notify->id,
+        'title' => $notify->title,
+        'body' => $notify->body,
+        'type' => $notify->type,
+        'order_type' => $notify->notes,
+        'side' => $notify->side,
+        'selectedservice_id' => $notify->selectedservice_id,
+        'client_id' => $notify->notificationUsers->first()->client_id,
+        'expert_id' => $notify->notificationUsers->first()->expert_id,
+        'isread' => $notify->notificationUsers->first()->isread,
+        'read_at' => is_null($readat) ? '' : $readat,
+        'created_at' => $notify->notificationUsers->first()->created_at,
+        'path' => $notify->path_conv,
+      ];
+    });
+    return $list;
   }
   public function settoread()
   {

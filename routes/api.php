@@ -58,6 +58,7 @@ Route::middleware('authExpert:api')->group(function () {
  //notification
  Route::post('/getnotifylist', [NotificationController::class, 'getexpertnotifylist']);
  Route::post('/settoread', [NotificationController::class, 'settoreadexpert']);
+ Route::post('/getnotifybyid', [NotificationController::class, 'getexpertnotifybyid']);
 
  Route::prefix('/service')->group(function () {
     Route::post('/viewall', [serviceController::class, 'index']); 
@@ -82,7 +83,7 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/store', [PointTransferController::class, 'store']);
         Route::post('/getnotifylist', [NotificationController::class, 'getclientnotifylist']);
         Route::post('/settoread', [NotificationController::class, 'settoread']);
-    
+        Route::post('/getnotifybyid', [NotificationController::class, 'getnotifybyid']);
         
 //api/client/service
         Route::prefix('/service')->group(function () {
