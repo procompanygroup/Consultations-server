@@ -355,10 +355,10 @@ $sendlist=$this->mapexperttoken($list);
   }
   public function sendfirenotify(Notification $notify, NotificationUser $notifyuser)
   {
-    $strgCtrlr = new StorageController();
-    $defaultimg = $strgCtrlr->DefaultPath('image');
-    $defaultsvg = $strgCtrlr->DefaultPath('icon');
-    $token = "";
+  //  $strgCtrlr = new StorageController();
+    //$defaultimg = $strgCtrlr->DefaultPath('image');
+    //$defaultsvg = $strgCtrlr->DefaultPath('icon');
+    //$token = "";
     if ($notifyuser->expert_id > 0) {
       $expert = Expert::find($notifyuser->expert_id);
       if ($expert) {
@@ -366,14 +366,15 @@ $sendlist=$this->mapexperttoken($list);
           $tokenList = [$expert->token];
           return Larafirebase::withTitle($notify->title)
             ->withBody($notify->body)
-            ->withImage($defaultimg)
-            ->withIcon($defaultsvg)
+           // ->withImage($defaultimg)
+          //  ->withIcon($defaultsvg)
             ->withSound('default')
             // ->withClickAction('https://www.google.com')
             ->withPriority('high')
             ->withAdditionalData([
               // 'date'=>$notifyuser->created_at,
-              'image' => $defaultimg,
+              'id'=> $notifyuser->id,
+             // 'image' => $defaultimg,
             ])
             ->sendMessage($tokenList);
         } else {
@@ -390,14 +391,15 @@ $sendlist=$this->mapexperttoken($list);
           $tokenList = [$client->token];
           return Larafirebase::withTitle($notify->title)
             ->withBody($notify->body)
-            ->withImage($defaultimg)
-            ->withIcon($defaultsvg)
+           // ->withImage($defaultimg)
+           // ->withIcon($defaultsvg)
             ->withSound('default')
             // ->withClickAction('https://www.google.com')
             ->withPriority('high')
             ->withAdditionalData([
               // 'date'=>$notifyuser->created_at,
-              'image' => $defaultimg,
+              'id'=> $notifyuser->id,
+            //  'image' => $defaultimg,
             ])
             ->sendMessage($tokenList);
         } else {
