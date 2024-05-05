@@ -170,16 +170,22 @@ class NotificationController extends Controller
             'state' => 'sent',
           ];
         });
+
         NotificationUser::insert($insertList->toArray());
       }
       //send firebase notify
 
       if (Str::contains($side, 'expert')) {
-        $experttokenList = Expert::where('is_active', 1)->whereNotNull('token')->pluck('token')->all();
+      //  $experttokenList = Expert::where('is_active', 1)->whereNotNull('token')->pluck('token')->all();
+            
+ //   $list= $this->clienttokenwithid( $notify);
+      $experttokenList= $this->experttokenwithid($newObj);
         $this->send_fire_notify_from_panel($newObj, $experttokenList);
       }
       if (Str::contains($side, 'client')) {
-        $clienttokenList = User::where('is_active', 1)->whereNotNull('token')->pluck('token')->all();
+     //   $clienttokenList = User::where('is_active', 1)->whereNotNull('token')->pluck('token')->all();
+        $clienttokenList= $this->clienttokenwithid( $newObj);
+     
         $this->send_fire_notify_from_panel($newObj, $clienttokenList);
       }    //$boolres= Str::contains( $type,'form') ;     
       return response()->json("ok");
@@ -190,11 +196,50 @@ class NotificationController extends Controller
   /**
    * Display the specified resource.
    */
-  public function show(string $id)
-  {
-    //
+  public function show()
+  { 
   }
+  public function clienttokenwithid(Notification $notify){
+    $id=$notify->id;
 
+    $list=NotificationUser::where('notification_id',$id)->
+    whereHas('client', function ($query) {
+$query->whereNotNull('token')->whereNot('token','')->where('is_active',1) ;     
+})->with('client:id,is_active,token')->select('id', 'notification_id', 'client_id','expert_id')->get();
+$sendlist=$this->mapclienttoken($list);
+return $sendlist;
+  }
+  public function experttokenwithid(Notification $notify){
+    $id=$notify->id;
+    $list=NotificationUser::where('notification_id', $id)->
+    whereHas('expert', function ($query) use ($id) {
+$query->whereNotNull('token')->whereNot('token','')->where('is_active',1) ;
+})->with('expert:id,is_active,token')->select('id', 'notification_id', 'client_id','expert_id',)->get();
+$sendlist=$this->mapexperttoken($list);
+    return $sendlist;
+  }
+  public function mapclienttoken($NotificationUserList)
+  {
+    $list = $NotificationUserList->map(function ($notifyuser) {
+ 
+      return [
+        'id' => $notifyuser->id,
+        'token' => $notifyuser->client->token,         
+      ];
+    });
+    return $list;
+  }
+  public function mapexperttoken($NotificationUserList)
+  {
+    $list = $NotificationUserList->map(function ($notifyuser) {
+ 
+      return [
+        'id' => $notifyuser->id,
+        'token' => $notifyuser->expert->token,         
+      ];
+    });
+    return $list;
+  }
   /**
    * Show the form for editing the specified resource.
    */
@@ -367,24 +412,28 @@ class NotificationController extends Controller
   }
   public function send_fire_notify_from_panel(Notification $notify, $tokenList)
   {
-    $strgCtrlr = new StorageController();
-    $defaultimg = $strgCtrlr->DefaultPath('image');
-    $defaultsvg = $strgCtrlr->DefaultPath('icon');
-    $token = "";
+ //   $strgCtrlr = new StorageController();
+   // $defaultimg = $strgCtrlr->DefaultPath('image');
+ //   $defaultsvg = $strgCtrlr->DefaultPath('icon');
+   
+    $res="";
     if ($tokenList) {
-      //  $tokenList =[$tokenList];
-      return Larafirebase::withTitle($notify->title)
+      foreach($tokenList as $tokenrow){
+        $tokenarr= [$tokenrow['token']];
+        $res=Larafirebase::withTitle($notify->title)
         ->withBody($notify->body)
-        ->withImage($defaultimg)
-        ->withIcon($defaultsvg)
+      //  ->withImage($defaultimg)
+       // ->withIcon($defaultsvg)
         ->withSound('default')
         // ->withClickAction('https://www.google.com')
         ->withPriority('high')
         ->withAdditionalData([
-          // 'date'=>$notify->created_at,
-          'image' => $defaultimg,
+         'id'=> $tokenrow['id'],
+         // 'image' => $defaultimg,
         ])
-        ->sendMessage($tokenList);
+        ->sendMessage($tokenarr);
+      }
+      return $res ;
     } else {
       return 'empty token';
     }
