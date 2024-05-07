@@ -98,11 +98,11 @@
                             <div class="col-lg-4 mt-sm-3 mt-lg-0">
 							 
 									<img alt="" id="imgshow" class="rounded img-thumbnail wd-100p float-sm-right  mg-t-10 mg-sm-t-0"
-									src="@if($service->image==""){{URL::asset('assets/img/photos/1.jpg')}}@else {{ $service->fullpathimg }} @endif" >
+									src="{{$service->image_path}}" >
 								 
                               
 									<img alt="" id="iconshow" class="rounded img-thumbnail wd-100p float-sm-right  mg-t-10 mg-sm-t-0"
-									src="@if($service->icon==""){{URL::asset('assets/img/photos/1.jpg')}} @else {{ $service->fullpathsvg }} @endif" >
+									src="{{$service->svg_path}}" >
 							 
                             </div>
 							</div>
