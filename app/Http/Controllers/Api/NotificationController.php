@@ -604,7 +604,7 @@ $sendlist=$this->mapexperttoken($list);
           'notes',
           'selectedservice_id',
         )->orderByDesc('created_at')->get();
-        $list=   $this->mapnotifylist( $Dblist)->first();  
+        $list=   $this->mapnotifylist( $Dblist);  
       return response()->json($list);
 
 
@@ -655,7 +655,7 @@ $sendlist=$this->mapexperttoken($list);
           'notes',
           'selectedservice_id',
         )->orderByDesc('created_at')->get();
-        $list=   $this->mapnotifylist( $Dblist);  
+        $list=   $this->mapnotifylist( $Dblist)->first();  
       return response()->json($list);
     }
   }
