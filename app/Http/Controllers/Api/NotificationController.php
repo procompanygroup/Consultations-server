@@ -448,7 +448,7 @@ $sendlist=$this->mapexperttoken($list);
          'id'=> $tokenrow['id'],
          // 'image' => $defaultimg,
         ])
-        ->sendNotification($tokenList);
+        ->sendNotification($tokenarr);
       // ->sendMessage($tokenarr);
       }
       return $res ;
