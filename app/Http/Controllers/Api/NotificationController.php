@@ -438,18 +438,23 @@ $sendlist=$this->mapexperttoken($list);
       foreach($tokenList as $tokenrow){
         $tokenarr= [$tokenrow['token']];
         $res=Larafirebase::withTitle($notify->title)
-        ->withBody($notify->body)
-      //  ->withImage($defaultimg)
-       // ->withIcon($defaultsvg)
-        ->withSound('default')
-        // ->withClickAction('https://www.google.com')
+        ->withBody($notify->body)     
+        ->withSound('default')     
         ->withPriority('high')
         ->withAdditionalData([
-         'id'=> $tokenrow['id'],
-         // 'image' => $defaultimg,
+         'id'=> $tokenrow['id'],         
+        ])
+        ->sendMessage($tokenarr);
+
+        $res=Larafirebase::withTitle($notify->title)
+        ->withBody($notify->body)    
+        ->withSound('default')     
+        ->withPriority('high')
+        ->withAdditionalData([
+         'id'=> $tokenrow['id'],         
         ])
         ->sendNotification($tokenarr);
-      // ->sendMessage($tokenarr);
+    
       }
       return $res ;
     } else {
