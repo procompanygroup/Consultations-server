@@ -368,6 +368,7 @@ $sendlist=$this->mapexperttoken($list);
   }
   public function sendfirenotify(Notification $notify, NotificationUser $notifyuser)
   {
+    //auto
   //  $strgCtrlr = new StorageController();
     //$defaultimg = $strgCtrlr->DefaultPath('image');
     //$defaultsvg = $strgCtrlr->DefaultPath('icon');
@@ -377,7 +378,22 @@ $sendlist=$this->mapexperttoken($list);
       if ($expert) {
         if ($expert->is_active == 1 && (!is_null($expert->token) && $expert->token != '')) {
           $tokenList = [$expert->token];
-          return Larafirebase::withTitle($notify->title)
+
+         $res= Larafirebase::withTitle($notify->title)
+            ->withBody($notify->body)
+           // ->withImage($defaultimg)
+          //  ->withIcon($defaultsvg)
+            ->withSound('default')
+            // ->withClickAction('https://www.google.com')
+            ->withPriority('high')
+            ->withAdditionalData([
+              // 'date'=>$notifyuser->created_at,
+              'id'=> $notifyuser->id,
+             // 'image' => $defaultimg,
+            ])
+             ->sendMessage($tokenList);
+
+            return Larafirebase::withTitle($notify->title)
             ->withBody($notify->body)
            // ->withImage($defaultimg)
           //  ->withIcon($defaultsvg)
@@ -403,6 +419,20 @@ $sendlist=$this->mapexperttoken($list);
         if ($client->is_active == 1 && (!is_null($client->token) && $client->token != '')) {
 
           $tokenList = [$client->token];
+         $res= Larafirebase::withTitle($notify->title)
+          ->withBody($notify->body)
+         // ->withImage($defaultimg)
+         // ->withIcon($defaultsvg)
+          ->withSound('default')
+          // ->withClickAction('https://www.google.com')
+          ->withPriority('high')
+          ->withAdditionalData([
+            // 'date'=>$notifyuser->created_at,
+            'id'=> $notifyuser->id,
+          //  'image' => $defaultimg,
+          ])
+          ->sendMessage($tokenList);
+
           return Larafirebase::withTitle($notify->title)
             ->withBody($notify->body)
            // ->withImage($defaultimg)
