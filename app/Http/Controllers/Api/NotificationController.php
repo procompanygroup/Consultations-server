@@ -52,7 +52,8 @@ class NotificationController extends Controller
         'username' => "Ahmad",
         'image' => $defaultimg,
       ])
-      ->sendMessage($tokenList);
+      ->sendNotification($tokenList);
+     // ->sendMessage($tokenList);
     //  ->sendNotification($tokenList);
   }
   public function sendbytoken(Request $request)
@@ -67,19 +68,31 @@ class NotificationController extends Controller
 
       $tokenList = [$token];
 
-      return Larafirebase::withTitle($request->title)
+    //   return    Larafirebase::withTitle($request->title)
+    //     ->withBody($request->body)
+    //  //   ->withImage($defaultimg)
+    //   //  ->withIcon($defaultsvg)
+    //     ->withSound('default')
+    //   //  ->withClickAction('https://www.google.com')
+    //     ->withPriority('high')
+    //     ->withAdditionalData([
+    //       'id' =>19,
+    //      // 'image' => $defaultimg,
+    //     ])
+    //     ->sendMessage($tokenList);
+       //  ->sendNotification($tokenList);
+         return Larafirebase::withTitle($request->title)
         ->withBody($request->body)
-        ->withImage($defaultimg)
-        ->withIcon($defaultsvg)
+     //   ->withImage($defaultimg)
+      //  ->withIcon($defaultsvg)
         ->withSound('default')
-        ->withClickAction('https://www.google.com')
+      //  ->withClickAction('https://www.google.com')
         ->withPriority('high')
-        ->withAdditionalData([
-          'username' => "Ahmad",
-          'image' => $defaultimg,
-        ])
-        ->sendMessage($tokenList);
-        //->sendNotification($tokenList);
+       // ->withAdditionalData([        //  'id' => "19",
+         // 'image' => $defaultimg,
+      //  ])
+       // ->sendMessage($tokenList);
+         ->sendNotification($tokenList);
     } else {
       return 'empty token';
     }
@@ -376,7 +389,8 @@ $sendlist=$this->mapexperttoken($list);
               'id'=> $notifyuser->id,
              // 'image' => $defaultimg,
             ])
-            ->sendMessage($tokenList);
+            ->sendNotification($tokenList);
+           // ->sendMessage($tokenList);
         } else {
           return 'empty token';
         }
@@ -401,7 +415,8 @@ $sendlist=$this->mapexperttoken($list);
               'id'=> $notifyuser->id,
             //  'image' => $defaultimg,
             ])
-            ->sendMessage($tokenList);
+            ->sendNotification($tokenList);
+            //->sendMessage($tokenList);
         } else {
           return 'empty token';
         }
@@ -433,7 +448,8 @@ $sendlist=$this->mapexperttoken($list);
          'id'=> $tokenrow['id'],
          // 'image' => $defaultimg,
         ])
-        ->sendMessage($tokenarr);
+        ->sendNotification($tokenList);
+      // ->sendMessage($tokenarr);
       }
       return $res ;
     } else {
