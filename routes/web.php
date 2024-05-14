@@ -20,6 +20,7 @@ use App\Http\Controllers\Web\CommentController;
 use App\Http\Controllers\Web\ClientOperationController;
 use App\Http\Controllers\Web\ExpertOperationController;
 use App\Http\Controllers\Web\PointTransferController;
+use App\Http\Controllers\Web\GiftController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,7 +102,15 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
             Route::get('/getbyside', [PointTransferController::class, 'getbyside']); 
         
         });
+//Gifts
+Route::prefix('gift')->group(function () {   
+     
+    Route::get('/', [GiftController::class , 'index']); 
+    Route::get('/create', [GiftController::class, 'create']);    
+    Route::post('/store', [GiftController::class, 'store']);   
+    Route::get('/fillclients', [GiftController::class, 'fillclients']); 
 
+});
         Route::resource('expert', ExpertController::class, ['except' => ['update']]);
         Route::prefix('expert')->group(function () {
             Route::post('/update/{id}', [ExpertController::class, 'update'])->name('expert.update');
