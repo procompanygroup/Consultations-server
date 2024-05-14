@@ -105,7 +105,45 @@
 
         </div>
         <!-- /div-->
+    <!--div-->
+    <div class="col-xl-12">
+        <div class="card mg-b-20">
+            <div class="card-header pb-0">
+                <div class="d-flex justify-content-between">
+                    <h4 class="card-title mg-b-0">عدد ايام صلاحية الهدية</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="">
+                    <form class="form-horizontal"
+                        action="{{ url('admin/setting/updatedays', $gift_expire_days->id) }}"
+                        name="expire_days_form"  method="POST" id="expire_days_form">
+                        @csrf
+                        <div class="row">
+                        <div class="form-group d-flex justify-content-between col-sm-12">
+                            <input type="text" class="form-control " id="expire_days"
+                                placeholder="يوم" name="expire_days"
+                                value="{{ $gift_expire_days->value }}">
+                          
+                            <button type="submit" name="btn_expire_days" id="btn_expire_days"
+                                class="btn btn-primary mr-3">{{ __('general.save') }}</button>
+                        </div>
+                        <div class="col-sm-12">
+                            <ul class="parsley-errors-list filled">
+                                <li class="parsley-required" id="expire_days_error"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    </form>
 
+                </div>
+            </div>
+        </div>
+        <!--/div-->
+
+
+    </div>
+    <!-- /div-->
         <!--div-->
         <div class="col-xl-12">
             <div class="card mg-b-20">

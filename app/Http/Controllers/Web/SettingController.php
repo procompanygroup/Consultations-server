@@ -11,6 +11,8 @@ use App\Http\Requests\Web\Setting\UpdateExpertServicePointsRequest;
 use App\Http\Requests\Web\Setting\UpdateExpertPercentRequest;
 use App\Http\Requests\Web\Setting\UpdatePublishablekeyRequest;
 use App\Http\Requests\Web\Setting\UpdateSecretkeyRequest;
+use App\Http\Requests\Web\Setting\UpdateExpireDaysRequest;
+
 class SettingController extends Controller
 {
     /**
@@ -23,10 +25,13 @@ class SettingController extends Controller
         $expert_service_points=$this->findbyname('expert_service_points');
         $secret_key=$this->findbyname('secret_key');
         $publishable_key=$this->findbyname('publishable_key');
+        $gift_expire_days=$this->findbyname('gift_expire_days');
         return view('admin.setting.show', ['expert_percent'=>$expert_percent,
         'expert_service_points'=>$expert_service_points,
         'secret_key'=>$secret_key,
         'publishable_key'=> $publishable_key,
+        'gift_expire_days'=> $gift_expire_days,
+
       ]);
  
       //  return view('admin.setting.show', ['settings' => ['expert_percent'=>$expert_percent,'expert_service_points'=>$expert_service_points]]);
@@ -181,6 +186,33 @@ class SettingController extends Controller
       
         Setting::find($id)->update([        
           'value'=>  $formdata['publishable_key'],          
+        ]);
+      
+        //save image
+        return response()->json("ok");
+        
+      }
+    }
+
+    
+    public function updatedays(UpdateExpireDaysRequest $request, $id)
+    {
+      $formdata = $request->all();
+      //validate
+      $validator = Validator::make(
+        $formdata,
+        $request->rules(),
+        $request->messages()
+      );
+      if ($validator->fails()) {
+         return response()->json($validator);
+  
+      } else {
+      
+        Setting::find($id)->update([
+        
+          'value'=>  $formdata['expire_days'],
+          
         ]);
       
         //save image

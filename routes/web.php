@@ -85,6 +85,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
             Route::post('/updatepoints/{id}', [SettingController::class, 'updatepoints']);
             Route::post('/updatesecretkey/{id}', [SettingController::class, 'updatesecretkey']);
             Route::post('/updatepublishablekey/{id}', [SettingController::class, 'updatepublishablekey']);
+            Route::post('/updatedays/{id}', [SettingController::class, 'updatedays']);
+            
         });
          // المعاملات المالية 
         //الرصيد

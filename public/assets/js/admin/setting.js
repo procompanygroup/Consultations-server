@@ -34,6 +34,12 @@ $(document).ready(function () {
 					sendform('#publishable_key_form');
 					});
 
+					///
+	$('#btn_expire_days').on('click', function (e) {
+		e.preventDefault();
+		sendform('#expire_days_form');
+		});		 
+
 	function ClearErrors() {
 
 		$('.parsley-required').html('');
