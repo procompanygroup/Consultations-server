@@ -24,7 +24,7 @@ class ChangeBalanceRequest extends FormRequest
        
       
        return[      
-         'client_id'=>'required|integer|not_in:0|in:'.auth()->user()->id,        
+        'client_id'=>'required|integer|not_in:0|in:'.auth()->user()->id,        
         'points'=>'required|integer',  
         'point_id'=>'required|integer',  
        ];   

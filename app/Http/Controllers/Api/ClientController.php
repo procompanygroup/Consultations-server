@@ -248,7 +248,7 @@ class ClientController extends Controller
 
     public function changebalance()
     {
-        $authuser = auth()->user();
+      //  $authuser = auth()->user();
         $request = request();
 
         $formdata = $request->all();
