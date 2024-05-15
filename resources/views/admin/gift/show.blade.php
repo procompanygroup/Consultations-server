@@ -44,23 +44,21 @@
 									<table id="example" class="table text-md-nowrap">
 										<thead>
 											<tr>
-												<th class="border-bottom-0">الرقم </th>
 												<th class="border-bottom-0">العميل</th>
-												<th class="border-bottom-0">الاسم</th>
 												<th class="border-bottom-0">القيمة</th>
-												<th class="border-bottom-0">التاريخ</th>                                              
+												<th class="border-bottom-0">التاريخ</th>
+												<th class="border-bottom-0">الحالة</th>											                                             
                                          	</tr>
 										</thead>
 										<tbody>
-											{{-- @foreach ($transfers as $transfer)
+											 @foreach ($List as $item)
 											<tr>
-												<td>{{ $transfer['num'] }} </td>
-												<td>{{ $transfer['side'] }} </td>
-												<td>{{ $transfer['name'] }}</td>
-												<td> {{ $transfer['count'] }}</td>
-												<td> {{ $transfer['created_at'] }}</td>
+												<td>{{ $item['user_name'] }} </td>
+												<td>{{ $item['orginal_points'] }}</td>
+												<td> {{ $item['created_at'] }}</td>
+												<td> {{ $item['status'] }}</td>
 											</tr>
-											@endforeach --}}
+											@endforeach  
 									</tbody>
 									</table>
 								</div>
