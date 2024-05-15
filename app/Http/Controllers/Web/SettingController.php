@@ -220,4 +220,13 @@ class SettingController extends Controller
         
       }
     }
+    public function expiredays()
+    {
+      $gift_expire_daysrow=$this->findbyname('gift_expire_days');
+      $days=0;
+      if($gift_expire_daysrow){
+        $days=$gift_expire_daysrow->value;
+      }     
+     return  $days;
+    }
 }

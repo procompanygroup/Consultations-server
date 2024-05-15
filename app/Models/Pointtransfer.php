@@ -98,5 +98,9 @@ class Pointtransfer extends Model
     {
         return $this->hasMany(Cashtransfer::class, 'pointtransfer_id');
     }
+    public function gift(): BelongsTo
+    {
+        return $this->belongsTo(Gift::class)->withDefault();
+    }
 
 }

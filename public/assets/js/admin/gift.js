@@ -81,14 +81,13 @@ $(document).ready(function () {
 					endLoading();
 					resetForm();
 					ClearErrors();
-					$('#p_show_balance').hide();
-					$('#balance_val').html();
+					 
 					if (data.length == 0) {
 						noteError();
 					} else if (data == "ok") {
 	
 						noteSuccess();	
-						 
+						loadclients() ;
 					}
 	
 					// $('.alert').html(result.success);
@@ -133,6 +132,20 @@ $(document).ready(function () {
 				bottom: '10'
 			});
 		}
+
+		$("#amount").focusout(function (e) {
+			if (!validatempty($(this))) {
+				return false;
+			} else {
+	
+				return true;
+			}
+		});
+		$("#sel_side_val").focusout(function (e) {
+		 
+		$(this).removeClass('parsley-error');
+		$("#sel_side_val"+ "_error").text('');
+		});
 });
 
 ///////////////////////////////////////////////////////

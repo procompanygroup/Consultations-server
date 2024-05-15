@@ -163,4 +163,8 @@ public function getGenderConvAttribute(){
     {
         return $this->hasMany(NotificationUser::class);
     }
+    public function gifts(): HasMany
+    {
+        return $this->hasMany(Gift::class);
+    }
 }
