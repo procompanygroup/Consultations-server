@@ -94,24 +94,25 @@ class OrderController extends Controller
         DB::transaction(function ()use($id) {
          
           $selectedObj= Selectedservice::find($id);
-
+        
           if(  $selectedObj->form_state=='wait'){
+               // change state to agree
             $now= Carbon::now();
-          $pointobj=Pointtransfer::where('selectedservice_id',$id)
+            Selectedservice::find($id)->update([
+              'form_state'=>'agree',
+              'order_admin_date'=> $now,
+              'order_admin_id'=>auth()->user()->id,                  
+            ]);
+            //main balance
+          $pointlist=Pointtransfer::where('selectedservice_id',$id)
           ->where('state','wait')
-          ->where('side','from-client')->first(); 
-  Selectedservice::find($id)->update([
-    'form_state'=>'agree',
-    'order_admin_date'=> $now,
-    'order_admin_id'=>auth()->user()->id,                  
-  ]);
-   // change state to agree
-   Pointtransfer::find($pointobj->id)->update([
-    'state'=>  'agree']              
-  );
-
-  $count= $pointobj->count ;
-
+          ->where('side','from-client')->get(); 
+          if( $pointlist->count()>0){
+            $pointobj= $pointlist->first();
+            Pointtransfer::find($pointobj->id)->update([
+              'state'=>  'agree']              
+            );
+             $count= $pointobj->count ;
   //add points to cash balance of company
   $comobj=Company::find(1);
   $newblnce= $comobj->point_balance+ $count;
@@ -121,6 +122,19 @@ Company::find(1)->update([
   'cash_balance'=>  $newcashblnce,//
   ]              
 );
+          }
+
+          //end main balance
+          //gift balance
+          $pointgiftlist=Pointtransfer::where('selectedservice_id',$id)
+          ->where('state','wait')->where('gift_id','>',0)
+          ->get(); 
+          if( $pointgiftlist->count()>0){
+            $pointGiftobj=  $pointgiftlist->first();
+            Pointtransfer::find($pointGiftobj->id)->update([
+              'state'=>  'agree']              
+            );
+          } 
 }
         });    
            //send auto notification 2
@@ -136,8 +150,7 @@ Company::find(1)->update([
       
     }
     public function rejectmethod(UpdateFormStateRequest $request, $id)
-    {
- 
+    { 
       $formdata = $request->all();
       //validate
       $validator = Validator::make(
@@ -148,13 +161,11 @@ Company::find(1)->update([
       if ($validator->fails()) {      
           return response()->json($validator);  
       } else {
-       // $imagemodel = Expert::find($id);
-       
+       // $imagemodel = Expert::find($id);       
         DB::transaction(function ()use( $formdata,$id) {
           $selectedObj= Selectedservice::find($id);
           if(  $selectedObj->form_state=='wait'){
-            $now= Carbon::now();
-           
+            $now= Carbon::now();           
       
   //reject
   $reason=Reason::find($formdata['form_reject_reason']);
@@ -165,14 +176,16 @@ Company::find(1)->update([
     'order_admin_id'=>auth()->user()->id,              
   ]);
 ///////////////
-$pointgiftrow=Pointtransfer::where('selectedservice_id',$id)->where('state','wait')
+$pointgiftlist=Pointtransfer::where('selectedservice_id',$id)->where('state','wait')
 ->where('gift_id','>',0)->get();
 
-if($pointgiftrow->count()>0)
+if($pointgiftlist->count()>0)
 {//يوجد هدية
 //ارجاع القيمة الى جدول الهدايا
-  $giftrow=Gift::find($pointgiftrow->gift_id);
-  $returngiftval=$pointgiftrow->first()->count;
+$pointgiftrow=$pointgiftlist->first();
+$gift_id=$pointgiftrow->gift_id;
+  $giftrow=Gift::find($gift_id);
+  $returngiftval=$pointgiftrow->count;
 
   $giftrow->free_points=$giftrow->free_points+$returngiftval;
   $giftrow->status ='return';
@@ -238,12 +251,7 @@ $returnPoint->save();
 $client = Client::find( $selectedObj->client_id);
 $client->points_balance = $client->points_balance + $pointobj->count;
 $client->save();
-
-
 }
-
- 
-
 }else{
   //لايوجد هدية
   $pointobj=Pointtransfer::where('selectedservice_id',$id)
@@ -277,12 +285,7 @@ $client = Client::find( $selectedObj->client_id);
 $client->points_balance = $client->points_balance + $pointobj->count;
 $client->save();
 }
-
-
 }
-
- 
-
         });   
                   //send auto notification 6
                   $notctrlr=new NotificationController();
@@ -293,13 +296,9 @@ $client->save();
                   $body= __('general.6orderreject_body',['Reason'=> $Reason]);     
                $notctrlr->sendautonotify($title, $body,'auto','text','','order-reject',$selectedObj->client_id,0,$id,0);         
        
-        return response()->json("ok");
-        
-     
+        return response()->json("ok");    
       }
-
-
-    }
+        }
     /**
      * Remove the specified resource from storage.
      */
