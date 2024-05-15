@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\PointTransferController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\MailController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Web\GiftController;
  //use App\Http\Middleware\Api\AuthenticateClient;
 
 /*
@@ -84,6 +85,7 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/getnotifylist', [NotificationController::class, 'getclientnotifylist']);
         Route::post('/settoread', [NotificationController::class, 'settoread']);
         Route::post('/getnotifybyid', [NotificationController::class, 'getnotifybyid']);
+        Route::post('/getgift', [GiftController::class, 'getgift']);
         
 //api/client/service
         Route::prefix('/service')->group(function () {
