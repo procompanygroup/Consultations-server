@@ -25,6 +25,8 @@ class Pointtransfer extends Model
         'type',
         'source_id',
         'num',
+        'notes',
+        'gift_id'
     ];
     protected $hidden = ['desc'];
     public function getDescAttribute()

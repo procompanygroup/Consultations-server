@@ -16,6 +16,8 @@ use Illuminate\Support\Carbon;
 use App\Http\Requests\Web\Order\UpdateFormStateRequest;
 use App\Models\Pointtransfer;
 use App\Models\Client;
+use App\Models\Gift;
+
 //use Illuminate\Support\Facades\Auth;
 // use Illuminate\Support\Facades\Storage;
  use App\Http\Controllers\Api\StorageController;
@@ -152,9 +154,7 @@ Company::find(1)->update([
           $selectedObj= Selectedservice::find($id);
           if(  $selectedObj->form_state=='wait'){
             $now= Carbon::now();
-          $pointobj=Pointtransfer::where('selectedservice_id',$id)
-          ->where('state','wait')
-          ->where('side','from-client')->first();
+           
       
   //reject
   $reason=Reason::find($formdata['form_reject_reason']);
@@ -164,7 +164,53 @@ Company::find(1)->update([
     'order_admin_date'=> $now,
     'order_admin_id'=>auth()->user()->id,              
   ]);
+///////////////
+$pointgiftrow=Pointtransfer::where('selectedservice_id',$id)->where('state','wait')
+->where('gift_id','>',0)->get();
 
+if($pointgiftrow->count()>0)
+{//يوجد هدية
+//ارجاع القيمة الى جدول الهدايا
+  $giftrow=Gift::find($pointgiftrow->gift_id);
+  $returngiftval=$pointgiftrow->first()->count;
+
+  $giftrow->free_points=$giftrow->free_points+$returngiftval;
+  $giftrow->status ='return';
+  $giftrow->save();
+  //تغيير الحالة
+  Pointtransfer::find($pointgiftrow->id)->update([
+    'state'=>  'reject']              
+  );
+  //انشاء سجل حركة مجاني مرتجع
+  $returnGiftPoint = new Pointtransfer();
+  $pntctrlr=new PointTransferController();
+  $type='p';
+  $firstLetters=$type.'clg-';
+  $newpnum= $pntctrlr->GenerateCode($firstLetters);
+  
+  $returnGiftPoint->client_id =  $selectedObj->client_id;
+  $returnGiftPoint->expert_id = $selectedObj->expert_id;
+  $returnGiftPoint->service_id = $selectedObj->service_id;
+  $returnGiftPoint->count = $pointgiftrow->count;
+  $returnGiftPoint->status = 1;
+  $returnGiftPoint->selectedservice_id = $id;
+  $returnGiftPoint->side = 'to-client';
+  $returnGiftPoint->state = 'reject-return-gift';
+  $returnGiftPoint->type =$type;
+  $returnGiftPoint->source_id =$pointgiftrow->id;
+  $returnGiftPoint->num =$newpnum;
+  $returnGiftPoint->notes= $selectedObj->points;
+  $returnGiftPoint->save();
+  //
+  //انشاء سجل للرصيد الاساسي
+  //التحقق من وجود السجل
+  $pointobjList=Pointtransfer::where('selectedservice_id',$id)
+  ->where('state','wait')
+  ->where('side','from-client')->get();
+
+if( $pointobjList->count()>0){
+  //يوجد سجل 
+  $pointobj= $pointobjList->first();
   Pointtransfer::find($pointobj->id)->update([
     'state'=>  'reject']              
   );
@@ -186,13 +232,57 @@ $returnPoint->state = 'reject-return';
 $returnPoint->type =$type;
 $returnPoint->source_id = $pointobj->id;
 $returnPoint->num =$newpnum;
+$returnPoint->notes= $selectedObj->points;
 $returnPoint->save();
+//add point to client
+$client = Client::find( $selectedObj->client_id);
+$client->points_balance = $client->points_balance + $pointobj->count;
+$client->save();
 
+
+}
+
+ 
+
+}else{
+  //لايوجد هدية
+  $pointobj=Pointtransfer::where('selectedservice_id',$id)
+  ->where('state','wait')
+  ->where('side','from-client')->first();
+  Pointtransfer::find($pointobj->id)->update([
+    'state'=>  'reject']              
+  );
+ //create return transfer
+$returnPoint = new Pointtransfer();
+$pntctrlr=new PointTransferController();
+$type='p';
+$firstLetters=$type.'cl-';
+$newpnum= $pntctrlr->GenerateCode($firstLetters);
+
+$returnPoint->client_id =  $selectedObj->client_id;
+$returnPoint->expert_id = $selectedObj->expert_id;
+$returnPoint->service_id = $selectedObj->service_id;
+$returnPoint->count = $pointobj->count;
+$returnPoint->status = 1;
+$returnPoint->selectedservice_id = $id;
+$returnPoint->side = 'to-client';
+$returnPoint->state = 'reject-return';
+$returnPoint->type =$type;
+$returnPoint->source_id = $pointobj->id;
+$returnPoint->num =$newpnum;
+$returnPoint->notes= $selectedObj->points;
+$returnPoint->save();
 //add point to client
 $client = Client::find( $selectedObj->client_id);
 $client->points_balance = $client->points_balance + $pointobj->count;
 $client->save();
 }
+
+
+}
+
+ 
+
         });   
                   //send auto notification 6
                   $notctrlr=new NotificationController();

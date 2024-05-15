@@ -27,9 +27,9 @@ class GiftController extends Controller
    */
   public function index()
   {
-//    $list = DB::table('pointstransfers')->get();
+     $List=$this->filltableclients();
     return view('admin.gift.show'
- //    ,['pointstransfers' => $list]
+    ,['List' => $List]
     );
     //return response()->json($users);
   }
@@ -103,7 +103,7 @@ if($item->client_id>0){
       $amount=$formdata["amount"];
 //check allowed
  
- //$newDateTime = Carbon::now()->subDays(5);
+  
  $is_allowed =$this->checkallowedclient($side_id);
 if($is_allowed==0){
 
@@ -114,10 +114,12 @@ if($is_allowed==0){
 } else{
   Gift::query()->where('client_id',$side_id)->update([       
     'is_active' =>0,
+    'status' =>'expired',
   ]);
   $newObj = new Gift;
   $newObj->client_id =$side_id;
   $newObj->free_points =$amount;
+  $newObj->orginal_points =$amount;  
   $newObj->is_active = 1;
   $newObj->status ='available';
   $newObj->notes = '';  
@@ -129,29 +131,13 @@ if($is_allowed==0){
 
     }
   }
-  // public function getbyside(Request $request)
-  // {
-  //   if (isset ($request->sel_side)) {
-  //     $side = $request->sel_side;
-  //     if ($side == 'expert') {
-  //       return response()->json($this->getexperts());
-  //     } else if ($side == 'client') {
-  //       return response()->json($this->getclients());
-  //     } else {
-  //       return response()->json("error",422);
-  //     }
-  //   } else {
-  //     return response()->json("error_notexist",422);
-  //   }
-
-  // }
+  
 
 
-  public function fillclients()
-  {
- //  $test=$this->checkallowedclient(12);
- //  return response()->json($test);
-  return response()->json($this->allowedclients());
+  public function fillclients(){
+  // $test=$this->checkavailablepoints(10);
+  //   return response()->json($test['giftmodel']->id);
+    return response()->json($this->allowedclients());
   }
   public function allowedclients()
   {
@@ -197,7 +183,7 @@ if($is_allowed==0){
        })
       ->with('gifts', function ($query) use ($nowsub) {
         $query->where('is_active', 1)
-         ->whereDate('created_at','>',$nowsub)->select('id','client_id','free_points','created_at','is_active'); 
+         ->whereDate('created_at','>',$nowsub)->select('id','client_id','free_points','created_at','is_active','orginal_points'); 
           })
       ->where('id',$client_id)
  ->select(
@@ -219,32 +205,77 @@ if($is_allowed==0){
     return $is_allowed;
     // return $List;
   }
-  // public function getclients()
-  // {
-  //   $setctrlr=new SettingController();
-  //  $days= $setctrlr->expiredays();
-  //  $nowsub= Carbon::now()->subDays($days);
-  //   //$newDateTime = Carbon::now()->subDays(5);
-  //   $DBList = Client::where('is_active',1)->whereDoesntHave('gifts', function ($query) use ($nowsub) {
-  //     $query->where('is_active', 1)->whereDate('created_at','>',$nowsub);
-  //   })-> select(
-  //     'id',
-  //     'user_name',     
-  //     'is_active'
-  //   )->get();
-  //   // map
-  //   // $List = $DBList->map(function ($item) {
-
-  //   //   return [
-  //   //     'id' => $item->id,
-  //   //     'name' => $item->user_name,
-        
-  //   //   ];
-  //   // });
-  //   //end map
-  //   return  $DBList;
-  //   // return $List;
-  // }
+  public function checkavailablepoints($client_id)
+  {  
+    $DBList =$this->clientbyid($client_id);
+       
+    $res=
+      ['points'=>0,
+      'giftmodel'=>new Gift(),
+    ];
+    if( $DBList->count()>0){
+      
+      $pointsrow= $DBList->first()->gifts->first();
+      $res=
+      ['points'=>$pointsrow->free_points,
+      'giftmodel'=>$pointsrow,
+    ];
+       } 
+    return $res;
+    // return $List;
+  }
+  public function filltableclients()
+  {
+    $setctrlr=new SettingController();
+   $days= $setctrlr->expiredays();
+   $nowsub= Carbon::now()->subDays($days);
+    //$newDateTime = Carbon::now()->subDays(5);
+    $DBList = Gift:: with(['client'=> function ($query){
+      $query->where('is_active', 1)
+      ->select('id','user_name','mobile','points_balance','is_active',); 
+        }])->select(
+      'id',
+      'client_id',
+      'free_points',
+      'is_active',
+      'status',
+      'notes',  
+      'orginal_points',
+      'created_at', 
+    )->get();
+    $setctrlr=new SettingController();
+    $days= $setctrlr->expiredays();
+   // $nowsub= Carbon::now()->subDays($days);
+    $nowsub= Carbon::now()->subDays($days)->toDateString();
+    // map
+    $List = $DBList->map(function ($item)use($nowsub) {
+      $create_date=$item->created_at->format('Y-m-d');
+      $status='';
+      if($item->is_active==0){
+        $status='منتهية';
+      }else{
+        if(Carbon::parse($create_date)->greaterThan($nowsub))
+     {
+      $status='متاحة';
+     }else{
+      $status='منتهية';
+     }
+      }    
+            return [
+        'id' => $item->id,
+        'client_id' => $item->client_id,
+        'user_name'=>$item->client->user_name,
+        'orginal_points'=>$item->orginal_points,
+        'created_at'=>$create_date,
+        'status'=>$status,
+      //  'is_active'=>$item->is_active,
+     //   'now'=>$nowsub,
+      ];
+    });
+    //end map
+     
+      return $List;
+  }
   /**
    * Show the form for creating a new resource.
    */

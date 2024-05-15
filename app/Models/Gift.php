@@ -15,7 +15,8 @@ class Gift extends Model
         'free_points',
         'is_active',
         'status',
-        'notes',           
+        'notes',  
+        'orginal_points',         
     ];
     public function client(): BelongsTo
     {
