@@ -171,6 +171,8 @@ return [
 '8commentcome_body'=>'تم التعليق على خدمة'.' '.':Servicename'.' '.'من قبل'.' '.':Clientname',
 '9commentreject_title'=>'رفض التعليق',
 '9commentreject_body'=>'تم رفض التعليق بسبب'.' '.'(:Reason)',
+'10addgift_title'=>'هدية مجانية',
+'10addgift_body'=>'تم اهداؤك'.' '. ':Points'.' '.'نقطة مجانية',
 ];
 /*
 

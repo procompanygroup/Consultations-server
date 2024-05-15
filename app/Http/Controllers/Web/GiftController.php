@@ -19,6 +19,8 @@ use App\Models\Client;
 
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Web\SettingController;
+use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\PointTransferController;
 class GiftController extends Controller
 {
 
@@ -112,6 +114,8 @@ if($is_allowed==0){
  // ["sel_side_val"=>[__('messages.amount_bigger')]]
 ],422);
 } else{
+  DB::transaction(function () use ($side_id, $amount) {
+  
   Gift::query()->where('client_id',$side_id)->update([       
     'is_active' =>0,
     'status' =>'expired',
@@ -124,6 +128,39 @@ if($is_allowed==0){
   $newObj->status ='available';
   $newObj->notes = '';  
         $newObj->save();
+
+//
+//add gift point transfer for client
+//$pointrow = Point::find($point_id);
+$pointtransfer = new Pointtransfer();
+$pntctrlr = new PointTransferController();
+$type = 'p';
+$firstLetters = $type . 'clg-';
+$newpnum = $pntctrlr->GenerateCode($firstLetters);
+//$pointtransfer->point_id = isset ($formdata["point_id"]) ? $formdata['point_id'] : null;
+
+$pointtransfer->client_id = $side_id;
+//  $pointtransfer->expert_id = $expertService->expert_id;
+// $pointtransfer->service_id = $expertService->service_id;
+$pointtransfer->count =$amount;
+$pointtransfer->status = 1;
+// $pointtransfer->selectedservice_id = $newObj->id;
+$pointtransfer->side = 'to-client';
+$pointtransfer->state = 'points-gift';
+$pointtransfer->type = $type;
+$pointtransfer->num = $newpnum;
+$pointtransfer->gift_id = $newObj->id;
+$pointtransfer->save();
+//10
+$notctrlr=new NotificationController();
+$pointsval=$amount;
+$title= __('general.10addgift_title');
+$body= __('general.10addgift_body',['Points'=> $pointsval]);
+$notctrlr->sendautonotify($title, $body,'auto','text','','finance',$side_id,0,0,$pointtransfer->id);
+
+});
+                  //send auto notification
+              
        return response()->json("ok");
         
   }
