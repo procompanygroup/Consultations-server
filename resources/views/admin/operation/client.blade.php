@@ -47,6 +47,7 @@
 												 
 												<th class="border-bottom-0">التاريخ</th>
                                                 <th class="border-bottom-0">النقاط</th>
+												<th class="border-bottom-0">قيمة الخدمة</th>
                                                 <th class="border-bottom-0">الوصف</th>
                                          	</tr>
 										</thead>
@@ -56,7 +57,9 @@
 												<td>{{ $transfer->num }} </td>
 												<td> {{ $transfer->created_at }}</td>
 												<td> {{ $transfer->count }}</td>
+												<td> @if($transfer->notes)@if( trim($transfer->notes)!=''){{  $transfer->notes }}@else - @endif @else - @endif</td>
 												<td> {{  Str::of($transfer->desc)->toHtmlString() }}</td>
+												
 											</tr>
 											@endforeach
 									</tbody>

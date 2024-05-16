@@ -54,7 +54,7 @@ class ClientController extends Controller
       ->where('client_id',$id)
       ->where(function ($query) {
         $query->where('side','from-client')
-              ->orWhere('side','to-client');
+              ->orWhere('side','to-client')->orWhere('side','from-gift-client');
     })->get();
       
       

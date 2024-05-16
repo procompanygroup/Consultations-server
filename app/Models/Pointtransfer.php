@@ -33,7 +33,7 @@ class Pointtransfer extends Model
     {
         $conv = "";
 
-        if ($this->side == "from-client" || $this->side == "to-client") {
+        if ($this->side == "from-client" || $this->side == "to-client"||$this->side =="from-gift-client") {
             //client
             if ($this->point_id > 0 && $this->client_id > 0) {
                 $pur = 'شراء';
@@ -58,7 +58,25 @@ class Pointtransfer extends Model
             }else if($this->client_id > 0 && $this->state == 'pull' && $this->side=='to-client'){
                 $conv = "سحب رصيد";
             }
-
+            else if ($this->gift_id > 0 && $this->client_id > 0 && $this->state=='points-gift') {
+                $conv = 'إهداء رصيد';
+               
+            }
+            else if ($this->client_id > 0 && $this->selectedservice_id > 0 && $this->side == "from-gift-client") {
+                $type = "سحب من الرصيد المجاني مقابل";
+                $ask = 'طلب خدمة رقم';
+                $link = '<a href="' . route("order.edit", $this->selectedservice_id) . '" >' . $this->selectedservices->order_num . ' </a>';
+                //   $conv= $type.' '.$ask.' '.$this->selectedservices->order_num  ;
+                $conv = $type . ' ' . $ask . ' ' . $link;
+               
+            }
+            else if ($this->client_id > 0 && $this->selectedservice_id > 0 && $this->side == "to-client" && $this->state == "reject-return-gift") {
+                $type = "ارجاع الى الرصيد المجاني";
+                $reason = 'بسبب رفض الطلب رقم';
+                $link = '<a href="' . route("order.edit", $this->selectedservice_id) . '" >' . $this->selectedservices->order_num . ' </a>';
+                $conv = $type . ' ' . $reason . ' ' . $link;
+                //  $conv= $type.' '. $reason.' '.$this->selectedservices->order_num ;                    
+            }
             //end client
         } else if ($this->side == "to-expert") {
             //expert
