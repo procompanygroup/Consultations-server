@@ -160,7 +160,7 @@
                             <div class="row">
                                 <div class="form-group d-flex justify-content-between col-sm-12">
                                     <input type="text" class="form-control " id="secret_key"
-                                        placeholder="Secret key" name="Stripe Secret key"
+                                        placeholder="Stripe Secret key" name="secret_key"
                                         value="{{ $secret_key->value }}">
                                     <button type="submit" name="btn_secret_key" id="btn_secret_key"
                                         class="btn btn-primary mr-3">{{ __('general.save') }}</button>
