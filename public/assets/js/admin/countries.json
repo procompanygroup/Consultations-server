@@ -127,5 +127,12 @@
       "dialCode": "+967",
       "flag": "assets/svg/yemen-flag-icon.svg"
     }
+    ,
+    {
+      "code": "MY",
+      "name": "ماليزيا",
+      "dialCode": "+60",
+      "flag": "assets/svg/malaysia-flag-icon.svg"
+    }
   ]
 }
