@@ -12,13 +12,13 @@ use Illuminate\Queue\SerializesModels;
 class VerifyEmail extends Mailable
 {
     use Queueable, SerializesModels;
-
+    public $data=[];
     /**
      * Create a new message instance.
      */
-    public function __construct(  )
+    public function __construct( $data )
     {
-       // $this->data = $data;
+         $this->data = $data;
       //  $this->switchMailSettings();
     }
 
@@ -28,7 +28,7 @@ class VerifyEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Verify Email',
+            subject: 'رسالة التحقق',
         );
     }
 
@@ -37,11 +37,9 @@ class VerifyEmail extends Mailable
      */
     public function content(): Content
     {
-        $code= rand(100000, 999999);
-
-        return new Content(
-            view: 'Mail.verify-template',
-            with:['code'=>$code]
+                return new Content(
+            view: 'admin.mail.verify-template',
+            with:['data'=>$this->data]
         );
     }
 

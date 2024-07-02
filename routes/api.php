@@ -30,7 +30,8 @@ use App\Http\Controllers\Web\GiftController;
 */
 //Route::post('registerexpert', [ExpertAuthController::class, 'register']);
 Route::post('loginexpert', [ExpertAuthController::class, 'login']);
- 
+Route::post('getmail', [MailController::class, 'getmail']);
+Route::post('codevalidate', [MailController::class, 'codevalidate']);
 Route::post('registerclient', [ClientAuthController::class, 'register']);
 Route::post('loginclient', [ClientAuthController::class, 'login']);
 Route::middleware('authExpert:api')->group(function () {
@@ -49,7 +50,7 @@ Route::middleware('authExpert:api')->group(function () {
     Route::post('/pullbalance', [ExpertController::class, 'pullbalance']);
     Route::post('/savetoken', [ExpertController::class, 'savetoken']);
     Route::post('/gettype', [ExpertController::class, 'gettype']);
-    Route::post('/convertfile', [MailController::class, 'convertfile']);
+   // Route::post('/convertfile', [MailController::class, 'convertfile']);
 
     Route::post('/getstatistics', [ExpertController::class, 'getstatistics']);
     Route::post('/getwallet', [ExpertController::class, 'getwallet']);
