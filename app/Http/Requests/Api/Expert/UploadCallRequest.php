@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api\Expert;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UploadRecordRequest extends FormRequest
+class UploadCallRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,8 @@ class UploadRecordRequest extends FormRequest
     public function rules(): array
     {
        return[      
-         'id'=>'required|integer|not_in:0',        
+         'expert_id'=>'required|integer|not_in:0',
+         'client_id'=>'required|integer|not_in:0',          
         'record'=>'required|file',  // 'record'=>'required|file|mimes:mp3',
      
       ];   

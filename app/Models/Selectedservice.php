@@ -41,6 +41,7 @@ class Selectedservice extends Model
 'comment_rate_date',
 'comment_rate_admin_id',
 'answer_speed',
+'call_file',
     ];  
     //$appends
  protected  $hidden= ['form_state_conv' ,'answer_state_conv' ,'comment_state_conv'];

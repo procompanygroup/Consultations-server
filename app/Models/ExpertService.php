@@ -16,6 +16,7 @@ class ExpertService extends Model
         'expert_cost',
         'cost_type',
         'expert_cost_value',
+        'call_file',
        ];
     public function expert(): BelongsTo
     {

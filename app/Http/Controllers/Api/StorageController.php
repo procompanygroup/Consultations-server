@@ -38,7 +38,7 @@ class StorageController extends Controller
     // $recordpath['experts'] = 'images/experts/records';
     $this->path['experts'] = 'images/experts';
     $this->recordpath['experts'] = 'images/experts/records';
-
+    $this->recordpath['calls'] = 'images/calls';
     //clients
     $this->path['clients'] = 'images/clients';
     //services
@@ -209,6 +209,12 @@ class StorageController extends Controller
       $url =  $this->getlocalpath($this->recordpath['answers']);
     }
     return $url;
+  }
+  public function CallPath()
+  { //image record
+    $url = "";
+      $url =  $this->getlocalpath($this->path['calls']);
+          return $url;
   }
   public static function CalcPercentVal($percent,$total)
   {

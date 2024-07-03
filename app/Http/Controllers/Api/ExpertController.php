@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Answer;
+use App\Models\Client;
 use App\Models\Pointtransfer;
 use App\Models\Cashtransfer;
 use App\Models\Selectedservice;
@@ -33,6 +34,8 @@ use App\Http\Requests\Api\Expert\PullBalanceRequest;
 use App\Http\Requests\Api\Expert\SaveTokenRequest;
 use App\Http\Requests\Api\Expert\StatisticRequest;
 use App\Http\Requests\Api\Expertfavorite\StoreExpertRequest;
+use App\Http\Requests\Api\Expert\UploadCallRequest;
+
 
 
 class ExpertController extends Controller
@@ -1372,6 +1375,31 @@ class ExpertController extends Controller
         }
         return 1;
     }
+    public function storeCall($file, $id)
+    {
+        $model = Selectedservice::find($id);
+        $oldfile = $model->call_file;
+        $oldfilename = basename($oldfile);
+        $strgCtrlr = new StorageController();
+        $recpath = $strgCtrlr->recordpath['calls'];
+        if ($file !== null) {
+            $filename = rand(10000, 99999) . $id . "." . $file->getClientOriginalExtension();
+            if (!File::isDirectory(Storage::url('/' . $recpath))) {
+                Storage::makeDirectory('public/' . $recpath);
+            }
+            $path = $file->storeAs(
+                $recpath,
+                $filename,
+                'public'
+            );
+
+            Selectedservice::find($id)->update([
+                "call_file" => $filename
+            ]);
+            Storage::delete("public/" . $recpath . '/' . $oldfilename);
+        }
+        return 1;
+    }
     public function storeAnswerRecord($file, $id)
     {
         $model = Answer::find($id);
@@ -1471,6 +1499,8 @@ class ExpertController extends Controller
         }
 
     }
+
+
     public function gettype(Request $request)
     {
         //
@@ -1800,5 +1830,64 @@ class ExpertController extends Controller
             return response()->json($expert);
 
         }
+    }
+
+    public function uploadcall(Request $request)
+    {
+        //
+        $formdata = $request->all();
+        $storrequest = new UploadCallRequest();
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        } else {
+           DB::transaction(function () use ($request, $formdata) {
+                if ($request->hasFile('record')) {
+$servicemodel=Service::where('is_callservice',1)->first();
+$expertmodel=Expert::find($formdata['expert_id']);
+$clientmodel=Client::find($formdata['client_id']);
+// add new selectedservice
+$newNum = $this->GenerateCode("order-");
+$now = Carbon::now();
+//save selected service
+$newObj = new Selectedservice;
+$newObj->client_id = $formdata['client_id'];
+$newObj->expert_id = $formdata['expert_id'];
+$newObj->service_id =$servicemodel->id;
+$newObj->points = $expertmodel->call_cost;
+$newObj->rate = 0;
+$newObj->form_state = 'agree';
+//   $newObj->answer = "";
+//   $newObj->answer2 = "";
+$newObj->comment = "";
+// $newObj->iscommentconfirmd = 0;
+//   $newObj->issendconfirmd = 0;
+//    $newObj->isanswerconfirmd = 0;
+$newObj->comment_rate = 0;
+$newObj->status = "call";
+$newObj->expert_cost =$expertmodel->call_cost;//percent
+$newObj->cost_type = 0;
+//   $newObj->expert_cost_value = $expertService->expert_cost_value;
+$newObj->expert_cost_value =$expertmodel->call_cost;
+$newObj->order_num = $newNum;
+$newObj->order_date = $now;
+$newObj->save();
+$this->id = $newObj->id;
+//end add
+                    $file = $request->file('record');
+                    $this->storeCall($file, $newObj->id);
+                   
+                }
+            });
+            return response()->json([
+                "message" => $this->id
+            ]);
+
+        }
+
     }
 }

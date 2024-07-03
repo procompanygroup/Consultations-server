@@ -50,6 +50,7 @@ Route::middleware('authExpert:api')->group(function () {
     Route::post('/pullbalance', [ExpertController::class, 'pullbalance']);
     Route::post('/savetoken', [ExpertController::class, 'savetoken']);
     Route::post('/gettype', [ExpertController::class, 'gettype']);
+    Route::post('/uploadcall', [ExpertController::class, 'uploadcall']);
    // Route::post('/convertfile', [MailController::class, 'convertfile']);
 
     Route::post('/getstatistics', [ExpertController::class, 'getstatistics']);

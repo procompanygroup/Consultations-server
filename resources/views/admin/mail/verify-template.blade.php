@@ -36,7 +36,7 @@
 <body>
     <div class="row"></div>
     <div class="col-12">
-        <div class="head-line" style=""></div>
+        <div class="head-line"  ></div>
         <p class="lead site-name">{{ $data['com_title'] }}</p>
         <div class="lead code-div">
             <span>رمز التحقق:</span><strong class="code-style">{{ $data['code'] }}</strong>
