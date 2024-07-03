@@ -1851,7 +1851,9 @@ $servicemodel=Service::where('is_callservice',1)->first();
 $expertmodel=Expert::find($formdata['expert_id']);
 $clientmodel=Client::find($formdata['client_id']);
 // add new selectedservice
-$newNum = $this->GenerateCode("order-");
+$selserCtrlr=new SelectedServiceController();
+
+$newNum = $selserCtrlr->GenerateCode("order-");
 $now = Carbon::now();
 //save selected service
 $newObj = new Selectedservice;
