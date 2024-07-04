@@ -1846,43 +1846,14 @@ class ExpertController extends Controller
             return response()->json($validator->errors());
         } else {
            DB::transaction(function () use ($request, $formdata) {
-                if ($request->hasFile('record')) {
-$servicemodel=Service::where('is_callservice',1)->first();
-$expertmodel=Expert::find($formdata['expert_id']);
-$clientmodel=Client::find($formdata['client_id']);
-// add new selectedservice
-$selserCtrlr=new SelectedServiceController();
-
-$newNum = $selserCtrlr->GenerateCode("order-");
-$now = Carbon::now();
-//save selected service
-$newObj = new Selectedservice;
-$newObj->client_id = $formdata['client_id'];
-$newObj->expert_id = $formdata['expert_id'];
-$newObj->service_id =$servicemodel->id;
-$newObj->points = $expertmodel->call_cost;
-$newObj->rate = 0;
-$newObj->form_state = 'agree';
-//   $newObj->answer = "";
-//   $newObj->answer2 = "";
-$newObj->comment = "";
-// $newObj->iscommentconfirmd = 0;
-//   $newObj->issendconfirmd = 0;
-//    $newObj->isanswerconfirmd = 0;
-$newObj->comment_rate = 0;
-$newObj->status = "call";
-$newObj->expert_cost =$expertmodel->call_cost;//percent
-$newObj->cost_type = 0;
-//   $newObj->expert_cost_value = $expertService->expert_cost_value;
-$newObj->expert_cost_value =$expertmodel->call_cost;
-$newObj->order_num = $newNum;
-$newObj->order_date = $now;
-$newObj->save();
-$this->id = $newObj->id;
-//end add
+            $selservicemodel= Selectedservice::find($formdata['selectedservice_id'])  ;  
+            $servicemodel=Service::where('is_callservice',1)->first();
+                if ($request->hasFile('record') && $selservicemodel->service_id== $servicemodel->id) {
                     $file = $request->file('record');
-                    $this->storeCall($file, $newObj->id);
-                   
+                    $this->storeCall($file,  $selservicemodel->id);      
+                    $this->id=$selservicemodel->id  ;      
+                }else{
+                      $this->id=0;
                 }
             });
             return response()->json([

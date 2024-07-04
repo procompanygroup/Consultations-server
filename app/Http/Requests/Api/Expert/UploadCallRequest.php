@@ -22,8 +22,8 @@ class UploadCallRequest extends FormRequest
     public function rules(): array
     {
        return[      
-         'expert_id'=>'required|integer|not_in:0',
-         'client_id'=>'required|integer|not_in:0',          
+         'selectedservice_id'=>'required|integer|not_in:0',
+                
         'record'=>'required|file',  // 'record'=>'required|file|mimes:mp3',
      
       ];   

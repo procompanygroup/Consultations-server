@@ -123,6 +123,8 @@ Route::prefix('gift')->group(function () {
         Route::prefix('client')->group(function () {
             Route::post('/update/{id}', [ClientController::class, 'update'])->name('client.update');
            
+
+           
         });
 
         Route::resource('service', ServiceController::class, ['except' => ['update']]);

@@ -50,6 +50,7 @@ Route::middleware('authExpert:api')->group(function () {
     Route::post('/pullbalance', [ExpertController::class, 'pullbalance']);
     Route::post('/savetoken', [ExpertController::class, 'savetoken']);
     Route::post('/gettype', [ExpertController::class, 'gettype']);
+    
     Route::post('/uploadcall', [ExpertController::class, 'uploadcall']);
    // Route::post('/convertfile', [MailController::class, 'convertfile']);
 
@@ -88,6 +89,7 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/settoread', [NotificationController::class, 'settoread']);
         Route::post('/getnotifybyid', [NotificationController::class, 'getnotifybyid']);
         Route::post('/getgift', [GiftController::class, 'getgift']);
+        Route::post('/callorder', [SelectedServiceController::class, 'callorder']);
         
 //api/client/service
         Route::prefix('/service')->group(function () {
