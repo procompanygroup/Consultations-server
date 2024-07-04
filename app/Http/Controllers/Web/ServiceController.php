@@ -58,7 +58,7 @@ class ServiceController extends Controller
     }
     public function showpercent()
     {
-      $list = DB::table('services')->whereNot('is_callservice',1)->get();
+      $list = DB::table('services')->get();
      return view('admin.service.showpercents', ['services' => $list]);
 
       //return  "sdsd";
@@ -66,7 +66,7 @@ class ServiceController extends Controller
     }
     public function showexpert()
     {
-      $list =Service::whereNot('is_callservice',1)->with('expertservices:id,service_id,expert_id','expertservices.expert:id,user_name,first_name,last_name')->get();
+      $list =Service::with('expertservices:id,service_id,expert_id','expertservices.expert:id,user_name,first_name,last_name')->get();
  $namesarray=[];  
  
       foreach(  $list as $servicerow){

@@ -121,19 +121,10 @@
 							<span class="side-menu__label"> {{ __('general.accounts') }}</span><i class="angle fe fe-chevron-down"></i></a>
 						<ul class="slide-menu">
 							<li><a class="slide-item"  href="{{ url('admin/service/percent/show') }}"> {{ __('general.show percent') }}</a></li>
-							<li class="slide">
-								<a class="side-menu__item"   href="{{ route('point.index') }}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24">
-                                        <path d="M0 0h24v24H0V0z" fill="none"/>
-                                        <path class="st1" d="M21.2,15.4c0.3,0.5,0.4,1,0.4,1.5c0,2.8-4.3,5-9.6,5c-5.3,0-9.6-2.3-9.6-5c0-0.5,0.2-1,0.4-1.5
-                                        C4,17.5,7.7,19,12,19C16.3,19,20,17.5,21.2,15.4z M12,12.1c5.3,0,9.6-2.3,9.6-5c0-2.8-4.3-5-9.6-5c-5.3,0-9.6,2.3-9.6,5
-                                        C2.4,9.8,6.7,12.1,12,12.1z M12,14c-4.4,0-8-1.5-9.2-3.6c-0.3,0.5-0.4,0.9-0.4,1.4c0,2.8,4.3,5,9.6,5c5.3,0,9.6-2.3,9.6-5
-                                        c0-0.5-0.1-1-0.4-1.4C20,12.5,16.4,14,12,14z"/></svg>
-									<span class="side-menu__label"> 	{{ __('general.points') }}</span><i class="angle fe fe-chevron-down"></i></a>
-								<ul class="slide-menu" style="padding-right: 15px">
-									<li><a class="slide-item" href="{{ url('admin/gift/') }}">هدية</a></li>
-								</ul>
-							</li>
+							
+                            <li><a class="slide-item"  href="{{ route('point.index') }}">{{ __('general.points') }}</a></li>
+                            <li><a class="slide-item"  href="{{ url('admin/gift/') }}">هدية</a></li>
+							 
 							<li><a class="slide-item" href="{{ url('admin/balance/client') }}"> {{ __('general.clients balance') }}</a></li>
 							<li><a class="slide-item" href="{{ url('admin/balance/expert') }}"> {{ __('general.experts balance') }}</a></li>
 							<li><a class="slide-item" href="{{ url('admin/balance/pulls') }}"> {{ __('general.pulls') }}</a></li>
