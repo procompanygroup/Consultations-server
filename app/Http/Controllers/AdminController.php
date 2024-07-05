@@ -20,7 +20,9 @@ class AdminController extends Controller
         $experts_count = Expert::where('is_active',1)->select('id','is_active')->count();
         $clients_count = Client::where('is_active',1)->select('id','is_active')->count();
         $services_count = Service::where('is_active',1)->whereNot('is_callservice',1)->select('id','is_active')->count();
-        $calls_count = Selectedservice::where('status','call')->select('id')->count();
+        $calls_count = Selectedservice::wherehas('service', function ($query){
+            $query->where('is_callservice',1);
+        })->select('id')->count();
         // return response (view('admin.home')); 
         return  view('admin.home',[
             'experts_count' =>  $experts_count,
