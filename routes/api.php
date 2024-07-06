@@ -90,6 +90,7 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/getnotifybyid', [NotificationController::class, 'getnotifybyid']);
         Route::post('/getgift', [GiftController::class, 'getgift']);
         Route::post('/callorder', [SelectedServiceController::class, 'callorder']);
+        Route::post('/uploadcall', [ExpertController::class, 'uploadcall']);
         
 //api/client/service
         Route::prefix('/service')->group(function () {
