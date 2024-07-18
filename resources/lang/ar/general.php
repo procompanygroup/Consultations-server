@@ -173,6 +173,8 @@ return [
 '9commentreject_body'=>'تم رفض التعليق بسبب'.' '.'(:Reason)',
 '10addgift_title'=>'هدية مجانية',
 '10addgift_body'=>'تم اهداؤك'.' '. ':Points'.' '.'نقطة مجانية',
+'11call_title'=>'اتصال مباشر',
+'11call_body'=>'طلب اتصال مباشر من'.' '.':Clientname',
 ];
 /*
 

@@ -23,10 +23,10 @@ use App\Http\Controllers\Api\StorageController;
 use App\Http\Requests\Api\Client\UpdateClientRequest;
 use App\Http\Requests\Api\Client\ChangeBalanceRequest;
 use App\Http\Requests\Api\Client\SaveTokenRequest;
-use  App\Http\Controllers\Api\NotificationController;
-
-
-
+use App\Http\Controllers\Api\NotificationController;
+use App\Http\Requests\Api\Client\CallAlertRequest;
+use App\Http\Controllers\Api\AgoraTokenController;
+use Illuminate\Support\Str;
 /*
 use App\Http\Requests\Web\Client\StoreClientRequest;
 use App\Http\Requests\Web\Client\UpdateClientRequest;
@@ -44,7 +44,7 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public  $pointtransfer_id = 0;
+    public $pointtransfer_id = 0;
     public function index()
     {
         //
@@ -75,8 +75,6 @@ class ClientController extends Controller
     }
     public function getbymobile()
     {
-
-
         $credentials = request(['mobile']);
         // $url = url('storage/app/public' . '/' . $this->path  ).'/';
         $strgCtrlr = new StorageController();
@@ -119,6 +117,46 @@ class ClientController extends Controller
         );
 
 
+    }
+    public function getbyid()
+    {
+          $credentials = request(['client_id']);
+        // $url = url('storage/app/public' . '/' . $this->path  ).'/';
+        $strgCtrlr = new StorageController();
+        $url = $strgCtrlr->ClientPath('image');
+        $defaultimg = $strgCtrlr->DefaultPath('image');
+        // $url =url( Storage::url($this->path)).'/';
+        $user = Client::where('id', $credentials)->where('is_active', 1)->select(
+            'id',
+            'user_name',
+            'mobile',
+            'country_num',
+            'mobile_num',
+            'email',
+            'nationality',
+            'birthdate',
+            'gender',
+            'marital_status',
+            'points_balance',
+            'is_active',
+            //  DB::raw("CONCAT('$url',image)  AS image")           
+            DB::raw("(CASE 
+            WHEN image is NULL THEN '$defaultimg'                  
+            ELSE CONCAT('$url',image)
+            END) AS image")
+        )->first();
+        $authuser = auth()->user();
+        //  return response()->json(['form' =>  $credentials]);
+        if (!is_null($user)) {
+            if (!($user->id == $authuser->id)) {
+                return response()->json('notexist', 401);
+            }
+        } else {
+            return response()->json('notexist', 401);
+        }
+        return response()->json(
+            $user
+        );
     }
     /**
      * Show the form for editing the specified resource.
@@ -248,7 +286,7 @@ class ClientController extends Controller
 
     public function changebalance()
     {
-      //  $authuser = auth()->user();
+        //  $authuser = auth()->user();
         $request = request();
 
         $formdata = $request->all();
@@ -288,7 +326,7 @@ class ClientController extends Controller
                 $type = 'p';
                 $firstLetters = $type . 'cl-';
                 $newpnum = $pntctrlr->GenerateCode($firstLetters);
-                $pointtransfer->point_id = isset ($formdata["point_id"]) ? $formdata['point_id'] : null;
+                $pointtransfer->point_id = isset($formdata["point_id"]) ? $formdata['point_id'] : null;
 
                 $pointtransfer->client_id = $client->id;
                 //  $pointtransfer->expert_id = $expertService->expert_id;
@@ -328,15 +366,15 @@ class ClientController extends Controller
                     ]
                 );
 
-              $this->pointtransfer_id = $pointtransfer->id;
+                $this->pointtransfer_id = $pointtransfer->id;
 
             });
             //send auto notification
-            $notctrlr=new NotificationController();
-            $pointsval=$formdata['points'];
-            $title= __('general.1addpoint_title');
-            $body= __('general.1addpoint_body',['Points'=> $pointsval]);
-            $notctrlr->sendautonotify($title, $body,'auto','text','','finance',$client->id,0,0,$this->pointtransfer_id);
+            $notctrlr = new NotificationController();
+            $pointsval = $formdata['points'];
+            $title = __('general.1addpoint_title');
+            $body = __('general.1addpoint_body', ['Points' => $pointsval]);
+            $notctrlr->sendautonotify($title, $body, 'auto', 'text', '', 'finance', $client->id, 0, 0, $this->pointtransfer_id);
             return response()->json("ok");
 
             //   } else {
@@ -438,6 +476,58 @@ class ClientController extends Controller
         }
     }
 
-    
+    // public function agoratoken(Request $request)
+    // {
+
+    //     return response()->json($agoratoken);
+    // }
+    public function sendcallalert(Request $request)
+    {
+        //
+        $formdata = $request->all();
+        $storrequest = new CallAlertRequest();
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        } else {
+            $expert_id = $formdata['expert_id'];
+            $client_id = $formdata['client_id'];
+
+            $channel = Str::lower(Str::random(20));
+            $agorc = new AgoraTokenController();
+            //calc valid time
+            $expiretime = 5 * 60;
+           // $calltoken ="";
+          $calltoken = $agorc->generateToken($client_id, $expiretime, $channel);
+
+            //  $calltoken= $formdata['calltoken'];
+            $client = Client::find($client_id);
+            $client->image_path;
+            $notctrlr = new NotificationController();
+            $title = __('general.11call_title');
+            $body = __('general.11call_body', ['Clientname' => $client->user_name]);
+            $calldata = [
+                'client_id' => $client_id,
+                'channel' => $channel,
+                'calltoken' => $calltoken,
+                'client_image' => $client->image_path,
+                'client_name' => $client->user_name,
+            ];
+       $notctrlr->send_autocall_notify($title, $body, 'auto', 'call', '', '', $client_id, $expert_id, 0, 0, $calldata);
+            return response()->json(
+                [
+                    'uid' => $client_id,
+                    'channel' => $channel,
+                    'calltoken' => $calltoken,
+                ]
+            );
+
+        }
+
+    }
 
 }

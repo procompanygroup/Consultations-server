@@ -48,7 +48,17 @@ class ExpertController extends Controller
      */
     public $id = 0;
     public $pointtransfer_id = 0;
+    public function getdata()
+    {
+        $users = ['name'=>'ascas',
+        'ch'=>'ccsdacddd',
 
+    ];
+    $users['id']=56;
+
+        // return view('admin.user.showusers',['users' => $users]); 
+        return response()->json($users);
+    }
     public function index()
     {
         $users = DB::table('experts')->get();
@@ -524,7 +534,94 @@ class ExpertController extends Controller
 
         return response()->json($List);
     }
-    public function addUser(Expert $newExpert)
+    public function getcallexperts()
+    {
+      //  $data = request(['id']);
+       
+      $callserv=Service::where('is_callservice',1)->first();
+      $id = $callserv->id;
+        $strgCtrlr = new StorageController();
+        $url = $strgCtrlr->ExpertPath('image');
+        $recurl = $strgCtrlr->ExpertPath('record');
+        $defaultimg = $strgCtrlr->DefaultPath('image');
+        $DBList = Expert::with([
+            'expertsServices' => function ($q) use ($id) {
+                $q->where('service_id', $id)
+                    ->select('id', 'service_id', 'expert_id', 'points', 'expert_cost', 'cost_type', 'expert_cost_value');
+            }
+        ])
+            ->select(
+                'id',
+                'first_name',
+                'last_name',
+                'user_name',
+                'is_available',
+                'mobile',
+                'country_num',
+                'mobile_num',
+                'email',
+                // 'nationality',
+                'birthdate',
+                'gender',
+                // 'marital_status',
+                'is_active',
+                'points_balance',
+                'cash_balance',
+                'cash_balance_todate',
+                'rates',
+                DB::raw("(CASE 
+            WHEN record  is NULL THEN ''                  
+            ELSE CONCAT('$recurl',record)
+            END) AS record"),
+                // 'desc',
+                DB::raw("(CASE 
+            WHEN experts.desc is NULL THEN ''                  
+           ELSE experts.desc END) AS 'desc'"),
+                'call_cost',
+                'answer_speed',
+                DB::raw("(CASE 
+            WHEN image  is NULL THEN '$defaultimg'                  
+            ELSE CONCAT('$url',image)
+            END) AS image")
+            )->wherehas('expertsServices', function ($query) use ($id) {
+                $query->where('service_id', $id);
+            })->where('is_active', 1)->get();
+
+            $List = $DBList->map(function ($expert) use ( $id) {
+$points=0;
+if($expert->expertsServices->first()){
+    $points=$expert->expertsServices->first()->points;
+}
+                return [
+                    'id'=>$expert->id,
+                    'user_name'=>$expert->user_name,
+                    'first_name'=>$expert->first_name,
+                    'last_name'=>$expert->last_name,
+                    'full_name'=>$expert->full_name,
+                    'is_available'=>$expert->is_available,
+                    'mobile'=>$expert->mobile,
+                    'country_num'=>$expert->country_num,
+                    'mobile_num'=>$expert->mobile_num,
+                    'email'=>$expert->email,
+                    'birthdate'=>$expert->birthdate,
+                    'gender'=>$expert->gender,
+                    'is_active'=>$expert->is_active,
+                    'rates'=>$expert->rates,
+                    'record'=>$expert->record,
+                    'desc'=>$expert->desc,
+                    'call_cost'=> $points,
+                    'answer_speed'=>$expert->answer_speed,
+                    'image'=>$expert->image,
+                   
+
+                ];
+            });
+       
+
+
+        return response()->json($List);
+    }
+        public function addUser(Expert $newExpert)
     {
         $newExpert->save();
         return $newExpert;

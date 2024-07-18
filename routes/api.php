@@ -29,6 +29,7 @@ use App\Http\Controllers\Web\GiftController;
 |
 */
 //Route::post('registerexpert', [ExpertAuthController::class, 'register']);
+ 
 Route::post('loginexpert', [ExpertAuthController::class, 'login']);
 Route::post('getmail', [MailController::class, 'getmail']);
 Route::post('codevalidate', [MailController::class, 'codevalidate']);
@@ -83,7 +84,8 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/addrate', [SelectedServiceController::class, 'addrate']);
         Route::post('/changebalance', [ClientController::class, 'changebalance']);
         Route::post('/savetoken', [ClientController::class, 'savetoken']);
-        
+        Route::post('/getbyid', [ClientController::class, 'getbyid']);
+
         Route::post('/store', [PointTransferController::class, 'store']);
         Route::post('/getnotifylist', [NotificationController::class, 'getclientnotifylist']);
         Route::post('/settoread', [NotificationController::class, 'settoread']);
@@ -91,13 +93,14 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/getgift', [GiftController::class, 'getgift']);
         Route::post('/callorder', [SelectedServiceController::class, 'callorder']);
         Route::post('/uploadcall', [ExpertController::class, 'uploadcall']);
-        
+        Route::post('/sendcallalert', [ClientController::class, 'sendcallalert']);
 //api/client/service
         Route::prefix('/service')->group(function () {
             Route::post('/viewall', [serviceController::class, 'index']); 
             Route::post('/getinputform', [serviceController::class, 'getinputserviceform']); 
             Route::post('/savewithvalues', [SelectedServiceController::class, 'savewithvalues']);
-            Route::post('/uploadfilesvalue', [SelectedServiceController::class, 'uploadfilesvalue']);       
+            Route::post('/uploadfilesvalue', [SelectedServiceController::class, 'uploadfilesvalue']); 
+            Route::post('/callexperts', [ExpertController::class, 'getcallexperts']);       
          //   Route::post('/diftime', [serviceController::class, 'diftime']);   
         });
         Route::prefix('/expert')->group(function () {
