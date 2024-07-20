@@ -25,6 +25,9 @@ class Notification extends Model
         'pointtransfer_id',
     ];
     protected  $hidden=['side_conv','path_conv','type_conv'];
+    protected $casts = [
+        'data' => 'json',
+    ];
     public function getSideConvAttribute()
     {
         $conv = "";

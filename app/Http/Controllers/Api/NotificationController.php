@@ -608,6 +608,7 @@ class NotificationController extends Controller
         'read_at' => is_null($readat) ? '' : $readat,
         'created_at' => $notify->notificationUsers->first()->created_at,
         'path' => $notify->path_conv,
+        'data'=>json_decode($notify->data),
       ];
     });
     return $list;
@@ -809,6 +810,7 @@ class NotificationController extends Controller
     $newObj->notes = $notes;
     $newObj->selectedservice_id = $selectedservice_id;
     $newObj->pointtransfer_id = $pointtransfer_id;
+ 
     $newObj->save();
 
     //create rows in noti user table 
@@ -826,6 +828,10 @@ class NotificationController extends Controller
     $notifyuser->created_at = $now;
     $notifyuser->updated_at = $now;
     $notifyuser->save();
+    //save call data array
+    $calldata['id']=$notifyuser->id;
+    $newObj->data=json_encode($calldata); 
+    $newObj->save();
     //send firebase notify
     $res = $this->sendfirecall($newObj, $notifyuser, $calldata);
 
