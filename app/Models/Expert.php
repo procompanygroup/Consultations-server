@@ -64,6 +64,7 @@ class Expert extends Authenticatable implements JWTSubject
     protected $casts = [
       
         'password' => 'hashed',
+      'answer_speed' => 'integer',
     ];
 
     protected $appends= ['full_name'];

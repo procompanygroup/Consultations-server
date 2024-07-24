@@ -137,6 +137,15 @@
 											</ul>
 										</div>
 									</div>
+									<div class="form-group mb-4 justify-content-end">
+										<div class="custom-file">
+											<input  type="file" class="custom-file-input" id="record" name="record" accept=".mp3" form="create_form"> 
+											<label class="custom-file-label" for="customFile"  id="record_label">التسجيل الصوتي التعريفي</label>
+											<ul class="parsley-errors-list filled" >
+												<li class="parsley-required" id="record_error"></li>
+											</ul>
+										</div>
+									</div>
 									<div class="form-group justify-content-end">
 										<div class="checkbox">
 											<div class="custom-checkbox custom-control">
@@ -160,7 +169,21 @@
 
 							<div class="col-lg-4 mt-sm-3 mt-lg-0">
 								<img alt="" id="imgshow" class="rounded img-thumbnail wd-100p float-sm-right  mg-t-10 mg-sm-t-0"
-								 src="{{URL::asset('assets/img/photos/1.jpg')}}" >							 	
+								 src="{{URL::asset('assets/img/photos/1.jpg')}}" >	
+								 
+								 <div class=" col-sm-12 " id="div_record"  >
+								 
+									 
+									<div class="row" style="padding-top:20px">
+									
+										<div class="col-sm-12 " style="padding-right: 20px">
+										 
+											
+	
+	
+										</div>
+									</div>
+								</div>
 							</div>
  
 

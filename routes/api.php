@@ -42,7 +42,7 @@ Route::middleware('authExpert:api')->group(function () {
     Route::post('/getexpert', [ExpertController::class, 'getexpert']);
     Route::post('/deleteaccount', [ExpertController::class, 'deleteaccount']);
     Route::post('/updateprofile', [ExpertController::class, 'updateprofile']);
-    Route::post('/uploadrecord', [ExpertController::class, 'uploadrecord']);
+   // Route::post('/uploadrecord', [ExpertController::class, 'uploadrecord']);
     Route::post('/uploadanswer', [ExpertController::class, 'uploadanswer']);
     Route::post('/getorders', [SelectedServiceController::class, 'getorders']);
     Route::post('/getorderbyid', [SelectedServiceController::class, 'getorderbyid']);

@@ -49,7 +49,7 @@ protected $alphaAtexpr='/^[\pL\s\_\-\@\.\0-9]+$/u';
       //  'is_active'=>'required',  
         'image'=>'file|image',   
         'birthdate'=>'required|date',
-        
+        'record'=>'nullable|file|extensions:mp3,wav',  // 'record'=>'required|file|mimes:mp3',
        ];   
     
     }

@@ -235,7 +235,8 @@ class StorageController extends Controller
       return $paddedNumber;
   }
   //
-  public static function diffTimeinMinutes($start_date, $end_date)
+   
+  public  function diffTimeinMinutes($start_date, $end_date)
   {
       $minutes = 0;
       if ((!is_null($start_date)) && (!is_null($end_date))) {
@@ -247,6 +248,14 @@ class StorageController extends Controller
       return $minutes;
   }
   
+  public function calcAnswerSpeed($start_date, $end_date)
+  {
+    $minutes =   $this->diffTimeinMinutes($start_date, $end_date);
+    if($minutes >60){
+      $minutes =60;
+    }    
+      return $minutes;
+  }
   public static function calcAnswerspeedAvg($expert_id)
   {
     $avg= Selectedservice::where('expert_id',$expert_id)->where('answer_speed','<>',0)->whereNotNull('answer_speed')

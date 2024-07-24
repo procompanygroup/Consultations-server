@@ -223,7 +223,8 @@ class AnswerController extends Controller
       // calc answer speed for this order
       $startdate= $selectedObj->order_date;
       $enddate= $now ;
-      $answespeed=StorageController::diffTimeinMinutes( $startdate,$enddate);
+      $strgctrlr=new StorageController();
+      $answespeed= $strgctrlr->calcAnswerSpeed( $startdate,$enddate);
       // end
       Selectedservice::find($id)->update([
         'status' => 'agree',

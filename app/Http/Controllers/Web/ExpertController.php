@@ -135,6 +135,12 @@ class ExpertController extends Controller
         $this->storeImage($file, $newObj->id);
         //  $this->storeImage( $file,2);
       }
+      if ($request->hasFile('record')) {
+        $file = $request->file('record');
+        // $filename= $file->getClientOriginalName();               
+        $this->storeExpertRecord($file, $newObj->id);
+        //  $this->storeImage( $file,2);
+      }
 
       return response()->json("ok");
     }
@@ -197,6 +203,12 @@ class ExpertController extends Controller
                // $filename= $file->getClientOriginalName();                
      $this->storeImage( $file,$id);
        }
+       if ($request->hasFile('record')) {
+        $file = $request->file('record');
+                   
+        $this->storeExpertRecord($file,$id);
+      
+      }
        $cnum = $formdata["country_num"];
        $mnum = $formdata["mobile_num"];
       Expert::find($id)->update([
@@ -337,6 +349,31 @@ class ExpertController extends Controller
               "record" =>""
           ]);
           Storage::delete("public/" . $recpath . '/' . $oldfilename);     
+      return 1;
+  }
+  public function storeExpertRecord($file, $id)
+  {
+      $model = Expert::find($id);
+      $oldfile = $model->record;
+      $oldfilename = basename($oldfile);
+      $strgCtrlr = new StorageController();
+      $recpath = $strgCtrlr->recordpath['experts'];
+      if ($file !== null) {
+          $filename = rand(10000, 99999) . $id . "." . $file->getClientOriginalExtension();
+          if (!File::isDirectory(Storage::url('/' . $recpath))) {
+              Storage::makeDirectory('public/' . $recpath);
+          }
+          $path = $file->storeAs(
+              $recpath,
+              $filename,
+              'public'
+          );
+
+          Expert::find($id)->update([
+              "record" => $filename
+          ]);
+          Storage::delete("public/" . $recpath . '/' . $oldfilename);
+      }
       return 1;
   }
 }
