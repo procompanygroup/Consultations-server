@@ -496,14 +496,16 @@ class ClientController extends Controller
         } else {
             $expert_id = $formdata['expert_id'];
             $client_id = $formdata['client_id'];
-
+$client_uid=$client_id;
+$expert_uid=$expert_id;
             $channel = Str::lower(Str::random(20));
             $agorc = new AgoraTokenController();
             //calc valid time
             $expiretime = 5 * 60;
            // $calltoken ="";
-          $calltoken = $agorc->generateToken($client_id, $expiretime, $channel);
-
+        //  $calltoken = $agorc->generateToken($client_id, $expiretime, $channel);
+        $client_calltoken = $agorc->generateToken($client_uid, $expiretime, $channel);
+        $expert_calltoken = $agorc->generateToken($expert_uid, $expiretime, $channel);
             //  $calltoken= $formdata['calltoken'];
             $client = Client::find($client_id);
             $client->image_path;
@@ -511,18 +513,19 @@ class ClientController extends Controller
             $title = __('general.11call_title');
             $body = __('general.11call_body', ['Clientname' => $client->user_name]);
             $calldata = [
+                'expert_uid' => $expert_uid,
                 'client_id' => $client_id,
                 'channel' => $channel,
-                'calltoken' => $calltoken,
+                'expert_calltoken' =>  $expert_calltoken,
                 'client_image' => $client->image_path,
                 'client_name' => $client->user_name,
             ];
        $notctrlr->send_autocall_notify($title, $body, 'auto', 'call', '', '', $client_id, $expert_id, 0, 0, $calldata);
             return response()->json(
                 [
-                    'uid' => $client_id,
+                    'client_uid' =>$client_uid,
                     'channel' => $channel,
-                    'calltoken' => $calltoken,
+                    'client_calltoken' => $client_calltoken,
                 ]
             );
 
