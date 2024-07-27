@@ -41,6 +41,8 @@ class Expert extends Authenticatable implements JWTSubject
 'country_num',
 'mobile_num',
 'is_available',
+'status',// a b n
+'call_balance'
 
     ];
     public $fullpathimg = "";
@@ -67,10 +69,33 @@ class Expert extends Authenticatable implements JWTSubject
       'answer_speed' => 'integer',
     ];
 
-    protected $appends= ['full_name'];
+    protected $appends= ['full_name','status_conv'];
  public function getFullNameAttribute(){     
         return  $this->first_name.' '. $this->last_name ;
  }
+ public function getStatusConvAttribute(){
+    $conv="";
+    if( $this->status==null || $this->status==""){
+        $conv=__('general.notavailable');
+    }else{
+        switch($this->status) {
+            case('a'):
+                $conv = __('general.available');
+               break;
+               case('b'):
+                $conv =__('general.busy');
+               break;
+               case('n'):
+                $conv = __('general.notavailable');
+               break;
+    
+            default:
+            $conv =__('general.notavailable');
+        }
+    }
+            return  $conv;
+ }
+ 
 
  public function getRecordPathAttribute(){     
 

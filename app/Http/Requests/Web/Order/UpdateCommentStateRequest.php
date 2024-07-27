@@ -24,7 +24,7 @@ class UpdateCommentStateRequest extends FormRequest
     {     
        return[
        //  'form_state'=>'required|in:agree,reject', 
-         'comment_reject_reason'=>'required|integer', //exclude_if
+       //  'comment_reject_reason'=>'required|integer', //exclude_if
         // 'form_reject_reason'=>'exclude_unless:form_state,reject|required|integer', //exclude_if
        ];   
     

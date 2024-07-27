@@ -70,7 +70,13 @@
                     <h6 class="font-weight-bold mb-2">نص التعليق</h6>
                     <p>{{ $selectedservice->comment }}</p>
                   
-                
+                    @if ($selectedservice->comment_state == 'agree' && $selectedservice->comment_rate > 0)
+                    <h6 class="font-weight-bold mb-2 ">التقييم</h6>
+                    <p >{{ $selectedservice->comment_rate }}</p>
+                @endif
+                <h6 class="font-weight-bold mb-2 rated-h" style="display: none">التقييم</h6>
+                <p id="p_rate_value" style="display: none"></p>
+
                     <div class="form-horizontal" id="div_btns">
                         <div class="form-group mb-0 mt-3 justify-content-end">
                             <div>
@@ -80,7 +86,12 @@
                                         form="agree_comment_form" class="btn btn-primary">موافقة</button>
                                 @endif
 
-                               
+                                @if ($selectedservice->comment_state == 'agree' && $selectedservice->comment_rate == 0)
+                                    <button type="button" name="btn_rate_modal" data-target="#scrollmodal"
+                                        data-toggle="modal" class="btn btn-primary rated-hide">تقييم</button>
+                                @endif
+                                <button type="button" name="btn_rate_modal" data-target="#scrollmodal"
+                                data-toggle="modal" class="btn btn-primary rate-btn rated-hide" style="display: none">تقييم</button>
                             </div>
                         </div>
 
@@ -111,7 +122,60 @@
     <!-- main-content closed -->
 
     <!-- Scroll with content modal -->
-    
+    <div class="modal" id="scrollmodal">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content modal-content-demo">
+                <div class="modal-header">
+                    <h6 class="modal-title">تقييم التعليق</h6><button aria-label="Close" class="close" data-dismiss="modal"
+                        type="button"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body">
+                    <!-- row -->
+                    <div class="row row-sm">
+                        <div class="col">
+                            <div class="card  box-shadow-0">
+                                <div class="card-body pt-4">
+                                    <form name="rate_comment_form" id="rate_comment_form"
+                                        action="{{ route('comment.rate', $selectedservice->id) }}" method="POST">
+                                        @csrf
+                                        <div class="form-group mb-3">
+                                            <select name="comment_rate" id="comment_rate" class="form-control">
+                                                <!--placeholder-->
+                                                <option title="" class="text-muted">اختر</option>
+
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+
+
+                                            </select>
+                                            <ul class="parsley-errors-list filled">
+                                                <li class="parsley-required" id="comment_rate_error"></li>
+                                            </ul>
+                                        </div>
+
+
+                                    </form>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <!-- row -->
+                </div>
+                <div class="modal-footer">
+                    <button class="btn ripple btn-primary" name="btn_rate_comment" id="btn_rate_comment"
+                        form="rate_comment_form" type="submit">حفظ</button>
+                    <button class="btn ripple btn-secondary" data-dismiss="modal" name="btn_cancel_field"
+                        id="btn_cancel_field" type="button"> إلغاء</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!--End Scroll with content modal -->
 @endsection
 @section('js')

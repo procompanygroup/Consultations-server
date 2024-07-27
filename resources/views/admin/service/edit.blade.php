@@ -357,8 +357,8 @@
 <script src="{{URL::asset('assets/js/admin/service-input.js')}}"></script>
 <script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
 <script  >
-var emptyimg ="{{URL::asset('assets/img/photos/1.jpg')}}"</script>
-<script  > urlshowinput ="{{url('admin/service/showinputs',$service->id)}}"; 
+var emptyimg ="{{URL::asset('assets/img/photos/1.jpg')}}";
+ urlshowinput ="{{url('admin/service/showinputs',$service->id)}}"; 
     delinputurl ='{{url("admin/input/delete/[itemid]")}}'; 
 
 	</script>

@@ -42,9 +42,10 @@ class Selectedservice extends Model
 'comment_rate_admin_id',
 'answer_speed',
 'call_file',
+'rate_state',
     ];  
     //$appends
- protected  $hidden= ['form_state_conv' ,'answer_state_conv' ,'comment_state_conv'];
+ protected  $hidden= ['form_state_conv' ,'answer_state_conv' ,'comment_state_conv','rate_state_conv'];
  protected  $appends= ['title','answer_state'];
  protected $casts = [
     'rate' => 'integer',    
@@ -141,7 +142,30 @@ class Selectedservice extends Model
         return  $conv;
  }
 
+ public function getRateStateConvAttribute(){
+    $conv="";
+    if( $this->rate_date==null){
+        $conv=__('general.not exist');
+    }else{
+        switch($this->rate_state) {
+            case('wait'):
+                $conv = __('general.wait');
+               break;
+               case('agree'):
+                $conv =__('general.the rate')." ".__('general.status.agree');
+               break;
+               case('reject'):
+                $conv = __('general.the rate')." ".__('general.status.reject');
+               break;
+    
+            default:
+            $conv = $this->rate_state;
+        }
+    }
+ 
 
+        return  $conv;
+ }
  
 
     /* deleted

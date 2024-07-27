@@ -41,9 +41,8 @@
 
 					</li>
 
-
-					<li class="slide">
-						<a class="side-menu__item"  href="{{ route('expert.index') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24">
+                    <li class="slide">
+						<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24">
                             <path d="M0 0h24v24H0V0z" fill="none"/>
                             <path d="M15.5,15.7c-0.1-0.1-0.3-0.3-0.5-0.4c-0.4-0.4-0.9-0.7-1.1-1l0,0c-0.4,0.3-1,0.5-1.7,0.5c-0.7,0-1.2-0.2-1.6-0.5
                             c-0.1-0.1-0.2-0.1-0.3-0.2c-0.2,0.3-0.7,0.7-1.2,1.1c-0.3,0.2-0.5,0.5-0.7,0.6c-0.5,0.6-0.9,1.2-1.2,1.9l1.5,0l3.3,2.9l3.3-2.9
@@ -63,9 +62,14 @@
                             c0.9-0.6,1.4-0.6,2.5-0.6c0.9,0,1.5,0,2.3,0.5C15.6,5.2,16.5,6.7,16.8,8.3L16.8,8.3z M10.9,18.8l0.7-2.3l-0.3-0.4
                             c-0.1-0.2-0.2-0.4-0.1-0.6c0.2-0.3,0.5-0.3,0.9-0.3c0.4,0,0.8-0.1,0.9,0.4c0,0.1,0,0.3-0.1,0.5l-0.3,0.4l0.7,2.3L12,19.7L10.9,18.8
                             L10.9,18.8z"/></svg>
-							<span class="side-menu__label"> {{ __('general.experts') }}</span> </a>
+							<span class="side-menu__label">{{ __('general.experts') }}</span><i class="angle fe fe-chevron-down"></i></a>
+						<ul class="slide-menu">
+							<li><a class="slide-item"  href="{{ route('expert.index') }}">اضافة خبير</a></li>
+							<li><a class="slide-item"  href="{{ url('admin/expertstatus') }}">حالة الخبير</a></li>
 
+						</ul>
 					</li>
+
 					<li class="slide">
 						<a class="side-menu__item"   href="{{ route('client.index') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24">
                             <path d="M0 0h24v24H0V0z" fill="none"/>
@@ -164,7 +168,8 @@
 
 							<li><a class="slide-item"  href="{{ route('answer.index') }}">{{ __('general.answers') }}</a></li>
 							<li><a class="slide-item"  href="{{ route('comment.index') }}">{{ __('general.comments') }}</a></li>
-						</ul>
+							<li><a class="slide-item"  href="{{ route('rate.index') }}">التقييمات</a></li>
+                        </ul>
 					</li>
 
 					@if(auth()->user()->role=='admin')

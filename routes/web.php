@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Web\AnswerController;
 use App\Http\Controllers\Web\ReasonController;
 use App\Http\Controllers\Web\CommentController;
+use App\Http\Controllers\Web\RateController;
 use App\Http\Controllers\Web\ClientOperationController;
 use App\Http\Controllers\Web\ExpertOperationController;
 use App\Http\Controllers\Web\PointTransferController;
@@ -120,10 +121,11 @@ Route::prefix('expertgift')->group(function () {
 
 });
         Route::resource('expert', ExpertController::class, ['except' => ['update']]);
+        Route::get('expertstatus', [ExpertController::class, 'showstatus']);
         Route::prefix('expert')->group(function () {
             Route::post('/update/{id}', [ExpertController::class, 'update'])->name('expert.update');
             Route::post('/delrecord/{id}', [ExpertController::class, 'delrecord'])->name('expert.delrecord');
-            
+       
           
         });
 
@@ -216,6 +218,15 @@ Route::prefix('user')->group(function () {
             Route::post('/agree/{id}', [CommentController::class, 'agreemethod'])->name('comment.agree');
             Route::post('/reject/{id}', [CommentController::class, 'rejectmethod'])->name('comment.reject');
             Route::post('/rate/{id}', [CommentController::class, 'ratemethod'])->name('comment.rate');
+       
+        });
+        //التعليقات
+        Route::resource('rate', RateController::class, ['except' => ['update']]);
+        Route::prefix('rate')->group(function () {
+            Route::post('/update/{id}', [RateController::class, 'update'])->name('rate.update');
+            Route::post('/agree/{id}', [RateController::class, 'agreemethod'])->name('rate.agree');
+            Route::post('/reject/{id}', [RateController::class, 'rejectmethod'])->name('rate.reject');
+            // Route::post('/rate/{id}', [RateController::class, 'ratemethod'])->name('rate.rate');
        
         });
        

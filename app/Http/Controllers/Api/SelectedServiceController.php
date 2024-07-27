@@ -639,15 +639,16 @@ class SelectedServiceController extends Controller
                             [
                                 'rate' => $formdata['rate'],
                                 'rate_date' => $now,
+                                'rate_state'=>'wait'
                             ]
                         );
-                        $rateavg = StorageController::calcRateAvg($selectedservice->expert_id);
-                        Expert::find($selectedservice->expert_id)->update(
-                            [
-                                'rates' => $rateavg,
+                        // $rateavg = StorageController::calcRateAvg($selectedservice->expert_id);
+                        // Expert::find($selectedservice->expert_id)->update(
+                        //     [
+                        //         'rates' => $rateavg,
 
-                            ]
-                        );
+                        //     ]
+                        // );
                     });
                 }
                 return response()->json("ok");

@@ -35,6 +35,15 @@ class ExpertController extends Controller
     //return response()->json($users);
 
   }
+  public function showstatus()
+  {
+    $list =Expert::get();
+    
+    return view('admin.expert.showstatus', ['experts' => $list]);
+    //return response()->json($users);
+
+  }
+   
   public function showbalance()
   {
     $list = Expert::get();
