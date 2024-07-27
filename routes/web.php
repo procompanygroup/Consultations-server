@@ -21,7 +21,7 @@ use App\Http\Controllers\Web\ClientOperationController;
 use App\Http\Controllers\Web\ExpertOperationController;
 use App\Http\Controllers\Web\PointTransferController;
 use App\Http\Controllers\Web\GiftController;
-
+use App\Http\Controllers\Web\GiftExpertController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -111,6 +111,14 @@ Route::prefix('gift')->group(function () {
     Route::get('/fillclients', [GiftController::class, 'fillclients']); 
 
 });
+Route::prefix('expertgift')->group(function () {   
+     
+    Route::get('/', [GiftExpertController::class , 'index']); 
+    Route::get('/create', [GiftExpertController::class, 'create']);    
+    Route::post('/store', [GiftExpertController::class, 'store']);   
+    // Route::get('/fillexperts', [GiftExpertController::class, 'fillclients']); 
+
+});
         Route::resource('expert', ExpertController::class, ['except' => ['update']]);
         Route::prefix('expert')->group(function () {
             Route::post('/update/{id}', [ExpertController::class, 'update'])->name('expert.update');
@@ -137,10 +145,13 @@ Route::prefix('gift')->group(function () {
 
             //عرض النسب
             Route::get('/percent/show', [ServiceController::class, 'showpercent']);
+            //عرض الخبراء لخدمة محددة مع نسبة كل خبير
+            Route::get('/expert/percentedit/{id}', [ServiceController::class, 'editpercentexpert']);
             //حفظ النسبة
             Route::post('/percent/save/{id}', [ServiceController::class, 'percentsave']);
             //عرض نسبة الخدمة حسب ال id modal
-            Route::get('/percent/edit/{id}', [ServiceController::class, 'percentedit']);
+            Route::get('/percent/edit/{id}', [ServiceController::class, 'percentmodaledit']);
+
             //عرض الخبراء المقدمين للخدمات
             Route::get('/expert/show', [ServiceController::class, 'showexpert']);
             Route::get('/expert/showselected/{id}', [ServiceController::class, 'showselected']);

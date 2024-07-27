@@ -10,17 +10,18 @@
 <link href="{{URL::asset('assets/plugins/datatable/css/jquery.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/datatable/css/responsive.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
-
 @endsection
 @section('page-header')
 				<!-- breadcrumb -->
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto">{{ __('general.accounts') }}</h4>
+							<h4 class="content-title mb-0 my-auto"> {{ __('general.accounts') }} </h4> 
+  
+					
 						</div>
 					</div>
-
+					 
 				</div>
 				<!-- breadcrumb -->
 @endsection
@@ -32,40 +33,32 @@
 					<!--div-->
 					<div class="col-xl-12">
 						<div class="card mg-b-20">
-							<div class="card-header pb-0">
-								<div class="d-flex justify-content-between">
-									<h4 class="card-title mg-b-0">{{ __('general.show percent') }}</h4>
-								</div>
+							<div class="card-header pb-0">									 
+										<div class="d-flex justify-content-between">
+											<h4 class="card-title mg-b-0">هدية الخبير</h4>
+											<a href="{{ url('admin/expertgift/create') }}" class="btn btn-primary btn-small">{{ __('general.new') }}</a>
+										</div>							 
 									</div>
 							<div class="card-body">
 								<div class="table-responsive">
 									<table id="example" class="table text-md-nowrap">
 										<thead>
 											<tr>
-
-												<th class="border-bottom-0">{{ __('general.service') }}</th>
-												<th class="border-bottom-0">{{ __('general.experts') }}</th>
-
-                                                <th class="border-bottom-0">{{ __('general.action') }}</th>
-
-											</tr>
+												<th class="border-bottom-0">الخبير</th>
+												<th class="border-bottom-0">القيمة</th>
+												<th class="border-bottom-0">التاريخ</th>
+											 									                                             
+                                         	</tr>
 										</thead>
 										<tbody>
-											@foreach ($services as $service)
-											 
-											
+											 @foreach ($List as $item)
 											<tr>
-
-												<td>{{$service->name }}</td>
-												<td>{{ $service->experts_names }}</td>
-                                                <td>
-													<a href="{{url('admin/service/expert/percentedit',$service->id)}}"  class="btn btn-light btn-sm" title="">قائمة الخبراء</a>
-
-                                                </td>
-
+												<td>{{ $item->expert->full_name }} </td>
+												<td>{{ $item->count }}</td>
+												<td> {{ $item->created_at}}</td>
+												 
 											</tr>
-										 
-											@endforeach
+											@endforeach  
 									</tbody>
 									</table>
 								</div>
@@ -73,19 +66,12 @@
 						</div>
 					</div>
 					<!--/div-->
-
-
 				</div>
 				<!-- /row -->
 			</div>
 			<!-- Container closed -->
 		</div>
 		<!-- main-content closed -->
-		<!-- Scroll Edit with content modal -->
-		<div class="modal" id="scrollmodal-edit">
-			
-		</div>
-		<!--End Scroll with content modal -->
 @endsection
 @section('js')
 <!-- Internal Data tables -->
@@ -107,12 +93,4 @@
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('assets/js/table-data.js')}}"></script>
-
-<script src="{{ URL::asset('assets/js/admin/validate.js') }}"></script>
-<script src="{{ URL::asset('assets/js/admin/content.js') }}"></script>
-
-<script>
-	urlshowpercent = "{{ url('admin/service/percent/edit', 'itemid') }}";  
-	urlallpercent = "{{ url('admin/service/percent/show')}}";  
-</script>
 @endsection

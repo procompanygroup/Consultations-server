@@ -58,13 +58,13 @@ class ServiceController extends Controller
     }
     public function showpercent()
     {
-      $list = DB::table('services')->get();
+      $list = $this->getexperts();
      return view('admin.service.showpercents', ['services' => $list]);
 
       //return  "sdsd";
   
     }
-    public function showexpert()
+    public function getexperts()
     {
       $list =Service::with('expertservices:id,service_id,expert_id','expertservices.expert:id,user_name,first_name,last_name')->get();
  $namesarray=[];  
@@ -80,11 +80,31 @@ class ServiceController extends Controller
  }
     
     //  return  dd($list);
+      return  $list ;
+
+      
+  
+    }
+    public function showexpert()
+    {
+      $list =$this->getexperts();
+    
+    //  return  dd($list);
       return view('admin.service.showexperts', ['services' => $list]);
 
       
   
     }
+    // public function showexpertpercent()
+    // {
+    //   $list =$this->getexperts();
+    
+    // //  return  dd($list);
+    //   return view('admin.service.showexperts', ['services' => $list]);
+
+      
+  
+    // }
     public function showselected($id)
     {
       $object = Service::find($id);
@@ -94,12 +114,22 @@ class ServiceController extends Controller
   
     }
     
+    
     public function editexpert($id)
     {
       $object = Service::find($id);
     $selectedExpertList = $object->expertservices()->with('expert')->get();
       $expertList = Expert::get();
        return view('admin.service.editxpert', ['service' => $object,'allexperts'=>$expertList ,'selectedexperts'=>$selectedExpertList]);
+     // return dd($list);
+  
+    }
+    public function editpercentexpert($id)
+    {
+      $object = Service::find($id);
+    $selectedExpertList = $object->expertservices()->with('expert')->get();
+      $expertList = Expert::get();
+       return view('admin.service.editxpertpercent', ['service' => $object,'allexperts'=>$expertList ,'selectedexperts'=>$selectedExpertList]);
      // return dd($list);
   
     }
@@ -111,6 +141,17 @@ class ServiceController extends Controller
     $expertservice = ExpertService::with('expert','service')->find($id);  
    //   return $expertservice;
       return view('admin.expertservice.pointmodal', ['expertservice' => $expertservice]);
+     // return dd($list);
+  
+    }
+    public function percentmodaledit($id)
+    {
+      //expert service id
+   
+    //  $expertservice = ExpertService::find($id)->with('expert','service')->first();    
+    $expertservice = ExpertService::with('expert','service')->find($id);  
+   //   return $expertservice;
+      return view('admin.expertservice.percentmodal', ['expertservice' => $expertservice]);
      // return dd($list);
   
     }
@@ -153,8 +194,8 @@ class ServiceController extends Controller
 
     } else {     
      
-      Service::find($id)->update([
-        'expert_percent'=>  $formdata['expert_percent'],       
+      ExpertService::find($id)->update([
+        'expert_cost'=>  $formdata['expert_cost'],       
       ]);
      
       return response()->json("ok");
@@ -162,12 +203,12 @@ class ServiceController extends Controller
     }
     }
 
-    public function percentedit($id)
-    {
-      $object = Service::find($id);
+//     public function percentedit($id)
+//     {
+//       $object = Service::find($id);
 
- return view('admin.expertservice.edit', ['service' => $object]);
-    }
+//  return view('admin.expertservice.edit', ['service' => $object]);
+//     }
     
     public function expertsave(StoreExpertServiceRequest $request, $id)
     {
@@ -197,8 +238,9 @@ $expertservice =new  ExpertService();
 $expertservice->expert_id=$formdata['select_expert'];
 $expertservice->service_id=$id;
 $expertservice->points=$setctrlr->findbyname('expert_service_points')->value;
-$expertservice->expert_cost=0;
-$expertservice->cost_type=0;
+
+$expertservice->expert_cost=$setctrlr->findbyname('expert_percent')->value;
+$expertservice->cost_type=2;
 $expertservice->expert_cost_value=0;
 $expertservice->save();
 }

@@ -123,8 +123,8 @@
 							<li><a class="slide-item"  href="{{ url('admin/service/percent/show') }}"> {{ __('general.show percent') }}</a></li>
 							
                             <li><a class="slide-item"  href="{{ route('point.index') }}">{{ __('general.points') }}</a></li>
-                            <li><a class="slide-item"  href="{{ url('admin/gift/') }}">هدية</a></li>
-							 
+                            <li><a class="slide-item"  href="{{ url('admin/gift/') }}">هدية العميل</a></li>
+                            <li><a class="slide-item"  href="{{ url('admin/expertgift/') }}">هدية الخبير</a></li>
 							<li><a class="slide-item" href="{{ url('admin/balance/client') }}"> {{ __('general.clients balance') }}</a></li>
 							<li><a class="slide-item" href="{{ url('admin/balance/expert') }}"> {{ __('general.experts balance') }}</a></li>
 							<li><a class="slide-item" href="{{ url('admin/balance/pulls') }}"> {{ __('general.pulls') }}</a></li>
@@ -141,7 +141,7 @@
 							<span class="side-menu__label"> {{ __('general.notifications') }}</span><i class="angle fe fe-chevron-down"></i></a>
 						<ul class="slide-menu">
 							<li><a class="slide-item" href="{{ route('notify.index') }}"> {{ __('general.show') }}</a></li>
-							<li><a class="slide-item" href="{{ url('admin/testnotify') }}"> Test</a></li>
+							 
 
 
 						</ul>

@@ -22,7 +22,7 @@ class UpdatePercentRequest extends FormRequest
     public function rules(): array
     {
         return[
-            'expert_percent'=>'required|decimal:0,2', 
+            'expert_cost'=>'required|decimal:0,2|gt:0', 
           //  'desc'=>'string', 
               
         
@@ -33,8 +33,8 @@ class UpdatePercentRequest extends FormRequest
     {
       
        return[   
-          'expert_percent.required'=> __('messages.this field is required') ,       
-          'expert_percent.decimal'=>__('messages.must be integer') , 
+          'expert_cost.required'=> __('messages.this field is required') ,       
+          'expert_cost.decimal'=>__('messages.must be integer') , 
          
      
         ];

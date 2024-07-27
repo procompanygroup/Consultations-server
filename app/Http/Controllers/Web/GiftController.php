@@ -31,7 +31,7 @@ class GiftController extends Controller
   {
     $List = $this->filltableclients();
     return view(
-      'admin.gift.show'
+      'admin.giftexpert.show'
       ,
       ['List' => $List]
     );
@@ -84,7 +84,7 @@ class GiftController extends Controller
      ->where('side','to-expert')->get();      
     */
     // $clients=$this->getclients();
-    return view('admin.gift.create');
+    return view('admin.giftexpert.create');
 
 
   }

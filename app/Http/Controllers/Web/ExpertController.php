@@ -23,14 +23,14 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Api\StorageController;
 class ExpertController extends Controller
 {
- // public $path = 'images/experts';
-  public $recordpath = 'images/experts/records';
+ // public $path = 'images/experts'; 
   /**
    * Display a listing of the resource.
    */
   public function index()
   {
     $list = DB::table('experts')->get();
+    
     return view('admin.expert.show', ['experts' => $list]);
     //return response()->json($users);
 

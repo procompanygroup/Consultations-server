@@ -103,10 +103,10 @@ class SelectedServiceController extends Controller
                     //    $newObj->isanswerconfirmd = 0;
                     $newObj->comment_rate = 0;
                     $newObj->status = "created";
-                    $newObj->expert_cost = $service->expert_percent;//percent
+                    $newObj->expert_cost =$expertService->expert_cost;//percent
                     $newObj->cost_type = $expertService->cost_type;
                     //   $newObj->expert_cost_value = $expertService->expert_cost_value;
-                    $newObj->expert_cost_value = StorageController::CalcPercentVal($service->expert_percent, $expertService->points);
+                    $newObj->expert_cost_value = StorageController::CalcPercentVal($expertService->expert_cost, $expertService->points);
                     $newObj->order_num = $newNum;
                     $newObj->order_date = $now;
                     $newObj->save();
@@ -183,10 +183,10 @@ class SelectedServiceController extends Controller
 
                     $newObj->comment_rate = 0;
                     $newObj->status = "created";
-                    $newObj->expert_cost = $service->expert_percent;//percent
+                    $newObj->expert_cost = $expertService->expert_cost;//percent
                     $newObj->cost_type = $expertService->cost_type;
                     //   $newObj->expert_cost_value = $expertService->expert_cost_value;
-                    $newObj->expert_cost_value = StorageController::CalcPercentVal($service->expert_percent, $expertService->points);
+                    $newObj->expert_cost_value = StorageController::CalcPercentVal($expertService->expert_cost, $expertService->points);
                     $newObj->order_num = $newNum;
                     $newObj->order_date = $now;
                     $newObj->save();
@@ -266,10 +266,10 @@ class SelectedServiceController extends Controller
 //    $newObj->isanswerconfirmd = 0;
                         $newObj->comment_rate = 0;
                         $newObj->status = "created";
-                        $newObj->expert_cost = $service->expert_percent;//percent
+                        $newObj->expert_cost = $expertService->expert_cost;//percent
                         $newObj->cost_type = $expertService->cost_type;
                         //   $newObj->expert_cost_value = $expertService->expert_cost_value;
-                        $newObj->expert_cost_value = StorageController::CalcPercentVal($service->expert_percent, $expertService->points);
+                        $newObj->expert_cost_value = StorageController::CalcPercentVal($expertService->expert_cost, $expertService->points);
                         $newObj->order_num = $newNum;
                         $newObj->order_date = $now;
                         $newObj->save();
@@ -1065,10 +1065,10 @@ class SelectedServiceController extends Controller
                         //    $newObj->isanswerconfirmd = 0;
                         $newObj->comment_rate = 0;
                         $newObj->status = "created";
-                        $newObj->expert_cost = $service->expert_percent;//percent
+                        $newObj->expert_cost =$expertService->expert_cost;//percent
                         $newObj->cost_type = $expertService->cost_type;
                         //   $newObj->expert_cost_value = $expertService->expert_cost_value;
-                        $newObj->expert_cost_value = StorageController::CalcPercentVal($service->expert_percent, $expertService->points);
+                        $newObj->expert_cost_value = StorageController::CalcPercentVal($expertService->expert_cost, $expertService->points);
                         $newObj->order_num = $newNum;
                         $newObj->order_date = $now;
                         $newObj->save();
@@ -1145,10 +1145,10 @@ class SelectedServiceController extends Controller
 
                         $newObj->comment_rate = 0;
                         $newObj->status = "created";
-                        $newObj->expert_cost = $service->expert_percent;//percent
+                        $newObj->expert_cost = $expertService->expert_cost;//percent
                         $newObj->cost_type = $expertService->cost_type;
                         //   $newObj->expert_cost_value = $expertService->expert_cost_value;
-                        $newObj->expert_cost_value = StorageController::CalcPercentVal($service->expert_percent, $expertService->points);
+                        $newObj->expert_cost_value = StorageController::CalcPercentVal($expertService->expert_cost, $expertService->points);
                         $newObj->order_num = $newNum;
                         $newObj->order_date = $now;
                         $newObj->save();
@@ -1228,10 +1228,10 @@ class SelectedServiceController extends Controller
 //    $newObj->isanswerconfirmd = 0;
                             $newObj->comment_rate = 0;
                             $newObj->status = "created";
-                            $newObj->expert_cost = $service->expert_percent;//percent
+                            $newObj->expert_cost = $expertService->expert_cost;//percent
                             $newObj->cost_type = $expertService->cost_type;
                             //   $newObj->expert_cost_value = $expertService->expert_cost_value;
-                            $newObj->expert_cost_value = StorageController::CalcPercentVal($service->expert_percent, $expertService->points);
+                            $newObj->expert_cost_value = StorageController::CalcPercentVal($expertService->expert_cost, $expertService->points);
                             $newObj->order_num = $newNum;
                             $newObj->order_date = $now;
                             $newObj->save();

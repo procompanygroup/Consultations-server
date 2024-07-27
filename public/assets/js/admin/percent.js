@@ -2,12 +2,12 @@ var urlallpercent="";
 //$(document).ready(function() {
 	  jQuery(function($){
 //save percent
-$('#btn_save_percent').on('click', function (e) {
+$('#btn_save_percent_form').on('click', function (e) {
   e.preventDefault();	 
   ClearErrors();	
-  var form = $('#expert_percent_form')[0];
+  var form = $('#point_form')[0];
   var formData = new FormData(form);
-  urlval = $('#expert_percent_form').attr("action");
+  urlval = $('#point_form').attr("action");
 	  $.ajax({
 	  url: urlval,
 	  type: "POST",
@@ -19,13 +19,8 @@ $('#btn_save_percent').on('click', function (e) {
 			  noteError();
 		  } else if (data == "ok") {
 			  noteSuccess();              
-		  //	ClearErrors();
-			  //$("#btn_cancel_field").trigger("click");
-			  //loadexperts();
-	 
-	//	var url = "{{ url('admin/service/percent/show')}}";
-		var url =urlallpercent;
-		$(location).attr('href',url);      
+			  var url= window.location.href;
+			  $(location).attr('href',url);     
 		  } 
 	  }, error: function (errorresult) {			 
 		  var response = $.parseJSON(errorresult.responseText);			 
