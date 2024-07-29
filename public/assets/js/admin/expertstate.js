@@ -1,7 +1,7 @@
 var expid;
 $(document).ready(function () {
- 
-		$('.btn-modal').on('click', function ( e) {
+    
+		$(document).on('click','.btn-modal', function ( e) {
 		 //
 		 e.preventDefault();	
 			var effect = $(this).attr('data-effect');
