@@ -137,6 +137,7 @@ class ExpertController extends Controller
             END) AS image"),
                 'first_name',
                 'last_name',
+                'status',
             )->where('user_name', request(['user_name']))->
             where('is_active', 1)->first();
         /// map 
@@ -201,6 +202,7 @@ class ExpertController extends Controller
                 'user_name',
                 'first_name',
                 'last_name',
+                'status',
                 //   'password',
                 // 'mobile',
                 // 'email',
@@ -755,7 +757,7 @@ if($expert->expertsServices->first()){
                     'email' => $expert->email,
                     'birthdate' => $expert->birthdate,
                     'gender' => $expert->gender,
-
+                    'status' => $expert->status,
                     'is_active' => $expert->is_active,
                     'points_balance' => $expert->points_balance,
                     'cash_balance' => $expert->cash_balance,
@@ -870,7 +872,7 @@ if($expert->expertsServices->first()){
                     'email' => $expert->email,
                     'birthdate' => $expert->birthdate,
                     'gender' => $expert->gender,
-
+                    'status'=> $expert->status,
                     'is_active' => $expert->is_active,
                     'points_balance' => $expert->points_balance,
                     'cash_balance' => $expert->cash_balance,
@@ -979,8 +981,9 @@ if($expert->expertsServices->first()){
                 'desc' => $expert->desc,
                 'image' => $expert->image,
                 'is_favorite' => $expert->expertsFavorites->isEmpty() ? 0 : 1,
+                'status'=> $expert->status,
                 'services' => $ServicesMap,
-
+              
                 //  'selectedservices' =>$selectedservicesMap,
                 'selectedservices' => $expert->selectedservices->makeHidden(['title', 'answer_state', 'answers']),
                 // 'selectedservices' => $expert->selectedservices->makeHidden(['comment_state_conv'])  ,
@@ -1038,6 +1041,7 @@ if($expert->expertsServices->first()){
                 'record' => $expert->record,
                 'desc' => $expert->desc,
                 'image' => $expert->image,
+                'status'=> $expert->status,
                 // 'is_favorite' => $expert->expertsFavorites->isEmpty() ? 0 : 1,
                 'services' => $ServicesMap,
 
@@ -1062,6 +1066,7 @@ if($expert->expertsServices->first()){
                 'last_name' => $expert->last_name,
                 'image' => $expert->image,
                 'full_name' => $expert->full_name,
+                'status'=> $expert->status,
                 'is_favorite' => $expert->expertsFavorites->isEmpty() ? 0 : 1,
             ];
         }
@@ -1102,6 +1107,7 @@ if($expert->expertsServices->first()){
                 'first_name' => $expert->first_name,
                 'last_name' => $expert->last_name,
                 'full_name' => $expert->full_name,
+                'status'=> $expert->status,
                 'services' => $ServicesMap,
             ];
         }
@@ -1181,7 +1187,7 @@ if($expert->expertsServices->first()){
                     'email' => $expert->email,
                     'birthdate' => $expert->birthdate,
                     'gender' => $expert->gender,
-
+                    'status'=> $expert->status,
                     'is_active' => $expert->is_active,
                     'points_balance' => $expert->points_balance,
                     'cash_balance' => $expert->cash_balance,
@@ -1750,7 +1756,8 @@ if($expert->expertsServices->first()){
             END) AS image"),
                 'first_name',
                 'last_name',
-                'is_available'
+                'is_available',
+                'status',
             )->get();
 
 

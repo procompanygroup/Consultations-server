@@ -125,8 +125,9 @@ Route::prefix('expertgift')->group(function () {
         Route::prefix('expert')->group(function () {
             Route::post('/update/{id}', [ExpertController::class, 'update'])->name('expert.update');
             Route::post('/delrecord/{id}', [ExpertController::class, 'delrecord'])->name('expert.delrecord');
-       
-          
+            
+            Route::get('/statusbyid/{id}', [ExpertController::class, 'statusbyid']);
+            Route::post('/updatestatus/{id}', [ExpertController::class, 'updatestatus']);
         });
 
         Route::resource('client', ClientController::class, ['except' => ['update']]);

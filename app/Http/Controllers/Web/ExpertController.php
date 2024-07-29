@@ -19,6 +19,8 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use App\Http\Requests\Web\Expert\StoreExpertRequest;
 use App\Http\Requests\Web\Expert\UpdateExpertRequest;
+use App\Http\Requests\Web\Expert\UpdateStatusRequest;
+
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Api\StorageController;
 class ExpertController extends Controller
@@ -42,6 +44,32 @@ class ExpertController extends Controller
     return view('admin.expert.showstatus', ['experts' => $list]);
     //return response()->json($users);
 
+  }
+  public function statusbyid($id)
+  {
+    $expert =Expert::select('id','status')->find($id);   
+     return response()->json( $expert);
+
+  }
+
+  public function updatestatus(UpdateStatusRequest $request, $id)
+  {
+    $formdata = $request->all();   
+    //validate
+    $validator = Validator::make(
+      $formdata,
+      $request->rules(),
+      $request->messages()
+    );
+    if ($validator->fails()) {      
+      return response()->json($validator);
+    } else {
+           Expert::find($id)->update([      
+        'status'=>  $formdata['status'],
+            ]);       
+      //save image
+      return redirect()->to(url('admin/expertstatus'));    
+    }
   }
    
   public function showbalance()

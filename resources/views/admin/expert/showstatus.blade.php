@@ -60,7 +60,7 @@
 												<td>{{ $expert->email }}</td>
 												<td>{{ $expert->status_conv }}</td>
                                                 <td>
-													<a href="{{route('expert.edit', $expert->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a> 
+													<button class="btn btn-success btn-sm btn-modal" data-target="#scrollmodal" data-toggle="modal" title="{{ __('general.edit') }}" id="expert-{{$expert->id }}" ><i class="fa fa-edit"></i></a> 
                                                      
                                                   
 
@@ -84,20 +84,54 @@
 		</div>
 		<!-- main-content closed -->
 			<!-- Modal effects -->
-			<div class="modal" id="modaldemo8">
-				<div class="modal-dialog modal-dialog-centered   modal-sm" role="document">
-					<div class="modal-content modal-content-demo">
-						 
-						<div class="modal-body text-center" style="padding-bottom: 5px;	padding-top: 30px;">
-							<h6 class="modal-title">{{ __('general.Are you sure') }}</h6>
-								 </div>
-						<div class="modal-footer d-flex justify-content-between">
-							<button class="btn ripple btn-danger" id="btn-modal-del" type="button">{{ __('general.delete') }}</button>
-							<button class="btn ripple btn-secondary"  id="btn-cancel-modal"  data-dismiss="modal" type="button">{{ __('general.cancel') }}</button>
+		   <!-- Scroll with content modal -->
+		   <div class="modal" id="scrollmodal">
+			<div class="modal-dialog modal-dialog-scrollable" role="document">
+				<div class="modal-content modal-content-demo">
+					<div class="modal-header">
+						<h6 class="modal-title">تعديل حالة الخبير</h6><button aria-label="Close" class="close"
+							data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+					</div>
+					<div class="modal-body">
+						<!-- row -->
+						<div class="row row-sm">
+							<div class="col">
+								<div class="card  box-shadow-0">
+									<div class="card-body pt-4">
+										<form class="form-horizontal" name="expert_form"
+											action="#" method="POST"
+											id="expert_form">
+											@csrf
+											<div class="form-group mb-3">
+												<select name="status" id="status"
+													class="form-control SlectBox">
+													<!--placeholder-->
+													<option title="" value="0"  class="text-muted">اختر الحالة</option>													 
+														<option value="a">{{ __('general.available') }}</option>
+														<option value="n">{{ __('general.notavailable') }}</option>
+														<option value="b">{{ __('general.busy') }}</option>
+												</select>
+												<ul class="parsley-errors-list filled">
+													<li class="parsley-required" id="select_expert_error"></li>
+												</ul>
+											</div>	
+										</form>
+									</div>	
+								</div>
+							</div>
 						</div>
+						<!-- row -->
+					</div>
+					<div class="modal-footer">
+						<button class="btn ripple btn-primary" type="submit" form="expert_form" name="btn_update_state"
+							id="btn_update_state" type="button">تعديل</button>
+						<button class="btn ripple btn-secondary" data-dismiss="modal" name="btn_cancel_field"
+							id="btn_cancel_field" type="button"> إلغاء</button>
 					</div>
 				</div>
 			</div>
+		</div>
+		<!--End Scroll with content modal -->
 			<!-- End Modal effects-->
 @endsection
 @section('js')
@@ -120,5 +154,12 @@
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('assets/js/table-data.js')}}"></script>
-<script src="{{URL::asset('assets/js/admin/delete.js')}}"></script>
+<script >
+ 
+	var urlgetstate="{{ url('admin/expert/statusbyid','itemid') }}";
+	var urlupdatestate="{{ url('admin/expert/updatestatus','itemid') }}";
+</script>
+<script src="{{URL::asset('assets/js/admin/expertstate.js')}}"></script>
+
+
 @endsection
