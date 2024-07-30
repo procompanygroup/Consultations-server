@@ -127,6 +127,7 @@
 							<li><a class="slide-item"  href="{{ url('admin/service/percent/show') }}"> {{ __('general.show percent') }}</a></li>
 							
                             <li><a class="slide-item"  href="{{ route('point.index') }}">{{ __('general.points') }}</a></li>
+                            <li><a class="slide-item"  href="{{ route('minute.index') }}">شرائح الدقائق</a></li>
                             <li><a class="slide-item"  href="{{ url('admin/gift/') }}">هدية العميل</a></li>
                             <li><a class="slide-item"  href="{{ url('admin/expertgift/') }}">هدية الخبير</a></li>
 							<li><a class="slide-item" href="{{ url('admin/balance/client') }}"> {{ __('general.clients balance') }}</a></li>

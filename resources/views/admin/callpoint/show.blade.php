@@ -16,9 +16,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto"> {{ __('general.accounts') }} </h4> 
-  
-					
+							<h4 class="content-title mb-0 my-auto">{{ __('general.accounts') }}</h4> 
 						</div>
 					</div>
 					 
@@ -33,32 +31,45 @@
 					<!--div-->
 					<div class="col-xl-12">
 						<div class="card mg-b-20">
-							<div class="card-header pb-0">									 
-										<div class="d-flex justify-content-between">
-											<h4 class="card-title mg-b-0">{{ __('general.pulls') }}</h4>
-											<a href="{{ url('admin/balance/createpull') }}" class="btn btn-primary btn-small">{{ __('general.pull balance') }}</a>
-										</div>							 
+							<div class="card-header pb-0">
+								<div class="d-flex justify-content-between">
+									<h4 class="card-title mg-b-0">شرائح الدقائق</h4>
+									<a href="{{ route('minute.create') }}" class="btn btn-primary btn-small">{{ __('general.new') }}</a>
+		 
+
+								</div>
 									</div>
 							<div class="card-body">
 								<div class="table-responsive">
 									<table id="example" class="table text-md-nowrap">
 										<thead>
 											<tr>
-												<th class="border-bottom-0">الرقم </th>
-											 
-												<th class="border-bottom-0">الاسم</th>
-												<th class="border-bottom-0">القيمة</th>
-												<th class="border-bottom-0">التاريخ</th>                                              
-                                         	</tr>
+
+												<th class="border-bottom-0">الدقائق</th>
+												<th class="border-bottom-0">{{ __('general.price') }}</th>
+											
+                                                <th class="border-bottom-0">{{ __('general.action') }}</th>
+
+											</tr>
 										</thead>
 										<tbody>
-											@foreach ($transfers as $transfer)
+											@foreach ($points as $point)
 											<tr>
-												<td>{{ $transfer['num'] }} </td>
-											 
-												<td>{{ $transfer['name'] }}</td>
-												<td> {{ $transfer['count'] }}</td>
-												<td> {{ $transfer['created_at'] }}</td>
+
+												<td>{{$point->count }}</td>
+												<td>{{ $point->price }}</td>
+												
+                                                <td>
+													<a href="{{route('minute.edit', $point->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.edit') }}"><i class="fa fa-edit"></i></a> 
+                                                     
+                                                    <form action="{{route('minute.destroy', $point->id)}}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button" id="del-{{$point->id}}" class="btn btn-danger btn-sm delete" data-effect="effect-scale" data-toggle="modal" data-target="#modaldemo8"   title="Delete"><i class="fa fa-trash"></i></button>
+														</form>
+
+                                                </td>
+
 											</tr>
 											@endforeach
 									</tbody>
@@ -68,12 +79,32 @@
 						</div>
 					</div>
 					<!--/div-->
+
+
 				</div>
 				<!-- /row -->
 			</div>
 			<!-- Container closed -->
 		</div>
 		<!-- main-content closed -->
+
+
+	<!-- Modal effects -->
+		<div class="modal" id="modaldemo8">
+			<div class="modal-dialog modal-dialog-centered   modal-sm" role="document">
+				<div class="modal-content modal-content-demo">
+					 
+					<div class="modal-body text-center" style="padding-bottom: 5px;	padding-top: 30px;">
+						<h6 class="modal-title">{{ __('general.Are you sure') }}</h6>
+						 	</div>
+					<div class="modal-footer d-flex justify-content-between">
+						<button class="btn ripple btn-danger" id="btn-modal-del" type="button">{{ __('general.delete') }}</button>
+						<button class="btn ripple btn-secondary"  id="btn-cancel-modal"  data-dismiss="modal" type="button">{{ __('general.cancel') }}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End Modal effects-->
 @endsection
 @section('js')
 <!-- Internal Data tables -->
@@ -93,6 +124,12 @@
 <script src="{{URL::asset('assets/plugins/datatable/js/buttons.colVis.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
-<!--Internal  Datatable js -->
+
+<!-- Internal Modal js-->
+<script src="{{URL::asset('assets/js/modal.js')}}"></script>
 <script src="{{URL::asset('assets/js/table-data.js')}}"></script>
+
+<!--Internal  Datatable js -->
+<script src="{{URL::asset('assets/js/admin/delete.js')}}"></script>
+ 
 @endsection

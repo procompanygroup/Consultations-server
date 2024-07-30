@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Callpoint;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
@@ -27,6 +28,8 @@ use App\Http\Controllers\Api\NotificationController;
 use App\Http\Requests\Api\Client\CallAlertRequest;
 use App\Http\Controllers\Api\AgoraTokenController;
 use Illuminate\Support\Str;
+use App\Http\Requests\Api\Client\BuyMinutesRequest;
+
 /*
 use App\Http\Requests\Web\Client\StoreClientRequest;
 use App\Http\Requests\Web\Client\UpdateClientRequest;
@@ -93,6 +96,7 @@ class ClientController extends Controller
             'gender',
             'marital_status',
             'points_balance',
+            'minutes_balance',
             'is_active',
             //  DB::raw("CONCAT('$url',image)  AS image")           
             DB::raw("(CASE 
@@ -138,6 +142,7 @@ class ClientController extends Controller
             'gender',
             'marital_status',
             'points_balance',
+            'minutes_balance',
             'is_active',
             //  DB::raw("CONCAT('$url',image)  AS image")           
             DB::raw("(CASE 
@@ -382,7 +387,105 @@ class ClientController extends Controller
             //  }
         }
     }
-    public function clientpullbalance($client, $amount)
+    public function buyminutes()
+    {
+        //  $authuser = auth()->user();
+        $request = request();
+
+        $formdata = $request->all();
+        //client_id
+//points
+        $storrequest = new BuyMinutesRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+
+            return response()->json($validator->errors());
+            //   return redirect()->back()->withErrors($validator)->withInput();
+
+        } else {
+
+            $client = Client::find($formdata['client_id']);
+            //   if ($authuser->id == $client->id ) {
+
+            DB::transaction(function () use ($client, $formdata) {
+                $point_id = $formdata["callpoint_id"];
+                //add points to client 
+                $newblnce = $client->minutes_balance + $formdata['minutes'];
+                Client::find($client->id)->update(
+                    [
+                        'minutes_balance' => $newblnce,
+                    ]
+                );
+                //add point transfer for client
+                $pointrow = Callpoint::find($point_id);
+                $pointtransfer = new Pointtransfer();
+                $pntctrlr = new PointTransferController();
+                $type = 'p';
+                $firstLetters = $type . 'cl-';
+                $newpnum = $pntctrlr->GenerateCode($firstLetters);
+                $pointtransfer->callpoint_id = isset($formdata["callpoint_id"]) ? $formdata['callpoint_id'] : null;
+
+                $pointtransfer->client_id = $client->id;
+                //  $pointtransfer->expert_id = $expertService->expert_id;
+                // $pointtransfer->service_id = $expertService->service_id;
+                $pointtransfer->count = $formdata['minutes'];
+                $pointtransfer->status = 1;
+                // $pointtransfer->selectedservice_id = $newObj->id;
+                $pointtransfer->side = 'to-client';
+                $pointtransfer->state = 'minutes';
+                $pointtransfer->type = $type;
+                $pointtransfer->num = $newpnum;
+                $pointtransfer->save();
+
+                ///////////////////////////
+                //add cach transfer to company
+                $cashtype1 = 'd';
+                $cashtrctrlr = new CashTransferController();
+                $firstLetters = $cashtype1 . 'com-';
+                $comCode = $cashtrctrlr->GenerateCode($firstLetters);
+                $companyCach = new Cashtransfer();
+
+                $companyCach->cash = $pointrow->price;
+                $companyCach->cashtype = $cashtype1;
+                $companyCach->fromtype = 'client';
+                $companyCach->totype = 'company';
+                $companyCach->status = 'minutes';
+                //   $companyCach->selectedservice_id = $id;
+                $companyCach->cash_num = $comCode;
+                $companyCach->pointtransfer_id = $pointtransfer->id;
+                $companyCach->save();
+                //add cash to company balance
+                $comObj = Company::find(1);
+                Company::find(1)->update(
+                    [
+                        'cash_balance' => $comObj->cash_balance + $pointrow->price,
+                        // 'cash_profit' => $comObj->cash_profit + $comprofitval,
+                    ]
+                );
+
+                $this->pointtransfer_id = $pointtransfer->id;
+
+            });
+            //send auto notification
+            $notctrlr = new NotificationController();
+            $pointsval = $formdata['minutes'];
+            $title = __('general.12addminute_title');
+            $body = __('general.12addminute_body', ['Points' => $pointsval]);
+            $notctrlr->sendautonotify($title, $body, 'auto', 'text', '', 'finance', $client->id, 0, 0, $this->pointtransfer_id);
+            
+            return response()->json("ok");
+
+            //   } else {
+            //     return response()->json(['error' => 'Unauthenticated'], 401);
+            //  }
+        }
+    }   
+     public function clientpullbalance($client, $amount)
     {
 
         DB::transaction(function () use ($client, $amount) {

@@ -35,7 +35,11 @@
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
 									<h4 class="card-title mg-b-0">{{ __('general.client') }} : {{  $client->user_name}} </h4>
-									<h4 class="card-title mg-b-0">{{ __('general.the balance') }}: {{  $client->points_balance}}</h4>
+									<h4 class="card-title mg-b-0 row">
+										<span class="col-12" style="padding:10px 0px;">{{ __('general.the balance') }}: {{  $client->points_balance}}</span>
+										<span class="col-12" style="padding:10px 0px;"> رصيد الدقائق: {{  $client->minutes_balance }}</span>								
+									</h4>
+								
 								</div>
 									</div>
 							<div class="card-body">

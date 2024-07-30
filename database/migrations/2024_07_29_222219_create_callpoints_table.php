@@ -7,20 +7,20 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.create_callpoints_table
+     * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('points', function (Blueprint $table) {
+        Schema::create('callpoints', function (Blueprint $table) {
             $table->id();
-          
-$table->integer('count')->nullable()->default(0);
+            $table->integer('count')->nullable()->default(0);
 $table->decimal('price')->nullable()->default(0);
 $table->decimal('pricebefor')->nullable()->default(0);
 $table->integer('countbefor')->nullable()->default(0);
 $table->foreignId('createuser_id')->nullable();
 $table->foreignId('updateuser_id')->nullable();
-
+$table->boolean('is_active')->nullable()->default(1);
+ 
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ $table->foreignId('updateuser_id')->nullable();
      */
     public function down(): void
     {
-        Schema::dropIfExists('points');
+        Schema::dropIfExists('callpoints');
     }
 };

@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+class Callpoint extends Model
+{
+    use HasFactory;
+    protected $table = 'callpoints';
+    protected $fillable = [        
+        'count',
+        'price',
+        'pricebefor',
+        'countbefor',
+        'createuser_id',
+        'updateuser_id',
+        'is_active',             
+    ];
+    public function pointsTransfers(): HasMany
+    {
+        return $this->hasMany(Pointtransfer::class,'callpoint_id');
+    }
+}

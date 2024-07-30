@@ -180,6 +180,8 @@ return [
 '10addgift_body'=>'تم اهداؤك'.' '. ':Points'.' '.'نقطة مجانية',
 '11call_title'=>'اتصال مباشر',
 '11call_body'=>'طلب اتصال مباشر من'.' '.':Clientname',
+'12addminute_title'=>'اضافة دقائق من المتجر',
+'12addminute_body'=>'تمت اضافة'.' '. ':Points'.' '.'دقيقة الى رصيدك',
 ];
 /*
 

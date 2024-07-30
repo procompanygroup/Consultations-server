@@ -35,6 +35,7 @@ use App\Http\Requests\Api\Expert\SaveTokenRequest;
 use App\Http\Requests\Api\Expert\StatisticRequest;
 use App\Http\Requests\Api\Expertfavorite\StoreExpertRequest;
 use App\Http\Requests\Api\Expert\UploadCallRequest;
+use App\Http\Requests\Api\Expert\ChangeAvailableRequest;
 
 
 
@@ -1790,6 +1791,36 @@ if($expert->expertsServices->first()){
             Expert::find($expert_id)->update(
                 [
                     'token' => $formdata["token"],
+                ]
+            );
+            return response()->json("ok");
+
+        }
+    }
+    public function changeavailable()
+    {
+
+        $request = request();
+
+        $formdata = $request->all();
+
+        $storrequest = new ChangeAvailableRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+
+            return response()->json($validator->errors());
+        } else {
+            $expert_id = $formdata['expert_id'];
+            //save token in expert 
+
+            Expert::find($expert_id)->update(
+                [
+                    'is_available' => $formdata["is_available"],
                 ]
             );
             return response()->json("ok");

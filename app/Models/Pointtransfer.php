@@ -26,7 +26,8 @@ class Pointtransfer extends Model
         'source_id',
         'num',
         'notes',
-        'gift_id'
+        'gift_id',
+        'callpoint_id',
     ];
     protected $hidden = ['desc'];
     public function getDescAttribute()
@@ -43,7 +44,17 @@ class Pointtransfer extends Model
                     $conv = $pur . ' ' . $this->count . ' ' . $point . ' ' . $valu . ' ' . $this->cashTransfers->first()->cash;
 
                 }
-            } else if ($this->client_id > 0 && $this->selectedservice_id > 0 && $this->side == "from-client") {
+            } 
+            else if ($this->callpoint_id > 0 && $this->client_id > 0) {
+                $pur = 'شراء';
+                $valu = 'بقيمة';
+                $point = 'دقيقة';
+                if (!is_null($this->cashTransfers->first())) {
+                    $conv = $pur . ' ' . $this->count . ' ' . $point . ' ' . $valu . ' ' . $this->cashTransfers->first()->cash;
+
+                }
+            }
+            else if ($this->client_id > 0 && $this->selectedservice_id > 0 && $this->side == "from-client") {
                 $type = "سحب مقابل";
                 $ask = 'طلب خدمة رقم';
                 $link = '<a href="' . route("order.edit", $this->selectedservice_id) . '" >' . $this->selectedservices->order_num . ' </a>';
@@ -122,5 +133,9 @@ class Pointtransfer extends Model
     {
         return $this->belongsTo(Gift::class)->withDefault();
     }
-
+    public function callpoint(): BelongsTo
+    {
+        return $this->belongsTo(Callpoint::class,'callpoint_id')->withDefault();
+    }
+    
 }

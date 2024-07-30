@@ -23,6 +23,8 @@ use App\Http\Controllers\Web\ExpertOperationController;
 use App\Http\Controllers\Web\PointTransferController;
 use App\Http\Controllers\Web\GiftController;
 use App\Http\Controllers\Web\GiftExpertController;
+use App\Http\Controllers\Web\CallpointController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -79,6 +81,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         Route::resource('point', PointController::class, ['except' => ['update']]);
         Route::prefix('point')->group(function () {
             Route::post('/update/{id}', [PointController::class, 'update'])->name('point.update');
+        });
+        Route::resource('minute', CallpointController::class, ['except' => ['update']]);
+        Route::prefix('minute')->group(function () {
+            Route::post('/update/{id}', [CallpointController::class, 'update'])->name('minute.update');
         });
         Route::resource('setting', SettingController::class, ['except' => ['update']]);
         Route::prefix('setting')->group(function () {

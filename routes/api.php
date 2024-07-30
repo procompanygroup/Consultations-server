@@ -16,6 +16,8 @@ use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\MailController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Web\GiftController;
+use App\Http\Controllers\Api\CallpointController;
+
  //use App\Http\Middleware\Api\AuthenticateClient;
 
 /*
@@ -51,6 +53,7 @@ Route::middleware('authExpert:api')->group(function () {
     Route::post('/pullbalance', [ExpertController::class, 'pullbalance']);
     Route::post('/savetoken', [ExpertController::class, 'savetoken']);
     Route::post('/gettype', [ExpertController::class, 'gettype']);
+    Route::post('/changeavailable', [ExpertController::class, 'changeavailable']);
     
     Route::post('/uploadcall', [ExpertController::class, 'uploadcall']);
    // Route::post('/convertfile', [MailController::class, 'convertfile']);
@@ -83,6 +86,8 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/addcomment', [SelectedServiceController::class, 'addcomment']);
         Route::post('/addrate', [SelectedServiceController::class, 'addrate']);
         Route::post('/changebalance', [ClientController::class, 'changebalance']);
+        Route::post('/buyminutes', [ClientController::class, 'buyminutes']);
+         
         Route::post('/savetoken', [ClientController::class, 'savetoken']);
         Route::post('/getbyid', [ClientController::class, 'getbyid']);
 
@@ -113,6 +118,10 @@ Route::middleware('authClient:api_clients')->group(function () {
         });
         Route::prefix('/point')->group(function () {
             Route::post('/getall', [PointController::class, 'index']); 
+      
+        });
+        Route::prefix('/minute')->group(function () {
+            Route::post('/getall', [CallpointController::class, 'index']); 
       
         });
         Route::prefix('/setting')->group(function () {
