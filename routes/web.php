@@ -24,6 +24,7 @@ use App\Http\Controllers\Web\PointTransferController;
 use App\Http\Controllers\Web\GiftController;
 use App\Http\Controllers\Web\GiftExpertController;
 use App\Http\Controllers\Web\CallpointController;
+use App\Http\Controllers\Web\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -185,9 +186,31 @@ Route::prefix('expertgift')->group(function () {
         Route::prefix('reason')->group(function () {
             Route::post('/update/{id}', [ReasonController::class, 'update'])->name('reason.update');
         });
+        Route::prefix('message')->group(function () {
+            Route::get('/clients', [MessageController::class, 'clients']);
+            Route::get('/experts', [MessageController::class, 'experts']);
+            //اظهار كل المحادثات للعميل
+            Route::get('/client/{id}', [MessageController::class, 'client']);
+               //اظهار كل المحادثات للخبير
+            Route::get('/expert/{id}', [MessageController::class, 'expert']);
+            //اظهار المحادثة المختارة مع كل التعليقات
+            Route::get('/show/{id}', [MessageController::class, 'showmessage']);
+// عرض صفحةانشاء محادثة جديدة وارسالها للخبير 
+            // Route::get('/toexpert/{id}', [MessageController::class, 'createtoexpert']);
+            //انشاء محادثة جديدة وارسالها للعميل عرض صفحة
+            // Route::get('/toclient/{id}', [MessageController::class, 'createtoclient']);
+            //ارسال المحادثة للخبير
+            Route::post('/toexpert/{id}', [MessageController::class, 'storetoexpert']);
+            //ارسال محادثة للعميل
+            Route::post('/toclient/{id}', [MessageController::class, 'storetoclient']);
+            //ارسال تعليق على محادثة للخبير
+        //    Route::post('/comtoexpert/{id}', [MessageController::class, 'storecomtoexpert']);
+              //ارسال تعليق على محادثة للعميل
+           // Route::post('/comtoclient/{id}', [MessageController::class, 'storecomtoclient']);
+        });
 
     });
-////////////////////////////////////////////////////////////////////
+////////////////////////////admin-super/////////////////////////////////
     Route::middleware('role.admin:admin-super')->group(function () {
 
         // expert

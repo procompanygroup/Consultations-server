@@ -156,4 +156,8 @@ class Expert extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(NotificationUser::class);
     }
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class);
+    }
 }

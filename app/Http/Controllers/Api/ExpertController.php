@@ -49,17 +49,17 @@ class ExpertController extends Controller
      */
     public $id = 0;
     public $pointtransfer_id = 0;
-    public function getdata()
-    {
-        $users = ['name'=>'ascas',
-        'ch'=>'ccsdacddd',
+    // public function getdata()
+    // {
+    //     $users = ['name'=>'ascas',
+    //     'ch'=>'ccsdacddd',
 
-    ];
-    $users['id']=56;
+    // ];
+    // $users['id']=56;
 
-        // return view('admin.user.showusers',['users' => $users]); 
-        return response()->json($users);
-    }
+    //     // return view('admin.user.showusers',['users' => $users]); 
+    //     return response()->json($users);
+    // }
     public function index()
     {
         $users = DB::table('experts')->get();

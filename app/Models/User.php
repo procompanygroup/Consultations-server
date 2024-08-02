@@ -108,4 +108,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Selectedservice::class,'comment_user_id');
     }
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class);
+    }
 }

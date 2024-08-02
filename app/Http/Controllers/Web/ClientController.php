@@ -30,7 +30,7 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      */
-    protected $path="";
+    
     public function index()
     {
       $list = DB::table('clients')->get();
@@ -79,85 +79,85 @@ class ClientController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-      $formdata = $request->all();
-      $validator = Validator::make(
-        $formdata,
-        $request->rules(),
-        $request->messages()
-      );
+  //   public function store(Request $request)
+  //   {
+  //     $formdata = $request->all();
+  //     $validator = Validator::make(
+  //       $formdata,
+  //       $request->rules(),
+  //       $request->messages()
+  //     );
   
-      if ($validator->fails()) {
+  //     if ($validator->fails()) {
   
-        return redirect()->back()->withErrors($validator)
-          ->withInput();
+  //       return redirect()->back()->withErrors($validator)
+  //         ->withInput();
   
-      } else {
+  //     } else {
        
-        $newObj = new Client;
+  //       $newObj = new Client;
  
-  $newObj->user_name = $formdata['user_name'];
-  $newObj->password = $formdata['password'];
-  $newObj->mobile = $formdata['mobile'];
-  $newObj->email = $formdata['email'];
-  $newObj->nationality = $formdata['nationality'];
-  $newObj->birthdate = $formdata['birthdate'];
-  $newObj->gender = $formdata['gender'];
-  $newObj->marital_status = $formdata['marital_status'];
-  $newObj->image = $formdata['image'];
-  $newObj->points_balance = $formdata['points_balance'];
-  $newObj->cash_balance =0;
-  $newObj->cash_balance_todate = 0;
-  $newObj->rates = 0;
-  $newObj->record = $formdata['record'];
-  $newObj->desc = $formdata['desc'];
-  $newObj->call_cost = $formdata['call_cost'];
-  //$newObj->token = $formdata['token'];
+  // $newObj->user_name = $formdata['user_name'];
+  // $newObj->password = $formdata['password'];
+  // $newObj->mobile = $formdata['mobile'];
+  // $newObj->email = $formdata['email'];
+  // $newObj->nationality = $formdata['nationality'];
+  // $newObj->birthdate = $formdata['birthdate'];
+  // $newObj->gender = $formdata['gender'];
+  // $newObj->marital_status = $formdata['marital_status'];
+  // $newObj->image = $formdata['image'];
+  // $newObj->points_balance = $formdata['points_balance'];
+  // $newObj->cash_balance =0;
+  // $newObj->cash_balance_todate = 0;
+  // $newObj->rates = 0;
+  // $newObj->record = $formdata['record'];
+  // $newObj->desc = $formdata['desc'];
+  // $newObj->call_cost = $formdata['call_cost'];
+  // //$newObj->token = $formdata['token'];
   
   
-        $newObj->save();
-        //save image
-      //  $this->path = 'media/clients';
-        $separator = '/';
-        if ($request->hasFile('image')) {
-          // $imagemodel->save();
-          $image_tmp = $request->file('image');
-          if ($image_tmp->isValid()) {
-            $folderpath = $this->path . $separator;
-            //Get image Extension
-            $extension = $image_tmp->getClientOriginalExtension();
-            //Generate new Image Name
+  //       $newObj->save();
+  //       //save image
+  //     //  $this->path = 'media/clients';
+  //       $separator = '/';
+  //       if ($request->hasFile('image')) {
+  //         // $imagemodel->save();
+  //         $image_tmp = $request->file('image');
+  //         if ($image_tmp->isValid()) {
+  //           $folderpath = $this->path . $separator;
+  //           //Get image Extension
+  //           $extension = $image_tmp->getClientOriginalExtension();
+  //           //Generate new Image Name
   
-            $now = Carbon::now();
-            $imageName = rand(10000, 99999) . $newObj->id . '.' . $extension;
+  //           $now = Carbon::now();
+  //           $imageName = rand(10000, 99999) . $newObj->id . '.' . $extension;
   
-            if (!File::isDirectory($folderpath)) {
-              File::makeDirectory($folderpath, 0777, true, true);
-            }
-            $imagePath = $folderpath . $imageName;
-            //Upload the Image
-            $manager = new ImageManager(new Driver());
+  //           if (!File::isDirectory($folderpath)) {
+  //             File::makeDirectory($folderpath, 0777, true, true);
+  //           }
+  //           $imagePath = $folderpath . $imageName;
+  //           //Upload the Image
+  //           $manager = new ImageManager(new Driver());
   
-            // read image from filesystem
-            $image = $manager->read($image_tmp);
-            //$image= $image->toWebp(75);
-            $image->save($imagePath);
-            //$fullpath= url($imagePath);
+  //           // read image from filesystem
+  //           $image = $manager->read($image_tmp);
+  //           //$image= $image->toWebp(75);
+  //           $image->save($imagePath);
+  //           //$fullpath= url($imagePath);
   
-            Client::find($newObj->id)->update([
-              "image" => $imageName
-            ]);
+  //           Client::find($newObj->id)->update([
+  //             "image" => $imageName
+  //           ]);
   
-            // if(File::exists($oldimagepath )){
-            //   File::delete($oldimagepath );
-            // }
-          }
-        }
+  //           // if(File::exists($oldimagepath )){
+  //           //   File::delete($oldimagepath );
+  //           // }
+  //         }
+  //       }
   
-        return redirect()->back()->with('success_message', 'user has been Added!');
-      }
-    }
+  //       return redirect()->back()->with('success_message', 'user has been Added!');
+  //     }
+  //   }
   
     /**
      * Display the specified resource.
