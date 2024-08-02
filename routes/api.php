@@ -17,7 +17,7 @@ use App\Http\Controllers\Api\MailController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Web\GiftController;
 use App\Http\Controllers\Api\CallpointController;
-
+use App\Http\Controllers\Web\MessageController;
  //use App\Http\Middleware\Api\AuthenticateClient;
 
 /*
@@ -67,7 +67,9 @@ Route::middleware('authExpert:api')->group(function () {
  Route::post('/getnotifylist', [NotificationController::class, 'getexpertnotifylist']);
  Route::post('/settoread', [NotificationController::class, 'settoreadexpert']);
  Route::post('/getnotifybyid', [NotificationController::class, 'getexpertnotifybyid']);
-
+ //messages
+ Route::post('/sendmsg', [MessageController::class, 'expertsendmsg']);
+ Route::post('/getmsgs', [MessageController::class, 'expertgetmsg']);
  Route::prefix('/service')->group(function () {
     Route::post('/viewall', [serviceController::class, 'index']); 
     Route::post('/getinputform', [serviceController::class, 'getinputserviceform']); 
@@ -99,6 +101,9 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/callorder', [SelectedServiceController::class, 'callorder']);
         Route::post('/uploadcall', [ExpertController::class, 'uploadcall']);
         Route::post('/sendcallalert', [ClientController::class, 'sendcallalert']);
+        //message
+        Route::post('/sendmsg', [MessageController::class, 'clientsendmsg']);
+        Route::post('/getmsgs', [MessageController::class, 'clientgetmsg']);
 //api/client/service
         Route::prefix('/service')->group(function () {
             Route::post('/viewall', [serviceController::class, 'index']); 

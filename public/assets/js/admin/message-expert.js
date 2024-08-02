@@ -63,9 +63,9 @@ $(document).ready(function () {
 
 		function loadlast() {	
 		 
-			var formData = 'msg_id='+lastid()+'&client_id='+clientId;
+			var formData = 'msg_id='+lastid()+'&expert_id='+expertId;
 			$.ajax({
-				url: clientlasturl,
+				url: expertlasturl,
 				type: "GET",	
 				data: formData,
 				contentType: false,
@@ -99,8 +99,6 @@ $(document).ready(function () {
 			 
 	
 			});
-	
-	
 		 
 		}
 		function resetForm() {

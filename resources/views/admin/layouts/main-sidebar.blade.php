@@ -173,14 +173,7 @@
                         </ul>
 					</li>
                     <li class="slide">
-						<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24">
-                            <path d="M0 0h24v24H0V0z" fill="none"/>
-                            <path d="M4.4,16.8c1.1,0,1.9,0.9,1.9,1.9c0,1.1-0.9,1.9-1.9,1.9c-1.1,0-1.9-0.9-1.9-1.9C2.5,17.7,3.4,16.8,4.4,16.8L4.4,16.8z
-                            M7.9,17h13.4c0.1,0,0.2,0.1,0.2,0.2v3.1c0,0.1-0.1,0.2-0.2,0.2H7.9c-0.1,0-0.2-0.1-0.2-0.2v-3.1C7.7,17,7.8,17,7.9,17L7.9,17z
-                            M7.9,10.2h13.4c0.1,0,0.2,0.1,0.2,0.2v3.1c0,0.1-0.1,0.2-0.2,0.2H7.9c-0.1,0-0.2-0.1-0.2-0.2v-3.1C7.7,10.3,7.8,10.2,7.9,10.2
-                           L7.9,10.2z M7.9,3.5h13.4c0.1,0,0.2,0.1,0.2,0.2v3.1c0,0.1-0.1,0.2-0.2,0.2H7.9C7.8,7,7.7,6.9,7.7,6.8V3.7C7.7,3.6,7.8,3.5,7.9,3.5
-                           L7.9,3.5z M4.4,10.1c1.1,0,1.9,0.9,1.9,1.9c0,1.1-0.9,1.9-1.9,1.9S2.5,13.1,2.5,12C2.5,10.9,3.4,10.1,4.4,10.1L4.4,10.1z M4.4,3.3
-                           c1.1,0,1.9,0.9,1.9,1.9c0,1.1-0.9,1.9-1.9,1.9c-1.1,0-1.9-0.9-1.9-1.9C2.5,4.2,3.4,3.3,4.4,3.3L4.4,3.3z"/></svg>
+						<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}"><i class="fa fa-paper-plane  side-menu__icon" style="color:#5b6e88;font-size:18px " aria-hidden="true"></i>
 							<span class="side-menu__label">التواصل المباشر</span><i class="angle fe fe-chevron-down"></i></a>
 						<ul class="slide-menu">
 							<li><a class="slide-item"  href="/admin/message/clients">العملاء</a></li>

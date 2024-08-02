@@ -193,8 +193,12 @@ Route::prefix('expertgift')->group(function () {
             Route::get('/client/{id}', [MessageController::class, 'client']);
                //اظهار كل المحادثات للخبير
             Route::get('/expert/{id}', [MessageController::class, 'expert']);
+            //اخر الرسائل
+            Route::get('/clientlast', [MessageController::class, 'clientlastmsgs']);
+
+            Route::get('/expertlast', [MessageController::class, 'expertlastmsgs']);
             //اظهار المحادثة المختارة مع كل التعليقات
-            Route::get('/show/{id}', [MessageController::class, 'showmessage']);
+        //    Route::get('/show/{id}', [MessageController::class, 'showmessage']);
 // عرض صفحةانشاء محادثة جديدة وارسالها للخبير 
             // Route::get('/toexpert/{id}', [MessageController::class, 'createtoexpert']);
             //انشاء محادثة جديدة وارسالها للعميل عرض صفحة

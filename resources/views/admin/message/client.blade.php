@@ -10,60 +10,7 @@
     <link href="{{ URL::asset('assets/plugins/datatable/css/jquery.dataTables.min.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('assets/plugins/datatable/css/responsive.dataTables.min.css') }}" rel="stylesheet">
     <link href="{{ URL::asset('assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
-    <style type="text/css">
-        body {
-            margin-top: 20px;
-        }
-
-        .chat-online {
-            color: #34ce57
-        }
-
-        .chat-offline {
-            color: #e4606d
-        }
-
-        .chat-messages {
-            display: flex;
-            flex-direction: column;
-            max-height: 400px;
-            overflow-y: scroll
-        }
-
-        .chat-message-left,
-        .chat-message-right {
-            display: flex;
-            flex-shrink: 0
-        }
-
-        .chat-message-left {
-            margin-left: auto
-            /* margin-right: auto */
-        }
-
-        .chat-message-right {
-            /* flex-direction: row-reverse; */
-            margin-left: auto
-        }
-
-        .py-3 {
-            padding-top: 1rem !important;
-            padding-bottom: 1rem !important;
-        }
-
-        .px-4 {
-            padding-right: 1.5rem !important;
-            padding-left: 1.5rem !important;
-        }
-
-        .flex-grow-0 {
-            flex-grow: 0 !important;
-        }
-
-        .border-top {
-            border-top: 1px solid #dee2e6 !important;
-        }
-    </style>
+    <link href="{{ URL::asset('assets/css/admin/chat.css') }}" rel="stylesheet">
 @endsection
 @section('page-header')
     <!-- breadcrumb -->
@@ -99,7 +46,7 @@
                                             <div class="d-flex align-items-center py-1">
                                                 <div class="position-relative">
                                                     <img src="{{ $client->image_path }}"
-                                                        class="rounded-circle mr-1" alt="Sharon Lessman" width="40"
+                                                        class="rounded-circle mr-1" alt="" width="40"
                                                         height="40">
                                                 </div>
                                                 <div class="flex-grow-1 pl-3 mr-2">
@@ -116,7 +63,7 @@
                                             <div class="chat-messages p-4">
                                                 @foreach ($client->messages as $message)
                                                 @if($message->user_id)
-                                                <div class="chat-message-left pb-4">
+                                                <div class="chat-message-left pb-4" id="{{$message->id}}">
                                                     <div>
                                                         <img src="{{ $manage_img}}"
                                                             class="rounded-circle mr-1" alt="{{ __('general.manage') }}"
@@ -128,7 +75,7 @@
                                                         <div class="font-weight-bold mb-1">{{ __('general.manage') }}</div><p>{{  $message->content }}</p></div>
                                                 </div>
                                                 @else
-                                                <div class="chat-message-left pb-4">
+                                                <div class="chat-message-left pb-4" id="{{$message->id}}" >
                                                     <div>
                                                         <img src="{{ $client->image_path }}"
                                                             class="rounded-circle mr-1" alt="{{ $client->user_name }}"
@@ -185,13 +132,27 @@
         <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
             <div class="font-weight-bold mb-1">{{ __('general.manage') }}</div><p class="msg-content"></p></div>
     </div>
+    {{-- from client --}}
+    <div class="chat-message-left pb-4" style="display: none" id="client-msg" >
+        <div>
+            <img src="{{ $client->image_path }}"
+                class="rounded-circle mr-1" alt="{{ $client->user_name }}"
+                width="40" height="40">
+            <div class="text-muted small text-nowrap mt-2 text-center"></div>
+        </div>
+        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+            <div class="font-weight-bold mb-1">{{ $client->user_name }}</div><p class="msg-content"></p></div>
+    </div>
 @endsection
 @section('css')
    
 @endsection
 @section('js')
     <!-- Internal Data tables -->
-    
+    <script>
+        var clientId={{ $client->id }};
+        var clientlasturl="{{url('admin/message/clientlast') }}";
+    </script>
     <script src="{{URL::asset('assets/js/admin/message.js')}}"></script>
   
 @endsection

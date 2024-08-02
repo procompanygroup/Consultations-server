@@ -56,6 +56,7 @@ class Expert extends Authenticatable implements JWTSubject
     protected $hidden = [
         'password',
         'record_path',
+        'image_path',
     ];
 
     /**
@@ -110,6 +111,21 @@ class Expert extends Authenticatable implements JWTSubject
 
 
 }
+
+public function getImagePathAttribute(){
+    $conv="";
+    $strgCtrlr = new StorageController(); 
+    if(is_null($this->image) ){
+        $conv =$strgCtrlr->DefaultPath('image'); 
+    }else if($this->image==''){
+        $conv =$strgCtrlr->DefaultPath('image'); 
+    } else {
+        $url = $strgCtrlr->ExpertPath('image');
+        $conv =  $url.$this->image;
+    }     
+   
+        return  $conv;
+ }
     public function getJWTIdentifier()
     {
         return $this->getKey();
