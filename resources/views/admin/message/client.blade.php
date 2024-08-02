@@ -179,7 +179,7 @@
             <img src="{{ $manage_img}}"
                 class="rounded-circle mr-1" alt="{{ __('general.manage') }}"
                 width="40" height="40">
-            <div class="text-muted small text-nowrap mt-2 text-center">{{  $message->created_at->format('H:m') }}<br>{{  $message->created_at->format('d/m/Y')  }}</div>
+            <div class="text-muted small text-nowrap mt-2 text-center"></div>
 
         </div>
         <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
