@@ -237,6 +237,7 @@ class MessageController extends Controller
 
 
   }
+
   public function msgsbyexpert_id($id){
     $nowsub = Carbon::now()->subDays($this->oldestday);
     $expert = Expert::where('id', $id)->where('is_active', 1)->
@@ -338,7 +339,7 @@ class MessageController extends Controller
       $id = $formdata['id'];
       $expert=$this->msgsbyexpert_id($id);
       //map
-      $List = $this->mapclientmsg($expert);
+      $List = $this->mapexpertmsg($expert);
       return response()->json($List);
     }
   }
