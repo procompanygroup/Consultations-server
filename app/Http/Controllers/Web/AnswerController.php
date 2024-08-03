@@ -48,8 +48,9 @@ class AnswerController extends Controller
           $q->latest()->first();
       }
       */
-    ])->where('form_state', 'agree')->get();
-
+    ])->whereDoesntHave('service', function ($query)  {
+      $query->where('is_callservice', 1);         
+    })->where('form_state', 'agree')->get();     
     //   return  $list;
     return view('admin.answer.show', ['selectedservices' => $list]);
   }

@@ -30,10 +30,12 @@ class OrderController extends Controller
      */
    
     public function index()
-    {
- 
-     $list =Selectedservice::with('expert','client','service')->orderByDesc('form_state')->get();//'order_num'
-     
+    { 
+     $list =Selectedservice::with('expert','client','service')
+     ->whereDoesntHave('service', function ($query)  {
+      $query->where('is_callservice', 1);         
+    })
+    ->orderByDesc('form_state')->get();//'order_num'     
       return view('admin.order.show', ['selectedservices' => $list]);     
     }
   
