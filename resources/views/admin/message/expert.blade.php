@@ -42,7 +42,7 @@
                                 <div class="row g-0">
                                      
                                     <div class="col-12 col-lg-12 col-xl-12">
-                                        <div class="py-2 px-4 border-bottom d-none d-lg-block">
+                                        <div class="py-2 px-4 border-bottom   d-lg-block">
                                             <div class="d-flex align-items-center py-1">
                                                 <div class="position-relative">
                                                     <img src="{{ $expert->image_path }}"

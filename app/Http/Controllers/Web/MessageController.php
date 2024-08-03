@@ -73,8 +73,8 @@ class MessageController extends Controller
       $newObj->save();
       $arr = [
         'id'=> $newObj->id,
-        'cdate' => $newObj->created_at->format('d/m/Y'),
-        'ctime' => $newObj->created_at->format('H:m'),
+        'create_date' => $newObj->created_at->format('d/m/Y'),
+        'create_time' => $newObj->created_at->format('H:m'),
         'content' => $newObj->content,
         'res' => 'ok'
       ];
@@ -277,8 +277,8 @@ class MessageController extends Controller
       $newObj->save();
       $arr = [
         'id'=> $newObj->id,
-        'cdate' => $newObj->created_at->format('d/m/Y'),
-        'ctime' => $newObj->created_at->format('H:m'),
+        'create_date' => $newObj->created_at->format('d/m/Y'),
+        'create_time' => $newObj->created_at->format('H:m'),
         'content' => $newObj->content,
         'res' => 'ok'
       ];
