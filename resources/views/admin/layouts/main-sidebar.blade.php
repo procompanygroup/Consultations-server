@@ -165,6 +165,7 @@
                            c1.1,0,1.9,0.9,1.9,1.9c0,1.1-0.9,1.9-1.9,1.9c-1.1,0-1.9-0.9-1.9-1.9C2.5,4.2,3.4,3.3,4.4,3.3L4.4,3.3z"/></svg>
 							<span class="side-menu__label"> {{ __('general.manage orders') }}</span><i class="angle fe fe-chevron-down"></i></a>
 						<ul class="slide-menu">
+                            <li><a class="slide-item"  href="{{ url('admin/call') }}">الاتصال المباشر</a></li>
 							<li><a class="slide-item"  href="{{ route('order.index') }}">{{ __('general.orders') }}</a></li>
 
 							<li><a class="slide-item"  href="{{ route('answer.index') }}">{{ __('general.answers') }}</a></li>

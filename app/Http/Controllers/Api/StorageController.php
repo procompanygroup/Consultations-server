@@ -213,7 +213,7 @@ class StorageController extends Controller
   public function CallPath()
   { //image record
     $url = "";
-      $url =  $this->getlocalpath($this->path['calls']);
+      $url =  $this->getlocalpath($this->recordpath['calls']);
           return $url;
   }
   public static function CalcPercentVal($percent,$total)

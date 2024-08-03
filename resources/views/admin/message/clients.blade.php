@@ -58,7 +58,13 @@
                                         <td>{{ $client->mobile }}</td>
                                       <td>
                                         <a href="{{url('admin/message/client', $client->id)}}"  class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>                              
-                                        </td>
+                                        <form action="{{url('admin/message/destroyclient', $client->id)}}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" id="del-{{$client->id}}" class="btn btn-danger btn-sm delete" data-effect="effect-scale" data-toggle="modal" data-target="#modaldemo8"   title="حذف المحادثة"><i class="fa fa-trash"></i></button>
+                                        </form>
+                                    
+                                    </td>
 
                                     </tr>
                                 @endforeach
@@ -77,6 +83,24 @@
     <!-- Container closed -->
     </div>
     <!-- main-content closed -->
+    	<!-- main-content closed -->
+			<!-- Modal effects -->
+			<div class="modal" id="modaldemo8">
+				<div class="modal-dialog modal-dialog-centered   modal-sm" role="document">
+					<div class="modal-content modal-content-demo">
+						 
+						<div class="modal-body text-center" style="padding-bottom: 5px;	padding-top: 30px;">
+							<h6 class="modal-title">{{ __('general.Are you sure') }}</h6>
+								 </div>
+						<div class="modal-footer d-flex justify-content-between">
+							<button class="btn ripple btn-danger" id="btn-modal-del" type="button">{{ __('general.delete') }}</button>
+							<button class="btn ripple btn-secondary"  id="btn-cancel-modal"  data-dismiss="modal" type="button">{{ __('general.cancel') }}</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End Modal effects-->
+
 @endsection
 @section('js')
     <!-- Internal Data tables -->
@@ -98,4 +122,5 @@
     <script src="{{ URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js') }}"></script>
     <!--Internal  Datatable js -->
     <script src="{{ URL::asset('assets/js/table-data.js') }}"></script>
+    <script src="{{URL::asset('assets/js/admin/delete.js')}}"></script>
 @endsection

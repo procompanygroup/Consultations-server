@@ -458,8 +458,22 @@ class MessageController extends Controller
   /**
    * Remove the specified resource from storage.
    */
-  public function destroy(string $id)
+  public function destroyclient($id)
   {
-    //
+    $object = Message::where('client_id',$id)->delete();
+
+
+    // return response()->json('ok');
+    // return redirect()->route('expert.index');
+    return redirect()->back();
+   
+
+  }
+  public function destroyexpert($id)
+  {
+    $object = Message::where('expert_id',$id)->delete();
+    return redirect()->back();
+   
+
   }
 }

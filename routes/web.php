@@ -25,7 +25,7 @@ use App\Http\Controllers\Web\GiftController;
 use App\Http\Controllers\Web\GiftExpertController;
 use App\Http\Controllers\Web\CallpointController;
 use App\Http\Controllers\Web\MessageController;
-
+use  App\Http\Controllers\Web\CallServiceController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -197,20 +197,16 @@ Route::prefix('expertgift')->group(function () {
             Route::get('/clientlast', [MessageController::class, 'clientlastmsgs']);
 
             Route::get('/expertlast', [MessageController::class, 'expertlastmsgs']);
-            //اظهار المحادثة المختارة مع كل التعليقات
-        //    Route::get('/show/{id}', [MessageController::class, 'showmessage']);
-// عرض صفحةانشاء محادثة جديدة وارسالها للخبير 
-            // Route::get('/toexpert/{id}', [MessageController::class, 'createtoexpert']);
-            //انشاء محادثة جديدة وارسالها للعميل عرض صفحة
-            // Route::get('/toclient/{id}', [MessageController::class, 'createtoclient']);
+             
             //ارسال المحادثة للخبير
             Route::post('/toexpert/{id}', [MessageController::class, 'storetoexpert']);
             //ارسال محادثة للعميل
             Route::post('/toclient/{id}', [MessageController::class, 'storetoclient']);
-            //ارسال تعليق على محادثة للخبير
-        //    Route::post('/comtoexpert/{id}', [MessageController::class, 'storecomtoexpert']);
-              //ارسال تعليق على محادثة للعميل
-           // Route::post('/comtoclient/{id}', [MessageController::class, 'storecomtoclient']);
+               //حذف المحادثة للخبير
+               Route::delete('/destroyexpert/{id}', [MessageController::class, 'destroyexpert']);
+               //حذف محادثة للعميل
+               Route::delete('/destroyclient/{id}', [MessageController::class, 'destroyclient']);
+     
         });
 
     });
@@ -264,7 +260,11 @@ Route::prefix('user')->group(function () {
        
         });
        
-      
+        Route::prefix('call')->group(function () {               
+            Route::get('/', [CallServiceController::class, 'index']);
+            Route::get('/{id}', [CallServiceController::class, 'edit']);
+          
+        }); 
     });
     /*
     Route::middleware('role.admin:super')->group(function () {
