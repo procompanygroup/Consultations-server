@@ -29,8 +29,10 @@ class RateController extends Controller
   /**
    * Display a listing of the resource.
    */
+  public $oldestday = 30;
   public function index()
   {
+    $nowsub = Carbon::now()->subDays($this->oldestday);    
     // $list =Selectedservice::with('expert','client','service')->orderByDesc('comment_state')->get();
     //  return  $list;
     $list = Selectedservice::with([
@@ -43,7 +45,9 @@ class RateController extends Controller
           $q->latest()->first();
       }
       */
-    ])->whereNotNull('rate_date')->orderByDesc('rate_date')->get()->where('answer_state', 'agree');
+    ])->whereNotNull('rate_date')->orderByDesc('rate_date')
+    ->whereDate('created_at', '>=', $nowsub)->
+    get()->where('answer_state', 'agree');
 
     //   return  $list;
     return view('admin.rate.show', ['selectedservices' => $list]);

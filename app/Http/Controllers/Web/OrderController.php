@@ -28,14 +28,17 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-   
+    public $oldestday = 30;
     public function index()
     { 
+      $nowsub = Carbon::now()->subDays($this->oldestday);
+
      $list =Selectedservice::with('expert','client','service')
      ->whereDoesntHave('service', function ($query)  {
       $query->where('is_callservice', 1);         
     })
-    ->orderByDesc('form_state')->get();//'order_num'     
+    ->orderByDesc('form_state')
+    ->whereDate('created_at', '>=', $nowsub)->get();     
       return view('admin.order.show', ['selectedservices' => $list]);     
     }
   

@@ -28,8 +28,10 @@ class CommentController extends Controller
   /**
    * Display a listing of the resource.
    */
+  public $oldestday = 30;
   public function index()
   {
+    $nowsub = Carbon::now()->subDays($this->oldestday);
     // $list =Selectedservice::with('expert','client','service')->orderByDesc('comment_state')->get();
     //  return  $list;
     $list = Selectedservice::with([
@@ -42,7 +44,9 @@ class CommentController extends Controller
           $q->latest()->first();
       }
       */
-    ])->whereNotNull('comment')->whereNot('comment', '')->orderByDesc('comment_state')->get()->where('answer_state', 'agree');
+    ])->whereNotNull('comment')->whereNot('comment', '')   
+    ->whereDate('created_at', '>=', $nowsub)->
+    orderByDesc('comment_state')->get()->where('answer_state', 'agree');
 
     //   return  $list;
     return view('admin.comment.show', ['selectedservices' => $list]);

@@ -25,6 +25,7 @@ use App\Models\Notification;
 
 class NotificationController extends Controller
 {
+  public $oldestday = 30;
 
   public function saveToken(Request $request)
   {
@@ -107,7 +108,12 @@ class NotificationController extends Controller
    */
   public function index()
   {
-    $List = Notification::where('side', 'LIKE', '%' . 'client' . '%')->orWhere('side', 'LIKE', '%' . 'expert' . '%')->get();
+    $nowsub = Carbon::now()->subDays($this->oldestday);
+    $List = Notification::
+       where(function ($query) {
+        $query->where('side', 'LIKE', '%' . 'client' . '%')
+            ->orWhere('side', 'LIKE', '%' . 'expert' . '%');
+    })->whereDate('created_at', '>=', $nowsub)->get();
     return view('admin.notify.show', ['list' => $List]);
   }
   public function testnotify()

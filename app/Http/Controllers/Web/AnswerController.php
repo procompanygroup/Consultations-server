@@ -33,11 +33,11 @@ class AnswerController extends Controller
    */
   public  $pointtransfer_id = 0;
   public  $reasonval ="";
-   
+  public $oldestday = 30;
   public function index()
   {
     // $list = User::latest()->first();
-
+    $nowsub = Carbon::now()->subDays($this->oldestday);
     $list = Selectedservice::with([
       'expert',
       'client',
@@ -50,7 +50,9 @@ class AnswerController extends Controller
       */
     ])->whereDoesntHave('service', function ($query)  {
       $query->where('is_callservice', 1);         
-    })->where('form_state', 'agree')->get();     
+    })->where('form_state', 'agree')      
+  ->whereDate('created_at', '>=', $nowsub)
+    ->get();     
     //   return  $list;
     return view('admin.answer.show', ['selectedservices' => $list]);
   }
