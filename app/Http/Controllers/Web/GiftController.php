@@ -84,7 +84,7 @@ class GiftController extends Controller
      ->where('side','to-expert')->get();      
     */
     // $clients=$this->getclients();
-    return view('admin.giftexpert.create');
+    return view('admin.gift.create');
 
 
   }
