@@ -55,7 +55,7 @@ Route::middleware('authExpert:api')->group(function () {
     Route::post('/gettype', [ExpertController::class, 'gettype']);
     Route::post('/changeavailable', [ExpertController::class, 'changeavailable']);
     
-    Route::post('/uploadcall', [ExpertController::class, 'uploadcall']);
+   // Route::post('/uploadcall', [ExpertController::class, 'uploadcall']);
    // Route::post('/convertfile', [MailController::class, 'convertfile']);
 
     Route::post('/getstatistics', [ExpertController::class, 'getstatistics']);

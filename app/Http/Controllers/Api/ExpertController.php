@@ -34,7 +34,7 @@ use App\Http\Requests\Api\Expert\PullBalanceRequest;
 use App\Http\Requests\Api\Expert\SaveTokenRequest;
 use App\Http\Requests\Api\Expert\StatisticRequest;
 use App\Http\Requests\Api\Expertfavorite\StoreExpertRequest;
-use App\Http\Requests\Api\Expert\UploadCallRequest;
+
 use App\Http\Requests\Api\Expert\ChangeAvailableRequest;
 
 
@@ -1479,30 +1479,7 @@ if($expert->expertsServices->first()){
         }
         return 1;
     }
-    public function storeCall($file, $id)
-    {
-        $model = Selectedservice::find($id);
-        $oldfile = $model->call_file;
-        $oldfilename = basename($oldfile);
-        $strgCtrlr = new StorageController();
-        $recpath = $strgCtrlr->recordpath['calls'];
-        if ($file !== null) {
-            $filename = rand(10000, 99999) . $id . "." . $file->getClientOriginalExtension();
-            if (!File::isDirectory(Storage::url('/' . $recpath))) {
-                Storage::makeDirectory('public/' . $recpath);
-            }
-            $path = $file->storeAs(
-                $recpath,
-                $filename,
-                'public'
-            );
-            Selectedservice::find($id)->update([
-                "call_file" => $filename
-            ]);
-            Storage::delete("public/" . $recpath . '/' . $oldfilename);
-        }
-        return 1;
-    }
+   
     public function storeAnswerRecord($file, $id)
     {
         $model = Answer::find($id);
@@ -1966,35 +1943,5 @@ if($expert->expertsServices->first()){
         }
     }
 
-    public function uploadcall(Request $request)
-    {
-        //
-        $formdata = $request->all();
-        $storrequest = new UploadCallRequest();
-        $validator = Validator::make(
-            $formdata,
-            $storrequest->rules(),
-            $storrequest->messages()
-        );
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
-        } else {
-           DB::transaction(function () use ($request, $formdata) {
-            $selservicemodel= Selectedservice::find($formdata['selectedservice_id'])  ;  
-            $servicemodel=Service::where('is_callservice',1)->first();
-                if ($request->hasFile('record') && $selservicemodel->service_id== $servicemodel->id) {
-                    $file = $request->file('record');
-                    $this->storeCall($file,  $selservicemodel->id);      
-                    $this->id=$selservicemodel->id  ;      
-                }else{
-                      $this->id=0;
-                }
-            });
-            return response()->json([
-                "message" => $this->id
-            ]);
-
-        }
-
-    }
+   
 }

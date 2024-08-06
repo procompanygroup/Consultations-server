@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Callpoint;
+use App\Models\ExpertService;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Client;
 use App\Models\Point;
+use App\Models\Service;
 use App\Models\Company;
 use App\Models\Pointtransfer;
 use App\Models\Cashtransfer;
@@ -29,7 +31,8 @@ use App\Http\Requests\Api\Client\CallAlertRequest;
 use App\Http\Controllers\Api\AgoraTokenController;
 use Illuminate\Support\Str;
 use App\Http\Requests\Api\Client\BuyMinutesRequest;
-
+use App\Models\Selectedservice;
+use App\Http\Requests\Api\Expert\UploadCallRequest;
 /*
 use App\Http\Requests\Web\Client\StoreClientRequest;
 use App\Http\Requests\Web\Client\UpdateClientRequest;
@@ -37,7 +40,7 @@ use App\Models\Pointtransfer;
 use App\Models\Cashtransfer;
 use App\Models\Expertfavorite;
 use App\Models\Servicefavorite;
-use App\Models\Selectedservice;
+
 */
 class ClientController extends Controller
 {
@@ -47,6 +50,7 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public $id = 0;
     public $pointtransfer_id = 0;
     public function index()
     {
@@ -584,6 +588,7 @@ class ClientController extends Controller
 
     //     return response()->json($agoratoken);
     // }
+
     public function sendcallalert(Request $request)
     {
         //
@@ -600,18 +605,34 @@ class ClientController extends Controller
             $expert_id = $formdata['expert_id'];
             $client_id = $formdata['client_id'];
 $client_uid=$client_id;
-$expert_uid=$expert_id;
-            $channel = Str::lower(Str::random(20));
-            $agorc = new AgoraTokenController();
+$expert_uid=$expert_id;         
             //calc valid time
             $expiretime = 5 * 60;
+            // client call balance , expert minute cost
+            $client = Client::find($client_id);
+            $client_minutebalance= $client->minutes_balance;
+            $expertService= ExpertService::where('expert_id',$expert_id )->whereHas('service', function ($query)  {
+                $query->where('is_callservice', 1);         
+              })->first(); 
+            if( $client_minutebalance<$expertService->points ){
+                return response()->json('insufficient_balance', 401);
+            }else{                
+          //add sel service record
+       $selectedservice_id= $this->Create_sel_serv($client_id,$expert_id, $expertService->service_id,$expertService->points,$expertService->expert_cost);
+    if($expertService->points>0){
+        $expiretime= (floor( $client_minutebalance/$expertService->points ))* 60;
+    }else{
+        $expiretime=$client_minutebalance*60;
+    }
+      
+       $channel = Str::lower(Str::random(20));
+           $agorc = new AgoraTokenController();
            // $calltoken ="";
         //  $calltoken = $agorc->generateToken($client_id, $expiretime, $channel);
         $client_calltoken = $agorc->generateToken($client_uid, $expiretime, $channel);
         $expert_calltoken = $agorc->generateToken($expert_uid, $expiretime, $channel);
-            //  $calltoken= $formdata['calltoken'];
-            $client = Client::find($client_id);
-            $client->image_path;
+            //  $calltoken= $formdata['calltoken'];           
+          //  $client->image_path;
             $notctrlr = new NotificationController();
             $title = __('general.11call_title');
             $body = __('general.11call_body', ['Clientname' => $client->user_name]);
@@ -622,6 +643,7 @@ $expert_uid=$expert_id;
                 'expert_calltoken' =>  $expert_calltoken,
                 'client_image' => $client->image_path,
                 'client_name' => $client->user_name,
+                'selectedservice_id'=>$selectedservice_id,
             ];
        $notctrlr->send_autocall_notify($title, $body, 'auto', 'call', '', '', $client_id, $expert_id, 0, 0, $calldata);
             return response()->json(
@@ -629,11 +651,100 @@ $expert_uid=$expert_id;
                     'client_uid' =>$client_uid,
                     'channel' => $channel,
                     'client_calltoken' => $client_calltoken,
+                  'selectedservice_id'=>$selectedservice_id,
                 ]
             );
+        }
+        }
+    }
+
+    public function Create_sel_serv($client_id,$expert_id,$service_id,$points,$expert_cost ){
+       $selservCtrlr=new  SelectedServiceController();
+        $newNum =  $selservCtrlr->GenerateCode("order-");
+        $now = Carbon::now();
+        //save selected service
+        $newObj = new Selectedservice();
+        $newObj->client_id = $client_id;
+        $newObj->expert_id = $expert_id;
+        $newObj->service_id = $service_id;
+        $newObj->points =$points;
+        $newObj->rate = 0;
+        $newObj->form_state = 'agree';
+        //   $newObj->answer = "";
+        //   $newObj->answer2 = "";
+        $newObj->comment = "";
+        // $newObj->iscommentconfirmd = 0;
+        //   $newObj->issendconfirmd = 0;
+        //    $newObj->isanswerconfirmd = 0;
+      //  $newObj->comment_rate = 0;
+        $newObj->status = "created";
+        $newObj->expert_cost =$expert_cost;//percent
+       // $newObj->cost_type = $expertService->cost_type;
+        //   $newObj->expert_cost_value = $expertService->expert_cost_value;
+        $newObj->expert_cost_value = StorageController::CalcPercentVal($expert_cost,$points);
+        $newObj->order_num = $newNum;
+        $newObj->order_date = $now;
+        $newObj->save();
+        return   $newObj->id;
+       
+    }
+
+    public function uploadcall(Request $request)
+    {
+        //
+        $formdata = $request->all();
+        $storrequest = new UploadCallRequest();
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        } else {
+           DB::transaction(function () use ($request, $formdata) {
+            $selservicemodel= Selectedservice::find($formdata['selectedservice_id'])  ;  
+            $servicemodel=Service::where('is_callservice',1)->first();
+                if ($request->hasFile('record') && $selservicemodel->service_id== $servicemodel->id) {
+                    $file = $request->file('record');
+                    $this->storeCall($file,  $selservicemodel->id);      
+                    $this->id=$selservicemodel->id  ;      
+                }else{
+                      $this->id=0;
+                }
+            });
+            return response()->json([
+                "message" => $this->id
+            ]);
 
         }
 
+    }
+
+    public function storeCall($file, $id)
+    {
+        $model = Selectedservice::find($id);
+        $oldfile = $model->call_file;
+        $oldfilename = basename($oldfile);
+        $strgCtrlr = new StorageController();
+        $recpath = $strgCtrlr->recordpath['calls'];
+        if ($file !== null) {
+            $filename = rand(10000, 99999) . $id . "." . $file->getClientOriginalExtension();
+            if (!File::isDirectory(Storage::url('/' . $recpath))) {
+                Storage::makeDirectory('public/' . $recpath);
+            }
+            $path = $file->storeAs(
+                $recpath,
+                $filename,
+                'public'
+            );
+            Selectedservice::find($id)->update([
+                "call_file" => $filename,
+                'status'=>'up'
+            ]);
+            Storage::delete("public/" . $recpath . '/' . $oldfilename);
+        }
+        return 1;
     }
 
 }

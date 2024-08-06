@@ -166,6 +166,7 @@ return [
 '3orderanswerd_body'=>'رد على طلب خدمة'.' '.':Servicename'.' '.'من قبل الخبير'.' '.':Expertname',
 '4addbalancetoexpert_title'=>'اضافة رصيد',
 '4addbalancetoexpert_body'=>'تم اضافة'.' '.':Cash'.'$'.' '.'الى رصيدك مقابل الرد على طلب'.' '.':Clientname',
+'4addbalancetoexpert_body_call'=>'تم اضافة'.' '.':Cash'.'$'.' '.'الى رصيدك مقابل الرد على اتصال'.' '.':Clientname',
 '5expertpullbalance_title'=>'سحب رصيد',
 '5expertpullbalance_body'=>'تم سحب'.' '.':Cash'.'$'.' '.'من اجمالي الرصيد الحالي',
 '6orderreject_title'=>'رفض طلب خدمة'.' '.':Servicename',
