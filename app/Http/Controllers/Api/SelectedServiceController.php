@@ -1158,6 +1158,7 @@ class SelectedServiceController extends Controller
         Expert::find($selectedObj->expert_id)->update(
           [
             'cash_balance' => $expertObj->cash_balance + $selectedObj->expert_cost_value,
+            'call_balance'=>$expertObj->call_balance + $selectedObj->expert_cost_value,
          //   'cash_balance_todate' => $expertObj->cash_balance_todate + $selectedObj->expert_cost_value,
           //  'answer_speed'=>$answespeedavg ,
             ]
