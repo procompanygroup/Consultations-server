@@ -45,7 +45,7 @@
 										<thead>
 											<tr>
 
-												<th class="border-bottom-0">الدقائق</th>
+												<th class="border-bottom-0">النقاط</th>
 												<th class="border-bottom-0">{{ __('general.price') }}</th>
 											
                                                 <th class="border-bottom-0">{{ __('general.action') }}</th>

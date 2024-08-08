@@ -127,12 +127,12 @@ class GiftExpertController extends Controller
           $expert->cash_balance_todate+=$amount;
           $expert->save();
          
-          //10
-          // $notctrlr = new NotificationController();
-          // $pointsval = $amount;
-          // $title = __('general.10addgift_title');
-          // $body = __('general.10addgift_body', ['Points' => $pointsval]);
-          // $notctrlr->sendautonotify($title, $body, 'auto', 'text', '', 'finance', $side_id, 0, 0, $pointtransfer->id);
+        //  10
+          $notctrlr = new NotificationController();
+          $pointsval = $amount;
+          $title = __('general.10addgift_title');
+          $body = __('general.10addgift_body', ['Points' => $pointsval]);
+          $notctrlr->sendautonotify($title, $body, 'auto', 'text', '','finance-gift',0,  $side_id, 0, $pointtransfer->id);
 
         });
         //send auto notification

@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\Web\Message\StoreRequest;
 use App\Http\Requests\Web\Message\StoreApiRequest;
 use App\Http\Requests\Web\Message\MessagesRequest;
-
+use App\Http\Controllers\Api\NotificationController;
+use Illuminate\Support\Str;
 class MessageController extends Controller
 {
   /**
@@ -111,7 +112,10 @@ class MessageController extends Controller
         'content' => $newObj->content,
         'res' => 'ok'
       ];
-
+      $notctrlr = new NotificationController();      
+      $title = __('general.13adminmsg_title');
+      $body =Str::limit($newObj->content,20);
+      $notctrlr->sendautonotify($title, $body, 'auto', 'text', '','help-msg',$id,0, 0,0);
       return response()->json($arr);
     }
 
@@ -315,6 +319,10 @@ class MessageController extends Controller
         'content' => $newObj->content,
         'res' => 'ok'
       ];
+      $notctrlr = new NotificationController();      
+      $title = __('general.13adminmsg_title');
+      $body = Str::limit($newObj->content,20);
+      $notctrlr->sendautonotify($title, $body, 'auto', 'text', '','help-msg',0,$id, 0,0);
 
       return response()->json($arr);
     }

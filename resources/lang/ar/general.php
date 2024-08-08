@@ -183,6 +183,8 @@ return [
 '11call_body'=>'طلب اتصال مباشر من'.' '.':Clientname',
 '12addminute_title'=>'اضافة دقائق من المتجر',
 '12addminute_body'=>'تمت اضافة'.' '. ':Points'.' '.'دقيقة الى رصيدك',
+'13adminmsg_title'=>'رسالة من الادارة',
+ 
 ];
 /*
 
