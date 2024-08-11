@@ -36,7 +36,6 @@
 									<h4 class="card-title mg-b-0">شرائح الدقائق</h4>
 									<a href="{{ route('minute.create') }}" class="btn btn-primary btn-small">{{ __('general.new') }}</a>
 		 
-
 								</div>
 									</div>
 							<div class="card-body">
@@ -45,7 +44,7 @@
 										<thead>
 											<tr>
 
-												<th class="border-bottom-0">النقاط</th>
+												<th class="border-bottom-0">الدقائق</th>
 												<th class="border-bottom-0">{{ __('general.price') }}</th>
 											
                                                 <th class="border-bottom-0">{{ __('general.action') }}</th>

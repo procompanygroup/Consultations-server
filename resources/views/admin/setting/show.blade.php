@@ -105,6 +105,45 @@
 
         </div>
         <!-- /div-->
+          <!--div-->
+          <div class="col-xl-12">
+            <div class="card mg-b-20">
+                <div class="card-header pb-0">
+                    <div class="d-flex justify-content-between">
+                        <h4 class="card-title mg-b-0">كلفة دقيقة الاتصال </h4>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="">
+                        <form class="form-horizontal"
+                            action="{{ url('admin/setting/updatecallcost', $call_cost->id) }}"
+                            name="call_cost_form"  method="POST" id="call_cost_form">
+                            @csrf
+                            <div class="row">
+                            <div class="form-group d-flex justify-content-between col-sm-12">
+                                <input type="text" class="form-control " id="call_cost"
+                                    placeholder="الكلفة * " name="call_cost"
+                                    value="{{ $call_cost->value }}">
+                              
+                                <button type="submit" name="btn_call_cost" id="btn_call_cost"
+                                    class="btn btn-primary mr-3">{{ __('general.save') }}</button>
+                            </div>
+                            <div class="col-sm-12">
+                                <ul class="parsley-errors-list filled">
+                                    <li class="parsley-required" id="call_cost_error"></li>
+                                </ul>
+                            </div>
+                        </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <!--/div-->
+
+
+        </div>
+        <!-- /div-->
     <!--div-->
     <div class="col-xl-12">
         <div class="card mg-b-20">

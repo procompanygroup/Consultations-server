@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 //use App\Providers\MailConfigServiceProvider;
 use App\Models\ClientEmail;
+use App\Models\Client;
 use Illuminate\Http\Request;
 use DB;
 //use Config;
@@ -16,7 +17,7 @@ use App\Http\Requests\Api\Mail\GetMailRequest;
 use App\Http\Requests\Api\Mail\ValidateCodeRequest;
 
 use Config;
-
+use App\Http\Controllers\Api\ClientController;
 //use URL;
 //  use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 //use FFMpeg;
@@ -130,11 +131,20 @@ class MailController extends Controller
         if ($mailmodel->code == $code) {
           //ok
           //  $mailmodel->is_confirm=1;
+
           ClientEmail::where('email', $clientemail)->where('is_confirm', 0)->update(
             [
               'is_confirm' => 1
             ]
           );
+         
+          // $client=Client::where('email',$clientemail)->orderByDesc('created_at')->first();
+          // if($client){
+          //   $clientctrlr=new ClientController();
+          //   $clientctrlr->setactive($client->id);
+          // }
+     
+           
           //  $mailmodel->save();
           return response()->json("ok");
         } else {

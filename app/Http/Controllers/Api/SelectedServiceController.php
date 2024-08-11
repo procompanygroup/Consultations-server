@@ -1052,14 +1052,19 @@ class SelectedServiceController extends Controller
             $expertService = ExpertService::where('expert_id', $expert_id)->where('service_id', $selectedservice->service_id)->first();
             if ($expertService) {            
                     //normal send
-
-                    $call_cost= $expertService->points*$minutes;
-                    if ($client->minutes_balance < $call_cost) {
+ //get cost for call service
+ $settctrlr=new SettingController();
+ $callcostobj=$settctrlr->findbyname('call_cost');
+ $minutecost=(float) $callcostobj->value;
+ //  
+                    $call_cost= $minutes*$minutecost;
+                    if ($client->minutes_balance < $minutes) {
                         //contunie with client minute balance as cost                
-                        $call_cost=$client->minutes_balance;
+                        $call_cost=$client->minutes_balance*$minutecost;
                     }
                          //save selected service                     
-                        $selectedservice->points = $call_cost;                      
+                        $selectedservice->points = $call_cost;    
+                        $selectedservice->cost_type = $minutes;                    
                         $selectedservice->status = "done";
                         $selectedservice->expert_cost =$expertService->expert_cost;//percent
                        // $newObj->cost_type = $expertService->cost_type;
@@ -1069,7 +1074,7 @@ class SelectedServiceController extends Controller
                         $selectedservice->save();
                         $this->id = $selectedservice->id;                   
                         // decrease client balance
-                        $client->minutes_balance = $client->minutes_balance - $call_cost;
+                        $client->minutes_balance = $client->minutes_balance -$minutes;
                         $client->save();
                         //create point transfer row
                         $pointtransfer = new Pointtransfer();

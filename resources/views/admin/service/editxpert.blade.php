@@ -55,13 +55,38 @@
                                 <tr>
 
                                     <th class="border-bottom-0">اسم الخبير</th>
-                                    <th class="border-bottom-0">النقاط</th>
+@if ($service->is_callservice==1)
+<th class="border-bottom-0">الكلفة</th>
+@else
+<th class="border-bottom-0">النقاط</th>
+@endif
+                                    
 
                                     <th class="border-bottom-0">{{ __('general.action') }}</th>
 
                                 </tr>
                             </thead>
                             <tbody>
+                                @if ($service->is_callservice==1)
+                                @foreach ($selectedexperts as $selectedexpert)
+                                <tr>
+
+                                    <td>{{ $selectedexpert->expert->first_name . ' ' . $selectedexpert->expert->last_name }}
+                                    </td>
+                                    <td>{{ $call_cost }}</td>
+
+                                    <td><form action="{{ url('admin/service/expert/deleteselected', $selectedexpert->id) }}" method="POST" class="d-inline" id="delete_expert_form">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger btn-sm btn-delete-expert"
+                                            id="expert-{{ $selectedexpert->expert->id }}"><i
+                                                class="fa fa-trash"></i></button>
+                                        </form>
+
+                                    </td>
+
+                                </tr>
+                            @endforeach
+                                @else
                                 @foreach ($selectedexperts as $selectedexpert)
                                     <tr>
 
@@ -85,6 +110,8 @@
 
                                     </tr>
                                 @endforeach
+                                @endif
+                             
                             </tbody>
                         </table>
                     </div>

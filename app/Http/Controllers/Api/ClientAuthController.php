@@ -110,7 +110,7 @@ class ClientAuthController extends Controller
         $birthdate= Carbon::create($formdata["birthdate"])->format('Y-m-d');
    
         $newObj->user_name= $formdata["user_name"];
-       // $newObj->password= $formdata["password"];
+      
         $newObj->email= $formdata["email"];
         $newObj->country_num = $cnum;
         $newObj->mobile_num = $mnum;
@@ -119,7 +119,8 @@ class ClientAuthController extends Controller
         $newObj->birthdate= $birthdate;
         $newObj->gender= $formdata["gender"];
         $newObj->marital_status= $formdata["marital_status"];
-      //  $newObj->image= $formdata["image"];
+      //  $newObj->is_active = 0;
+   
         $newObj= $clintCont->addUser( $newObj);
      //  if( isset($formdata["image"]))
      //  {

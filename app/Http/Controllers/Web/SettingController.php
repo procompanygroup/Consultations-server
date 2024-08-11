@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Web\Setting\UpdateCallCostRequest;
 use Illuminate\Http\Request;
 use App\Models\Setting;
 use Illuminate\Support\Facades\DB; 
@@ -26,12 +27,14 @@ class SettingController extends Controller
         $secret_key=$this->findbyname('secret_key');
         $publishable_key=$this->findbyname('publishable_key');
         $gift_expire_days=$this->findbyname('gift_expire_days');
+        $call_cost=$this->findbyname('call_cost');
+      //  updatepoints
         return view('admin.setting.show', ['expert_percent'=>$expert_percent,
         'expert_service_points'=>$expert_service_points,
         'secret_key'=>$secret_key,
         'publishable_key'=> $publishable_key,
         'gift_expire_days'=> $gift_expire_days,
-
+        'call_cost'=> $call_cost,
       ]);
  
       //  return view('admin.setting.show', ['settings' => ['expert_percent'=>$expert_percent,'expert_service_points'=>$expert_service_points]]);
@@ -114,6 +117,26 @@ class SettingController extends Controller
         //save image
         return response()->json("ok");
         
+      }
+    }
+
+    public function updatecallcost(UpdateCallCostRequest $request, $id)
+    {
+      $formdata = $request->all();
+      //validate
+      $validator = Validator::make(
+        $formdata,
+        $request->rules(),
+        $request->messages()
+      );
+      if ($validator->fails()) {
+         return response()->json($validator);  
+      } else {      
+        Setting::find($id)->update([        
+          'value'=>  $formdata['call_cost'],          
+        ]);      
+        //save image
+        return response()->json("ok");        
       }
     }
 

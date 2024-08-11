@@ -38,8 +38,12 @@ $(document).ready(function () {
 	$('#btn_expire_days').on('click', function (e) {
 		e.preventDefault();
 		sendform('#expire_days_form');
-		});		 
+		});	
 
+		$('#btn_call_cost').on('click', function (e) {
+			e.preventDefault();
+			sendform('#call_cost_form');
+			});	
 	function ClearErrors() {
 
 		$('.parsley-required').html('');

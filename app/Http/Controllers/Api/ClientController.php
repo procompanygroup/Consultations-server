@@ -33,6 +33,8 @@ use Illuminate\Support\Str;
 use App\Http\Requests\Api\Client\BuyMinutesRequest;
 use App\Models\Selectedservice;
 use App\Http\Requests\Api\Expert\UploadCallRequest;
+use App\Http\Requests\Api\Client\ActivateRequest;
+
 /*
 use App\Http\Requests\Web\Client\StoreClientRequest;
 use App\Http\Requests\Web\Client\UpdateClientRequest;
@@ -277,6 +279,30 @@ class ClientController extends Controller
 
 
     }
+    public function activateaccount(Request $filerequest)
+    {
+        $formdata = $filerequest->all();       
+        $storrequest = new ActivateRequest();        
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {            
+            return response()->json($validator->errors());
+                } else {
+            $id = $formdata["id"];              
+                $this->setactive($id);
+        return response()->json($id);           
+        }
+      }
+      public function setactive($id){
+        Client::find($id)->update([
+            'is_active' => 1,                    
+        ]);
+        return 1;
+      }
+
     public function deleteaccount(Request $filerequest)
     {
         $formdata = request(['id']);
@@ -605,26 +631,32 @@ class ClientController extends Controller
             $expert_id = $formdata['expert_id'];
             $client_id = $formdata['client_id'];
 $client_uid=$client_id;
-$expert_uid=$expert_id;         
+$expert_uid=$expert_id;    
+    //get cost for call service
+    $settctrlr=new SettingController();
+    $callcostobj=$settctrlr->findbyname('call_cost');
+    $minutecost=(float) $callcostobj->value;
+    //     
             //calc valid time
-            $expiretime = 5 * 60;
+          $expiretime = 0;
             // client call balance , expert minute cost
             $client = Client::find($client_id);
             $client_minutebalance= $client->minutes_balance;
             $expertService= ExpertService::where('expert_id',$expert_id )->whereHas('service', function ($query)  {
                 $query->where('is_callservice', 1);         
               })->first(); 
-            if( $client_minutebalance<$expertService->points ){
+            if( $client_minutebalance<1 ){
                 return response()->json('insufficient_balance', 401);
             }else{                
           //add sel service record
-       $selectedservice_id= $this->Create_sel_serv($client_id,$expert_id, $expertService->service_id,$expertService->points,$expertService->expert_cost);
-    if($expertService->points>0){
-        $expiretime= (floor( $client_minutebalance/$expertService->points ))* 60;
-    }else{
-        $expiretime=$client_minutebalance*60;
-    }
-      
+       $selectedservice_id= $this->Create_sel_serv($client_id,$expert_id, $expertService->service_id,$minutecost,$expertService->expert_cost);
+    // if($expertService->points>0){
+    //  //   $expiretime= (floor( $client_minutebalance/$expertService->points ))* 60;
+
+    // }else{
+    //     $expiretime=$client_minutebalance*60;
+    // }
+    $expiretime=$client_minutebalance*60;
        $channel = Str::lower(Str::random(20));
            $agorc = new AgoraTokenController();
            // $calltoken ="";

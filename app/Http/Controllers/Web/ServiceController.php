@@ -120,7 +120,12 @@ class ServiceController extends Controller
       $object = Service::find($id);
     $selectedExpertList = $object->expertservices()->with('expert')->get();
       $expertList = Expert::get();
-       return view('admin.service.editxpert', ['service' => $object,'allexperts'=>$expertList ,'selectedexperts'=>$selectedExpertList]);
+        //get cost for call service
+        $settctrlr=new SettingController();
+        $callcostobj=$settctrlr->findbyname('call_cost');
+        $callcost=$callcostobj->value;
+        //
+       return view('admin.service.editxpert', ['service' => $object,'allexperts'=>$expertList ,'selectedexperts'=>$selectedExpertList,'call_cost'=>$callcost]);
      // return dd($list);
   
     }
