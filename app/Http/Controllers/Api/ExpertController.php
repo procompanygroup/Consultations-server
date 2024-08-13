@@ -34,10 +34,12 @@ use App\Http\Requests\Api\Expert\PullBalanceRequest;
 use App\Http\Requests\Api\Expert\SaveTokenRequest;
 use App\Http\Requests\Api\Expert\StatisticRequest;
 use App\Http\Requests\Api\Expertfavorite\StoreExpertRequest;
+use App\Http\Requests\Api\Expert\StoreNotifyRequest;
+use App\Http\Requests\Api\Expert\GetNotifyRequest;
 
 use App\Http\Requests\Api\Expert\ChangeAvailableRequest;
 
-
+use App\Models\ClientExpert;
 
 class ExpertController extends Controller
 {
@@ -1301,6 +1303,8 @@ if($expert->expertsServices->first()){
             }
         }
     }
+
+
     //expert app
     public function saveexpertfav()
     {
@@ -1344,7 +1348,89 @@ if($expert->expertsServices->first()){
             }
         }
     }
+
     //end
+
+    public function changenotifyme()
+    {
+        $authuser = auth()->user();
+        $request = request();
+
+        $formdata = $request->all();
+
+        $storrequest = new StoreNotifyRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+
+            return response()->json($validator->errors());
+            //   return redirect()->back()->withErrors($validator)->withInput();
+
+        } else {
+
+            //   $data = json_decode($request->getContent(), true);            
+            //   return response()->json([$client_id,$authuser->id]);
+            if ($authuser->id == $formdata['client_id']) {          
+                    //updateOrCreate
+                    $expertfavorit = ClientExpert::updateOrCreate(
+                        ['client_id' => $formdata['client_id'], 'expert_id' => $formdata['expert_id']],
+                        ['notify'=>$formdata['notify'] ]
+                    );
+             
+                return response()->json("ok");
+                //   return response()->json( $client_id );
+            } else {
+                return response()->json(['error' => 'Unauthenticated'], 401);
+            }
+        }
+    }
+    public function getnotifyme()
+    {
+        $authuser = auth()->user();
+        $request = request();
+
+        $formdata = $request->all();
+
+        $storrequest = new GetNotifyRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+
+            return response()->json($validator->errors());
+            //   return redirect()->back()->withErrors($validator)->withInput();
+
+        } else {
+$notify=0;
+            //   $data = json_decode($request->getContent(), true);            
+            //   return response()->json([$client_id,$authuser->id]);
+            if ($authuser->id == $formdata['client_id']) {          
+                    //updateOrCreate
+                    $expertcl = ClientExpert::where('client_id',$formdata['client_id'])->where('expert_id',$formdata['expert_id'])
+             ->first();
+             if($expertcl){
+                $notify=$expertcl->notify;
+
+             }
+
+                return response()->json($notify);
+                //   return response()->json( $client_id );
+            } else {
+                return response()->json(['error' => 'Unauthenticated'], 401);
+            }
+        }
+    }
+
+    
+
+
     public function deleteaccount()
     {
         $formdata = request(['id']);

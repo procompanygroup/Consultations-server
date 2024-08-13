@@ -120,6 +120,8 @@ Route::middleware('authClient:api_clients')->group(function () {
             Route::post('/getwithcomments', [ExpertController::class, 'getwithcomments']); 
             Route::post('/getavailable', [ExpertController::class, 'getavailable']); 
             Route::post('/getorderwithanswer', [SelectedServiceController::class, 'getorderwithanswer']); 
+            Route::post('/changenotifyme', [ExpertController::class, 'changenotifyme']); 
+            Route::post('/getnotifyme', [ExpertController::class, 'getnotifyme']); 
         });
         Route::prefix('/point')->group(function () {
             Route::post('/getall', [PointController::class, 'index']); 

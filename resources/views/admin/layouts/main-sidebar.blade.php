@@ -147,6 +147,8 @@
 						<ul class="slide-menu">
 							<li><a class="slide-item" href="{{ route('notify.index') }}"> {{ __('general.show') }}</a></li>
 							 
+                            <li><a class="slide-item" href="{{ route('notifyme.index') }}">اشعارات ابلغني</a></li>
+							 
 
 
 						</ul>

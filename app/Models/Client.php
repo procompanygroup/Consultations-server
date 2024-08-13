@@ -176,4 +176,13 @@ public function getGenderConvAttribute(){
     {
         return $this->hasMany(Comment::class);
     }
+    public function clientsexperts(): HasMany
+    {
+        return $this->hasMany(ClientExpert::class);
+    }
+    public function notifyclientstates(): HasMany
+    {
+        return $this->hasMany(NotifyClientState::class);
+    }
+    
 }

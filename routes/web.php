@@ -26,6 +26,8 @@ use App\Http\Controllers\Web\GiftExpertController;
 use App\Http\Controllers\Web\CallpointController;
 use App\Http\Controllers\Web\MessageController;
 use  App\Http\Controllers\Web\CallServiceController;
+use  App\Http\Controllers\Web\NotifyClientController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -74,6 +76,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         Route::post('sendNotification', [NotificationController::class, 'sendNotification']);
         Route::post('sendbytoken', [NotificationController::class, 'sendbytoken']);
         Route::get('testnotify', [NotificationController::class, 'testnotify']);
+
+        Route::resource('notifyme', NotifyClientController::class);
 
         Route::resource('user', UserController::class, ['except' => ['update']]);
         Route::prefix('user')->group(function () {

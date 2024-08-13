@@ -176,4 +176,12 @@ public function getImagePathAttribute(){
     {
         return $this->hasMany(Message::class);
     }
+    public function clientsexperts(): HasMany
+    {
+        return $this->hasMany(ClientExpert::class);
+    }
+    public function notifyclients(): HasMany
+    {
+        return $this->hasMany(NotifyClient::class);
+    }
 }
