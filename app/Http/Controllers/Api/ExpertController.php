@@ -51,6 +51,7 @@ class ExpertController extends Controller
      */
     public $id = 0;
     public $pointtransfer_id = 0;
+    public $oldestday = 30;
     // public function getdata()
     // {
     //     $users = ['name'=>'ascas',
@@ -317,7 +318,7 @@ class ExpertController extends Controller
         $data = request(['expert_id']);
         $id = $data['expert_id'];
 
-
+        $nowsub = Carbon::now()->subDays($this->oldestday);
         $strgCtrlr = new StorageController();
         $url = $strgCtrlr->ExpertPath('image');
         $recurl = $strgCtrlr->ExpertPath('record');
@@ -330,6 +331,7 @@ class ExpertController extends Controller
         $clientUrl = $strgCtrlr->ClientPath('image');
 
         $clienids = Selectedservice::where('expert_id', $id)->where('comment_state', 'agree')
+        ->whereDate('created_at', '>=', $nowsub)
             ->wherehas('client', function ($query) {
                 $query->where('is_active', 1);
             })->groupBy('client_id')->select('client_id')->get()
@@ -337,6 +339,7 @@ class ExpertController extends Controller
 
 
         $selectList = Selectedservice::where('expert_id', $id)->where('comment_state', 'agree')
+        ->whereDate('created_at', '>=', $nowsub)
             ->wherehas('client', function ($query) {
                 $query->where('is_active', 1);
             })->orderBy('client_id')->orderByDesc('comment_date')
@@ -397,10 +400,11 @@ class ExpertController extends Controller
                         );
                     }
                     ,
-                    'selectedservices' => function ($q) use ($seletedserviceidlist) {
+                    'selectedservices' => function ($q) use ($seletedserviceidlist,$nowsub) {
 
                         $q
                             ->whereIn('id', $seletedserviceidlist)
+                            ->whereDate('created_at', '>=', $nowsub)
                             ->select('id', 'expert_id', 'service_id', 'client_id', 'comment', 'comment_state', 'comment_date')
                             ->orderByDesc('comment_date');
 

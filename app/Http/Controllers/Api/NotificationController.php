@@ -524,10 +524,11 @@ class NotificationController extends Controller
 
     } else {
       $client_id = $formdata['id'];
-
+      $nowsub = Carbon::now()->subDays($this->oldestday);
       $Dblist = Notification::wherehas('notificationUsers', function ($query) use ($client_id) {
         $query->where('client_id', $client_id);
-      })->with(
+      })->whereDate('created_at', '>=', $nowsub)
+      ->with(
           [
             'notificationUsers' => function ($q) use ($client_id) {
               $q->where('client_id', $client_id)
@@ -622,6 +623,7 @@ class NotificationController extends Controller
 
   public function getexpertnotifylist()
   {
+
     $authuser = auth()->user();
     $request = request();
 
@@ -641,8 +643,9 @@ class NotificationController extends Controller
       //   return redirect()->back()->withErrors($validator)->withInput();
 
     } else {
-      $expert_id = $formdata['id'];
 
+      $expert_id = $formdata['id'];
+   $nowsub = Carbon::now()->subDays($this->oldestday);
       $Dblist = Notification::wherehas('notificationUsers', function ($query) use ($expert_id) {
         $query->where('expert_id', $expert_id);
       })->with(
@@ -652,7 +655,8 @@ class NotificationController extends Controller
                 ->select('id', 'notification_id', 'client_id', 'expert_id', 'isread', 'read_at', 'created_at');
             }
           ]
-        )->select(
+        ) ->whereDate('created_at', '>=', $nowsub)
+        ->select(
           'id',
           'title',
           'body',

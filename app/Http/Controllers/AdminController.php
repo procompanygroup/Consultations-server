@@ -22,7 +22,10 @@ class AdminController extends Controller
         $services_count = Service::where('is_active',1)->whereNot('is_callservice',1)->select('id','is_active')->count();
         $calls_count = Selectedservice::wherehas('service', function ($query){
             $query->where('is_callservice',1);
-        })->select('id')->count();
+        })->where(function ($query) {
+            $query->where('status','done')
+                ->orWhere('status','up');
+        })->select('id')->count();      
         // return response (view('admin.home')); 
         return  view('admin.home',[
             'experts_count' =>  $experts_count,

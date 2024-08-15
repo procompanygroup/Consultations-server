@@ -52,13 +52,13 @@ Route::middleware('authExpert:api')->group(function () {
     Route::post('/getwithcomments', [ExpertController::class, 'getexpertwithcomments']); 
     Route::post('/pullbalance', [ExpertController::class, 'pullbalance']);
     Route::post('/savetoken', [ExpertController::class, 'savetoken']);
-    Route::post('/gettype', [ExpertController::class, 'gettype']);
+    // Route::post('/gettype', [ExpertController::class, 'gettype']);
     Route::post('/changeavailable', [ExpertController::class, 'changeavailable']);
     
    // Route::post('/uploadcall', [ExpertController::class, 'uploadcall']);
    // Route::post('/convertfile', [MailController::class, 'convertfile']);
 
-    Route::post('/getstatistics', [ExpertController::class, 'getstatistics']);
+    Route::post('/getstatistics', [ExpertController::class, 'getstatistics']);//
     Route::post('/getwallet', [ExpertController::class, 'getwallet']);
  //   Route::post('/getloguser', [ClientController::class, 'getloguser']);uploadanswer
  Route::post('/getwithfav', [ExpertController::class, 'getexpertwithfav']); 
@@ -80,7 +80,7 @@ Route::middleware('authExpert:api')->group(function () {
 Route::middleware('authClient:api_clients')->group(function () {
     // مسارات المصادقة للـ Client
     Route::prefix('/client')->group(function () {
-        Route::post('/view', [ClientController::class, 'index']);
+        // Route::post('/view', [ClientController::class, 'index']);
         Route::post('/getloguser', [ClientController::class, 'getloguser']);
         Route::post('/getbymobile', [ClientController::class, 'getbymobile']);
         Route::post('/updateprofile', [ClientController::class, 'updateprofile']);
@@ -99,7 +99,7 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/getnotifybyid', [NotificationController::class, 'getnotifybyid']);
         Route::post('/getgift', [GiftController::class, 'getgift']);
         Route::post('/callorder', [SelectedServiceController::class, 'callorder']);
-        Route::post('/uploadcall', [ExpertController::class, 'uploadcall']);
+        Route::post('/uploadcall', [ClientController::class, 'uploadcall']);
         Route::post('/sendcallalert', [ClientController::class, 'sendcallalert']);
         //message
         Route::post('/sendmsg', [MessageController::class, 'clientsendmsg']);

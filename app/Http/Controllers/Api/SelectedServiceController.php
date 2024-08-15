@@ -38,6 +38,9 @@ use App\Http\Requests\Api\Order\CallOrderRequest;
 //use Illuminate\Support\Str;
 class SelectedServiceController extends Controller
 {
+    public $oldestday = 30;
+ 
+  
     /**
      * Display a listing of the resource.
      */
@@ -701,8 +704,10 @@ class SelectedServiceController extends Controller
             return response()->json($validator->errors());
 
         } else {
+            $nowsub = Carbon::now()->subDays($this->oldestday);
             $expert_id = $formdata['expert_id'];
             $list = Selectedservice::where('expert_id', $expert_id)->where('form_state', 'agree')
+            ->whereDate('created_at', '>=', $nowsub)
                 ->wherehas('client', function ($query) {
                     $query->where('is_active', 1);
                 })
@@ -1131,7 +1136,7 @@ class SelectedServiceController extends Controller
       //  $answespeed= $strgctrlr->calcAnswerSpeed( $startdate,$enddate);
         // end
         Selectedservice::find($selectedObj->id)->update([
-          'status' => 'agree',
+        //  'status' => 'agree',
           'company_profit_percent' => $comprofitperc,
           'company_profit' => $comprofitval,
           'comment_state' => 'no-comment',
