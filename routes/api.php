@@ -70,6 +70,8 @@ Route::middleware('authExpert:api')->group(function () {
  //messages
  Route::post('/sendmsg', [MessageController::class, 'expertsendmsg']);
  Route::post('/getmsgs', [MessageController::class, 'expertgetmsg']);
+ //
+ Route::post('/logout', [ExpertAuthController::class, 'logout_expert']);
  Route::prefix('/service')->group(function () {
     Route::post('/viewall', [serviceController::class, 'index']); 
     Route::post('/getinputform', [serviceController::class, 'getinputserviceform']); 
@@ -104,6 +106,8 @@ Route::middleware('authClient:api_clients')->group(function () {
         //message
         Route::post('/sendmsg', [MessageController::class, 'clientsendmsg']);
         Route::post('/getmsgs', [MessageController::class, 'clientgetmsg']);
+        //
+        Route::post('/logout', [ClientAuthController::class, 'logout_client']);
 //api/client/service
         Route::prefix('/service')->group(function () {
             Route::post('/viewall', [serviceController::class, 'index']); 

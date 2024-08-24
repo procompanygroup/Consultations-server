@@ -202,6 +202,15 @@ class ExpertAuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+    public function logout_expert()
+    {
+      $user_id = auth('api')->user()->id;
+      Expert::find($user_id)->update([
+        'token' => '',
+    ]);
+    auth('api')->logout();
+        return response()->json('ok');
+    }
     public function logout()
     {
         auth('api')->logout();

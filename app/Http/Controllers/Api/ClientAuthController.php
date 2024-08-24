@@ -178,11 +178,21 @@ class ClientAuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+    public function logout_client()
+    {
+      $user_id = auth('api_clients')->user()->id;
+      Client::find($user_id)->update([
+        'token' => '',
+    ]);
+        auth('api_clients')->logout();
+
+        return response()->json('ok');
+    }
     public function logout()
     {
         auth('api_clients')->logout();
-
-        return response()->json('Success');
+        
+         return response()->json('Success');
     }
     /*
  public function login()
