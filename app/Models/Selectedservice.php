@@ -45,6 +45,7 @@ class Selectedservice extends Model
         'answer_speed',
         'call_file',
         'rate_state',
+        'call_duration',
     ];
     //$appends
     protected $hidden = ['form_state_conv', 'answer_state_conv', 'comment_state_conv', 'rate_state_conv', 'file_path'];

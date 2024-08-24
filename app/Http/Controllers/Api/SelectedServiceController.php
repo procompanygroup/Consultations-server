@@ -1047,6 +1047,16 @@ class SelectedServiceController extends Controller
         DB::transaction(function () use($formdata) {
             $selectedservice_id= $formdata ['selectedservice_id'];
             $minutes=$formdata ['minutes'];
+// convert seconds to minute and get round up for cost 
+            $real_minutes=$minutes/60;
+            //round down
+            $floor_minutes= floor($real_minutes);
+            //get remain
+            $seconds=$minutes % 60;
+            $str_minutes= ((string)$floor_minutes).":".$seconds;
+            //round up
+            $cost_minutes= ceil($real_minutes);
+//
             $selectedservice=Selectedservice::find($selectedservice_id);
             if( auth()->user()->id==$selectedservice->client_id){           
             $client_id =  $selectedservice->client_id;
@@ -1062,14 +1072,14 @@ class SelectedServiceController extends Controller
  $callcostobj=$settctrlr->findbyname('call_cost');
  $minutecost=(float) $callcostobj->value;
  //  
-                    $call_cost= $minutes*$minutecost;
-                    if ($client->minutes_balance < $minutes) {
+                    $call_cost= $cost_minutes*$minutecost;
+                    if ($client->minutes_balance < $cost_minutes) {
                         //contunie with client minute balance as cost                
                         $call_cost=$client->minutes_balance*$minutecost;
                     }
                          //save selected service                     
                         $selectedservice->points = $call_cost;    
-                        $selectedservice->cost_type = $minutes;                    
+                        $selectedservice->call_duration = $str_minutes;                    
                         $selectedservice->status = "done";
                         $selectedservice->expert_cost =$expertService->expert_cost;//percent
                        // $newObj->cost_type = $expertService->cost_type;
@@ -1079,7 +1089,7 @@ class SelectedServiceController extends Controller
                         $selectedservice->save();
                         $this->id = $selectedservice->id;                   
                         // decrease client balance
-                        $client->minutes_balance = $client->minutes_balance -$minutes;
+                        $client->minutes_balance = $client->minutes_balance -$cost_minutes;
                         $client->save();
                         //create point transfer row
                         $pointtransfer = new Pointtransfer();
