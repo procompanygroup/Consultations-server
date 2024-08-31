@@ -45,7 +45,7 @@
 
                                     <th class="border-bottom-0">{{ __('general.user_name') }}</th>
                                     <th class="border-bottom-0">{{ __('general.mobile') }}</th>
-
+                                    <th class="border-bottom-0">الحالة</th>
                                     <th class="border-bottom-0">{{ __('general.action') }}</th>
 
                                 </tr>
@@ -54,14 +54,16 @@
                                 @foreach ($clients as $client)
                                     <tr>
 
-                                        <td>{{ $client->user_name }}</td>
-                                        <td>{{ $client->mobile }}</td>
+                                        <td>{{ $client['client']->user_name }}</td>
+                                        <td>{{ $client['client']->mobile }}</td>
+                                        <td class="text-center">@if (  $client['status']=='new')
+                                            <i class="fa fa-circle "  style="color: #22c03c" aria-hidden="true"></i>@endif </td>
                                       <td>
-                                        <a href="{{url('admin/message/client', $client->id)}}"  class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>                              
-                                        <form action="{{url('admin/message/destroyclient', $client->id)}}" method="POST" class="d-inline">
+                                        <a href="{{url('admin/message/client', $client['client']->id)}}"  class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>                              
+                                        <form action="{{url('admin/message/destroyclient', $client['client']->id)}}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button" id="del-{{$client->id}}" class="btn btn-danger btn-sm delete" data-effect="effect-scale" data-toggle="modal" data-target="#modaldemo8"   title="حذف المحادثة"><i class="fa fa-trash"></i></button>
+                                            <button type="button" id="del-{{$client['client']->id}}" class="btn btn-danger btn-sm delete" data-effect="effect-scale" data-toggle="modal" data-target="#modaldemo8"   title="حذف المحادثة"><i class="fa fa-trash"></i></button>
                                         </form>
                                     
                                     </td>

@@ -18,6 +18,7 @@ class Message extends Model
         'is_active',
         'user_id',
         'status',
+        'title',
     ];
 
     public function client(): BelongsTo

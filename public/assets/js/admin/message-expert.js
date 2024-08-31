@@ -143,6 +143,7 @@ $(document).ready(function () {
 					$(data.messages).each(function(index, item) {
 						var $divclon = $('#client-msg').clone().prop('id',item.id).show();					 
 						$divclon.find('.text-muted').html(item.create_time+'<br>'+item.create_date);
+						$divclon.find('.msg-title').html(item.title);
 						$divclon.find('.msg-content').html(item.content);					 
 						$('.chat-messages').append($divclon); 
 				});							 

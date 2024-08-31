@@ -84,7 +84,7 @@
                                    
                                                     </div>
                                                     <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                                                        <div class="font-weight-bold mb-1">{{ $expert->full_name }}</div><p>{{  $message->content }}</p></div>
+                                                        <div class="font-weight-bold mb-1">{{ $expert->full_name }}</div><p ><strong>{{  $message->title }}</strong></p><p>{{  $message->content }}</p></div>
                                                 </div>
                                                 @endif
                                                
@@ -141,7 +141,7 @@
             <div class="text-muted small text-nowrap mt-2 text-center"></div>
         </div>
         <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-            <div class="font-weight-bold mb-1">{{ $expert->full_name }}</div><p class="msg-content"></p></div>
+            <div class="font-weight-bold mb-1">{{ $expert->full_name }}</div><p ><strong class="msg-title"></strong></p><p class="msg-content"></p></div>
     </div>
 @endsection
 @section('css')

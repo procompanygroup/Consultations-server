@@ -46,7 +46,7 @@
 												<th class="border-bottom-0">{{ __('general.user_name') }}</th>
 												<th class="border-bottom-0">الاسم الكامل</th>
 												<th class="border-bottom-0">{{ __('general.email') }}</th>
-											
+												<th class="border-bottom-0">الحالة</th>
                                                 <th class="border-bottom-0">{{ __('general.action') }}</th>
 
 											</tr>
@@ -54,17 +54,18 @@
 										<tbody>
 											@foreach ($experts as $expert)
 											<tr>
-
-												<td>{{$expert->user_name }}</td>
-												<td>{{$expert->full_name }}</td>
-												<td>{{ $expert->email }}</td>
-												
+												 
+												<td>{{$expert['expert']->user_name }}</td>
+												<td>{{$expert['expert']->full_name }}</td>
+												<td>{{ $expert['expert']->email }}</td>
+												<td class="text-center">@if ( $expert['status']=='new')
+													<i class="fa fa-circle" style="color: #22c03c" aria-hidden="true"></i>@endif
                                                 <td>
-													<a href="{{url('admin/message/expert', $expert->id)}}"  class="btn btn-success btn-sm"  ><i class="fa fa-edit"></i></a> 
-													<form action="{{url('admin/message/destroyexpert', $expert->id)}}" method="POST" class="d-inline">
+													<a href="{{url('admin/message/expert', $expert['expert']->id)}}"  class="btn btn-success btn-sm"  ><i class="fa fa-edit"></i></a> 
+													<form action="{{url('admin/message/destroyexpert', $expert['expert']->id)}}" method="POST" class="d-inline">
 														@csrf
 														@method('DELETE')
-														<button type="button" id="del-{{$expert->id}}" class="btn btn-danger btn-sm delete" data-effect="effect-scale" data-toggle="modal" data-target="#modaldemo8"   title="حذف المحادثة"><i class="fa fa-trash"></i></button>
+														<button type="button" id="del-{{$expert['expert']->id}}" class="btn btn-danger btn-sm delete" data-effect="effect-scale" data-toggle="modal" data-target="#modaldemo8"   title="حذف المحادثة"><i class="fa fa-trash"></i></button>
 													</form>
                                                 </td>
 

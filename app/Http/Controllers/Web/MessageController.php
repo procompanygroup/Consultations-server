@@ -23,19 +23,65 @@ class MessageController extends Controller
   public $oldestday = 30;
   public function clients()
   {
-    $list = Client::where('is_active', 1)->get();
-    return view('admin.message.clients', ['clients' => $list]);
+    $Dblist = Client::where('is_active', 1)->get();
+    $List = $Dblist->map(function ($client)   {
+      $status=$this->lastmsgsbyclient_id($client->id);
+      return    ['client'=>$client,
+                 'status'=>$status,      
+      ]; 
+    });
+    return view('admin.message.clients', ['clients' => $List]);
     //return response()->json($users);
 
   }
+
+  public function lastmsgsbyclient_id($id){
+    $nowsub = Carbon::now()->subDays($this->oldestday);
+    $message = Message::where('client_id', $id)
+    ->whereDate('created_at', '>=', $nowsub)->orderByDesc('created_at')->first();
+    $status='';
+      if($message){
+        if($message->status=='c'){
+          $status='new';
+        }else{
+          $status='answerd';
+        }      
+      }else{
+        $status='answerd';
+      }
+      return  $status;
+  }
+
+
   public function experts()
   {
-    $list = Expert::where('is_active', 1)->get();
-    return view('admin.message.experts', ['experts' => $list]);
+    $Dblist = Expert::where('is_active', 1)->get();
+    $List = $Dblist->map(function ($expert)   {
+      $status=$this->lastmsgsbyexpert_id($expert->id);
+      return    ['expert'=>$expert,
+                 'status'=>$status,      
+      ]; 
+    });
+    return view('admin.message.experts', ['experts' =>$List]);
     //return response()->json($users);
 
   }
-
+public function lastmsgsbyexpert_id($id){
+    $nowsub = Carbon::now()->subDays($this->oldestday);
+    $message = Message::where('expert_id', $id)
+    ->whereDate('created_at', '>=', $nowsub)->orderByDesc('created_at')->first();
+    $status='';
+      if($message){
+        if($message->status=='e'){
+          $status='new';
+        }else{
+          $status='answerd';
+        }      
+      }else{
+        $status='answerd';
+      }
+      return  $status;
+  }
   public function client($id)
   {
     $client=$this->msgsbyclient_id($id);
@@ -65,6 +111,11 @@ class MessageController extends Controller
     } else {
 
       $newObj = new Message();
+      $title="";
+      if(isset($formdata['title'])){
+        $title=$formdata['title'];
+      }
+      $newObj->title = $title;
       $newObj->content = $formdata['message'];
       $newObj->client_id = $formdata['id'];
       // $newObj->expert_id = $formdata['expert_id'];
@@ -76,7 +127,8 @@ class MessageController extends Controller
         'id'=> $newObj->id,
         'create_date' => $newObj->created_at->format('d/m/Y'),
         'create_time' => $newObj->created_at->format('H:m'),
-        'content' => $newObj->content,
+        'content' => $newObj->content,       
+        'title' => $newObj->title,
         'res' => 'ok'
       ];
 
@@ -166,6 +218,7 @@ class MessageController extends Controller
           'client_id' => $message->client_id,
           'create_date' => $message->created_at->format('d/m/Y'),
           'create_time' => $message->created_at->format('H:m'),
+          'title' => $message->title,
           'content' => $message->content,
           'status' => $message->status,
           'sender_name' => __('general.manage'),
@@ -177,6 +230,7 @@ class MessageController extends Controller
           'client_id' => $message->client_id,
           'create_date' => $message->created_at->format('d/m/Y'),
           'create_time' => $message->created_at->format('H:m'),
+          'title' => $message->title,
           'content' => $message->content,
           'status' => $message->status,
           'sender_name' => $client->user_name,
@@ -193,7 +247,7 @@ class MessageController extends Controller
    $msg_id= $formdata['msg_id'];
    $client_id= $formdata['client_id'];   
    $messages=Message::where('client_id',$client_id)->where('id','>',$msg_id)->whereNull('user_id')->
-     select( 'id','content',
+     select( 'id','content','title',
      'client_id',
      'expert_id',
     // 'is_active',
@@ -219,6 +273,7 @@ class MessageController extends Controller
           'create_date' => $message->created_at->format('d/m/Y'),
           'create_time' => $message->created_at->format('H:m'),
           'content' => $message->content,
+          'title' => $message->title,
           'status' => $message->status,
           // 'sender_name' => $client->user_name,
           // 'sender_image' => $client->image_path,
@@ -272,7 +327,13 @@ class MessageController extends Controller
     } else {
 
       $newObj = new Message();
+      $title="";
+      if(isset($formdata['title'])){
+        $title=$formdata['title'];
+      }
+      $newObj->title = $title;
       $newObj->content = $formdata['message'];
+
       $newObj->expert_id = $formdata['id'];
    
       $newObj->is_active = 1;
@@ -283,6 +344,7 @@ class MessageController extends Controller
         'id'=> $newObj->id,
         'create_date' => $newObj->created_at->format('d/m/Y'),
         'create_time' => $newObj->created_at->format('H:m'),
+        'title' => $newObj->title,
         'content' => $newObj->content,
         'res' => 'ok'
       ];
@@ -366,6 +428,7 @@ class MessageController extends Controller
           'create_date' => $message->created_at->format('d/m/Y'),
           'create_time' => $message->created_at->format('H:m'),
           'content' => $message->content,
+          'title' => $message->title,
           'status' => $message->status,
           'sender_name' => __('general.manage'),
           'sender_image' => $manage_img,
@@ -377,6 +440,7 @@ class MessageController extends Controller
           'create_date' => $message->created_at->format('d/m/Y'),
           'create_time' => $message->created_at->format('H:m'),
           'content' => $message->content,
+          'title' => $message->title,
           'status' => $message->status,
           'sender_name' => $expert->full_name,
           'sender_image' => $expert->image_path,
@@ -392,7 +456,7 @@ class MessageController extends Controller
    $msg_id= $formdata['msg_id'];
    $expert_id= $formdata['expert_id'];   
    $messages=Message::where('expert_id',$expert_id)->where('id','>',$msg_id)->whereNull('user_id')->
-     select( 'id','content',
+     select( 'id','content','title',
      'client_id',
      'expert_id',
     // 'is_active',
@@ -417,7 +481,9 @@ class MessageController extends Controller
           'expert_id' => $message->expert_id,
           'create_date' => $message->created_at->format('d/m/Y'),
           'create_time' => $message->created_at->format('H:m'),
+          'title' => $message->title,
           'content' => $message->content,
+      
           'status' => $message->status,
           // 'sender_name' => $client->user_name,
           // 'sender_image' => $client->image_path,
