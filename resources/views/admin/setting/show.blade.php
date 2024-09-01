@@ -371,7 +371,7 @@
                         <div class="row">
                             <div class="form-group d-flex justify-content-between col-sm-11">
                                 <input type="text" class="form-control " id="facebook_link"
-                                    placeholder=">رابط حساب Facebook" name="facebook_link"
+                                    placeholder="رابط حساب Facebook" name="facebook_link"
                                     value="{{ $facebook_link->value }}">
 
                             </div>
