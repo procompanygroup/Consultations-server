@@ -21,11 +21,7 @@ class SettingController extends Controller
     }
     public function getkeys()
     {
-             $list =Setting::select("id",
-             "name",
-             "value",            
-             "ar_name" 
-          )->get();
+           
         $secret_key=$this->findbyname('secret_key');
         $publishable_key=$this->findbyname('publishable_key');
     //    return view('admin.setting.show', ['expert_percent'=>$expert_percent,'expert_service_points'=>$expert_service_points]);
@@ -33,6 +29,23 @@ class SettingController extends Controller
             ['secret_key' => $secret_key->value
         ,'publishable_key'=> $publishable_key->value] );
     }
+    public function getlinks()
+    { 
+        $gplay_link=$this->findbyname('gplay_link');
+        $appstor_link=$this->findbyname('appstor_link');
+        $x_link=$this->findbyname('x_link');
+        $facebook_link=$this->findbyname('facebook_link');
+    //    return view('admin.setting.show', ['expert_percent'=>$expert_percent,'expert_service_points'=>$expert_service_points]);
+        return response()->json(
+            [
+                'gplay_link' => $gplay_link->value,
+                'appstor_link' => $appstor_link->value,
+                'x_link' => $x_link->value,
+                'facebook_link' => $facebook_link->value,
+        
+        ] );
+    }
+    
     /**
      * Show the form for creating a new resource.
      */

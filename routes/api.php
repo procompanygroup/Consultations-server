@@ -76,6 +76,8 @@ Route::middleware('authExpert:api')->group(function () {
     Route::post('/viewall', [serviceController::class, 'index']); 
     Route::post('/getinputform', [serviceController::class, 'getinputserviceform']); 
 });
+
+Route::post('/getlinks', [SettingController::class, 'getlinks']);
 });
 });
 //Route::get('getloguser', [ClientController::class, 'getloguser']);
@@ -139,8 +141,9 @@ Route::middleware('authClient:api_clients')->group(function () {
             Route::post('/getkeys', [SettingController::class, 'getkeys']); 
       
         });
+        Route::post('/getlinks', [SettingController::class, 'getlinks']);
     });
-  
+
 });
 
 /*
