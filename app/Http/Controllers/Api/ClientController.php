@@ -645,7 +645,7 @@ $expert_uid=$expert_id;
             $expertService= ExpertService::where('expert_id',$expert_id )->whereHas('service', function ($query)  {
                 $query->where('is_callservice', 1);         
               })->first(); 
-            if( $client_minutebalance<1 ){
+            if( $client_minutebalance<=0 ){
                 return response()->json('insufficient_balance', 401);
             }else{                
           //add sel service record
@@ -656,7 +656,7 @@ $expert_uid=$expert_id;
     // }else{
     //     $expiretime=$client_minutebalance*60;
     // }
-    $expiretime=$client_minutebalance*60;
+    $expiretime=($client_minutebalance+1)*60;
        $channel = Str::lower(Str::random(20));
            $agorc = new AgoraTokenController();
            // $calltoken ="";

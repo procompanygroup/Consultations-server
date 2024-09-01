@@ -23,6 +23,7 @@ use App\Http\Requests\Web\Expert\UpdateStatusRequest;
 
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Api\StorageController;
+use App\Http\Controllers\Web\NotifyClientController;
 class ExpertController extends Controller
 {
  // public $path = 'images/experts'; 
@@ -66,7 +67,12 @@ class ExpertController extends Controller
     } else {
            Expert::find($id)->update([      
         'status'=>  $formdata['status'],
-            ]);       
+            ]);  
+           if($formdata['status']=='a'){
+//send notification 
+ $notifyctrlr=new NotifyClientController();
+ $notifyctrlr->send_available_to_clients($id,'other');
+           }      
       //save image
       return redirect()->to(url('admin/expertstatus'));    
     }

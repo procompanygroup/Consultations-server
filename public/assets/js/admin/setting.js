@@ -44,6 +44,18 @@ $(document).ready(function () {
 			e.preventDefault();
 			sendform('#call_cost_form');
 			});	
+
+			//
+
+			$('#btn_app_link').on('click', function (e) {
+				e.preventDefault();
+				sendform('#applink_form');
+				});
+				//
+				$('#btn_social_link').on('click', function (e) {
+				e.preventDefault();
+				sendform('#social_form');
+				});
 	function ClearErrors() {
 
 		$('.parsley-required').html('');

@@ -40,7 +40,7 @@ use App\Http\Requests\Api\Expert\GetNotifyRequest;
 use App\Http\Requests\Api\Expert\ChangeAvailableRequest;
 
 use App\Models\ClientExpert;
-
+use App\Http\Controllers\Web\NotifyClientController;
 class ExpertController extends Controller
 {
 
@@ -1889,6 +1889,11 @@ $notify=0;
                     'is_available' => $formdata["is_available"],
                 ]
             );
+            if($formdata['is_available']==1){
+                //send notification 
+                 $notifyctrlr=new NotifyClientController();
+                 $notifyctrlr->send_available_to_clients( $expert_id,'call');
+                           }  
             return response()->json("ok");
 
         }

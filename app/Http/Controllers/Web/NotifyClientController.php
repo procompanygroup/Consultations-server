@@ -192,4 +192,61 @@ class NotifyClientController extends Controller
     {
         //
     }
+
+    public function send_available_to_clients($expert_id,$type)//from panel
+    {
+      
+     $expert=Expert::find($expert_id);
+     $title ='';
+     $body ='';
+     if($type=='other'){
+      $title = __('general.14otherserviceavailable_title',['Expertname' => $expert->full_name]);
+      $body = __('general.14otherserviceavailable__body',['Expertname' => $expert->full_name]);
+     }else{
+      $title = __('general.15callserviceavailable_title',['Expertname' => $expert->full_name]);
+      $body = __('general.15callserviceavailable__body',['Expertname' => $expert->full_name]);
+     }
+     
+        $newObj = new NotifyClient();
+        $newObj->title = $title ;
+        $newObj->body =  $body ;
+       
+        $newObj->expert_id =  $expert_id;
+         
+        $newObj->save();
+       
+        //create rows in noti user table 
+        $notification_id = $newObj->id;
+        //expert
+       
+        //client
+         
+          $clientids = Client::whereHas('clientsexperts', function ($query) use($expert_id) {
+              $query->where('expert_id', $expert_id)->where('notify',1);         
+            })->where('is_active', 1)->select('id')->get();
+          $now = Carbon::now();
+          $insertList = $clientids->map(function ($notifyuser) use ($notification_id, $now) {
+            return [
+              'client_id' => $notifyuser->id,
+              'notify_client_id' => $notification_id,
+              'isread' => 0,
+              'created_at' => $now,
+              'updated_at' => $now,
+                ];
+          });
+  
+          NotifyClientState::insert($insertList->toArray());
+       
+        //send firebase notify
+  
+          //   $clienttokenList = User::where('is_active', 1)->whereNotNull('token')->pluck('token')->all();
+          $clienttokenList = $this->clienttokenwithid($newObj);
+  
+          $this->send_fire_notify_from_panel($newObj, $clienttokenList);
+         //$boolres= Str::contains( $type,'form') ;     
+        return response()->json("ok");
+  
+    
+    }
+  
 }

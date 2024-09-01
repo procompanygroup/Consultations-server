@@ -184,7 +184,10 @@ return [
 '12addminute_title'=>'اضافة دقائق من المتجر',
 '12addminute_body'=>'تمت اضافة'.' '. ':Points'.' '.'دقيقة الى رصيدك',
 '13adminmsg_title'=>'رسالة من الادارة',
- 
+ '14otherserviceavailable_title'=>'الخبير'.' '.':Expertname',
+'14otherserviceavailable__body'=>'الخبير'.' '.':Expertname'.' '.'متاح الان لاستلام الطلبات',
+'15callserviceavailable_title'=>'الخبير'.' '.':Expertname',
+'15callserviceavailable__body'=>'الخبير'.' '.':Expertname'.' '.'متاح الان للاتصال المباشر',
 ];
 /*
 
