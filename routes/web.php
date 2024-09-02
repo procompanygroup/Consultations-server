@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\InputController;
 use App\Http\Controllers\Web\OrderController;
@@ -38,11 +39,9 @@ use  App\Http\Controllers\Web\NotifyClientController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', function () {
-    // return view('welcome');
-    return redirect()->route('login');
-});
+ 
+  Route::get('/', [HomeController::class, 'index']);
+ 
 
 
 
