@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>تطبيق روح </title>
-
+    <link rel="icon" href="{{URL::asset('assets/site/img/logo-title.svg')}}" type="image/x-icon">
    
 <!--- Style css -->
 <link href="{{URL::asset('assets/site/css/style.css')}}" rel="stylesheet">
