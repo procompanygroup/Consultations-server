@@ -177,7 +177,7 @@
 					</li>
                     <li class="slide">
 						<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}"><i class="fa fa-paper-plane  side-menu__icon" style="color:#5b6e88;font-size:18px " aria-hidden="true"></i>
-							<span class="side-menu__label">التواصل المباشر</span><i class="angle fe fe-chevron-down"></i></a>
+							<span class="side-menu__label">المساعدة والدعم</span><i class="angle fe fe-chevron-down"></i></a>
 						<ul class="slide-menu">
 							<li><a class="slide-item"  href="/admin/message/clients">العملاء</a></li>
 							<li><a class="slide-item"  href="/admin/message/experts">الخبراء</a></li> 

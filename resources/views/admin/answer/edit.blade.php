@@ -53,7 +53,9 @@
                                 fetchpriority="high" decoding="async" data-nimg="1" style="width:20px;height:20px"
                                 src="{{$sharpicon}}">
                             {{ ' ' . __('general.order num') }}</span>{{ ' ' . $selectedservice->order_num }}</p>
-
+                            <p><span class="badge badge-light badge-lg px-3 py-2">
+                                <img alt="Icon SVG Vector Icon" fetchpriority="high" decoding="async" data-nimg="1" style="width:20px;height:20px"
+                                src="{{$sharpicon}}"> تاريخ الطلب </span>{{ ' ' . $selectedservice->created_at }}</p>
                     <p><span class="badge badge-light badge-lg px-3 py-2"><img alt="User Icon SVG Vector Icon"
                                 fetchpriority="high" decoding="async" data-nimg="1" style="width:20px;height:20px"
                                 src="{{ $selectedservice->service->svg_path }}">

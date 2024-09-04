@@ -49,11 +49,10 @@
 											 
 												<th class="border-bottom-0">العميل</th>
 												<th class="border-bottom-0">{{ __('general.service') }}</th>
-												<th class="border-bottom-0">{{ __('general.expert') }}</th>
-
-												<th class="border-bottom-0">التقييم</th>
+												<th class="border-bottom-0">{{ __('general.expert') }}</th>												
+												<th class="border-bottom-0">التقييم</th>												
                                                 <th class="border-bottom-0">{{ __('general.status') }}</th>
-												
+												<th class="border-bottom-0">التاريخ</th>
                                                 <th class="border-bottom-0">{{ __('general.action') }}</th>
 											</tr>
 										</thead>
@@ -66,10 +65,10 @@
 												<td>{{$selectedservice->client->user_name  }}</td>
 												<td>{{$selectedservice->service->name }}</td>
 												<td>{{ $selectedservice->expert->full_name }}</td>
-												 
+												
 												<td style="width: 100px;"><div class="my-rating-8" data-rating="{{ $selectedservice->rate}}"></div></td>
                                                 <td>{{ $selectedservice->rate_state_conv}}</td>
-												
+												<td>{{ $selectedservice->created_at }}</td>
                                                 <td>
 													@if ($selectedservice->rate_state=='wait')
 													<button type="button"	id="{{ $selectedservice->id }}" class="btn btn-success btn-sm rate_btn" data-effect="effect-scale" data-toggle="modal" data-target="#modaldemo8" title="موافقة او رفض"><i class="fa fa-edit"></i></button>

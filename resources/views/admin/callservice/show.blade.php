@@ -50,6 +50,7 @@
 											
                                                 <th class="border-bottom-0">{{ __('general.client') }}</th>
 												<th class="border-bottom-0">مدة الاتصال /ثانية:دقيقة/</th>
+												<th class="border-bottom-0">التاريخ</th>
                                                 <th class="border-bottom-0">{{ __('general.action') }}</th>
 											</tr>
 										</thead>
@@ -61,7 +62,8 @@
 												<td>{{ $selectedservice->expert->full_name }}</td>
                                                 <td>{{ $selectedservice->client->user_name }}</td>
 												<td>{{ $selectedservice->call_duration==null?'-': $selectedservice->call_duration }}</td>
-                                                <td>
+                                                <td>{{ $selectedservice->created_at }}</td>
+												<td>
 													<a href="{{url('admin/call',$selectedservice->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.detail') }}"><i class="fa fa-edit"></i></a> 
                                                 </td>
 
