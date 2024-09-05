@@ -60,7 +60,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
    
     
     Route::middleware('role.admin:admin')->group(function () {
-
+        Route::get('/getlastorders/{id}', [OrderController::class, 'getlastorders']) ;
         // Route::prefix('user')->group(function () {
         //     Route::get('', [UserController::class, 'index'])->name('admin.user.show');
         //     Route::get('/add', [UserController::class, 'create']);

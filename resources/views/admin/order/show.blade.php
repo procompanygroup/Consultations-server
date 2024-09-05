@@ -26,19 +26,18 @@
 @section('content')
 				<!-- row opened -->
 				<div class="row row-sm">
-
-
 					<!--div-->
 					<div class="col-xl-12">
 						<div class="card mg-b-20">
 							<div class="card-header pb-0">
 								<div  >
 									<h4 class="card-title mg-b-0">{{ __('general.orders') }}</h4>
+								 
 								 	</div>
 									</div>
 							<div class="card-body">
 								<div class="table-responsive">
-									<table id="example" class="table text-md-nowrap">
+									<table id="order-table" class="table text-md-nowrap">
 										<thead>
 											<tr>
 												<th class="border-bottom-0">{{ __('general.order num') }}</th>

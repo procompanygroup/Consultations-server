@@ -149,7 +149,7 @@
     <script>
         var emptyimg = "{{ URL::asset('assets/img/photos/1.jpg') }}";
 
-        $('#expertdate').datepicker("option", "altFormat", "yy-mm-dd");
+       
 
         var lightbox = $('.gallery a').simpleLightbox({
             // default source attribute
@@ -232,8 +232,7 @@
             disableRightClick: false,
 
             // disable page scroll
-            disable < a href = "https://www.jqueryscript.net/tags.php?/Scroll/" > Scroll < /a>: true,
-
+      
             // show an alert if image was not found
             alertError: true,
 

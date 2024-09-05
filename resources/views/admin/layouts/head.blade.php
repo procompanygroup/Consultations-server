@@ -26,6 +26,10 @@
 <link href="{{URL::asset('assets/css-rtl/skin-modes.css')}}" rel="stylesheet">
 <!--Internal   Notify -->
 <link href="{{URL::asset('assets/plugins/notify/css/notifIt.css')}}" rel="stylesheet">
+
+
+<link href="{{URL::asset('assets/plugins/node-waves/waves.css')}}" rel="stylesheet">
+<link href="{{URL::asset('assets/plugins/animate-css/animate.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/css/admin/main.css')}}" rel="stylesheet">
 <style>
     body {

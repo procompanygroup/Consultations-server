@@ -168,11 +168,11 @@
 							<span class="side-menu__label"> {{ __('general.manage orders') }}</span><i class="angle fe fe-chevron-down"></i></a>
 						<ul class="slide-menu">
                             <li><a class="slide-item"  href="{{ url('admin/call') }}">الاتصال المباشر</a></li>
-							<li><a class="slide-item"  href="{{ route('order.index') }}">{{ __('general.orders') }}</a></li>
+							<li><a class="slide-item"  href="{{ route('order.index') }}">{{ __('general.orders') }}<span id="orders-num" class="badge badge-success side-badge"></span></a></li>
 
-							<li><a class="slide-item"  href="{{ route('answer.index') }}">{{ __('general.answers') }}</a></li>
-							<li><a class="slide-item"  href="{{ route('comment.index') }}">{{ __('general.comments') }}</a></li>
-							<li><a class="slide-item"  href="{{ route('rate.index') }}">التقييمات</a></li>
+							<li><a class="slide-item"  href="{{ route('answer.index') }}">{{ __('general.answers') }}<span id="answers-num" class="badge badge-success side-badge"></span></a></li>
+							<li><a class="slide-item"  href="{{ route('comment.index') }}">{{ __('general.comments') }}<span id="comments-num" class="badge badge-success side-badge"></span></a></li>
+							<li><a class="slide-item"  href="{{ route('rate.index') }}">التقييمات<span id="rates-num" class="badge badge-success side-badge"></span></a></li>
                         </ul>
 					</li>
                     <li class="slide">

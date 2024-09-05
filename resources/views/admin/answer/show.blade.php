@@ -40,7 +40,7 @@
 								 
 							<div class="card-body">
 								<div class="table-responsive">
-									<table id="example" class="table text-md-nowrap">
+									<table id="order-table" class="table text-md-nowrap">
 										<thead>
 											<tr>
 												<th class="border-bottom-0">{{ __('general.order num') }}</th>
