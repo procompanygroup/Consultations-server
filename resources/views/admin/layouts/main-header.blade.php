@@ -31,7 +31,7 @@
 										</div>
 	
 									</div>
-									<div class="main-notification-list Notification-scroll ps" id="notify-orders-container">
+									<div class="main-notification-list chat-scroll  ps" id="notify-orders-container">
 									 
 									 
 									 
