@@ -68,13 +68,13 @@ class NotifyController extends Controller
                         "body" => $body,
 
                     ],
-                   
+                   "data" => $dataArr,
                     "apns" => [
                         "payload" => [
                             "aps" => [
                                 "sound" => "default"
                             ],
-"data" => $dataArr,
+
                         ]
                     ]
                 ]
