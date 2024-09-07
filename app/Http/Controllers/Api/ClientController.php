@@ -669,13 +669,13 @@ $expert_uid=$expert_id;
             $title = __('general.11call_title');
             $body = __('general.11call_body', ['Clientname' => $client->user_name]);
             $calldata = [
-                'expert_uid' => $expert_uid,
-                'client_id' => $client_id,
+                'expert_uid' => strval($expert_uid),
+                'client_id' => strval($client_id),
                 'channel' => $channel,
                 'expert_calltoken' =>  $expert_calltoken,
                 'client_image' => $client->image_path,
                 'client_name' => $client->user_name,
-                'selectedservice_id'=>$selectedservice_id,
+                'selectedservice_id'=>strval($selectedservice_id),
             ];
        $notctrlr->send_autocall_notify($title, $body, 'auto', 'call', '', '', $client_id, $expert_id, 0, 0, $calldata);
             return response()->json(

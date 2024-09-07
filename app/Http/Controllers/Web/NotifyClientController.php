@@ -12,7 +12,8 @@ use App\Models\NotifyClientState;
 
 use App\Http\Requests\Web\Notifyme\StoreNotifymeRequest;
 use Illuminate\Support\Facades\Validator;
-use Kutia\Larafirebase\Facades\Larafirebase;
+//use Kutia\Larafirebase\Facades\Larafirebase;
+use App\Http\Controllers\Web\NotifyController;
 class NotifyClientController extends Controller
 {
     /**
@@ -120,17 +121,25 @@ class NotifyClientController extends Controller
 
     $res = "";
     if ($tokenList) {
+      $notctrlr=new NotifyController();
+     
       foreach ($tokenList as $tokenrow) {
-        $tokenarr = [$tokenrow['token']];
-        $res = Larafirebase::withTitle($notify->title)
-          ->withBody($notify->body)
-          ->withSound('default')
-          ->withPriority('high')
-          ->withAdditionalData([
-            'id' => $tokenrow['id'],
-            'notes' => 'notifyme',
-          ])
-          ->sendMessage($tokenarr);
+        $data=[ 
+          'id' =>strval($tokenrow['id']),
+          'notes' => 'notifyme',
+        ];
+        $res =    $notctrlr->send_to_fcm($tokenrow['token'],$notify->title,$notify->body,$data);
+        
+        // $tokenarr = [$tokenrow['token']];
+        // $res = Larafirebase::withTitle($notify->title)
+        //   ->withBody($notify->body)
+        //   ->withSound('default')
+        //   ->withPriority('high')
+        //   ->withAdditionalData([
+        //     'id' => $tokenrow['id'],
+        //     'notes' => 'notifyme',
+        //   ])
+        //   ->sendMessage($tokenarr);
  
 
       }

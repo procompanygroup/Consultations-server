@@ -7,7 +7,7 @@ use App\Models\NotificationUser;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Kutia\Larafirebase\Facades\Larafirebase;
+//use Kutia\Larafirebase\Facades\Larafirebase;
 use App\Models\User;
 use App\Models\Expert;
 use App\Models\Client;
@@ -19,7 +19,7 @@ use Illuminate\Support\Str;
 use App\Http\Requests\Api\Client\NotifyListRequest;
 use App\Http\Requests\Api\Client\SetToReadRequest;
 use App\Http\Requests\Api\Client\NotifyByIdRequest;
-
+use App\Http\Controllers\Web\NotifyController;
 //use Notification;
 use App\Models\Notification;
 
@@ -33,30 +33,30 @@ class NotificationController extends Controller
     auth()->user()->update(['token' => $request->token]);
     return response()->json(['Token Saved!']);
   }
-  public function sendNotification(Request $request)
-  {
-    $strgCtrlr = new StorageController();
-    $defaultimg = $strgCtrlr->DefaultPath('image');
-    $defaultsvg = $strgCtrlr->DefaultPath('icon');
+  // public function sendNotification(Request $request)
+  // {
+  //   $strgCtrlr = new StorageController();
+  //   $defaultimg = $strgCtrlr->DefaultPath('image');
+  //   $defaultsvg = $strgCtrlr->DefaultPath('icon');
 
-    $tokenList = User::whereNotNull('token')->pluck('token')->all();
-    return Larafirebase::withTitle($request->title)
-      ->withBody($request->body)
-      ->withImage($defaultimg)
-      ->withIcon($defaultsvg)
-      ->withSound('default')
-      ->withClickAction('https://www.google.com')
-      ->withPriority('high')
-      ->withAdditionalData([
-        'color' => '#000000',
-        'badge' => 0,
-        'username' => "Ahmad",
-        'image' => $defaultimg,
-      ])
-      //  ->sendNotification($tokenList);
-      ->sendMessage($tokenList);
+  //   $tokenList = User::whereNotNull('token')->pluck('token')->all();
+  //   return Larafirebase::withTitle($request->title)
+  //     ->withBody($request->body)
+  //     ->withImage($defaultimg)
+  //     ->withIcon($defaultsvg)
+  //     ->withSound('default')
+  //     ->withClickAction('https://www.google.com')
+  //     ->withPriority('high')
+  //     ->withAdditionalData([
+  //       'color' => '#000000',
+  //       'badge' => 0,
+  //       'username' => "Ahmad",
+  //       'image' => $defaultimg,
+  //     ])
+  //     //  ->sendNotification($tokenList);
+  //     ->sendMessage($tokenList);
 
-  }
+  // }
   public function sendbytoken(Request $request)
   {
   
@@ -198,19 +198,19 @@ class NotificationController extends Controller
         NotificationUser::insert($insertList->toArray());
       }
       //send firebase notify
-
+$res='';
       if (Str::contains($side, 'expert')) {
         //  $experttokenList = Expert::where('is_active', 1)->whereNotNull('token')->pluck('token')->all();
 
         //   $list= $this->clienttokenwithid( $notify);
         $experttokenList = $this->experttokenwithid($newObj);
-        $this->send_fire_notify_from_panel($newObj, $experttokenList);
+        $res=  $this->send_fire_notify_from_panel($newObj, $experttokenList);
       }
       if (Str::contains($side, 'client')) {
         //   $clienttokenList = User::where('is_active', 1)->whereNotNull('token')->pluck('token')->all();
-        $clienttokenList = $this->clienttokenwithid($newObj);
+         $clienttokenList = $this->clienttokenwithid($newObj);
 
-        $this->send_fire_notify_from_panel($newObj, $clienttokenList);
+        $res=  $this->send_fire_notify_from_panel($newObj, $clienttokenList);
       }    //$boolres= Str::contains( $type,'form') ;     
       return response()->json("ok");
 
@@ -390,35 +390,30 @@ class NotificationController extends Controller
       $expert = Expert::find($notifyuser->expert_id);
       if ($expert) {
         if ($expert->is_active == 1 && (!is_null($expert->token) && $expert->token != '')) {
-          $tokenList = [$expert->token];
 
-          $res = Larafirebase::withTitle($notify->title)
-            ->withBody($notify->body)
-            // ->withImage($defaultimg)
-            //  ->withIcon($defaultsvg)
-            ->withSound('default')
-            // ->withClickAction('https://www.google.com')
-            ->withPriority('high')
-            ->withAdditionalData([
-              // 'date'=>$notifyuser->created_at,
-              'id' => $notifyuser->id,
-              // 'image' => $defaultimg,
-            ])
-            ->sendMessage($tokenList);
-          return $res;
-          //   return Larafirebase::withTitle($notify->title)
+          $notctrlr=new NotifyController();
+          $data=[ 'id' =>strval($notifyuser->id)];
+          $res =    $notctrlr->send_to_fcm($expert->token,$notify->title,$notify->body,$data);
+          
+
+          // $tokenList = [$expert->token];
+          // $res = Larafirebase::withTitle($notify->title)
           //   ->withBody($notify->body)
-          //  // ->withImage($defaultimg)
-          // //  ->withIcon($defaultsvg)
+          //   // ->withImage($defaultimg)
+          //   //  ->withIcon($defaultsvg)
           //   ->withSound('default')
           //   // ->withClickAction('https://www.google.com')
           //   ->withPriority('high')
           //   ->withAdditionalData([
           //     // 'date'=>$notifyuser->created_at,
-          //     'id'=> $notifyuser->id,
-          //    // 'image' => $defaultimg,
+          //     'id' => $notifyuser->id,
+          //     // 'image' => $defaultimg,
           //   ])
-          //   ->sendNotification($tokenList);
+          //   ->sendMessage($tokenList);
+
+
+          return $res;
+        
 
         } else {
           return 'empty token';
@@ -431,34 +426,27 @@ class NotificationController extends Controller
       if ($client) {
         if ($client->is_active == 1 && (!is_null($client->token) && $client->token != '')) {
 
-          $tokenList = [$client->token];
-          $res = Larafirebase::withTitle($notify->title)
-            ->withBody($notify->body)
-            // ->withImage($defaultimg)
-            // ->withIcon($defaultsvg)
-            ->withSound('default')
-            // ->withClickAction('https://www.google.com')
-            ->withPriority('high')
-            ->withAdditionalData([
-              // 'date'=>$notifyuser->created_at,
-              'id' => $notifyuser->id,
-              //  'image' => $defaultimg,
-            ])
-            ->sendMessage($tokenList);
-          return $res;
-          // return Larafirebase::withTitle($notify->title)
+          $notctrlr=new NotifyController();
+          $data=[ 'id' =>strval($notifyuser->id)];
+          $res =    $notctrlr->send_to_fcm($client->token,$notify->title,$notify->body,$data);
+          
+
+          // $tokenList = [$client->token];
+          // $res = Larafirebase::withTitle($notify->title)
           //   ->withBody($notify->body)
-          //  // ->withImage($defaultimg)
-          //  // ->withIcon($defaultsvg)
+          //   // ->withImage($defaultimg)
+          //   // ->withIcon($defaultsvg)
           //   ->withSound('default')
           //   // ->withClickAction('https://www.google.com')
           //   ->withPriority('high')
           //   ->withAdditionalData([
           //     // 'date'=>$notifyuser->created_at,
-          //     'id'=> $notifyuser->id,
-          //   //  'image' => $defaultimg,
+          //     'id' => $notifyuser->id,
+          //     //  'image' => $defaultimg,
           //   ])
-          //   ->sendNotification($tokenList);
+          //   ->sendMessage($tokenList);
+          return $res;
+         
 
         } else {
           return 'empty token';
@@ -475,28 +463,24 @@ class NotificationController extends Controller
     //   $strgCtrlr = new StorageController();
     // $defaultimg = $strgCtrlr->DefaultPath('image');
     //   $defaultsvg = $strgCtrlr->DefaultPath('icon');
-
+$notctrlr=new NotifyController();
     $res = "";
     if ($tokenList) {
       foreach ($tokenList as $tokenrow) {
-        $tokenarr = [$tokenrow['token']];
-        $res = Larafirebase::withTitle($notify->title)
-          ->withBody($notify->body)
-          ->withSound('default')
-          ->withPriority('high')
-          ->withAdditionalData([
-            'id' => $tokenrow['id'],
-          ])
-          ->sendMessage($tokenarr);
+       // $tokenarr = [$tokenrow['token']];
+$data=[ 'id' =>strval($tokenrow['id'])];
+$res =    $notctrlr->send_to_fcm($tokenrow['token'],$notify->title,$notify->body,$data);
 
-        // $res=Larafirebase::withTitle($notify->title)
-        // ->withBody($notify->body)    
-        // ->withSound('default')     
-        // ->withPriority('high')
-        // ->withAdditionalData([
-        //  'id'=> $tokenrow['id'],         
-        // ])
-        // ->sendNotification($tokenarr);
+        // $res = Larafirebase::withTitle($notify->title)
+        //   ->withBody($notify->body)
+        //   ->withSound('default')
+        //   ->withPriority('high')
+        //   ->withAdditionalData([
+        //     'id' => $tokenrow['id'],
+        //   ])
+        //   ->sendMessage($tokenarr);
+
+       
 
       }
       return $res;
@@ -844,7 +828,7 @@ class NotificationController extends Controller
     $notifyuser->updated_at = $now;
     $notifyuser->save();
     //save call data array
-    $calldata['id']=$notifyuser->id;
+    $calldata['id']=strval($notifyuser->id);
     $newObj->data=json_encode($calldata); 
     $newObj->save();
     //send firebase notify
@@ -864,27 +848,25 @@ class NotificationController extends Controller
       $expert = Expert::find($notifyuser->expert_id);
       if ($expert) {
         if ($expert->is_active == 1 && (!is_null($expert->token) && $expert->token != '')) {
-          $tokenList = [$expert->token];
-          $data['id'] = $notifyuser->id;
-          $res = Larafirebase::withTitle($notify->title)
-            ->withBody($notify->body)
-            // ->withImage($defaultimg)
-            //  ->withIcon($defaultsvg)
-            ->withSound('default')
-            // ->withClickAction('https://www.google.com')
-            ->withPriority('high')
-            ->withAdditionalData($data)
-            ->sendMessage($tokenList);
-          return $res;
-          //   return Larafirebase::withTitle($notify->title)
+         // $data['id'] = $notifyuser->id;
+
+       //   $tokenList = [$expert->token];
+ 
+          // $res = Larafirebase::withTitle($notify->title)
           //   ->withBody($notify->body)
-          //  // ->withImage($defaultimg)
-          // //  ->withIcon($defaultsvg)
+          //   // ->withImage($defaultimg)
+          //   //  ->withIcon($defaultsvg)
           //   ->withSound('default')
           //   // ->withClickAction('https://www.google.com')
           //   ->withPriority('high')
           //   ->withAdditionalData($data)
-          //   ->sendNotification($tokenList);
+          //   ->sendMessage($tokenList);
+
+            $notctrlr=new NotifyController();
+            $data=[ 'id' =>strval($notifyuser->id)];
+            $res =  $notctrlr->send_to_fcm($expert->token,$notify->title,$notify->body,$data);         
+
+          return $res;    
 
         } else {
           return 'empty token';
