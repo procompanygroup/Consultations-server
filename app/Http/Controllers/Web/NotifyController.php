@@ -63,12 +63,12 @@ class NotifyController extends Controller
                 "message" => [
                     'token' => $to_token,
                     // 'registration_ids'=>[$token_to],
-                    "notification" => [
+
+                    "data" => [
                         "title" => $title,
                         "body" => $body,
-
+                        "data" => $dataArr
                     ],
-                   "data" => $dataArr,
                     "apns" => [
                         "payload" => [
                             "aps" => [
