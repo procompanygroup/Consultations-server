@@ -863,7 +863,7 @@ $res =    $notctrlr->send_to_fcm($tokenrow['token'],$notify->title,$notify->body
           //   ->sendMessage($tokenList);
 
             $notctrlr=new NotifyController();
-            $data=[ 'id' =>strval($notifyuser->id)];
+            $data['id'] =strval($notifyuser->id);
             $res =  $notctrlr->send_to_fcm($expert->token,$notify->title,$notify->body,$data);         
 
           return $res;    
