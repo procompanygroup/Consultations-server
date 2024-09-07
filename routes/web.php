@@ -28,6 +28,7 @@ use App\Http\Controllers\Web\CallpointController;
 use App\Http\Controllers\Web\MessageController;
 use  App\Http\Controllers\Web\CallServiceController;
 use  App\Http\Controllers\Web\NotifyClientController;
+use   App\Http\Controllers\Web\NotifyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,7 +74,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
         Route::resource('notify', NotificationController::class, ['except' => ['update']]);
         Route::post('saveToken', [NotificationController::class, 'saveToken']);
         Route::post('sendNotification', [NotificationController::class, 'sendNotification']);
-        Route::post('sendbytoken', [NotificationController::class, 'sendbytoken']);
+        Route::post('sendbytoken', [NotifyController::class, 'sendbytoken']);
         Route::get('testnotify', [NotificationController::class, 'testnotify']);
 
         Route::resource('notifyme', NotifyClientController::class);

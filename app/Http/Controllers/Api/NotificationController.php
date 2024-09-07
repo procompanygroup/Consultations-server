@@ -59,48 +59,53 @@ class NotificationController extends Controller
   }
   public function sendbytoken(Request $request)
   {
-    $strgCtrlr = new StorageController();
-    $defaultimg = $strgCtrlr->DefaultPath('image');
-    $defaultsvg = $strgCtrlr->DefaultPath('icon');
-    $formdata = $request->all();
-    $token = "";
-    if (isset($formdata['input_token'])) {
-      $token = $formdata['input_token'];
-
-      $tokenList = [$token];
-
-      //   return    Larafirebase::withTitle($request->title)
-      //     ->withBody($request->body)
-      //  //   ->withImage($defaultimg)
-      //   //  ->withIcon($defaultsvg)
-      //     ->withSound('default')
-      //   //  ->withClickAction('https://www.google.com')
-      //     ->withPriority('high')
-      //     ->withAdditionalData([
-      //       'id' =>19,
-      //      // 'image' => $defaultimg,
-      //     ])
-      //     ->sendMessage($tokenList);
-      //     ->sendNotification($tokenList);
-      return Larafirebase::withTitle($request->title)
-        ->withBody($request->body)
-        //   ->withImage($defaultimg)
-        //  ->withIcon($defaultsvg)
-        ->withSound('default')
-        //  ->withClickAction('https://www.google.com')
-        ->withPriority('high')
-        // ->withAdditionalData([        //  'id' => "19",
-        // 'image' => $defaultimg,
-        //  ])
-        ->sendMessage($tokenList);
-      //  ->sendNotification($tokenList);
-    } else {
-      return 'empty token';
-    }
-
-
-    //  ->sendNotification($tokenList);
+  
   }
+
+  // public function sendbytoken(Request $request)
+  // {
+  //   $strgCtrlr = new StorageController();
+  //   $defaultimg = $strgCtrlr->DefaultPath('image');
+  //   $defaultsvg = $strgCtrlr->DefaultPath('icon');
+  //   $formdata = $request->all();
+  //   $token = "";
+  //   if (isset($formdata['input_token'])) {
+  //     $token = $formdata['input_token'];
+
+  //     $tokenList = [$token];
+
+  //     //   return    Larafirebase::withTitle($request->title)
+  //     //     ->withBody($request->body)
+  //     //  //   ->withImage($defaultimg)
+  //     //   //  ->withIcon($defaultsvg)
+  //     //     ->withSound('default')
+  //     //   //  ->withClickAction('https://www.google.com')
+  //     //     ->withPriority('high')
+  //     //     ->withAdditionalData([
+  //     //       'id' =>19,
+  //     //      // 'image' => $defaultimg,
+  //     //     ])
+  //     //     ->sendMessage($tokenList);
+  //     //     ->sendNotification($tokenList);
+  //     return Larafirebase::withTitle($request->title)
+  //       ->withBody($request->body)
+  //       //   ->withImage($defaultimg)
+  //       //  ->withIcon($defaultsvg)
+  //       ->withSound('default')
+  //       //  ->withClickAction('https://www.google.com')
+  //       ->withPriority('high')
+  //       // ->withAdditionalData([        //  'id' => "19",
+  //       // 'image' => $defaultimg,
+  //       //  ])
+  //       ->sendMessage($tokenList);
+  //     //  ->sendNotification($tokenList);
+  //   } else {
+  //     return 'empty token';
+  //   }
+
+
+  //   //  ->sendNotification($tokenList);
+  // }
 
 
   /**
