@@ -168,6 +168,8 @@ class NotifyController extends Controller
         if (is_null($to_token) || $to_token == '') {
             return 'no-token';
         } else {
+            $dataArr["title"] = $title;
+             $dataArr["body"]= $body;
             $credentialsFilePath = storage_path('app/rouh-app-firebase-adminsdk-cecz8-895e8731d2.json');
 
             $client = new GoogleClient();
@@ -191,11 +193,8 @@ class NotifyController extends Controller
                 "message" => [
                     'token' => $to_token,
                     // 'registration_ids'=>[$token_to],
-                    "notification" => [
-                        "title" => $title,
-                        "body" => $body,
-                    ],
-                    "data" => $dataArr,                
+                     "notification" => [ "title" => null],
+                     "data" => $dataArr ,                
                 ]
             ];
             $payload = json_encode($data);
