@@ -48,9 +48,9 @@
 												<th class="border-bottom-0">{{ __('general.service') }}</th>
 												<th class="border-bottom-0">{{ __('general.expert') }}</th>
 
-
-                                                <th class="border-bottom-0">{{ __('general.status') }}</th>
 												<th class="border-bottom-0">التاريخ</th>
+                                                <th class="border-bottom-0">{{ __('general.status') }}</th>
+											
                                                 <th class="border-bottom-0">{{ __('general.action') }}</th>
 											</tr>
 										</thead>
