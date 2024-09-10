@@ -706,7 +706,13 @@ class SelectedServiceController extends Controller
         } else {
             $nowsub = Carbon::now()->subDays($this->oldestday);
             $expert_id = $formdata['expert_id'];
+            $callservice=Service::where('is_callservice',1)->first();
+            $callservice_id=0;
+            if($callservice){
+                $callservice_id=$callservice->id;
+            }
             $list = Selectedservice::where('expert_id', $expert_id)->where('form_state', 'agree')
+            ->whereNot('service_id',$callservice_id)
             ->whereDate('created_at', '>=', $nowsub)
                 ->wherehas('client', function ($query) {
                     $query->where('is_active', 1);
