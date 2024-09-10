@@ -46,6 +46,7 @@
 												<th class="border-bottom-0">{{ __('general.text') }}</th>
 												<th class="border-bottom-0">{{ __('general.notify_side') }}</th>
 												<th class="border-bottom-0">{{ __('general.notify_type') }}</th>
+												<th class="border-bottom-0">{{ __('general.date') }}</th>
                                                 <th class="border-bottom-0">{{ __('general.action') }}</th>
 
 											</tr>
@@ -58,6 +59,7 @@
 												<td>{{ $notify->body }}</td>
 												<td>{{ $notify->side_conv }}</td>
 												<td>{{ $notify->type_conv }}</td>
+												<td>{{ $notify->created_at }}</td>
                                                 <td>
 													<a href="{{route('notify.edit', $notify->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.detail') }}"><i class="fa fa-edit"></i></a> 
                                                      

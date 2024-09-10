@@ -45,7 +45,7 @@
 												<th class="border-bottom-0">{{ __('general.title') }}</th>
 												<th class="border-bottom-0">{{ __('general.text') }}</th>
 												<th class="border-bottom-0">الخبير</th>
-											 
+												<th class="border-bottom-0">{{ __('general.date') }}</th>
                                                 <th class="border-bottom-0">{{ __('general.action') }}</th>
 
 											</tr>
@@ -57,7 +57,7 @@
 												<td>{{$notify->title }}</td>
 												<td>{{ $notify->body }}</td>
 												<td>{{ $notify->expert->full_name }}</td>
-												 
+												<td>{{ $notify->created_at }}</td>
                                                 <td>
 													<a href="{{route('notifyme.edit', $notify->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.detail') }}"><i class="fa fa-edit"></i></a> 
                                                      
