@@ -158,6 +158,7 @@ return [
 'available'=>'متاح',
 'notavailable'=>'غير متاح',
 'busy'=>'مشغول',
+'date'=>'التاريخ',
 '1addpoint_title'=>'اضافة نقاط من المتجر',
 '1addpoint_body'=>'تمت اضافة'.' '. ':Points'.' '.'نقطة الى رصيدك',
 '2ordercome_title'=>'طلب من'.' '.':Clientname',

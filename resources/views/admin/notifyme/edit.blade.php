@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('page-title')
-{{ __('general.notifications') }}
+ابلغني
 @endsection
 @section('css')
     <!-- Internal Select2 css -->
@@ -20,7 +20,7 @@
     <div class="breadcrumb-header justify-content-between">
         <div class="my-auto">
             <div class="d-flex">
-                <h4 class="content-title mb-0 my-auto"><a href="{{ route('notify.index') }}">{{ __('general.notifications') }}</a></h4><span class="text-muted mt-1 tx-13 mr-2 mb-0"></span>
+                <h4 class="content-title mb-0 my-auto"><a href="{{ route('notifyme.index') }}">ابلغني</a></h4><span class="text-muted mt-1 tx-13 mr-2 mb-0"></span>
             </div>
         </div>
     </div>
@@ -38,40 +38,23 @@
       
                 </div>
                 <div class="card-body pt-0">
-                    <p><span class="badge badge-light badge-lg px-3 py-2">
-                    {{ ' ' . __('general.title')  }}</span>{{ ' ' .$item->title }}</p>
-                    <p><span class="badge badge-light badge-lg px-3 py-2">
-                            {{ ' ' . __('general.text')  }}</span>{{ ' ' . $item->body}}</p>
-                    <p><span class="badge badge-light px-3 py-2">
-                            {{ ' ' . __('general.sent_to') }}</span>{{ ' ' .$item->side_conv }}</p>
+                    <p><span class="badge badge-light badge-lg px-3 py-2"> 
+                    {{ ' ' . __('general.title')  }}</span>{{ ' ' .$notify_msg->title }}</p>
+                    <p><span class="badge badge-light badge-lg px-3 py-2"> 
+                            {{ ' ' . __('general.text')  }}</span>{{ ' ' . $notify_msg->body}}</p>
+              
                  
-
-                            @if ($item->type == 'video')
-                            <div id="div_last_answer">
-                                <h3 class="card-title mb-1 border-top pt-3"></h3>
-    
-                                <label class="col-sm-12 ">
-                                     
-                                </label>
-                                <video controls  >
-                                    <source src="{{ $item->path_conv}}" >
-                                </video>
-                            </div>
-                        @endif
+                            <p><span class="badge badge-light px-3 py-2"><img alt="User Icon SVG Vector Icon" fetchpriority="high"
+                                decoding="async" data-nimg="1" style="width:20px;height:20px"
+                                src="{{$usericon}}">
+                            {{ ' ' . __('general.expert') }}</span>{{ ' ' . $notify_msg->expert->full_name }} -{{ ' ' . $notify_msg->expert->user_name }} </p>
+                            <p><span class="badge badge-light badge-lg px-3 py-2">
+                                <img alt=" SVG Vector Icon" fetchpriority="high"
+                                decoding="async" data-nimg="1" style="width:20px;height:20px"
+                                src="{{$sharp}}">
+                                {{ ' ' . __('general.date')  }}</span>{{ ' ' . $notify_msg->created_at}}</p>
                   
-                        @if ($item->type == 'image')
-                        <div class="row">
-                            <div class="gallery mb-3">
-                                
-                                    <a href="{{ $item->path_conv}}" style="margin: 5px"
-                                        class="rounded img-thumbnail wd-100p wd-sm-200 float-sm-right  mg-t-10 mg-sm-t-0 big "
-                                        rel="rel1">
-                                        <img src="{{ $item->path_conv}}" alt="" title="">
-                                    </a>
-                             
-                            </div>
-                            </div>
-                    @endif
+                      
                 </div>
             </div>
         </div>
@@ -122,7 +105,7 @@
         $('#expertdate').datepicker("option", "altFormat", "yy-mm-dd");
 
         var lightbox = $('.gallery a').simpleLightbox({
-            // default source attribute
+        // default source attribute
             sourceAttr: 'href',
 
             // shows fullscreen overlay

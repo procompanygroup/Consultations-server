@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Api\StorageController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -182,8 +183,13 @@ class NotifyClientController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
-    {
-        //
+    {      
+    $note=  NotifyClient::with('expert')->find($id);
+    $strgCtrlr=new StorageController();
+    $usericon= $strgCtrlr->DefaultPath('user');
+    $sharp= $strgCtrlr->DefaultPath('sharp');
+      return view('admin.notifyme.edit', ['notify_msg' => $note,'usericon'=>$usericon
+    ,'sharp'=>$sharp]);
     }
 
     /**
@@ -197,9 +203,17 @@ class NotifyClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy( $id)
     {
-        //
+      $object = NotifyClient::find($id);
+if($object){
+  NotifyClientState::where('notify_client_id',$id)->delete();
+  NotifyClient::find($id)->delete();
+}
+
+      // return response()->json('ok');
+      // return redirect()->route('expert.index');
+      return redirect()->back();
     }
 
     public function send_available_to_clients($expert_id,$type)//from panel

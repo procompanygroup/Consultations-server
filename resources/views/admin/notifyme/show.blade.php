@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('page-title')
-{{ __('general.notifications') }}
+ابلغني
 @endsection
 @section('css')
 <!-- Internal Data table css -->
@@ -16,7 +16,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto">{{ __('general.notifications') }}</h4> 
+							<h4 class="content-title mb-0 my-auto">ابلغني</h4> 
 						</div>
 					</div>
 					 
@@ -61,7 +61,11 @@
                                                 <td>
 													<a href="{{route('notifyme.edit', $notify->id)}}"  class="btn btn-success btn-sm" title="{{ __('general.detail') }}"><i class="fa fa-edit"></i></a> 
                                                      
-                                                    
+													<form action="{{route('notifyme.destroy', $notify->id)}}" method="POST" class="d-inline">
+														@csrf
+														@method('DELETE')
+														<button type="button" id="del-{{$notify->id}}" class="btn btn-danger btn-sm delete" data-effect="effect-scale" data-toggle="modal" data-target="#modaldemo8"   title="حذف"><i class="fa fa-trash"></i></button>
+													</form>
 
                                                 </td>
 
@@ -82,6 +86,20 @@
 			<!-- Container closed -->
 		</div>
 		<!-- main-content closed -->
+		<div class="modal" id="modaldemo8">
+			<div class="modal-dialog modal-dialog-centered   modal-sm" role="document">
+				<div class="modal-content modal-content-demo">
+					 
+					<div class="modal-body text-center" style="padding-bottom: 5px;	padding-top: 30px;">
+						<h6 class="modal-title">{{ __('general.Are you sure') }}</h6>
+							 </div>
+					<div class="modal-footer d-flex justify-content-between">
+						<button class="btn ripple btn-danger" id="btn-modal-del" type="button">{{ __('general.delete') }}</button>
+						<button class="btn ripple btn-secondary"  id="btn-cancel-modal"  data-dismiss="modal" type="button">{{ __('general.cancel') }}</button>
+					</div>
+				</div>
+			</div>
+		</div>
 @endsection
 @section('js')
 <!-- Internal Data tables -->
@@ -103,4 +121,5 @@
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('assets/js/table-data.js')}}"></script>
+<script src="{{URL::asset('assets/js/admin/delete.js')}}"></script>
 @endsection
