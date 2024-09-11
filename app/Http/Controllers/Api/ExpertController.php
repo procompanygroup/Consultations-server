@@ -143,6 +143,7 @@ class ExpertController extends Controller
                 'first_name',
                 'last_name',
                 'status',
+                'is_available',
             )->where('user_name', request(['user_name']))->
             where('is_active', 1)->first();
         /// map 
@@ -220,6 +221,8 @@ class ExpertController extends Controller
                 // 'cash_balance',
                 //   'cash_balance_todate',
                 'rates',
+                'status',
+                'is_available',
                 DB::raw("(CASE 
             WHEN record is NULL THEN ''                  
             ELSE CONCAT('$recurl',record)
@@ -990,8 +993,10 @@ if($expert->expertsServices->first()){
                 'image' => $expert->image,
                 'is_favorite' => $expert->expertsFavorites->isEmpty() ? 0 : 1,
                 'status'=> $expert->status,
+                'is_available'=>$expert->is_available,
                 'services' => $ServicesMap,
-              
+               
+                
                 //  'selectedservices' =>$selectedservicesMap,
                 'selectedservices' => $expert->selectedservices->makeHidden(['title', 'answer_state', 'answers']),
                 // 'selectedservices' => $expert->selectedservices->makeHidden(['comment_state_conv'])  ,
@@ -1050,6 +1055,7 @@ if($expert->expertsServices->first()){
                 'desc' => $expert->desc,
                 'image' => $expert->image,
                 'status'=> $expert->status,
+                'is_available'=>$expert->is_available,
                 // 'is_favorite' => $expert->expertsFavorites->isEmpty() ? 0 : 1,
                 'services' => $ServicesMap,
 
@@ -1075,6 +1081,7 @@ if($expert->expertsServices->first()){
                 'image' => $expert->image,
                 'full_name' => $expert->full_name,
                 'status'=> $expert->status,
+                'is_available'=>$expert->is_available,
                 'is_favorite' => $expert->expertsFavorites->isEmpty() ? 0 : 1,
             ];
         }
@@ -1116,6 +1123,7 @@ if($expert->expertsServices->first()){
                 'last_name' => $expert->last_name,
                 'full_name' => $expert->full_name,
                 'status'=> $expert->status,
+                'is_available'=>$expert->is_available,
                 'services' => $ServicesMap,
             ];
         }
@@ -1196,6 +1204,7 @@ if($expert->expertsServices->first()){
                     'birthdate' => $expert->birthdate,
                     'gender' => $expert->gender,
                     'status'=> $expert->status,
+                    'is_available'=>$expert->is_available,
                     'is_active' => $expert->is_active,
                     'points_balance' => $expert->points_balance,
                     'cash_balance' => $expert->cash_balance,
