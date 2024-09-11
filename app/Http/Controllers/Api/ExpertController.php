@@ -41,6 +41,7 @@ use App\Http\Requests\Api\Expert\ChangeAvailableRequest;
 
 use App\Models\ClientExpert;
 use App\Http\Controllers\Web\NotifyClientController;
+use App\Http\Requests\Api\Expert\ChangeStatusRequest;
 class ExpertController extends Controller
 {
 
@@ -1896,6 +1897,38 @@ $notify=0;
                            }  
             return response()->json("ok");
 
+        }
+    }
+    
+    public function changestatus()
+    {
+        $request = request();
+        $formdata = $request->all();
+        $storrequest = new ChangeStatusRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+
+            return response()->json($validator->errors());
+        } else {
+            $expert_id = $formdata['expert_id'];
+            //save token in expert 
+
+            Expert::find($expert_id)->update(
+                [
+                    'status' => $formdata["status"],
+                ]
+            );
+            if($formdata['status']=='a'){
+                //send notification 
+                 $notifyctrlr=new NotifyClientController();
+                 $notifyctrlr->send_available_to_clients($expert_id ,'other');
+                           }  
+            return response()->json("ok");
         }
     }
 

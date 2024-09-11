@@ -54,7 +54,7 @@ Route::middleware('authExpert:api')->group(function () {
     Route::post('/savetoken', [ExpertController::class, 'savetoken']);
     // Route::post('/gettype', [ExpertController::class, 'gettype']);
     Route::post('/changeavailable', [ExpertController::class, 'changeavailable']);
-    
+    Route::post('/changestatus', [ExpertController::class, 'changestatus']);
    // Route::post('/uploadcall', [ExpertController::class, 'uploadcall']);
    // Route::post('/convertfile', [MailController::class, 'convertfile']);
 
