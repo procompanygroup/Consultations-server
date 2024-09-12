@@ -639,8 +639,7 @@ if($expert->is_available==2 ||$expert->is_available==3){
  
 return response()->json([
 'msg'=>'busy',
-'is_available'=>$expert->is_available,
-,]
+'is_available'=>$expert->is_available]
 , 401);
 }else{
   //get cost for call service
