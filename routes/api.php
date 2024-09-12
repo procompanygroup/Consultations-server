@@ -55,6 +55,9 @@ Route::middleware('authExpert:api')->group(function () {
     // Route::post('/gettype', [ExpertController::class, 'gettype']);
     Route::post('/changeavailable', [ExpertController::class, 'changeavailable']);
     Route::post('/changestatus', [ExpertController::class, 'changestatus']);
+    //notify status
+    Route::post('/changenotifystate', [ExpertController::class, 'changenotifystate']);
+    Route::post('/getnotifystate', [ExpertController::class, 'getnotifystate']);
    // Route::post('/uploadcall', [ExpertController::class, 'uploadcall']);
    // Route::post('/convertfile', [MailController::class, 'convertfile']);
 
@@ -110,6 +113,12 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/getmsgs', [MessageController::class, 'clientgetmsg']);
         //
         Route::post('/logout', [ClientAuthController::class, 'logout_client']);
+        //notify
+        Route::post('/changeavailable', [ClientController::class, 'changeavailable']);
+        Route::post('/changestatus', [ClientController::class, 'changestatus']);
+//notify
+        Route::post('/changenotifystate', [ClientController::class, 'changenotifystate']);
+        Route::post('/getnotifystate', [ClientController::class, 'getnotifystate']);
 //api/client/service
         Route::prefix('/service')->group(function () {
             Route::post('/viewall', [serviceController::class, 'index']); 

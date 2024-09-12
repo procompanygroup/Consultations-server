@@ -14,6 +14,7 @@ use App\Models\Expert;
 use App\Models\Point;
 use App\Models\Service;
 use App\Models\Company;
+use App\Models\NotificationUser;
 use App\Models\Pointtransfer;
 use App\Models\Cashtransfer;
 use File;
@@ -36,7 +37,7 @@ use App\Http\Requests\Api\Client\BuyMinutesRequest;
 use App\Models\Selectedservice;
 use App\Http\Requests\Api\Expert\UploadCallRequest;
 use App\Http\Requests\Api\Client\ActivateRequest;
-
+use App\Http\Requests\Api\Client\ChangeNotifyStatusRequest;
 /*
 use App\Http\Requests\Web\Client\StoreClientRequest;
 use App\Http\Requests\Web\Client\UpdateClientRequest;
@@ -56,6 +57,7 @@ class ClientController extends Controller
      */
     public $id = 0;
     public $pointtransfer_id = 0;
+    public $oldestday = 30;
     public function index()
     {
         //
@@ -790,5 +792,71 @@ return response()->json([
         }
         return 1;
     }
+
+    public function changenotifystate()
+    {
+        $request = request();
+        $formdata = $request->all();
+        $storrequest = new ChangeNotifyStatusRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+
+            return response()->json($validator->errors());
+        } else {
+            $client_id = $formdata['client_id'];          
+           
+            $nowsub = Carbon::now()->subDays($this->oldestday);
+            //save token in expert 
+
+            NotificationUser::where('client_id', $client_id)
+            ->where('status','sent')
+            ->whereDate('created_at', '>=', $nowsub)->update(
+                [
+                    'status' =>'open',
+                ]
+            );
+             
+            return response()->json("ok");
+        }
+    }
+
+    public function getnotifystate()
+    {
+        $request = request();
+        $formdata = $request->all();
+        $storrequest = new ChangeNotifyStatusRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+
+            return response()->json($validator->errors());
+        } else {
+            $client_id = $formdata['client_id'];          
+           
+            $nowsub = Carbon::now()->subDays($this->oldestday);
+            //save token in expert 
+
+         $notifyuser=  NotificationUser::where('client_id', $client_id)            
+            ->whereDate('created_at', '>=',$nowsub)
+            ->orderByDesc('created_at');
+            $status=1;
+           if( $notifyuser->state=='open'){
+            //opend befor
+            $status=0;
+           } 
+           //sent : not opened yet
+            return response()->json($status);
+        }
+    }
+
 
 }

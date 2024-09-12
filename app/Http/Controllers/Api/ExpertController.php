@@ -42,6 +42,8 @@ use App\Http\Requests\Api\Expert\ChangeAvailableRequest;
 use App\Models\ClientExpert;
 use App\Http\Controllers\Web\NotifyClientController;
 use App\Http\Requests\Api\Expert\ChangeStatusRequest;
+use App\Http\Requests\Api\Expert\ChangeNotifyStatusRequest;
+use App\Models\NotificationUser;
 class ExpertController extends Controller
 {
 
@@ -1940,6 +1942,71 @@ $notify=0;
             return response()->json("ok");
         }
     }
+    public function changenotifystate()
+    {
+        $request = request();
+        $formdata = $request->all();
+        $storrequest = new ChangeNotifyStatusRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+
+            return response()->json($validator->errors());
+        } else {
+            $expert_id = $formdata['expert_id'];          
+           
+            $nowsub = Carbon::now()->subDays($this->oldestday);
+            //save token in expert 
+
+            NotificationUser::where('expert_id', $expert_id)
+            ->where('status','sent')
+            ->whereDate('created_at', '>=', $nowsub)->update(
+                [
+                    'status' =>'open',
+                ]
+            );
+             
+            return response()->json("ok");
+        }
+    }
+
+    public function getnotifystate()
+    {
+        $request = request();
+        $formdata = $request->all();
+        $storrequest = new ChangeNotifyStatusRequest();//php artisan make:request Api/Expertfavorite/StoreRequest
+
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+
+            return response()->json($validator->errors());
+        } else {
+            $expert_id = $formdata['expert_id'];          
+           
+            $nowsub = Carbon::now()->subDays($this->oldestday);
+            //save token in expert 
+
+         $notifyuser=  NotificationUser::where('expert_id', $expert_id)            
+            ->whereDate('created_at', '>=',$nowsub)
+            ->orderByDesc('created_at');
+            $status=1;
+           if( $notifyuser->state=='open'){
+            //opend befor
+            $status=0;
+           } 
+           //sent : not opened yet
+            return response()->json($status);
+        }
+    }
+
 
     public function getstatistics()
     {
