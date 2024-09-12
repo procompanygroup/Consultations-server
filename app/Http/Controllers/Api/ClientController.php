@@ -814,10 +814,10 @@ return response()->json([
             //save token in expert 
 
             NotificationUser::where('client_id', $client_id)
-            ->where('status','sent')
+            ->where('state','sent')
             ->whereDate('created_at', '>=', $nowsub)->update(
                 [
-                    'status' =>'open',
+                    'state' =>'open',
                 ]
             );
              

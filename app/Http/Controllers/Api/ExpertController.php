@@ -1963,10 +1963,10 @@ $notify=0;
             //save token in expert 
 
             NotificationUser::where('expert_id', $expert_id)
-            ->where('status','sent')
+            ->where('state','sent')
             ->whereDate('created_at', '>=', $nowsub)->update(
                 [
-                    'status' =>'open',
+                    'state' =>'open',
                 ]
             );
              
