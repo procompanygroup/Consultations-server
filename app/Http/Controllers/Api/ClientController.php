@@ -847,12 +847,17 @@ return response()->json([
 
          $notifyuser=  NotificationUser::where('client_id', $client_id)            
             ->whereDate('created_at', '>=',$nowsub)
-            ->orderByDesc('created_at');
+            ->orderByDesc('created_at')->first();
             $status=1;
-           if( $notifyuser->state=='open'){
-            //opend befor
-            $status=0;
-           } 
+            if($notifyuser){
+                if( $notifyuser->state=='open'){
+                    //opend befor
+                    $status=0;
+                   } 
+            }else{
+                $status=0; 
+            }
+        
            //sent : not opened yet
             return response()->json($status);
         }
