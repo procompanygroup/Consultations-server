@@ -655,7 +655,7 @@ return response()->json([
           $expertService= ExpertService::where('expert_id',$expert_id )->whereHas('service', function ($query)  {
               $query->where('is_callservice', 1);         
             })->first(); 
-          if( $client_minutebalance<=0 ){
+          if( $client_minutebalance<=1 ){
               return response()->json('insufficient_balance', 401);
           }else{                
         //add sel service record
