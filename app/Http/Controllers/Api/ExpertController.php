@@ -1989,13 +1989,12 @@ $notify=0;
 
             return response()->json($validator->errors());
         } else {
-            $expert_id = $formdata['expert_id'];          
-           
+            $expert_id = $formdata['expert_id'];           
             $nowsub = Carbon::now()->subDays($this->oldestday);
             //save token in expert 
-
          $notifyuser=  NotificationUser::where('expert_id', $expert_id)            
             ->whereDate('created_at', '>=',$nowsub)
+            ->whereNot('state', 'sentcall')
             ->orderByDesc('created_at')->first();
             $status=1;
             
@@ -2011,7 +2010,6 @@ $notify=0;
             return response()->json($status);
         }
     }
-
 
     public function getstatistics()
     {

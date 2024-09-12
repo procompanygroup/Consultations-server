@@ -818,11 +818,11 @@ $res =    $notctrlr->send_to_fcm($tokenrow['token'],$notify->title,$notify->body
     $notifyuser = new NotificationUser();
 
     $now = Carbon::now();
-    $notifyuser->client_id = $client_id;
+    //$notifyuser->client_id = $client_id;
     $notifyuser->expert_id = $expert_id;
     $notifyuser->notification_id = $notification_id;
     $notifyuser->isread = 0;
-    $notifyuser->state = 'sent';
+    $notifyuser->state = 'sentcall';
     $notifyuser->notes = '';
     $notifyuser->created_at = $now;
     $notifyuser->updated_at = $now;

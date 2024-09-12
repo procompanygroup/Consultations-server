@@ -689,7 +689,7 @@ return response()->json([
               'client_name' => $client->user_name,
               'selectedservice_id'=>strval($selectedservice_id),
           ];
-     $notctrlr->send_autocall_notify($title, $body, 'auto', 'call', '', '', $client_id, $expert_id, 0, 0, $calldata);
+     $notctrlr->send_autocall_notify($title, $body, 'auto', 'call', '', '', $client_id, $expert_id, $selectedservice_id, 0, $calldata);
           return response()->json(
               [
                   'client_uid' =>$client_uid,
