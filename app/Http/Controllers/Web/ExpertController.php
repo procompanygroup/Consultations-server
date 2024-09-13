@@ -165,6 +165,10 @@ class ExpertController extends Controller
       $newObj->call_cost = 0;
       $newObj->answer_speed = 0;
       $newObj->is_active = isset($formdata["is_active"]) ? 1 : 0;
+      $newObj->is_available = 3;
+      $newObj->status = 'n';
+      
+
       //$newObj->token = $formdata['token'];
          
    //   $newObj->createuser_id = Auth::user()->id;
