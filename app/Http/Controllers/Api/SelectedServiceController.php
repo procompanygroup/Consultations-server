@@ -1117,7 +1117,14 @@ class SelectedServiceController extends Controller
                         $pointtransfer->notes =  $call_cost;
                         $pointtransfer->save();
                         //add to expert balance
-                        $this->expert_op($selectedservice,$client);         
+                        $this->expert_op($selectedservice,$client); 
+                        // send to client
+                     //   $cost_minutes
+                        $notctrlr2=new NotificationController();                             
+                          $title2= __('general.16minusminute_title');
+                          $body2= __('general.16minusminute_body',['Minuts'=> $cost_minutes]);     
+                          $notctrlr2->sendautonotify($title2, $body2,'auto','order','','call-order',$selectedservice->client_id,0,$selectedservice->id,0);
+                             
                     //end normal
                     //add to expert                             
                 $this->msg=$this->id ;
@@ -1189,7 +1196,6 @@ class SelectedServiceController extends Controller
           //  'answer_speed'=>$answespeedavg ,
             ]
         );
-
   //  //send auto notification 4 increase balance
   $notctrlr2=new NotificationController();   
 //    $Servicename=$selectedObj->service->name;

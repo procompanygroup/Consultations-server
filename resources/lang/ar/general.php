@@ -189,6 +189,8 @@ return [
 '14otherserviceavailable__body'=>'الخبير'.' '.':Expertname'.' '.'متاح الان لاستلام الطلبات',
 '15callserviceavailable_title'=>'الخبير'.' '.':Expertname',
 '15callserviceavailable__body'=>'الخبير'.' '.':Expertname'.' '.'متاح الان للاتصال المباشر',
+'16minusminute_title'=>'رصيد الدقائق',
+'16minusminute_body'=>'تم انقاص'.' '. ':Minuts'.' '.' دقيقة من رصيدك مقابل خدمة الاتصال المباشر',
 ];
 /*
 
