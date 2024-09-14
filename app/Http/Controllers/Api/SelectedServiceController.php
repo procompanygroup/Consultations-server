@@ -343,7 +343,8 @@ class SelectedServiceController extends Controller
                         $pointtransfer->num = $newpnum;
                         $pointtransfer->notes = $expertService->points;
                         $pointtransfer->save();
-
+///////// noti
+$this->sendnotify_toclient($pointsremain, $newObj,$service->name);
                     }
 
 
