@@ -39,8 +39,8 @@ use App\Http\Requests\Api\Order\CallOrderRequest;
 class SelectedServiceController extends Controller
 {
     public $oldestday = 30;
- 
-  
+
+
     /**
      * Display a listing of the resource.
      */
@@ -107,7 +107,7 @@ class SelectedServiceController extends Controller
                     //    $newObj->isanswerconfirmd = 0;
                     $newObj->comment_rate = 0;
                     $newObj->status = "created";
-                    $newObj->expert_cost =$expertService->expert_cost;//percent
+                    $newObj->expert_cost = $expertService->expert_cost;//percent
                     $newObj->cost_type = $expertService->cost_type;
                     //   $newObj->expert_cost_value = $expertService->expert_cost_value;
                     $newObj->expert_cost_value = StorageController::CalcPercentVal($expertService->expert_cost, $expertService->points);
@@ -136,6 +136,7 @@ class SelectedServiceController extends Controller
                     // decrease client balance
                     $client->points_balance = $client->points_balance - $expertService->points;
                     $client->save();
+
                     //create point transfer row
                     $pointtransfer = new Pointtransfer();
                     $pntctrlr = new PointTransferController();
@@ -156,6 +157,7 @@ class SelectedServiceController extends Controller
                     $pointtransfer->notes = $expertService->points;
                     $pointtransfer->save();
                     //  }
+                  $this-> sendnotify_toclient($expertService->points,  $newObj,$service->name);
                 }
                 //end normal
 
@@ -362,6 +364,14 @@ class SelectedServiceController extends Controller
 
     }
 
+    public function sendnotify_toclient($points, $selectedservice,$service_name)
+    {
+        $notctrlr2 = new NotificationController();
+        $title2 = __('general.17minuspoints_title');
+        $body2 = __('general.17minuspoints_body', ['Points' => $points,'Service'=>$service_name]);
+        $notctrlr2->sendautonotify($title2, $body2, 'auto', 'order', '', 'finance', $selectedservice->client_id, 0, $selectedservice->id, 0);
+
+    }
     /*
      public function savewithvalues()
         {
@@ -643,7 +653,7 @@ class SelectedServiceController extends Controller
                             [
                                 'rate' => $formdata['rate'],
                                 'rate_date' => $now,
-                                'rate_state'=>'wait'
+                                'rate_state' => 'wait'
                             ]
                         );
                         // $rateavg = StorageController::calcRateAvg($selectedservice->expert_id);
@@ -706,14 +716,14 @@ class SelectedServiceController extends Controller
         } else {
             $nowsub = Carbon::now()->subDays($this->oldestday);
             $expert_id = $formdata['expert_id'];
-            $callservice=Service::where('is_callservice',1)->first();
-            $callservice_id=0;
-            if($callservice){
-                $callservice_id=$callservice->id;
+            $callservice = Service::where('is_callservice', 1)->first();
+            $callservice_id = 0;
+            if ($callservice) {
+                $callservice_id = $callservice->id;
             }
             $list = Selectedservice::where('expert_id', $expert_id)->where('form_state', 'agree')
-            ->whereNot('service_id',$callservice_id)
-            ->whereDate('created_at', '>=', $nowsub)
+                ->whereNot('service_id', $callservice_id)
+                ->whereDate('created_at', '>=', $nowsub)
                 ->wherehas('client', function ($query) {
                     $query->where('is_active', 1);
                 })
@@ -1037,7 +1047,7 @@ class SelectedServiceController extends Controller
     }
 
     public function callorder()
-    {   
+    {
         $request = request();
         $formdata = $request->all();
         $storrequest = new CallOrderRequest();
@@ -1048,54 +1058,54 @@ class SelectedServiceController extends Controller
         );
         if ($validator->fails()) {
             return response()->json($validator->errors());
-               } else {           
-        //  client app    
-        DB::transaction(function () use($formdata) {
-            $selectedservice_id= $formdata ['selectedservice_id'];
-            $minutes=$formdata ['minutes'];
-// convert seconds to minute and get round up for cost 
-            $real_minutes=$minutes/60;
-            //round down
-            $floor_minutes= floor($real_minutes);
-            //get remain
-            $seconds=$minutes % 60;
-            $str_minutes= ((string)$floor_minutes).":".$seconds;
-            //round up
-            $cost_minutes= ceil($real_minutes);
-//
-            $selectedservice=Selectedservice::find($selectedservice_id);
-            if( auth()->user()->id==$selectedservice->client_id){           
-            $client_id =  $selectedservice->client_id;
-            $expert_id= $selectedservice->expert_id;
-            //check client balance
-            $client = Client::find($client_id);
-         //   $service = Service::where('is_callservice', 1)->first();
-            $expertService = ExpertService::where('expert_id', $expert_id)->where('service_id', $selectedservice->service_id)->first();
-            if ($expertService) {            
-                    //normal send
- //get cost for call service
- $settctrlr=new SettingController();
- $callcostobj=$settctrlr->findbyname('call_cost');
- $minutecost=(float) $callcostobj->value;
- //  
-                    $call_cost= $cost_minutes*$minutecost;
-                    if ($client->minutes_balance < $cost_minutes) {
-                        //contunie with client minute balance as cost                
-                        $call_cost=$client->minutes_balance*$minutecost;
-                    }
-                         //save selected service                     
-                        $selectedservice->points = $call_cost;    
-                        $selectedservice->call_duration = $str_minutes;                    
+        } else {
+            //  client app    
+            DB::transaction(function () use ($formdata) {
+                $selectedservice_id = $formdata['selectedservice_id'];
+                $minutes = $formdata['minutes'];
+                // convert seconds to minute and get round up for cost 
+                $real_minutes = $minutes / 60;
+                //round down
+                $floor_minutes = floor($real_minutes);
+                //get remain
+                $seconds = $minutes % 60;
+                $str_minutes = ((string) $floor_minutes) . ":" . $seconds;
+                //round up
+                $cost_minutes = ceil($real_minutes);
+                //
+                $selectedservice = Selectedservice::find($selectedservice_id);
+                if (auth()->user()->id == $selectedservice->client_id) {
+                    $client_id = $selectedservice->client_id;
+                    $expert_id = $selectedservice->expert_id;
+                    //check client balance
+                    $client = Client::find($client_id);
+                    //   $service = Service::where('is_callservice', 1)->first();
+                    $expertService = ExpertService::where('expert_id', $expert_id)->where('service_id', $selectedservice->service_id)->first();
+                    if ($expertService) {
+                        //normal send
+                        //get cost for call service
+                        $settctrlr = new SettingController();
+                        $callcostobj = $settctrlr->findbyname('call_cost');
+                        $minutecost = (float) $callcostobj->value;
+                        //  
+                        $call_cost = $cost_minutes * $minutecost;
+                        if ($client->minutes_balance < $cost_minutes) {
+                            //contunie with client minute balance as cost                
+                            $call_cost = $client->minutes_balance * $minutecost;
+                        }
+                        //save selected service                     
+                        $selectedservice->points = $call_cost;
+                        $selectedservice->call_duration = $str_minutes;
                         $selectedservice->status = "done";
-                        $selectedservice->expert_cost =$expertService->expert_cost;//percent
-                       // $newObj->cost_type = $expertService->cost_type;
+                        $selectedservice->expert_cost = $expertService->expert_cost;//percent
+                        // $newObj->cost_type = $expertService->cost_type;
                         //   $newObj->expert_cost_value = $expertService->expert_cost_value;
                         $selectedservice->expert_cost_value = StorageController::CalcPercentVal($expertService->expert_cost, $call_cost);
-                       
+
                         $selectedservice->save();
-                        $this->id = $selectedservice->id;                   
+                        $this->id = $selectedservice->id;
                         // decrease client balance
-                        $client->minutes_balance = $client->minutes_balance -$cost_minutes;
+                        $client->minutes_balance = $client->minutes_balance - $cost_minutes;
                         $client->save();
                         //create point transfer row
                         $pointtransfer = new Pointtransfer();
@@ -1107,44 +1117,44 @@ class SelectedServiceController extends Controller
                         $pointtransfer->client_id = $client->id;
                         $pointtransfer->expert_id = $expertService->expert_id;
                         $pointtransfer->service_id = $expertService->service_id;
-                        $pointtransfer->count =  $call_cost;
+                        $pointtransfer->count = $call_cost;
                         $pointtransfer->status = 1;
                         $pointtransfer->selectedservice_id = $selectedservice->id;
                         $pointtransfer->side = 'from-client';
                         $pointtransfer->state = 'agree';
                         $pointtransfer->type = 'd';
                         $pointtransfer->num = $newpnum;
-                        $pointtransfer->notes =  $call_cost;
+                        $pointtransfer->notes = $call_cost;
                         $pointtransfer->save();
                         //add to expert balance
-                        $this->expert_op($selectedservice,$client); 
+                        $this->expert_op($selectedservice, $client);
                         // send to client
-                     //   $cost_minutes
-                        $notctrlr2=new NotificationController();                             
-                          $title2= __('general.16minusminute_title');
-                          $body2= __('general.16minusminute_body',['Minuts'=> $cost_minutes]);     
-                          $notctrlr2->sendautonotify($title2, $body2,'auto','order','','call-order',$selectedservice->client_id,0,$selectedservice->id,0);
-                             
-                    //end normal
-                    //add to expert                             
-                $this->msg=$this->id ;
+                        //   $cost_minutes
+                        $notctrlr2 = new NotificationController();
+                        $title2 = __('general.16minusminute_title');
+                        $body2 = __('general.16minusminute_body', ['Minuts' => $cost_minutes]);
+                        $notctrlr2->sendautonotify($title2, $body2, 'auto', 'order', '', 'call-order', $selectedservice->client_id, 0, $selectedservice->id, 0);
+
+                        //end normal
+                        //add to expert                             
+                        $this->msg = $this->id;
+                    } else {
+                        $this->msg == "notallowed";
+                    }
+                } else {
+                    $this->msg == "notallowed";
+                }
+            });
+            $res = [];
+            if ($this->msg == "nopoints" || $this->msg == "notallowed") {
+                $res = [
+                    "message" => 0,
+                    "error" => $this->msg,
+                ];
             } else {
-                $this->msg == "notallowed";
+                $res = ["message" => $this->msg];
             }
-        } else {
-            $this->msg == "notallowed";
-        }
-        });
-        $res = [];
-        if ($this->msg == "nopoints" || $this->msg == "notallowed") {
-            $res = [
-                "message" => 0,
-                "error" => $this->msg,
-            ];
-        } else {
-            $res = ["message" =>  $this->msg];
-        }
-        return response()->json($res);
+            return response()->json($res);
         }
 
     }
@@ -1156,17 +1166,17 @@ class SelectedServiceController extends Controller
         // $startdate= $selectedObj->order_date;
         // //$enddate= $now ;
         // $strgctrlr=new StorageController();
-      //  $answespeed= $strgctrlr->calcAnswerSpeed( $startdate,$enddate);
+        //  $answespeed= $strgctrlr->calcAnswerSpeed( $startdate,$enddate);
         // end
         Selectedservice::find($selectedObj->id)->update([
-        //  'status' => 'agree',
-          'company_profit_percent' => $comprofitperc,
-          'company_profit' => $comprofitval,
-          'comment_state' => 'no-comment',
-       //   'answer_speed'=>  $answespeed,
+            //  'status' => 'agree',
+            'company_profit_percent' => $comprofitperc,
+            'company_profit' => $comprofitval,
+            'comment_state' => 'no-comment',
+            //   'answer_speed'=>  $answespeed,
         ]);
-       // $cashtrctrlr = new CashTransferController();
-      
+        // $cashtrctrlr = new CashTransferController();
+
         // add point transfer for expert percent
         $pointtransfer = new Pointtransfer();
         $pntctrlr = new PointTransferController();
@@ -1174,39 +1184,39 @@ class SelectedServiceController extends Controller
         $firstLetters = $type . 'ex-';
         $newpnum = $pntctrlr->GenerateCode($firstLetters);
         //$pointtransfer->point_id = $formdata['point_id'];
-         $pointtransfer->client_id =  $selectedObj->client_id;
+        $pointtransfer->client_id = $selectedObj->client_id;
         $pointtransfer->expert_id = $selectedObj->expert_id;
-        $pointtransfer->service_id =$selectedObj->service_id;
-        $pointtransfer->count =$selectedObj->expert_cost_value;
+        $pointtransfer->service_id = $selectedObj->service_id;
+        $pointtransfer->count = $selectedObj->expert_cost_value;
         $pointtransfer->status = 1;
         $pointtransfer->selectedservice_id = $selectedObj->id;
         $pointtransfer->side = 'to-expert';
         $pointtransfer->state = 'agree';
-        $pointtransfer->type =  $type;
+        $pointtransfer->type = $type;
         $pointtransfer->num = $newpnum;
         $pointtransfer->save();
-       // $this->pointtransfer_id= $pointtransfer->id;     
+        // $this->pointtransfer_id= $pointtransfer->id;     
         ////add cost to expert balance and update answer speed  
-        $expertObj = Expert::find($selectedObj->expert_id); 
+        $expertObj = Expert::find($selectedObj->expert_id);
         Expert::find($selectedObj->expert_id)->update(
-          [
-            'cash_balance' => $expertObj->cash_balance + $selectedObj->expert_cost_value,
-            'call_balance'=>$expertObj->call_balance + $selectedObj->expert_cost_value,
-         //   'cash_balance_todate' => $expertObj->cash_balance_todate + $selectedObj->expert_cost_value,
-          //  'answer_speed'=>$answespeedavg ,
+            [
+                'cash_balance' => $expertObj->cash_balance + $selectedObj->expert_cost_value,
+                'call_balance' => $expertObj->call_balance + $selectedObj->expert_cost_value,
+                //   'cash_balance_todate' => $expertObj->cash_balance_todate + $selectedObj->expert_cost_value,
+                //  'answer_speed'=>$answespeedavg ,
             ]
         );
-  //  //send auto notification 4 increase balance
-  $notctrlr2=new NotificationController();   
-//    $Servicename=$selectedObj->service->name;
+        //  //send auto notification 4 increase balance
+        $notctrlr2 = new NotificationController();
+        //    $Servicename=$selectedObj->service->name;
 //    $Expertname=$selectedObj->expert->full_name; 
-   $Clientname= $client->user_name;    
-  $title2= __('general.4addbalancetoexpert_title');
-  $body2= __('general.4addbalancetoexpert_body_call',['Cash'=> $selectedObj->expert_cost_value,'Clientname'=> $Clientname]);     
-  $notctrlr2->sendautonotify($title2, $body2,'auto','order','','call-order',0,$selectedObj->expert_id,$selectedObj->id,$pointtransfer->id);
-      return 1;
+        $Clientname = $client->user_name;
+        $title2 = __('general.4addbalancetoexpert_title');
+        $body2 = __('general.4addbalancetoexpert_body_call', ['Cash' => $selectedObj->expert_cost_value, 'Clientname' => $Clientname]);
+        $notctrlr2->sendautonotify($title2, $body2, 'auto', 'order', '', 'call-order', 0, $selectedObj->expert_id, $selectedObj->id, $pointtransfer->id);
+        return 1;
     }
-//     public function callorder()
+    //     public function callorder()
 //     {   
 //         //  client app    
 //         DB::transaction(function () {
@@ -1224,12 +1234,12 @@ class SelectedServiceController extends Controller
 //                 $free_points = $avlarr['points'];
 //                 //$giftmodel=$avlarr['giftmodel'];
 
-//                 if ($free_points == 0) {
+    //                 if ($free_points == 0) {
 //                     //normal send
 //                     if ($client->points_balance < $expertService->points) {
 //                         $this->msg = "nopoints";
 
-//                     } else {
+    //                     } else {
 //                         $newNum = $this->GenerateCode("order-");
 //                         $now = Carbon::now();
 //                         //save selected service
@@ -1257,16 +1267,16 @@ class SelectedServiceController extends Controller
 //                         $newObj->save();
 //                         $this->id = $newObj->id;
 
-//                         //save values in values_services table
+    //                         //save values in values_services table
 //                         // foreach ($data["valueServices"] as $row) {
 //                         //     $valueService = new valueService();
 //                         //     $input = InputService::find($row['inputservice_id'])->input()->first();
 
-//                         //     $valueService->value = $row['value'];
+    //                         //     $valueService->value = $row['value'];
 //                         //     $valueService->inputservice_id = $row['inputservice_id'];
 //                         //     $valueService->selectedservice_id = $newObj->id;
 
-//                         //     $valueService->name = $input->name;
+    //                         //     $valueService->name = $input->name;
 //                         //     $valueService->type = $input->type;
 //                         //     $valueService->tooltipe = $input->tooltipe;
 //                         //     $valueService->icon = $input->icon;
@@ -1300,7 +1310,7 @@ class SelectedServiceController extends Controller
 //                     }
 //                     //end normal
 
-//                 } else {
+    //                 } else {
 //                     // free with balance
 //                     $giftmodel = $avlarr['giftmodel'];
 //                     //الرصيد المجاني اكبر او يساوي الكلفة
@@ -1324,9 +1334,9 @@ class SelectedServiceController extends Controller
 //                         $newObj->rate = 0;
 //                         $newObj->form_state = 'agree';
 
-//                         $newObj->comment = "";
+    //                         $newObj->comment = "";
 
-//                         $newObj->comment_rate = 0;
+    //                         $newObj->comment_rate = 0;
 //                         $newObj->status = "created";
 //                         $newObj->expert_cost = $expertService->expert_cost;//percent
 //                         $newObj->cost_type = $expertService->cost_type;
@@ -1337,16 +1347,16 @@ class SelectedServiceController extends Controller
 //                         $newObj->save();
 //                         $this->id = $newObj->id;
 
-//                         //save values in values_services table
+    //                         //save values in values_services table
 // // foreach ($data["valueServices"] as $row) {
 // //     $valueService = new valueService();
 // //     $input = InputService::find($row['inputservice_id'])->input()->first();
 
-//                         //     $valueService->value = $row['value'];
+    //                         //     $valueService->value = $row['value'];
 // //     $valueService->inputservice_id = $row['inputservice_id'];
 // //     $valueService->selectedservice_id = $newObj->id;
 
-//                         //     $valueService->name = $input->name;
+    //                         //     $valueService->name = $input->name;
 // //     $valueService->type = $input->type;
 // //     $valueService->tooltipe = $input->tooltipe;
 // //     $valueService->icon = $input->icon;
@@ -1378,13 +1388,13 @@ class SelectedServiceController extends Controller
 //                         $pointtransfer->save();
 //                         //end add free point transfer
 
-//                     } else {
+    //                     } else {
 //                         //الرصيد المجاني اصغر تماما من الكلفة
 //                         $pointsremain = $expertService->points - $free_points;
 //                         if ($client->points_balance < $pointsremain) {
 //                             $this->msg = "nopoints";
 
-//                         } else {
+    //                         } else {
 //                             //update gift row
 //                             $gift_id = $giftmodel->id;
 //                             Gift::find($gift_id)->update([
@@ -1420,16 +1430,16 @@ class SelectedServiceController extends Controller
 //                             $newObj->save();
 //                             $this->id = $newObj->id;
 
-//                             //save values in values_services table
+    //                             //save values in values_services table
 // // foreach ($data["valueServices"] as $row) {
 // //   $valueService = new valueService();
 // //   $input = InputService::find($row['inputservice_id'])->input()->first();
 
-//                             //   $valueService->value = $row['value'];
+    //                             //   $valueService->value = $row['value'];
 // //   $valueService->inputservice_id = $row['inputservice_id'];
 // //   $valueService->selectedservice_id = $newObj->id;
 
-//                             //   $valueService->name = $input->name;
+    //                             //   $valueService->name = $input->name;
 // //   $valueService->type = $input->type;
 // //   $valueService->tooltipe = $input->tooltipe;
 // //   $valueService->icon = $input->icon;
@@ -1439,7 +1449,7 @@ class SelectedServiceController extends Controller
 // // }
 // //end save selected service
 
-//                             //add free point transfer 
+    //                             //add free point transfer 
 //                             $pointtransfer = new Pointtransfer();
 //                             $pntctrlr = new PointTransferController();
 //                             $type = 'd';
@@ -1490,7 +1500,7 @@ class SelectedServiceController extends Controller
 //                 $this->msg == "notallowed";
 //             }
 
-//         });
+    //         });
 //         $res = [];
 //         if ($this->msg == "nopoints" || $this->msg == "notallowed") {
 //             $res = [
@@ -1502,5 +1512,5 @@ class SelectedServiceController extends Controller
 //         }
 //         return response()->json($res);
 
-//     }
+    //     }
 }
