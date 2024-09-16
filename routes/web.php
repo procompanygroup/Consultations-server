@@ -45,6 +45,23 @@ use   App\Http\Controllers\Web\NotifyController;
  
 
 
+  Route::get('/clear', function () {
+    $exitCode = Artisan::call('route:cache');
+    $exitCode = Artisan::call('optimize');
+    return 'ok';
+});
+
+Route::get('/storagelink', function () {
+    $exitCode = Artisan::call('storage:link');
+    return 'ok';
+});
+
+Route::get('/cashclear', function () {
+    $exitCode = Artisan::call('cache:clear');
+    $exitCode = Artisan::call('config:cache');
+    $exitCode = Artisan::call('view:clear');
+    return 'ok';
+});
 
 //Route::get('/', [AuthenticatedSessionController::class, 'create']);
 /*

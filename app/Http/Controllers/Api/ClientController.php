@@ -404,9 +404,7 @@ class ClientController extends Controller
                         // 'cash_profit' => $comObj->cash_profit + $comprofitval,
                     ]
                 );
-
                 $this->pointtransfer_id = $pointtransfer->id;
-
             });
             //send auto notification
             $notctrlr = new NotificationController();
