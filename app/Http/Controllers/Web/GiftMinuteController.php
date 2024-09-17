@@ -259,7 +259,7 @@ class GiftMinuteController extends Controller
       ];
     if ($DBList->count() > 0) {
 
-      $pointsrow = $DBList->first()->gifts->first();
+      $pointsrow = $DBList->first()->giftsminutes->first();
       $res =
         [
           'points' => $pointsrow->free_minutes,
