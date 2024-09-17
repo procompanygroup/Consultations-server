@@ -830,7 +830,7 @@ $res =    $notctrlr->send_to_fcm($tokenrow['token'],$notify->title,$notify->body
     // $notifyuser->save();
     //save call data array
   //  $calldata['id']=strval($notifyuser->id);
-    $calldata['id']=0;
+   // $calldata['id']="0";
     // $newObj->data=json_encode($calldata); 
     // $newObj->save();
     //send firebase notify
