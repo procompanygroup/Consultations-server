@@ -801,52 +801,54 @@ $res =    $notctrlr->send_to_fcm($tokenrow['token'],$notify->title,$notify->body
     $pointtransfer_id,
     $calldata,
   ) {
-    $newObj = new Notification;
-    $newObj->title = $title;
-    $newObj->body = $body;
-    $newObj->side = $side;
-    $newObj->type = $type;
-    $newObj->data = '';
-    $newObj->notes = $notes;
-    $newObj->selectedservice_id = $selectedservice_id;
-    $newObj->pointtransfer_id = $pointtransfer_id;
+    // $newObj = new Notification;
+    // $newObj->title = $title;
+    // $newObj->body = $body;
+    // $newObj->side = $side;
+    // $newObj->type = $type;
+    // $newObj->data = '';
+    // $newObj->notes = $notes;
+    // $newObj->selectedservice_id = $selectedservice_id;
+    // $newObj->pointtransfer_id = $pointtransfer_id;
  
-    $newObj->save();
+   // $newObj->save();
 
     //create rows in noti user table 
-    $notification_id = $newObj->id;
+    //$notification_id = $newObj->id;
 
-    $notifyuser = new NotificationUser();
+    //$notifyuser = new NotificationUser();
 
-    $now = Carbon::now();
-    //$notifyuser->client_id = $client_id;
-  //  $notifyuser->expert_id = $expert_id;
-    $notifyuser->notification_id = $notification_id;
-    $notifyuser->isread = 0;
-    $notifyuser->state = 'sentcall';
-    $notifyuser->notes = '';
-    $notifyuser->created_at = $now;
-    $notifyuser->updated_at = $now;
-    $notifyuser->save();
+    // $now = Carbon::now();
+    // //$notifyuser->client_id = $client_id;
+    // $notifyuser->expert_id = $expert_id;
+    // $notifyuser->notification_id = $notification_id;
+    // $notifyuser->isread = 0;
+    // $notifyuser->state = 'sentcall';
+    // $notifyuser->notes = '';
+    // $notifyuser->created_at = $now;
+    // $notifyuser->updated_at = $now;
+    // $notifyuser->save();
     //save call data array
-    $calldata['id']=strval($notifyuser->id);
-    $newObj->data=json_encode($calldata); 
-    $newObj->save();
+  //  $calldata['id']=strval($notifyuser->id);
+    $calldata['id']=0;
+    // $newObj->data=json_encode($calldata); 
+    // $newObj->save();
     //send firebase notify
-    $res = $this->sendfirecall($newObj, $notifyuser, $calldata);
+    $res = $this->sendfirecall( $title,$body, $calldata,$expert_id);
 
     return ("1");
 
   }
-  public function sendfirecall(Notification $notify, NotificationUser $notifyuser, $data)
+  public function sendfirecall($title,$body, $data,$expert_id)
   {
     //auto
     //  $strgCtrlr = new StorageController();
     //$defaultimg = $strgCtrlr->DefaultPath('image');
     //$defaultsvg = $strgCtrlr->DefaultPath('icon');
     //$token = "";
-    if ($notifyuser->expert_id > 0) {
-      $expert = Expert::find($notifyuser->expert_id);
+   // if ($notifyuser->expert_id > 0) {
+    if ($expert_id > 0) {
+      $expert = Expert::find($expert_id);
       if ($expert) {
         if ($expert->is_active == 1 && (!is_null($expert->token) && $expert->token != '')) {
          // $data['id'] = $notifyuser->id;
@@ -864,8 +866,8 @@ $res =    $notctrlr->send_to_fcm($tokenrow['token'],$notify->title,$notify->body
           //   ->sendMessage($tokenList);
 
             $notctrlr=new NotifyController();
-            $data['id'] =strval($notifyuser->id);
-            $res =  $notctrlr->send_to_fcm($expert->token,$notify->title,$notify->body,$data);         
+        //    $data['id'] =strval($notifyuser->id);
+            $res =  $notctrlr->send_to_fcm($expert->token,$title,$body,$data);         
 
           return $res;    
 
