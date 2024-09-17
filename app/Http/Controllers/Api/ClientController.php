@@ -694,6 +694,7 @@ return response()->json([
               'client_image' => $client->image_path,
               'client_name' => $client->user_name,
               'selectedservice_id'=>strval($selectedservice_id),
+              'id'=>strval(0),
           ];
      $notctrlr->send_autocall_notify($title, $body, 'auto', 'call', '', '', $client_id, $expert_id, $selectedservice_id, 0, $calldata);
           return response()->json(
