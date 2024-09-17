@@ -750,7 +750,7 @@ $this->sendnotify_toclient($pointsremain, $newObj,$service->name);
                     'order_admin_date',
                     'rate_date',
                     'answer_speed',
-                )->get()->makeHidden(['answers']);
+                )->orderByDesc('order_date')->get()->makeHidden(['answers']);
 
             return response()->json($list);
 
