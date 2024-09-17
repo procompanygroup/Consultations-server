@@ -21,7 +21,7 @@ use App\Models\Service;
 use App\Models\ExpertService;
 use App\Models\ValueService;
 use App\Models\Pointtransfer;
-
+use App\Models\GiftMinute;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Api\ValueService\StoreImageRequest;
 use App\Http\Requests\Api\Comment\AddCommentRequest;
@@ -370,6 +370,14 @@ $this->sendnotify_toclient($pointsremain, $newObj,$service->name);
         $notctrlr2 = new NotificationController();
         $title2 = __('general.17minuspoints_title');
         $body2 = __('general.17minuspoints_body', ['Points' => $points,'Service'=>$service_name]);
+        $notctrlr2->sendautonotify($title2, $body2, 'auto', 'order', '', 'finance', $selectedservice->client_id, 0, $selectedservice->id, 0);
+
+    }
+    public function sendnotifyminute_toclient($points, $selectedservice)
+    {
+        $notctrlr2 = new NotificationController();
+        $title2 = __('general.16minusminute_title');
+        $body2 = __('general.16minusminute_body', ['Minuts' => $points]);
         $notctrlr2->sendautonotify($title2, $body2, 'auto', 'order', '', 'finance', $selectedservice->client_id, 0, $selectedservice->id, 0);
 
     }
@@ -1096,57 +1104,156 @@ $this->sendnotify_toclient($pointsremain, $newObj,$service->name);
     $avlarr = $giftctrlr->checkavailablepoints($client_id);
     $free_points = $avlarr['points'];
     //free point end
-                        if ($client->minutes_balance < $cost_minutes) {
-                            //contunie with client minute balance as cost                
-                            $call_cost = $client->minutes_balance * $minutecost;
-                        }
-                        //save selected service                     
-                        $selectedservice->points = $call_cost;
-                        $selectedservice->call_duration = $str_minutes;
-                        $selectedservice->status = "done";
-                        $selectedservice->expert_cost = $expertService->expert_cost;//percent
-                        // $newObj->cost_type = $expertService->cost_type;
-                        //   $newObj->expert_cost_value = $expertService->expert_cost_value;
-                        $selectedservice->expert_cost_value = StorageController::CalcPercentVal($expertService->expert_cost, $call_cost);
+    if ($client->minutes_balance < $cost_minutes && $free_points == 0) {
+        //contunie with client minute balance as cost                
+        $call_cost = $client->minutes_balance * $minutecost;
+    }
+    //save selected service                     
+    $selectedservice->points = $call_cost;
+    $selectedservice->call_duration = $str_minutes;
+    $selectedservice->status = "done";
+    $selectedservice->expert_cost = $expertService->expert_cost;//percent
+    // $newObj->cost_type = $expertService->cost_type;
+    //   $newObj->expert_cost_value = $expertService->expert_cost_value;
+    $selectedservice->expert_cost_value = StorageController::CalcPercentVal($expertService->expert_cost, $call_cost);
 
-                        $selectedservice->save();
-                        $this->id = $selectedservice->id;
+    $selectedservice->save();
+    $this->id = $selectedservice->id;
+if($free_points == 0){
+
+    // decrease client balance
+    $client->minutes_balance = $client->minutes_balance - $cost_minutes;
+    $client->save();
+
+    //create point transfer row
+    $pointtransfer = new Pointtransfer();
+    $pntctrlr = new PointTransferController();
+    $type = 'd';
+    $firstLetters = $type . 'cl-';
+    $newpnum = $pntctrlr->GenerateCode($firstLetters);
+    //$pointtransfer->point_id = $formdata['point_id'];
+    $pointtransfer->client_id = $client->id;
+    $pointtransfer->expert_id = $expertService->expert_id;
+    $pointtransfer->service_id = $expertService->service_id;
+    $pointtransfer->count = $cost_minutes;
+    $pointtransfer->status = 1;
+    $pointtransfer->selectedservice_id = $selectedservice->id;
+    $pointtransfer->side = 'from-client-minute';
+    $pointtransfer->state = 'agree';
+    $pointtransfer->type = 'd';
+    $pointtransfer->num = $newpnum;
+    $pointtransfer->notes = $call_cost;
+    $pointtransfer->save();
+
+    // send to client
+    //   $cost_minutes
+    // $notctrlr2 = new NotificationController();
+    // $title2 = __('general.16minusminute_title');
+    // $body2 = __('general.16minusminute_body', ['Minuts' => $cost_minutes]);
+    // $notctrlr2->sendautonotify($title2, $body2, 'auto', 'order', '', 'finance', $selectedservice->client_id, 0, $selectedservice->id, 0);
+    $this->sendnotifyminute_toclient( $cost_minutes, $selectedservice);
+    //end normal
+
+                       
+    $this->msg = $this->id;
+}else if($free_points >=$cost_minutes){
+     //الرصيد المجاني اكبر او يساوي الكلفة
+    $giftmodel = $avlarr['giftmodel'];
+    $newfree = $free_points -$cost_minutes;
+    //update gift row
+    $gift_id = $giftmodel->id;
+    GiftMinute::find($gift_id)->update([
+        'free_minutes' => $newfree,
+        'status' => 'used',
+    ]);
+//add free point transfer
+                    
+                    $pointtransfer = new Pointtransfer();
+                    $pntctrlr = new PointTransferController();
+                    $type = 'd';
+                    $firstLetters = $type . 'clg-';
+                    $newpnum = $pntctrlr->GenerateCode($firstLetters);
+                    //$pointtransfer->point_id = $formdata['point_id'];
+                    $pointtransfer->client_id = $client->id;
+                    $pointtransfer->expert_id = $expertService->expert_id;
+                    $pointtransfer->service_id = $expertService->service_id;
+                    $pointtransfer->count = $cost_minutes;
+                    $pointtransfer->status = 1;
+                    $pointtransfer->selectedservice_id = $selectedservice->id;
+                    $pointtransfer->side = 'from-giftminute-client';
+                    $pointtransfer->state = 'agree';
+                    $pointtransfer->type = 'd';
+                    $pointtransfer->num = $newpnum;
+                    $pointtransfer->gift_id = $gift_id;
+                    $pointtransfer->notes =$call_cost;
+                    $pointtransfer->save();
+
+
+}else{
+    //الرصيد المجاني اصغر تماما من الكلفة
+    $minutesremain =$cost_minutes- $free_points;
+  //update gift row
+  $giftmodel = $avlarr['giftmodel'];
+  $gift_id = $giftmodel->id;
+  GiftMinute::find($gift_id)->update([
+      'free_minutes' => 0,
+      'status' => 'used',
+  ]);
+//add free point transfer
+                    
+$pointtransfer = new Pointtransfer();
+$pntctrlr = new PointTransferController();
+$type = 'd';
+$firstLetters = $type . 'clg-';
+$newpnum = $pntctrlr->GenerateCode($firstLetters);
+//$pointtransfer->point_id = $formdata['point_id'];
+$pointtransfer->client_id = $client->id;
+$pointtransfer->expert_id = $expertService->expert_id;
+$pointtransfer->service_id = $expertService->service_id;
+$pointtransfer->count = $free_points;
+$pointtransfer->status = 1;
+$pointtransfer->selectedservice_id = $selectedservice->id;
+$pointtransfer->side = 'from-giftminute-client';
+$pointtransfer->state = 'agree';
+$pointtransfer->type = 'd';
+$pointtransfer->num = $newpnum;
+$pointtransfer->gift_id = $gift_id;
+$pointtransfer->notes ='0';
+$pointtransfer->save();
+ //end add free point transfer
+ // decrease client balance
+
+ $client->minutes_balance = $client->minutes_balance - $minutesremain;
+ $client->save();
+ //create point transfer row
+ $remain_cost=$minutesremain * $minutecost;
+ $pointtransfer = new Pointtransfer();
+ $pntctrlr = new PointTransferController();
+ $type = 'd';
+ $firstLetters = $type . 'cl-';
+ $newpnum = $pntctrlr->GenerateCode($firstLetters);
+ //$pointtransfer->point_id = $formdata['point_id'];
+ $pointtransfer->client_id = $client->id;
+ $pointtransfer->expert_id = $expertService->expert_id;
+ $pointtransfer->service_id = $expertService->service_id;
+ $pointtransfer->count = $minutesremain;
+ $pointtransfer->status = 1;
+ $pointtransfer->selectedservice_id = $selectedservice->id;
+ $pointtransfer->side = 'from-client-minute';
+ $pointtransfer->state = 'wait';
+ $pointtransfer->type = 'd';
+ $pointtransfer->num = $newpnum;
+ $pointtransfer->notes = $remain_cost;
+ $pointtransfer->save();
+ ///////// noti
  
-                        // decrease client balance
-                        $client->minutes_balance = $client->minutes_balance - $cost_minutes;
-                        $client->save();
+ $this->sendnotifyminute_toclient( $minutesremain, $selectedservice);
 
-                        //create point transfer row
-                        $pointtransfer = new Pointtransfer();
-                        $pntctrlr = new PointTransferController();
-                        $type = 'd';
-                        $firstLetters = $type . 'cl-';
-                        $newpnum = $pntctrlr->GenerateCode($firstLetters);
-                        //$pointtransfer->point_id = $formdata['point_id'];
-                        $pointtransfer->client_id = $client->id;
-                        $pointtransfer->expert_id = $expertService->expert_id;
-                        $pointtransfer->service_id = $expertService->service_id;
-                        $pointtransfer->count = $call_cost;
-                        $pointtransfer->status = 1;
-                        $pointtransfer->selectedservice_id = $selectedservice->id;
-                        $pointtransfer->side = 'from-client';
-                        $pointtransfer->state = 'agree';
-                        $pointtransfer->type = 'd';
-                        $pointtransfer->num = $newpnum;
-                        $pointtransfer->notes = $call_cost;
-                        $pointtransfer->save();
-                        //add to expert balance
-                        $this->expert_op($selectedservice, $client);
-                        // send to client
-                        //   $cost_minutes
-                        $notctrlr2 = new NotificationController();
-                        $title2 = __('general.16minusminute_title');
-                        $body2 = __('general.16minusminute_body', ['Minuts' => $cost_minutes]);
-                        $notctrlr2->sendautonotify($title2, $body2, 'auto', 'order', '', 'call-order', $selectedservice->client_id, 0, $selectedservice->id, 0);
 
-                        //end normal
-                        //add to expert                             
-                        $this->msg = $this->id;
+}
+//for expert only  add to expert balance
+$this->expert_op($selectedservice, $client);
+                      
                     } else {
                         $this->msg == "notallowed";
                     }
