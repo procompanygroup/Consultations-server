@@ -28,6 +28,7 @@ class Pointtransfer extends Model
         'notes',
         'gift_id',
         'callpoint_id',
+        'gift_minute_id',
     ];
     protected $hidden = ['desc'];
     public function getDescAttribute()
@@ -132,6 +133,10 @@ class Pointtransfer extends Model
     public function gift(): BelongsTo
     {
         return $this->belongsTo(Gift::class)->withDefault();
+    }
+    public function giftminute(): BelongsTo
+    {
+        return $this->belongsTo(GiftMinute::class,'gift_minute_id')->withDefault();
     }
     public function callpoint(): BelongsTo
     {

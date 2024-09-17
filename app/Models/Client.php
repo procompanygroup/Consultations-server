@@ -168,6 +168,10 @@ public function getGenderConvAttribute(){
     {
         return $this->hasMany(Gift::class);
     }
+    public function giftsminutes(): HasMany
+    {
+        return $this->hasMany(GiftMinute::class);
+    }
     public function messages(): HasMany
     {
         return $this->hasMany(Message::class);

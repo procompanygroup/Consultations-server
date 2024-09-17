@@ -23,12 +23,15 @@ use App\Http\Controllers\Web\ClientOperationController;
 use App\Http\Controllers\Web\ExpertOperationController;
 use App\Http\Controllers\Web\PointTransferController;
 use App\Http\Controllers\Web\GiftController;
+use App\Http\Controllers\Web\GiftMinuteController;
+
 use App\Http\Controllers\Web\GiftExpertController;
 use App\Http\Controllers\Web\CallpointController;
 use App\Http\Controllers\Web\MessageController;
 use  App\Http\Controllers\Web\CallServiceController;
 use  App\Http\Controllers\Web\NotifyClientController;
 use   App\Http\Controllers\Web\NotifyController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -116,6 +119,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
             Route::post('/updatesecretkey/{id}', [SettingController::class, 'updatesecretkey']);
             Route::post('/updatepublishablekey/{id}', [SettingController::class, 'updatepublishablekey']);
             Route::post('/updatedays/{id}', [SettingController::class, 'updatedays']);
+            Route::post('/updatedaysminute/{id}', [SettingController::class, 'updatedaysminute']);
             Route::post('/updatecallcost/{id}', [SettingController::class, 'updatecallcost']);
             Route::post('/updateapplink', [SettingController::class, 'updateapplink']);
             Route::post('/updatesociallink', [SettingController::class, 'updatesociallink']);
@@ -142,12 +146,21 @@ Route::prefix('gift')->group(function () {
     Route::get('/fillclients', [GiftController::class, 'fillclients']); 
 
 });
+
 Route::prefix('expertgift')->group(function () {   
      
     Route::get('/', [GiftExpertController::class , 'index']); 
     Route::get('/create', [GiftExpertController::class, 'create']);    
     Route::post('/store', [GiftExpertController::class, 'store']);   
     // Route::get('/fillexperts', [GiftExpertController::class, 'fillclients']); 
+
+});
+Route::prefix('minute-gift')->group(function () {   
+     
+    Route::get('/', [GiftMinuteController::class , 'index']); 
+    Route::get('/create', [GiftMinuteController::class, 'create']);    
+    Route::post('/store', [GiftMinuteController::class, 'store']);   
+    Route::get('/fillclients', [GiftMinuteController::class, 'fillclients']); 
 
 });
         Route::resource('expert', ExpertController::class, ['except' => ['update']]);

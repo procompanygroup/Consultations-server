@@ -12,50 +12,13 @@ $(document).ready(function () {
  
 	//save image record
 	 
-
-
-
-	$('#btn_expert_percent').on('click', function (e) {
+	$('.send-btn').on('click', function (e) {
 		e.preventDefault();
-		sendform('#expert_percent_form');
-		});
-	 
-		$('#btn_expert_service_points').on('click', function (e) {
-			e.preventDefault();
-			sendform('#expert_service_points_form');
-			});
-/////////////////////
-	$('#btn_secret_key').on('click', function (e) {
-				e.preventDefault();
-				sendform('#secret_key_form');
-				});
-	$('#btn_publishable_key').on('click', function (e) {
-					e.preventDefault();
-					sendform('#publishable_key_form');
-					});
-
-					///
-	$('#btn_expire_days').on('click', function (e) {
-		e.preventDefault();
-		sendform('#expire_days_form');
+		var formid = $(this).closest("form").attr('id');
+		sendform('#'+formid);
 		});	
 
-		$('#btn_call_cost').on('click', function (e) {
-			e.preventDefault();
-			sendform('#call_cost_form');
-			});	
-
-			//
-
-			$('#btn_app_link').on('click', function (e) {
-				e.preventDefault();
-				sendform('#applink_form');
-				});
-				//
-				$('#btn_social_link').on('click', function (e) {
-				e.preventDefault();
-				sendform('#social_form');
-				});
+ 
 	function ClearErrors() {
 
 		$('.parsley-required').html('');
@@ -119,17 +82,7 @@ $(document).ready(function () {
  
 	});
 	 
-	 
-
- 
-
-
- 
-
 ///////////////////////////////////////////////////////
-
- 
- 
 function noteSuccess() {
 	notif({
 		msg: "تمت العملية بنجاح",
@@ -144,16 +97,9 @@ function noteError() {
 		bottom: '10'
 	});
 }
- 
- 
 function resetexpertForm() {
 	jQuery('#expert_form')[0].reset();
 
-
-	/*
-	$('#imgshow').attr("src", emptyimg);
-	$('#iconshow').attr("src", emptyimg);
-	*/
 }
  
 

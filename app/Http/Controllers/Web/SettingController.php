@@ -14,6 +14,7 @@ use App\Http\Requests\Web\Setting\UpdatePublishablekeyRequest;
 use App\Http\Requests\Web\Setting\UpdateSecretkeyRequest;
 use App\Http\Requests\Web\Setting\UpdateExpireDaysRequest;
 use App\Http\Requests\Web\Setting\UpdateAppLinkRequest;
+use App\Http\Requests\Web\Setting\UpdateExpireDaysMinuteRequest;
 
 
 class SettingController extends Controller
@@ -29,6 +30,7 @@ class SettingController extends Controller
     $secret_key = $this->findbyname('secret_key');
     $publishable_key = $this->findbyname('publishable_key');
     $gift_expire_days = $this->findbyname('gift_expire_days');
+    $gift_minute_expire_days = $this->findbyname('gift_minute_expire_days');
     $call_cost = $this->findbyname('call_cost');
     $gplay_link = $this->findbyname('gplay_link');
     $appstor_link = $this->findbyname('appstor_link');
@@ -41,6 +43,7 @@ class SettingController extends Controller
       'secret_key' => $secret_key,
       'publishable_key' => $publishable_key,
       'gift_expire_days' => $gift_expire_days,
+      'gift_minute_expire_days'=>$gift_minute_expire_days,
       'call_cost' => $call_cost,
       'gplay_link' => $gplay_link,
       'appstor_link' => $appstor_link,
@@ -254,9 +257,45 @@ class SettingController extends Controller
 
     }
   }
+  public function updatedaysminute(UpdateExpireDaysMinuteRequest $request, $id)
+  {
+    $formdata = $request->all();
+    //validate
+    $validator = Validator::make(
+      $formdata,
+      $request->rules(),
+      $request->messages()
+    );
+    if ($validator->fails()) {
+      return response()->json($validator);
+
+    } else {
+
+      Setting::find($id)->update([
+
+        'value' => $formdata['expire_days_minute'],
+
+      ]);
+
+      //save image
+      return response()->json("ok");
+
+    }
+  }
+  
   public function expiredays()
   {
     $gift_expire_daysrow = $this->findbyname('gift_expire_days');
+    $days = 0;
+    if ($gift_expire_daysrow) {
+      $days = $gift_expire_daysrow->value;
+    }
+    return $days;
+  }
+  
+  public function expiredays_gift_minute()
+  {
+    $gift_expire_daysrow = $this->findbyname('gift_minute_expire_days');
     $days = 0;
     if ($gift_expire_daysrow) {
       $days = $gift_expire_daysrow->value;

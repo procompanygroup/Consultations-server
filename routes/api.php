@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\GiftMinuteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\AuthController;
@@ -105,6 +106,7 @@ Route::middleware('authClient:api_clients')->group(function () {
         Route::post('/settoread', [NotificationController::class, 'settoread']);
         Route::post('/getnotifybyid', [NotificationController::class, 'getnotifybyid']);
         Route::post('/getgift', [GiftController::class, 'getgift']);
+        Route::post('/getgiftminute', [GiftMinuteController::class, 'getgift']);
         Route::post('/callorder', [SelectedServiceController::class, 'callorder']);
         Route::post('/uploadcall', [ClientController::class, 'uploadcall']);
         Route::post('/sendcallalert', [ClientController::class, 'sendcallalert']);

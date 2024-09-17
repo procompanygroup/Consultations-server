@@ -47,7 +47,7 @@
                                         placeholder="نسبة الخبير" name="expert_percent"
                                         value="{{ $expert_percent->value }}">
                                     <button type="submit" name="btn_expert_percent" id="btn_expert_percent"
-                                        class="btn btn-primary mr-3">{{ __('general.save') }}</button>
+                                        class="btn btn-primary mr-3 send-btn">{{ __('general.save') }}</button>
                                 </div>
                                 <div class="col-sm-12">
                                     <ul class="parsley-errors-list filled">
@@ -87,7 +87,7 @@
                                         value="{{ $expert_service_points->value }}">
 
                                     <button type="submit" name="btn_expert_service_points" id="btn_expert_service_points"
-                                        class="btn btn-primary mr-3">{{ __('general.save') }}</button>
+                                        class="btn btn-primary mr-3 send-btn">{{ __('general.save') }}</button>
                                 </div>
                                 <div class="col-sm-12">
                                     <ul class="parsley-errors-list filled">
@@ -124,7 +124,7 @@
                                         name="call_cost" value="{{ $call_cost->value }}">
 
                                     <button type="submit" name="btn_call_cost" id="btn_call_cost"
-                                        class="btn btn-primary mr-3">{{ __('general.save') }}</button>
+                                        class="btn btn-primary mr-3 send-btn">{{ __('general.save') }}</button>
                                 </div>
                                 <div class="col-sm-12">
                                     <ul class="parsley-errors-list filled">
@@ -162,7 +162,7 @@
                                         name="expire_days" value="{{ $gift_expire_days->value }}">
 
                                     <button type="submit" name="btn_expire_days" id="btn_expire_days"
-                                        class="btn btn-primary mr-3">{{ __('general.save') }}</button>
+                                        class="btn btn-primary mr-3 send-btn">{{ __('general.save') }}</button>
                                 </div>
                                 <div class="col-sm-12">
                                     <ul class="parsley-errors-list filled">
@@ -180,6 +180,43 @@
 
         </div>
         <!-- /div-->
+              <!--div-->
+              <div class="col-xl-12">
+                <div class="card mg-b-20">
+                    <div class="card-header pb-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title mg-b-0">عدد ايام صلاحية هدية الدقائق</h4>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="">
+                            <form class="form-horizontal"
+                                action="{{ url('admin/setting/updatedaysminute', $gift_minute_expire_days->id) }}" name="expire_days_minute_form"
+                                method="POST" id="expire_days_minute_form">
+                                @csrf
+                                <div class="row">
+                                    <div class="form-group d-flex justify-content-between col-sm-12">
+                                        <input type="text" class="form-control " id="expire_days_minute" placeholder="يوم"
+                                            name="expire_days_minute" value="{{ $gift_minute_expire_days->value }}">
+    
+                                        <button type="submit" name="btn_expire_days_minute" id="btn_expire_days_minute"
+                                            class="btn btn-primary mr-3 send-btn">{{ __('general.save') }}</button>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <ul class="parsley-errors-list filled">
+                                            <li class="parsley-required" id="expire_days_minute_error"></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </form>
+    
+                        </div>
+                    </div>
+                </div>
+                <!--/div-->
+    
+    
+            </div>
         <!--div-->
         <div class="col-xl-12">
             <div class="card mg-b-20">
@@ -200,7 +237,7 @@
                                         placeholder="Stripe Secret key" name="secret_key"
                                         value="{{ $secret_key->value }}">
                                     <button type="submit" name="btn_secret_key" id="btn_secret_key"
-                                        class="btn btn-primary mr-3">{{ __('general.save') }}</button>
+                                        class="btn btn-primary mr-3 send-btn">{{ __('general.save') }}</button>
                                 </div>
                                 <div class="col-sm-12">
                                     <ul class="parsley-errors-list filled">
@@ -238,7 +275,7 @@
                                         placeholder="Publishable key" name="publishable_key"
                                         value="{{ $publishable_key->value }}">
                                     <button type="submit" name="btn_publishable_key" id="btn_publishable_key"
-                                        class="btn btn-primary mr-3">{{ __('general.save') }}</button>
+                                        class="btn btn-primary mr-3 send-btn">{{ __('general.save') }}</button>
                                 </div>
                                 <div class="col-sm-12">
                                     <ul class="parsley-errors-list filled">
@@ -307,7 +344,7 @@
                                         <li class="parsley-required" id="appstor_link_error"></li>
                                     </ul>
                                     <button type="submit" name="btn_app_link" id="btn_app_link"
-                                        class="btn btn-primary mr-3">{{ __('general.save') }}</button>
+                                        class="btn btn-primary mr-3 send-btn">{{ __('general.save') }}</button>
                                 </div>
                             </div>
                 </form>
@@ -380,7 +417,7 @@
                                     <li class="parsley-required" id="facebook_link_error"></li>
                                 </ul>
                                 <button type="submit" name="btn_app_link" id="btn_social_link"
-                                    class="btn btn-primary mr-3">{{ __('general.save') }}</button>
+                                    class="btn btn-primary mr-3 send-btn">{{ __('general.save') }}</button>
                             </div>
                         </div>
             </form>
