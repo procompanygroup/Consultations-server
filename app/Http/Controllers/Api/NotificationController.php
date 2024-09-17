@@ -598,6 +598,7 @@ $res =    $notctrlr->send_to_fcm($tokenrow['token'],$notify->title,$notify->body
         'body' => $notify->body,
         'type' => $notify->type,
         'side' => $notify->side,
+        'order_type' => $notify->notes,
         'selectedservice_id' => $notify->selectedservice_id,
         'client_id' => $notify->notificationUsers->first()->client_id,
         'isread' => $notify->notificationUsers->first()->isread,

@@ -38,6 +38,7 @@ use App\Models\Selectedservice;
 use App\Http\Requests\Api\Expert\UploadCallRequest;
 use App\Http\Requests\Api\Client\ActivateRequest;
 use App\Http\Requests\Api\Client\ChangeNotifyStatusRequest;
+use App\Http\Controllers\Web\GiftMinuteController;
 /*
 use App\Http\Requests\Web\Client\StoreClientRequest;
 use App\Http\Requests\Web\Client\UpdateClientRequest;
@@ -651,10 +652,17 @@ return response()->json([
         $expiretime = 0;
           // client call balance , expert minute cost
           $client = Client::find($client_id);
-          $client_minutebalance= $client->minutes_balance;
+   //gift+minute 
+        //free point start
+        $giftctrlr = new GiftMinuteController();
+        $avlarr = $giftctrlr->checkavailablepoints($client_id);
+        $free_points = $avlarr['points'];
+        //free point end
+          $client_minutebalance= $client->minutes_balance + $free_points;
           $expertService= ExpertService::where('expert_id',$expert_id )->whereHas('service', function ($query)  {
               $query->where('is_callservice', 1);         
-            })->first(); 
+            })->first();
+         
           if( $client_minutebalance<=1 ){
               return response()->json('insufficient_balance', 401);
           }else{                

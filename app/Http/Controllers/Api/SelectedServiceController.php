@@ -34,7 +34,7 @@ use Illuminate\Support\Str;
 use App\Http\Controllers\Web\GiftController;
 use App\Models\Gift;
 use App\Http\Requests\Api\Order\CallOrderRequest;
-
+use App\Http\Controllers\Web\GiftMinuteController;
 //use Illuminate\Support\Str;
 class SelectedServiceController extends Controller
 {
@@ -1062,6 +1062,7 @@ $this->sendnotify_toclient($pointsremain, $newObj,$service->name);
         } else {
             //  client app    
             DB::transaction(function () use ($formdata) {
+
                 $selectedservice_id = $formdata['selectedservice_id'];
                 $minutes = $formdata['minutes'];
                 // convert seconds to minute and get round up for cost 
@@ -1090,6 +1091,11 @@ $this->sendnotify_toclient($pointsremain, $newObj,$service->name);
                         $minutecost = (float) $callcostobj->value;
                         //  
                         $call_cost = $cost_minutes * $minutecost;
+                           //free point start
+    $giftctrlr = new GiftMinuteController();
+    $avlarr = $giftctrlr->checkavailablepoints($client_id);
+    $free_points = $avlarr['points'];
+    //free point end
                         if ($client->minutes_balance < $cost_minutes) {
                             //contunie with client minute balance as cost                
                             $call_cost = $client->minutes_balance * $minutecost;
@@ -1105,9 +1111,11 @@ $this->sendnotify_toclient($pointsremain, $newObj,$service->name);
 
                         $selectedservice->save();
                         $this->id = $selectedservice->id;
+ 
                         // decrease client balance
                         $client->minutes_balance = $client->minutes_balance - $cost_minutes;
                         $client->save();
+
                         //create point transfer row
                         $pointtransfer = new Pointtransfer();
                         $pntctrlr = new PointTransferController();
