@@ -210,7 +210,7 @@ class ExpertAuthController extends Controller
         Expert::find($user_id)->update([
             'token' => '',
             'is_available' => 3,
-            'status' => 'n',
+            'status' => 'b',
         ]);
         auth('api')->logout();
         return response()->json('ok');
