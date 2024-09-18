@@ -15,17 +15,17 @@ use App\Http\Controllers\Api\ExpertController;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Middleware\Api\AuthenticateExpert;
 use JWTAuth;
- 
+
 class ExpertAuthController extends Controller
 {
-     /**
+    /**
      * Create a new AuthController instance.
      *
      * @return void
      */
     public function __construct()
     {
-       $this->middleware('authExpert:api', ['except' => ['register','login','loginexpert','registerexpert']]);
+        $this->middleware('authExpert:api', ['except' => ['register', 'login', 'loginexpert', 'registerexpert']]);
     }
 
     /**
@@ -33,148 +33,150 @@ class ExpertAuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-/*
-    public function login()
-    {
-     //   $credentials = request(['username', 'password']);
-      //   return response()->json( $request);
-   
-      //  $request->validate(
-        //    ['userName'=>'required',
-       //     'password'=>'required',
-      //  ]
-      //  );
+    /*
+        public function login()
+        {
+         //   $credentials = request(['username', 'password']);
+          //   return response()->json( $request);
        
-        $credentials = request(['user_name', 'password']);
+          //  $request->validate(
+            //    ['userName'=>'required',
+           //     'password'=>'required',
+          //  ]
+          //  );
+           
+            $credentials = request(['user_name', 'password']);
 
-        if (! $token = auth('api')->attempt($credentials)) {
-            return response()->json(['error' => 'notexist'], 401);
+            if (! $token = auth('api')->attempt($credentials)) {
+                return response()->json(['error' => 'notexist'], 401);
+            }
+            
+          //  $user = User::where('userName',$credentials['userName'])
+         //   ->where('password',$credentials['password']);
+          
+          //  $passhash=Hash::make( $request['password']);
+        
+            
+          //  $user=auth('api')->user();
+          //  auth('api')->login( $user);
+           // $type=  auth('api')->type();
+           // Auth::login($user);
+            return response()->json(
+                [
+                    'token' => $token,                
+                 ]
+               // 'message'=>"success",
+              //  'user'=> $user,
+             //   'type'=>  $type,
+            );
+        //   return $this->respondTokenwithExpire($token);        
         }
-        
-      //  $user = User::where('userName',$credentials['userName'])
-     //   ->where('password',$credentials['password']);
-      
-      //  $passhash=Hash::make( $request['password']);
-    
-        
-      //  $user=auth('api')->user();
-      //  auth('api')->login( $user);
-       // $type=  auth('api')->type();
-       // Auth::login($user);
-        return response()->json(
-            [
-                'token' => $token,                
-             ]
-           // 'message'=>"success",
-          //  'user'=> $user,
-         //   'type'=>  $type,
-        );
-    //   return $this->respondTokenwithExpire($token);        
-    }
-*/
+    */
 
 
     public function login()
     {
-     //   $credentials = request(['user_name', 'password']);
-     $formdata=request();
-        $user_name=$formdata['user_name'];
-        $password= $formdata['password'];
-     //   $credentials = request(['mobile']);
-       
-     
-        $user= Expert::where('user_name',$user_name)->where('is_active',1)->first();
-      //  return response()->json(['form' =>  $credentials]);
-        if (!is_null( $user)) {
-            if (Hash::check( $password,$user->password)) {
+        //   $credentials = request(['user_name', 'password']);
+        $formdata = request();
+        $user_name = $formdata['user_name'];
+        $password = $formdata['password'];
+        //   $credentials = request(['mobile']);
+
+
+        $user = Expert::where('user_name', $user_name)->where('is_active', 1)->first();
+        //  return response()->json(['form' =>  $credentials]);
+        if (!is_null($user)) {
+            if (Hash::check($password, $user->password)) {
                 // The passwords match...
-                if(! $token =auth('api')->fromUser($user)){
+                if (!$token = auth('api')->fromUser($user)) {
                     return response()->json(['error' => 'notexist'], 401);
                 }
-            }else{
-                return response()->json(['error' => 'notexist'], 401); 
-            }    
-           
-        }else{
+            } else {
+                return response()->json(['error' => 'notexist'], 401);
+            }
+
+        } else {
             return response()->json(['error' => 'notexist'], 401);
         }
         //Auth::check();
-     //  $atype=  Auth::user()->type; 
-   //  $user=auth('api_clients')->user();
-    // auth('api_clients')->login($user);
-       return response()->json([
-        'token' => $token,
-       // 'user'=> $user,   
-     ]);
-      
+        //  $atype=  Auth::user()->type; 
+        //  $user=auth('api_clients')->user();
+        // auth('api_clients')->login($user);
+        return response()->json([
+            'token' => $token,
+            // 'user'=> $user,   
+        ]);
+
     }
     public function register()
     {
-        $userCont=new ExpertController();
-        $formdata = request(['user_name',
-        'password',
-         'mobile',
-         
-        'email',
-        'nationality',
-         'birthdate',
-         'gender',
-        'marital_status',
-         'image',
-        'token',
-        'points_balance',
-    ]);
-      $storrequest=new StoreExpertRequest();
-    //  $storrequest->request()=$formdata ;
-   //   $storrequest=  $formdata ;
-      $validator = Validator::make($formdata,
-      $storrequest->rules(),
-      $storrequest->messages()
-    );
-    if ($validator->fails()) {
+        $userCont = new ExpertController();
+        $formdata = request([
+            'user_name',
+            'password',
+            'mobile',
+
+            'email',
+            'nationality',
+            'birthdate',
+            'gender',
+            'marital_status',
+            'image',
+            'token',
+            'points_balance',
+        ]);
+        $storrequest = new StoreExpertRequest();
+        //  $storrequest->request()=$formdata ;
+        //   $storrequest=  $formdata ;
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+            /*
+              return redirect('/cpanel/users/add')
+              ->withErrors($validator)
+                          ->withInput();
+                          */
+            return response()->json(['errorValidation' => $validator->errors()]);
+            //   return redirect()->back()->withErrors($validator)->withInput();
+
+        } else {
+
+            $user = new Expert();
+            $user->userName = $formdata["userName"];
+            $user->password = $formdata["password"];
+            $user->email = $formdata["email"];
+            $user->mobile = $formdata["mobile"];
+            $user->nationality = $formdata["nationality"];
+            $user->gender = $formdata["gender"];
+            $user->maritalStatus = $formdata["maritalStatus"];
+            $user->image = $formdata["image"];
+            $user = $userCont->addUser($user);
+
+            // return response()->json(['formdata' => $formdata ]);
+            // return response()->json(['userName' => $formdata["userName"]]);
+            return response()->json(['userId' => $user->id]);
+        }
+
         /*
-          return redirect('/cpanel/users/add')
-          ->withErrors($validator)
-                      ->withInput();
-                      */
-                      return response()->json(['errorValidation' => $validator->errors()]);
-     //   return redirect()->back()->withErrors($validator)->withInput();
-  
-      } else {
+        {
+        "userName":"ahmad2",
+         "password":"123123",
+        "email":"aa@gmail.com",
+        "mobile":"0957575",
+        "nationality":"syr",
+        "gender":0,
+        "maritalStatus":"single",
+        "image":""
+        }
+        */
 
-        $user=new Expert();
-        $user->userName= $formdata["userName"];
-        $user->password= $formdata["password"];
-        $user->email= $formdata["email"];
-        $user->mobile= $formdata["mobile"];
-        $user->nationality= $formdata["nationality"];
-        $user->gender= $formdata["gender"];
-        $user->maritalStatus= $formdata["maritalStatus"];
-        $user->image= $formdata["image"];
-        $user= $userCont->addUser($user);
 
-       // return response()->json(['formdata' => $formdata ]);
-        // return response()->json(['userName' => $formdata["userName"]]);
-         return response()->json(['userId' => $user->id]);
-      }
+        //  $token=Auth::login($user);
 
-    /*
-    {
-    "userName":"ahmad2",
-     "password":"123123",
-    "email":"aa@gmail.com",
-    "mobile":"0957575",
-    "nationality":"syr",
-    "gender":0,
-    "maritalStatus":"single",
-    "image":""
-    }
-    */
-  
-  
-      //  $token=Auth::login($user);
-
-      //  return response()->json(['name' => 'Unauthorized']);
+        //  return response()->json(['name' => 'Unauthorized']);
         /*
         $credentials = request(['userName', 'password']);
 
@@ -185,8 +187,8 @@ class ExpertAuthController extends Controller
         return $this->respondWithToken($token);
         */
     }
-     
-  
+
+
     /**
      * Get the authenticated User.
      *
@@ -204,11 +206,13 @@ class ExpertAuthController extends Controller
      */
     public function logout_expert()
     {
-      $user_id = auth('api')->user()->id;
-      Expert::find($user_id)->update([
-        'token' => '',
-    ]);
-    auth('api')->logout();
+        $user_id = auth('api')->user()->id;
+        Expert::find($user_id)->update([
+            'token' => '',
+            'is_available' => 3,
+            'status' => 'n',
+        ]);
+        auth('api')->logout();
         return response()->json('ok');
     }
     public function logout()
@@ -246,9 +250,9 @@ class ExpertAuthController extends Controller
     protected function respondTokenwithExpire($token)
     {
         return response()->json([
-            ' token' => $token,           
+            ' token' => $token,
             'expires_in' => auth('api')->factory()->getTTL() * 60
         ]);
     }
-  
+
 }
