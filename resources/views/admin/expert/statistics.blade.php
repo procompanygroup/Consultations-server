@@ -48,7 +48,7 @@
 											
                                                 <th class="border-bottom-0">الخدمة</th>
 												<th class="border-bottom-0">التقييم</th>
-												<th class="border-bottom-0">التعليق</th>
+												<th class="border-bottom-0"></th>
 											</tr>
 										</thead>
 										<tbody>
@@ -59,7 +59,7 @@
 												<td>{{ $sts['answer_speed']  }}</td>
 												<td>{{ $sts['service_name']  }}</td>
 												<td>{{ $sts['rate']  }}</td>
-												<td>{{ $sts['comment']  }}</td>
+												<td></td>
 
 											</tr>
 											@endforeach

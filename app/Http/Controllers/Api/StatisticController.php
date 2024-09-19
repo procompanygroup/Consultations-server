@@ -142,7 +142,8 @@ class StatisticController extends Controller
         $Arr = [];
         foreach ($experts as $expert) {
             $stsresArr = $this->expert_statistics($expert->id);
-            if ($stsresArr) {
+
+            if ($stsresArr['service_statistics']) {
                 // $newArr=[];          
                 foreach ($stsresArr['service_statistics'] as $service_sts) {
                     $newArr = [
@@ -157,6 +158,18 @@ class StatisticController extends Controller
                     ];
                     $Arr[] = $newArr;
                 }
+            }else{
+                $newArr = [
+                    'answer_speed' => $stsresArr['answer_speed'],
+                    'full_name' => $expert->full_name,
+                    'expert_id' => $expert->id,
+                    "service_id" => 0,
+                    "service_name" => '-',
+                    "icon" => '',
+                    "rate" => '-',
+                    "comment" => '-',
+                ];
+                $Arr[] = $newArr;  
             }
         }
         return $Arr;
