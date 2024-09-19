@@ -66,7 +66,7 @@
 						<ul class="slide-menu">
 							<li><a class="slide-item"  href="{{ route('expert.index') }}">اضافة خبير</a></li>
 							<li><a class="slide-item"  href="{{ url('admin/expertstatus') }}">حالة الخبير</a></li>
-
+                            <li><a class="slide-item"  href="{{ url('admin/experts/statistics') }}">احصائيات الخبراء</a></li>
 						</ul>
 					</li>
 

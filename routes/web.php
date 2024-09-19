@@ -164,6 +164,7 @@ Route::prefix('minute-gift')->group(function () {
 
 });
         Route::resource('expert', ExpertController::class, ['except' => ['update']]);
+        Route::get('experts/statistics', [ExpertController::class, 'statistics']);
         Route::get('expertstatus', [ExpertController::class, 'showstatus']);
         Route::prefix('expert')->group(function () {
             Route::post('/update/{id}', [ExpertController::class, 'update'])->name('expert.update');
@@ -171,6 +172,8 @@ Route::prefix('minute-gift')->group(function () {
             
             Route::get('/statusbyid/{id}', [ExpertController::class, 'statusbyid']);
             Route::post('/updatestatus/{id}', [ExpertController::class, 'updatestatus']);
+      
+            
         });
 
         Route::resource('client', ClientController::class, ['except' => ['update']]);

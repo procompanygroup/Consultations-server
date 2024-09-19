@@ -370,7 +370,7 @@ $this->sendnotify_toclient($pointsremain, $newObj,$service->name);
         $notctrlr2 = new NotificationController();
         $title2 = __('general.17minuspoints_title');
         $body2 = __('general.17minuspoints_body', ['Points' => $points,'Service'=>$service_name]);
-        $notctrlr2->sendautonotify($title2, $body2, 'auto', 'order', '', 'finance', $selectedservice->client_id, 0, $selectedservice->id, 0);
+        $notctrlr2->sendautonotify($title2, $body2, 'auto', 'finance', '', 'finance', $selectedservice->client_id, 0, $selectedservice->id, 0);
 
     }
     public function sendnotifyminute_toclient($points, $selectedservice)
@@ -378,7 +378,7 @@ $this->sendnotify_toclient($pointsremain, $newObj,$service->name);
         $notctrlr2 = new NotificationController();
         $title2 = __('general.16minusminute_title');
         $body2 = __('general.16minusminute_body', ['Minuts' => $points]);
-        $notctrlr2->sendautonotify($title2, $body2, 'auto', 'order', '', 'finance', $selectedservice->client_id, 0, $selectedservice->id, 0);
+        $notctrlr2->sendautonotify($title2, $body2, 'auto', 'finance', '', 'finance', $selectedservice->client_id, 0, $selectedservice->id, 0);
 
     }
     /*

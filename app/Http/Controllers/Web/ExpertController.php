@@ -24,6 +24,7 @@ use App\Http\Requests\Web\Expert\UpdateStatusRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Api\StorageController;
 use App\Http\Controllers\Web\NotifyClientController;
+use App\Http\Controllers\Api\StatisticController;
 class ExpertController extends Controller
 {
  // public $path = 'images/experts'; 
@@ -422,5 +423,14 @@ class ExpertController extends Controller
           Storage::delete("public/" . $recpath . '/' . $oldfilename);
       }
       return 1;
+  }
+
+  public function statistics()
+  {
+    
+    $stsctrlr=new StatisticController();
+    $sts_list= $stsctrlr->all_expert_statistics();
+        
+      return view('admin.expert.statistics', ['sts_list' => $sts_list]);
   }
 }
