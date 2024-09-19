@@ -103,7 +103,7 @@ class StatisticController extends Controller
             END) AS icon")
     )->find($key);
    //  $aa= $value;
-  $rate='-';
+  $rate=0;
    $serv= $service_rate_list->where('service_id',$key)->first();
    if($serv){
     $rate=$serv['rate'];
