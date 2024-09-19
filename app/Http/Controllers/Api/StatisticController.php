@@ -39,21 +39,22 @@ class StatisticController extends Controller
         //group services
         $serviceIds = Selectedservice::where('expert_id', $expert_id)->
             where(function ($query) {
-                $query->where('comment_state', 'agree')
-                    ->orWhere('rate', '>', 0);
+                $query->where('rate_state', 'agree')
+                    ->Where('rate', '>', 0);
             })
-            ->whereDate('created_at', '>=', $nowsub)
+           // ->whereDate('created_at', '>=', $nowsub)
             ->groupBy('service_id')->select('service_id')->get();
-        //group service client for comment and rate
+        //group service client for   rate
         $service_clientIds = Selectedservice::where('expert_id', $expert_id)->
             where(function ($query) {
-                $query->where('comment_state', 'agree')
-                    ->orWhere('rate', '>', 0);
-            })->whereDate('created_at', '>=', $nowsub)
+                $query->where('rate_state', 'agree')
+                    ->Where('rate', '>', 0);
+            })
+            //->whereDate('created_at', '>=', $nowsub)
             ->groupBy('service_id', 'client_id')->select('service_id', 'client_id')->get();
         $rate_id_list = [];
         // $admin_rate_id_list = [];
-        $comment_id_list = [];
+      //  $comment_id_list = [];
         foreach ($service_clientIds as $service_clint_row) {
             //group service client rate
             //rate 
@@ -61,78 +62,68 @@ class StatisticController extends Controller
                 where('service_id', $service_clint_row->service_id)->
                 where('client_id', $service_clint_row->client_id)->
                 where('rate', '>', 0)
-                ->whereDate('created_at', '>=', $nowsub)
+               // ->whereDate('created_at', '>=', $nowsub)
                 ->orderByDesc('rate_date')->select('id')->first();
             if ($rate_Id) {
                 $rate_id_list[] = $rate_Id->id;
             }
-            //admin rate 
-            // $admin_rate_Id = Selectedservice::where('expert_id', $expert_id)->
-            //     where('service_id', $service_clint_row->service_id)->
-            //     where('client_id', $service_clint_row->client_id)->
-            //     where('comment_state', 'agree')->
-            //     where('comment_rate', '>', 0)
-            //     ->orderByDesc('comment_rate_date')->select('id')->first();
-            // if ($admin_rate_Id) {
-            //     $admin_rate_id_list[] = $admin_rate_Id->id;
-            // }
-
         }
-        $last_service_list = [];
+        $service_rate_list = [];
         foreach ($serviceIds as $service_row) {
             //rate
             $rateavg = Selectedservice::where('expert_id', $expert_id)
                 ->where('service_id', $service_row->service_id)
                 //   ->whereDate('created_at', '>=', $nowsub)
-                ->whereIntegerInRaw('id', $rate_id_list)->select('rate')->average('rate');
-            //admin rate avg
-            // $adminrateavg = Selectedservice::where('expert_id', $expert_id)
-            //     ->where('service_id', $service_row->service_id)
-            //     ->whereIn('id', $admin_rate_id_list)->select('comment_rate')->average('comment_rate');
-
-
-            //     $finalrate = 0;
-            // if ($rateavg == 0 || $adminrateavg == 0) {
-            //     $finalrate = ($rateavg + $adminrateavg);
-            // } else {
-            //     $finalrate = ($rateavg + $adminrateavg) / 2;
-            // }
+                ->whereIntegerInRaw('id', $rate_id_list)->select('rate')->average('rate');     
             //2.1 ->3
-            $finalrate = ceil($rateavg);
-            //comment
-            $commentrow = Selectedservice::where('expert_id', $expert_id)
-                ->where('service_id', $service_row->service_id)
-                ->where('comment_state', 'agree')
-                ->whereDate('created_at', '>=', $nowsub)
-                ->orderByDesc('comment_date')->select('comment')->first();
-            $finalcomment = '';
-            if ($commentrow) {
-                $finalcomment = $commentrow->comment;
-            }
-            $service = Service::select(
-                'id',
-                'name',
-                DB::raw("(CASE 
-                    WHEN services.icon is NULL THEN '$defaultsvg'                    
-                    ELSE CONCAT('$iconurl',icon)
-                    END) AS icon")
-            )->find($service_row->service_id);
+            $finalrate = ceil($rateavg);        
             $arrayservice = [
-                'service_id' => $service->id,
-                'name' => $service->name,
-                'icon' => $service->icon,
+                'service_id' => $service_row->service_id,
+                // 'name' => $service->name,
+                // 'icon' => $service->icon,
                 'rate' => $finalrate,
-                'comment' => $finalcomment,
+              //  'comment' => $finalcomment,
             ];
-            $last_service_list[] = $arrayservice;
+            $service_rate_list[] = $arrayservice;
         }
+        //group all services and calculate count of orders for each service
+        $service_rate_list= collect($service_rate_list);
+        $services_ofexpert = Selectedservice::where('expert_id', $expert_id)->get();
+     $services_count_list= $services_ofexpert->where('answer_state','agree')->makeHidden(['answers'])->map
+     ->only(['id','service_id','expert_id'])
+     ->countBy('service_id');
+     $allserviceArr=[];
+   foreach ($services_count_list as $key => $value) {
+    $service = Service::select(
+        'id',
+        'name',
+        DB::raw("(CASE 
+            WHEN services.icon is NULL THEN '$defaultsvg'                    
+            ELSE CONCAT('$iconurl',icon)
+            END) AS icon")
+    )->find($key);
+   //  $aa= $value;
+  $rate='-';
+   $serv= $service_rate_list->where('service_id',$key)->first();
+   if($serv){
+    $rate=$serv['rate'];
+   }    
+     $arrayservice = [
+        'service_id' => $service->id,
+        'name' => $service->name,
+        'icon' => $service->icon,
+        'rate' => $rate,
+        'orders_count'=>$value,
+      //  'comment' => $finalcomment,
+    ];
+    $allserviceArr[]= $arrayservice;
+   }         
         $expert = Expert::select('id', 'answer_speed')->find($expert_id);
         $answerspeed = $expert->answer_speed;
-
         //  return response()->json(['answer_speed' => $answerspeed, 'service_statistics' => $last_service_list]);
         return [
             'answer_speed' => $answerspeed,
-            'service_statistics' => $last_service_list
+            'service_statistics' => $allserviceArr
         ];
     }
 
@@ -154,7 +145,7 @@ class StatisticController extends Controller
                         "service_name" => $service_sts['name'],
                         "icon" => $service_sts['icon'],
                         "rate" => $service_sts['rate'],
-                        "comment" => $service_sts['comment'],
+                      "orders_count" => $service_sts['orders_count'],
                     ];
                     $Arr[] = $newArr;
                 }
@@ -167,7 +158,8 @@ class StatisticController extends Controller
                     "service_name" => '-',
                     "icon" => '',
                     "rate" => '-',
-                    "comment" => '-',
+                    "orders_count"=>'-',
+                   // "comment" => '-',
                 ];
                 $Arr[] = $newArr;  
             }

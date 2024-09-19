@@ -44,6 +44,7 @@
 											<tr>
 
 												<th class="border-bottom-0">{{ __('general.user_name') }}</th>
+												<th class="border-bottom-0">الاسم الكامل</th>
 												<th class="border-bottom-0">{{ __('general.email') }}</th>
 											
                                                 <th class="border-bottom-0">{{ __('general.action') }}</th>
@@ -55,6 +56,7 @@
 											<tr>
 
 												<td>{{$expert->user_name }}</td>
+												<td>{{$expert->full_name }}</td>
 												<td>{{ $expert->email }}</td>
 												
                                                 <td>

@@ -33,7 +33,7 @@ class ExpertController extends Controller
    */
   public function index()
   {
-    $list = DB::table('experts')->get();
+    $list = Expert::get();
     
     return view('admin.expert.show', ['experts' => $list]);
     //return response()->json($users);
@@ -430,7 +430,9 @@ class ExpertController extends Controller
     
     $stsctrlr=new StatisticController();
     $sts_list= $stsctrlr->all_expert_statistics();
-        
+
+    
+  
       return view('admin.expert.statistics', ['sts_list' => $sts_list]);
   }
 }

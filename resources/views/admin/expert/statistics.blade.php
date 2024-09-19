@@ -48,7 +48,7 @@
 											
                                                 <th class="border-bottom-0">الخدمة</th>
 												<th class="border-bottom-0">التقييم</th>
-												<th class="border-bottom-0"></th>
+												<th class="border-bottom-0">عدد الطلبات</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -58,8 +58,8 @@
 												<td>{{$sts['full_name'] }}</td>
 												<td>{{ $sts['answer_speed']  }}</td>
 												<td>{{ $sts['service_name']  }}</td>
-												<td>{{ $sts['rate']  }}</td>
-												<td></td>
+												<td>{{ $sts['rate'] }}</td>
+												<td>{{ $sts['orders_count'] }}</td>
 
 											</tr>
 											@endforeach
