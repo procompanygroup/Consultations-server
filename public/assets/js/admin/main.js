@@ -24,7 +24,7 @@ $(document).ready(function () {
                        if(data.answers!=0){
                        $('#answers-num ').text(data.answers) ;
                        }
-                       if(data.answers!=0){
+                       if(data.comments!=0){
                        $('#comments-num ').text(data.comments) ;
                        }
                        if(data.rates!=0){
