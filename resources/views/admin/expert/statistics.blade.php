@@ -9,7 +9,13 @@
 <link href="{{URL::asset('assets/plugins/datatable/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" />
 <link href="{{URL::asset('assets/plugins/datatable/css/jquery.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/datatable/css/responsive.dataTables.min.css')}}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{{URL::asset('assets/star-rating/src/css/star-rating-svg.css')}}">
 <link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
+
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/rating/ratings.css')}}">
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/rating/themes/css-stars.css')}}">
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/rating/themes/bootstrap-stars.css')}}">
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/rating/themes/fontawesome-stars-o.css')}}">
 @endsection
 @section('page-header')
 				<!-- breadcrumb -->
@@ -58,7 +64,18 @@
 												<td>{{$sts['full_name'] }}</td>
 												<td>{{ $sts['answer_speed']  }}</td>
 												<td>{{ $sts['service_name']  }}</td>
-												<td>{{ $sts['rate'] }}</td>
+											 <td style="width: 100px;">
+												<div class="static-rate text-center fs-30">
+													@php $n=5-$sts['rate']; @endphp
+													@for ($i = 1; $i <= $sts['rate']; $i++)
+													<i class="fa fa-star text-warning" aria-hidden="true"></i>
+													@endfor
+													@for ($i = 1; $i <= $n; $i++)
+													<i class="fa fa-star "  style="color: lightgray" aria-hidden="true"></i>
+													@endfor
+												</div>
+											</td>
+										 
 												<td>{{ $sts['orders_count'] }}</td>
 
 											</tr>
@@ -116,4 +133,9 @@
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('assets/js/table-data.js')}}"></script>
 <script src="{{URL::asset('assets/js/admin/delete.js')}}"></script>
+
+	<script src="{{URL::asset('assets/plugins/rating/jquery.rating-stars.js')}}"></script>
+	<script src="{{URL::asset('assets/plugins/rating/jquery.barrating.js')}}"></script>
+	<script src="{{URL::asset('assets/plugins/rating/ratings.js')}}"></script>
+	 
 @endsection

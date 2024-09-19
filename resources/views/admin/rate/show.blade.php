@@ -10,8 +10,10 @@
 <link href="{{URL::asset('assets/plugins/datatable/css/jquery.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/datatable/css/responsive.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
-
-<link rel="stylesheet" type="text/css" href="{{URL::asset('assets/star-rating/src/css/star-rating-svg.css')}}">
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/rating/ratings.css')}}">
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/rating/themes/css-stars.css')}}">
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/rating/themes/bootstrap-stars.css')}}">
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/rating/themes/fontawesome-stars-o.css')}}">
 
 @endsection
 @section('page-header')
@@ -67,8 +69,18 @@
 												<td>{{$selectedservice->service->name }}</td>
 												<td>{{ $selectedservice->expert->full_name }}</td>
 												
-												<td style="width: 100px;"><div class="my-rating-8" data-rating="{{ $selectedservice->rate}}"></div></td>
-                                                
+													<td style="width: 100px;">
+													<div class="static-rate text-center fs-30">
+														@php $n=5- $selectedservice->rate ; @endphp
+														@for ($i = 1; $i <= $selectedservice->rate; $i++)
+														<i class="fa fa-star text-warning" aria-hidden="true"></i>
+														@endfor
+														@for ($i = 1; $i <= $n; $i++)
+														<i class="fa fa-star "  style="color: lightgray" aria-hidden="true"></i>
+														@endfor
+													</div>
+												</td>
+
 												<td>{{ $selectedservice->created_at }}</td>
 												<td>{{ $selectedservice->rate_state_conv}}</td>
                                                 <td>
@@ -150,6 +162,11 @@
 <script src="{{URL::asset('assets/plugins/datatable/js/buttons.colVis.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
+
+<script src="{{URL::asset('assets/plugins/rating/jquery.rating-stars.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/rating/jquery.barrating.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/rating/ratings.js')}}"></script>
+
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('assets/js/table-data.js')}}"></script>
 <script src="{{URL::asset('assets/js/admin/rate.js')}}"></script>
@@ -161,48 +178,6 @@
 	
 		</script>
 
-<script>
-	$(function() {
-	
-	  // basic use comes with defaults values
-	  
-	
-	  $(".my-rating-2").starRating({
-		totalStars: 5,
-		starSize: 30,
-		starShape: 'rounded',
-		emptyColor: 'lightgray',
-		hoverColor: 'salmon',
-		activeColor: 'crimson',
-		useGradient: false
-	  });
-	
-	  // example grabing rating from markup, and custom colors
-	  $(".my-rating-4").starRating({
-		totalStars: 5,
-		starShape: 'rounded',
-		starSize: 40,
-		emptyColor: 'lightgray',
-		hoverColor: 'salmon',
-		activeColor: 'crimson',
-		useGradient: false
-	  });
-	
  
  
-	
-	 
-	
-	  $(".my-rating-8").starRating({
-		totalStars: 5,
-		useFullStars: true,
-		readOnly: true,
-		starSize: 20,
-	  });
-	
-	  
-	
-	});
-	</script>
-	<script src="{{URL::asset('assets/star-rating/src/jquery.star-rating-svg.js')}}"></script>
 @endsection

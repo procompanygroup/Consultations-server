@@ -157,8 +157,8 @@ class StatisticController extends Controller
                     "service_id" => 0,
                     "service_name" => '-',
                     "icon" => '',
-                    "rate" => '-',
-                    "orders_count"=>'-',
+                    "rate" => 0,
+                    "orders_count"=>0,
                    // "comment" => '-',
                 ];
                 $Arr[] = $newArr;  
