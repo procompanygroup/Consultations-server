@@ -427,12 +427,22 @@ class ExpertController extends Controller
 
   public function statistics()
   {
-    
-    $stsctrlr=new StatisticController();
-    $sts_list= $stsctrlr->all_expert_statistics();
+    $List =Expert::get();  
+     
+   // $sts_list= $stsctrlr->all_expert_statistics();
 
-    
-  
-      return view('admin.expert.statistics', ['sts_list' => $sts_list]);
+      return view('admin.expert.statistics', ['sts_list' => $List]);
+  }
+  public function statistics_expert($id)
+  {
+    $expert =Expert::find($id);  
+    if($expert){
+      $stsctrlr=new StatisticController();
+      $sts_list= $stsctrlr->expert_statistics($id);
+          return view('admin.expert.statistics-expert', ['expert'=> $expert,'sts_list' =>$sts_list]);
+    }else{
+      return response("not Found",401);
+    }
+
   }
 }

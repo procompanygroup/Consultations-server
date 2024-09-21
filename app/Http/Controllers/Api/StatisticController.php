@@ -19,13 +19,10 @@ use App\Http\Controllers\Api\StorageController;
 class StatisticController extends Controller
 {
 
-    //  public $path = 'images/experts';
-    // public $recordpath = 'images/experts/records';
+    
     /**
      * Display a listing of the resource.
-     */
-    public $id = 0;
-    public $pointtransfer_id = 0;
+     */ 
     public $oldestday = 30;
 
 
@@ -34,7 +31,7 @@ class StatisticController extends Controller
         $strgCtrlr = new StorageController();
         $iconurl = $strgCtrlr->ServicePath('icon');
         $defaultsvg = $strgCtrlr->DefaultPath('icon');
-        $nowsub = Carbon::now()->subDays($this->oldestday);
+      //  $nowsub = Carbon::now()->subDays($this->oldestday);
 
         //group services
         $serviceIds = Selectedservice::where('expert_id', $expert_id)->
@@ -127,44 +124,84 @@ class StatisticController extends Controller
         ];
     }
 
-    public function all_expert_statistics()
-    {
-        $experts = Expert::get();
-        $Arr = [];
-        foreach ($experts as $expert) {
-            $stsresArr = $this->expert_statistics($expert->id);
+    // public function all_expert_statistics()
+    // {
+    //     $experts = Expert::get();
+    //     $Arr = [];
+    //     foreach ($experts as $expert) {
+    //         $stsresArr = $this->expert_statistics($expert->id);
 
-            if ($stsresArr['service_statistics']) {
-                // $newArr=[];          
-                foreach ($stsresArr['service_statistics'] as $service_sts) {
-                    $newArr = [
-                        'answer_speed' => $stsresArr['answer_speed'],
-                        'full_name' => $expert->full_name,
-                        'expert_id' => $expert->id,
-                        "service_id" => $service_sts['service_id'],
-                        "service_name" => $service_sts['name'],
-                        "icon" => $service_sts['icon'],
-                        "rate" => $service_sts['rate'],
-                      "orders_count" => $service_sts['orders_count'],
-                    ];
-                    $Arr[] = $newArr;
-                }
-            }else{
-                $newArr = [
-                    'answer_speed' => $stsresArr['answer_speed'],
-                    'full_name' => $expert->full_name,
-                    'expert_id' => $expert->id,
-                    "service_id" => 0,
-                    "service_name" => '-',
-                    "icon" => '',
-                    "rate" => 0,
-                    "orders_count"=>0,
-                   // "comment" => '-',
-                ];
-                $Arr[] = $newArr;  
-            }
-        }
-        return $Arr;
-    }
+    //         if ($stsresArr['service_statistics']) {
+    //             // $newArr=[];          
+    //             foreach ($stsresArr['service_statistics'] as $service_sts) {
+    //                 $newArr = [
+    //                     'answer_speed' => $stsresArr['answer_speed'],
+    //                     'full_name' => $expert->full_name,
+    //                     'expert_id' => $expert->id,
+    //                     "service_id" => $service_sts['service_id'],
+    //                     "service_name" => $service_sts['name'],
+    //                     "icon" => $service_sts['icon'],
+    //                     "rate" => $service_sts['rate'],
+    //                   "orders_count" => $service_sts['orders_count'],
+    //                 ];
+    //                 $Arr[] = $newArr;
+    //             }
+    //         }else{
+    //             $newArr = [
+    //                 'answer_speed' => $stsresArr['answer_speed'],
+    //                 'full_name' => $expert->full_name,
+    //                 'expert_id' => $expert->id,
+    //                 "service_id" => 0,
+    //                 "service_name" => '-',
+    //                 "icon" => '',
+    //                 "rate" => 0,
+    //                 "orders_count"=>0,
+    //                // "comment" => '-',
+    //             ];
+    //             $Arr[] = $newArr;  
+    //         }
+    //     }
+    //     return $Arr;
+    // }
+
+    // public function all_expert_statistics()
+    // {
+    //     $experts = Expert::get();
+    //     $Arr = [];
+    //     foreach ($experts as $expert) {
+    //         $stsresArr = $this->expert_statistics($expert->id);
+
+    //         if ($stsresArr['service_statistics']) {
+    //             // $newArr=[];          
+    //             foreach ($stsresArr['service_statistics'] as $service_sts) {
+    //                 $newArr = [
+    //                     'answer_speed' => $stsresArr['answer_speed'],
+    //                     'full_name' => $expert->full_name,
+    //                     'expert_id' => $expert->id,
+    //                     "service_id" => $service_sts['service_id'],
+    //                     "service_name" => $service_sts['name'],
+    //                     "icon" => $service_sts['icon'],
+    //                     "rate" => $service_sts['rate'],
+    //                   "orders_count" => $service_sts['orders_count'],
+    //                 ];
+    //                 $Arr[] = $newArr;
+    //             }
+    //         }else{
+    //             $newArr = [
+    //                 'answer_speed' => $stsresArr['answer_speed'],
+    //                 'full_name' => $expert->full_name,
+    //                 'expert_id' => $expert->id,
+    //                 "service_id" => 0,
+    //                 "service_name" => '-',
+    //                 "icon" => '',
+    //                 "rate" => 0,
+    //                 "orders_count"=>0,
+    //                // "comment" => '-',
+    //             ];
+    //             $Arr[] = $newArr;  
+    //         }
+    //     }
+    //     return $Arr;
+    // }
 
 }

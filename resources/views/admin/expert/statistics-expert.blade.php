@@ -22,7 +22,7 @@
 				<div class="breadcrumb-header justify-content-between">
 					<div class="my-auto">
 						<div class="d-flex">
-							<h4 class="content-title mb-0 my-auto">{{ __('general.experts') }}</h4> 
+							<a href="{{ url('admin/experts/statistics') }}"><h4 class="content-title mb-0 my-auto">احصائيات الخبراء</h4></a>
 						</div>
 					</div>
 					 
@@ -39,7 +39,7 @@
 						<div class="card mg-b-20">
 							<div class="card-header pb-0">
 								<div class="d-flex justify-content-between">
-									<h4 class="card-title mg-b-0">احصائيات الخبراء</h4>
+									<h4 class="card-title mg-b-0">احصائيات الخبير: {{ $expert->full_name }}</h4>
 									 
 								</div>
 									</div>
@@ -47,22 +47,32 @@
 								<div class="table-responsive">
 									<table id="example" class="table text-md-nowrap">
 										<thead>
-											<tr>
-												<th class="border-bottom-0">الخبير</th>
-												<th class="border-bottom-0">الاسم الكامل</th>
-												<th class="border-bottom-0">سرعة الرد</th>                                              
-												<th class="border-bottom-0">العملية</th>
+											<tr> 
+                                                <th class="border-bottom-0">الخدمة</th>
+												<th class="border-bottom-0">التقييم</th>
+												<th class="border-bottom-0">عدد الطلبات</th>
 											</tr>
 										</thead>
 										<tbody>
-											@foreach ($sts_list as $sts)
+											@foreach ($sts_list['service_statistics'] as $sts)
 											<tr>
-												<td>{{$sts->user_name}}</td>
-												<td>{{$sts->full_name}}</td>
-												<td>{{ $sts['answer_speed']  }}</td>												 
-												<td>
-												<a href="{{url('admin/experts/statistics', $sts->id)}}"  class="btn btn-success btn-sm" title="تفاصيل"><i class="fa fa-info"></i></a> 
-                                                </td>
+ 
+												<td>{{ $sts['name']  }}</td>
+											 <td style="width: 100px;">
+												<div class="static-rate text-center fs-30">
+													@php $n=5-$sts['rate']; @endphp
+													@for ($i = 1; $i <= $sts['rate']; $i++)
+													<i class="fa fa-star text-warning" aria-hidden="true"></i>
+													@endfor
+													@for ($i = 1; $i <= $n; $i++)
+													<i class="fa fa-star "  style="color: lightgray" aria-hidden="true"></i>
+													@endfor
+												</div>
+											</td>
+										 
+												<td>{{ $sts['orders_count'] }}</td>
+
+											</tr>
 											@endforeach
 									</tbody>
 									</table>
@@ -79,9 +89,7 @@
 			<!-- Container closed -->
 		</div>
 		<!-- main-content closed -->
-			<!-- Modal effects -->
-		
-			<!-- End Modal effects-->
+
 @endsection
 @section('js')
 <!-- Internal Data tables -->
@@ -103,7 +111,7 @@
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('assets/js/table-data.js')}}"></script>
-
+ 
 
 	<script src="{{URL::asset('assets/plugins/rating/jquery.rating-stars.js')}}"></script>
 	<script src="{{URL::asset('assets/plugins/rating/jquery.barrating.js')}}"></script>
