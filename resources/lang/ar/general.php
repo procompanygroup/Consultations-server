@@ -192,7 +192,7 @@ return [
 '16minusminute_title'=>'رصيد الدقائق',
 '16minusminute_body'=>'تم انقاص'.' '. ':Minuts'.' '.' دقيقة من رصيدك مقابل خدمة الاتصال المباشر',
 '17minuspoints_title'=>'رصيد النقاط',
-'17minuspoints_body'=>'تم انقاص'.' '. ':Points'.' '.' دقيقة من رصيدك مقابل طلب خدمة  '.':Service',
+'17minuspoints_body'=>'تم انقاص'.' '. ':Points'.' '.' نقطة من رصيدك مقابل طلب خدمة  '.':Service',
 '18addgift_title'=>'هدية دقائق مجانية',
 '18addgift_body'=>'تم اهداؤك'.' '. ':Points'.' '.'دقيقة مجانية',
 ];
