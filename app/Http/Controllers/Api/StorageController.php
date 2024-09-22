@@ -259,7 +259,10 @@ class StorageController extends Controller
   public static function calcAnswerspeedAvg($expert_id)
   {
     $avg= Selectedservice::where('expert_id',$expert_id)->where('answer_speed','<>',0)->whereNotNull('answer_speed')
-    ->select('answer_speed')->average('answer_speed');     
+    ->select('answer_speed')->average('answer_speed'); 
+    if($avg >60){
+      $avg=60;
+    }    
       return $avg;
   }
   public static function calcRateAvg($expert_id)
