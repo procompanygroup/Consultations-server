@@ -663,7 +663,7 @@ return response()->json([
               $query->where('is_callservice', 1);         
             })->first();
          
-          if( $client_minutebalance<=1 ){
+          if( $client_minutebalance<=0 ){
               return response()->json('insufficient_balance', 401);
           }else{                
         //add sel service record
@@ -674,7 +674,7 @@ return response()->json([
   // }else{
   //     $expiretime=$client_minutebalance*60;
   // }
-  $expiretime=($client_minutebalance+1)*60;
+  $expiretime=(($client_minutebalance)*60)+30;
      $channel = Str::lower(Str::random(20));
          $agorc = new AgoraTokenController();
          // $calltoken ="";
