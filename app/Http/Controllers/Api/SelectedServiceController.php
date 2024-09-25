@@ -75,185 +75,24 @@ class SelectedServiceController extends Controller
             $client_id = $data['client_id'];
             //check client balance
             $client = Client::find($client_id);
-            $expertService = ExpertService::where('expert_id', $data['expert_id'])->where('service_id', $data['service_id'])->first();
-            $service = Service::find($expertService->service_id);
-            //free point start
-            $giftctrlr = new GiftController();
-            $avlarr = $giftctrlr->checkavailablepoints($client_id);
-            $free_points = $avlarr['points'];
-            //$giftmodel=$avlarr['giftmodel'];
-
-            if ($free_points == 0) {
-                //normal send
-                if ($client->points_balance < $expertService->points) {
-                    $this->msg = "nopoints";
-
-                } else {
-                    $newNum = $this->GenerateCode("order-");
-                    $now = Carbon::now();
-                    //save selected service
-                    $newObj = new Selectedservice;
-                    $newObj->client_id = $client->id;
-                    $newObj->expert_id = $expertService->expert_id;
-                    $newObj->service_id = $expertService->service_id;
-                    $newObj->points = $expertService->points;
-                    $newObj->rate = 0;
-                    $newObj->form_state = 'wait';
-                    //   $newObj->answer = "";
-                    //   $newObj->answer2 = "";
-                    $newObj->comment = "";
-                    // $newObj->iscommentconfirmd = 0;
-                    //   $newObj->issendconfirmd = 0;
-                    //    $newObj->isanswerconfirmd = 0;
-                    $newObj->comment_rate = 0;
-                    $newObj->status = "created";
-                    $newObj->expert_cost = $expertService->expert_cost;//percent
-                    $newObj->cost_type = $expertService->cost_type;
-                    //   $newObj->expert_cost_value = $expertService->expert_cost_value;
-                    $newObj->expert_cost_value = StorageController::CalcPercentVal($expertService->expert_cost, $expertService->points);
-                    $newObj->order_num = $newNum;
-                    $newObj->order_date = $now;
-                    $newObj->save();
-                    $this->id = $newObj->id;
-
-                    //save values in values_services table
-                    foreach ($data["valueServices"] as $row) {
-                        $valueService = new valueService();
-                        $input = InputService::find($row['inputservice_id'])->input()->first();
-
-                        $valueService->value = $row['value'];
-                        $valueService->inputservice_id = $row['inputservice_id'];
-                        $valueService->selectedservice_id = $newObj->id;
-
-                        $valueService->name = $input->name;
-                        $valueService->type = $input->type;
-                        $valueService->tooltipe = $input->tooltipe;
-                        $valueService->icon = $input->icon;
-                        $valueService->ispersonal = $input->ispersonal;
-                        $valueService->image_count = $input->image_count;
-                        $valueService->save();
-                    }
-                    // decrease client balance
-                    $client->points_balance = $client->points_balance - $expertService->points;
-                    $client->save();
-
-                    //create point transfer row
-                    $pointtransfer = new Pointtransfer();
-                    $pntctrlr = new PointTransferController();
-                    $type = 'd';
-                    $firstLetters = $type . 'cl-';
-                    $newpnum = $pntctrlr->GenerateCode($firstLetters);
-                    //$pointtransfer->point_id = $formdata['point_id'];
-                    $pointtransfer->client_id = $client->id;
-                    $pointtransfer->expert_id = $expertService->expert_id;
-                    $pointtransfer->service_id = $expertService->service_id;
-                    $pointtransfer->count = $expertService->points;
-                    $pointtransfer->status = 1;
-                    $pointtransfer->selectedservice_id = $newObj->id;
-                    $pointtransfer->side = 'from-client';
-                    $pointtransfer->state = 'wait';
-                    $pointtransfer->type = 'd';
-                    $pointtransfer->num = $newpnum;
-                    $pointtransfer->notes = $expertService->points;
-                    $pointtransfer->save();
-                    //  }
-                  $this-> sendnotify_toclient($expertService->points,  $newObj,$service->name);
-                }
-                //end normal
-
-            } else {
-                // free with balance
-                $giftmodel = $avlarr['giftmodel'];
-                //الرصيد المجاني اكبر او يساوي الكلفة
-                if ($free_points >= $expertService->points) {
-                    $newfree = $free_points - $expertService->points;
-                    //update gift row
-                    $gift_id = $giftmodel->id;
-                    Gift::find($gift_id)->update([
-                        'free_points' => $newfree,
-                        'status' => 'used',
-                    ]);
-                    // start save selected service
-                    $newNum = $this->GenerateCode("order-");
-                    $now = Carbon::now();
-                    //save selected service
-                    $newObj = new Selectedservice;
-                    $newObj->client_id = $client->id;
-                    $newObj->expert_id = $expertService->expert_id;
-                    $newObj->service_id = $expertService->service_id;
-                    $newObj->points = $expertService->points;
-                    $newObj->rate = 0;
-                    $newObj->form_state = 'wait';
-
-                    $newObj->comment = "";
-
-                    $newObj->comment_rate = 0;
-                    $newObj->status = "created";
-                    $newObj->expert_cost = $expertService->expert_cost;//percent
-                    $newObj->cost_type = $expertService->cost_type;
-                    //   $newObj->expert_cost_value = $expertService->expert_cost_value;
-                    $newObj->expert_cost_value = StorageController::CalcPercentVal($expertService->expert_cost, $expertService->points);
-                    $newObj->order_num = $newNum;
-                    $newObj->order_date = $now;
-                    $newObj->save();
-                    $this->id = $newObj->id;
-
-                    //save values in values_services table
-                    foreach ($data["valueServices"] as $row) {
-                        $valueService = new valueService();
-                        $input = InputService::find($row['inputservice_id'])->input()->first();
-
-                        $valueService->value = $row['value'];
-                        $valueService->inputservice_id = $row['inputservice_id'];
-                        $valueService->selectedservice_id = $newObj->id;
-
-                        $valueService->name = $input->name;
-                        $valueService->type = $input->type;
-                        $valueService->tooltipe = $input->tooltipe;
-                        $valueService->icon = $input->icon;
-                        $valueService->ispersonal = $input->ispersonal;
-                        $valueService->image_count = $input->image_count;
-                        $valueService->save();
-                    }
-                    //end save selected service
-//add free point transfer
-                    //create point transfer row
-                    $pointtransfer = new Pointtransfer();
-                    $pntctrlr = new PointTransferController();
-                    $type = 'd';
-                    $firstLetters = $type . 'clg-';
-                    $newpnum = $pntctrlr->GenerateCode($firstLetters);
-                    //$pointtransfer->point_id = $formdata['point_id'];
-                    $pointtransfer->client_id = $client->id;
-                    $pointtransfer->expert_id = $expertService->expert_id;
-                    $pointtransfer->service_id = $expertService->service_id;
-                    $pointtransfer->count = $expertService->points;
-                    $pointtransfer->status = 1;
-                    $pointtransfer->selectedservice_id = $newObj->id;
-                    $pointtransfer->side = 'from-gift-client';
-                    $pointtransfer->state = 'wait';
-                    $pointtransfer->type = 'd';
-                    $pointtransfer->num = $newpnum;
-                    $pointtransfer->gift_id = $gift_id;
-                    $pointtransfer->notes = $expertService->points;
-                    $pointtransfer->save();
-                    //end add free point transfer
-
-                } else {
-                    //الرصيد المجاني اصغر تماما من الكلفة
-                    $pointsremain = $expertService->points - $free_points;
-                    if ($client->points_balance < $pointsremain) {
+            $expert = Expert::find($data['expert_id']);
+            if( $expert->status=='b'){
+                $this->msg ='not-available';
+            }else{
+                $expertService = ExpertService::where('expert_id', $data['expert_id'])->where('service_id', $data['service_id'])->first();
+                $service = Service::find($expertService->service_id);
+                //free point start
+                $giftctrlr = new GiftController();
+                $avlarr = $giftctrlr->checkavailablepoints($client_id);
+                $free_points = $avlarr['points'];
+                //$giftmodel=$avlarr['giftmodel'];
+    
+                if ($free_points == 0) {
+                    //normal send
+                    if ($client->points_balance < $expertService->points) {
                         $this->msg = "nopoints";
-
+    
                     } else {
-                        //update gift row
-                        $gift_id = $giftmodel->id;
-                        Gift::find($gift_id)->update([
-                            'free_points' => 0,
-                            'status' => 'used',
-                        ]);
-                        //
-// start save selected service
                         $newNum = $this->GenerateCode("order-");
                         $now = Carbon::now();
                         //save selected service
@@ -265,11 +104,11 @@ class SelectedServiceController extends Controller
                         $newObj->rate = 0;
                         $newObj->form_state = 'wait';
                         //   $newObj->answer = "";
-//   $newObj->answer2 = "";
+                        //   $newObj->answer2 = "";
                         $newObj->comment = "";
                         // $newObj->iscommentconfirmd = 0;
-//   $newObj->issendconfirmd = 0;
-//    $newObj->isanswerconfirmd = 0;
+                        //   $newObj->issendconfirmd = 0;
+                        //    $newObj->isanswerconfirmd = 0;
                         $newObj->comment_rate = 0;
                         $newObj->status = "created";
                         $newObj->expert_cost = $expertService->expert_cost;//percent
@@ -280,16 +119,16 @@ class SelectedServiceController extends Controller
                         $newObj->order_date = $now;
                         $newObj->save();
                         $this->id = $newObj->id;
-
+    
                         //save values in values_services table
                         foreach ($data["valueServices"] as $row) {
                             $valueService = new valueService();
                             $input = InputService::find($row['inputservice_id'])->input()->first();
-
+    
                             $valueService->value = $row['value'];
                             $valueService->inputservice_id = $row['inputservice_id'];
                             $valueService->selectedservice_id = $newObj->id;
-
+    
                             $valueService->name = $input->name;
                             $valueService->type = $input->type;
                             $valueService->tooltipe = $input->tooltipe;
@@ -298,32 +137,10 @@ class SelectedServiceController extends Controller
                             $valueService->image_count = $input->image_count;
                             $valueService->save();
                         }
-                        //end save selected service
-
-                        //add free point transfer 
-                        $pointtransfer = new Pointtransfer();
-                        $pntctrlr = new PointTransferController();
-                        $type = 'd';
-                        $firstLetters = $type . 'clg-';
-                        $newpnum = $pntctrlr->GenerateCode($firstLetters);
-                        //$pointtransfer->point_id = $formdata['point_id'];
-                        $pointtransfer->client_id = $client->id;
-                        $pointtransfer->expert_id = $expertService->expert_id;
-                        $pointtransfer->service_id = $expertService->service_id;
-                        $pointtransfer->count = $free_points;
-                        $pointtransfer->status = 1;
-                        $pointtransfer->selectedservice_id = $newObj->id;
-                        $pointtransfer->side = 'from-gift-client';
-                        $pointtransfer->state = 'wait';
-                        $pointtransfer->type = 'd';
-                        $pointtransfer->num = $newpnum;
-                        $pointtransfer->gift_id = $gift_id;
-                        $pointtransfer->notes = $expertService->points;
-                        $pointtransfer->save();
-                        //end add free point transfer
-// decrease client balance
-                        $client->points_balance = $client->points_balance - $pointsremain;
+                        // decrease client balance
+                        $client->points_balance = $client->points_balance - $expertService->points;
                         $client->save();
+    
                         //create point transfer row
                         $pointtransfer = new Pointtransfer();
                         $pntctrlr = new PointTransferController();
@@ -334,7 +151,7 @@ class SelectedServiceController extends Controller
                         $pointtransfer->client_id = $client->id;
                         $pointtransfer->expert_id = $expertService->expert_id;
                         $pointtransfer->service_id = $expertService->service_id;
-                        $pointtransfer->count = $pointsremain;
+                        $pointtransfer->count = $expertService->points;
                         $pointtransfer->status = 1;
                         $pointtransfer->selectedservice_id = $newObj->id;
                         $pointtransfer->side = 'from-client';
@@ -343,13 +160,203 @@ class SelectedServiceController extends Controller
                         $pointtransfer->num = $newpnum;
                         $pointtransfer->notes = $expertService->points;
                         $pointtransfer->save();
-///////// noti
-$this->sendnotify_toclient($pointsremain, $newObj,$service->name);
+                        //  }
+                      $this-> sendnotify_toclient($expertService->points,  $newObj,$service->name);
                     }
-
-
+                    //end normal
+    
+                } else {
+                    // free with balance
+                    $giftmodel = $avlarr['giftmodel'];
+                    //الرصيد المجاني اكبر او يساوي الكلفة
+                    if ($free_points >= $expertService->points) {
+                        $newfree = $free_points - $expertService->points;
+                        //update gift row
+                        $gift_id = $giftmodel->id;
+                        Gift::find($gift_id)->update([
+                            'free_points' => $newfree,
+                            'status' => 'used',
+                        ]);
+                        // start save selected service
+                        $newNum = $this->GenerateCode("order-");
+                        $now = Carbon::now();
+                        //save selected service
+                        $newObj = new Selectedservice;
+                        $newObj->client_id = $client->id;
+                        $newObj->expert_id = $expertService->expert_id;
+                        $newObj->service_id = $expertService->service_id;
+                        $newObj->points = $expertService->points;
+                        $newObj->rate = 0;
+                        $newObj->form_state = 'wait';
+    
+                        $newObj->comment = "";
+    
+                        $newObj->comment_rate = 0;
+                        $newObj->status = "created";
+                        $newObj->expert_cost = $expertService->expert_cost;//percent
+                        $newObj->cost_type = $expertService->cost_type;
+                        //   $newObj->expert_cost_value = $expertService->expert_cost_value;
+                        $newObj->expert_cost_value = StorageController::CalcPercentVal($expertService->expert_cost, $expertService->points);
+                        $newObj->order_num = $newNum;
+                        $newObj->order_date = $now;
+                        $newObj->save();
+                        $this->id = $newObj->id;
+    
+                        //save values in values_services table
+                        foreach ($data["valueServices"] as $row) {
+                            $valueService = new valueService();
+                            $input = InputService::find($row['inputservice_id'])->input()->first();
+    
+                            $valueService->value = $row['value'];
+                            $valueService->inputservice_id = $row['inputservice_id'];
+                            $valueService->selectedservice_id = $newObj->id;
+    
+                            $valueService->name = $input->name;
+                            $valueService->type = $input->type;
+                            $valueService->tooltipe = $input->tooltipe;
+                            $valueService->icon = $input->icon;
+                            $valueService->ispersonal = $input->ispersonal;
+                            $valueService->image_count = $input->image_count;
+                            $valueService->save();
+                        }
+                        //end save selected service
+    //add free point transfer
+                        //create point transfer row
+                        $pointtransfer = new Pointtransfer();
+                        $pntctrlr = new PointTransferController();
+                        $type = 'd';
+                        $firstLetters = $type . 'clg-';
+                        $newpnum = $pntctrlr->GenerateCode($firstLetters);
+                        //$pointtransfer->point_id = $formdata['point_id'];
+                        $pointtransfer->client_id = $client->id;
+                        $pointtransfer->expert_id = $expertService->expert_id;
+                        $pointtransfer->service_id = $expertService->service_id;
+                        $pointtransfer->count = $expertService->points;
+                        $pointtransfer->status = 1;
+                        $pointtransfer->selectedservice_id = $newObj->id;
+                        $pointtransfer->side = 'from-gift-client';
+                        $pointtransfer->state = 'wait';
+                        $pointtransfer->type = 'd';
+                        $pointtransfer->num = $newpnum;
+                        $pointtransfer->gift_id = $gift_id;
+                        $pointtransfer->notes = $expertService->points;
+                        $pointtransfer->save();
+                        //end add free point transfer
+    
+                    } else {
+                        //الرصيد المجاني اصغر تماما من الكلفة
+                        $pointsremain = $expertService->points - $free_points;
+                        if ($client->points_balance < $pointsremain) {
+                            $this->msg = "nopoints";
+    
+                        } else {
+                            //update gift row
+                            $gift_id = $giftmodel->id;
+                            Gift::find($gift_id)->update([
+                                'free_points' => 0,
+                                'status' => 'used',
+                            ]);
+                            //
+    // start save selected service
+                            $newNum = $this->GenerateCode("order-");
+                            $now = Carbon::now();
+                            //save selected service
+                            $newObj = new Selectedservice;
+                            $newObj->client_id = $client->id;
+                            $newObj->expert_id = $expertService->expert_id;
+                            $newObj->service_id = $expertService->service_id;
+                            $newObj->points = $expertService->points;
+                            $newObj->rate = 0;
+                            $newObj->form_state = 'wait';
+                            //   $newObj->answer = "";
+    //   $newObj->answer2 = "";
+                            $newObj->comment = "";
+                            // $newObj->iscommentconfirmd = 0;
+    //   $newObj->issendconfirmd = 0;
+    //    $newObj->isanswerconfirmd = 0;
+                            $newObj->comment_rate = 0;
+                            $newObj->status = "created";
+                            $newObj->expert_cost = $expertService->expert_cost;//percent
+                            $newObj->cost_type = $expertService->cost_type;
+                            //   $newObj->expert_cost_value = $expertService->expert_cost_value;
+                            $newObj->expert_cost_value = StorageController::CalcPercentVal($expertService->expert_cost, $expertService->points);
+                            $newObj->order_num = $newNum;
+                            $newObj->order_date = $now;
+                            $newObj->save();
+                            $this->id = $newObj->id;
+    
+                            //save values in values_services table
+                            foreach ($data["valueServices"] as $row) {
+                                $valueService = new valueService();
+                                $input = InputService::find($row['inputservice_id'])->input()->first();
+    
+                                $valueService->value = $row['value'];
+                                $valueService->inputservice_id = $row['inputservice_id'];
+                                $valueService->selectedservice_id = $newObj->id;
+    
+                                $valueService->name = $input->name;
+                                $valueService->type = $input->type;
+                                $valueService->tooltipe = $input->tooltipe;
+                                $valueService->icon = $input->icon;
+                                $valueService->ispersonal = $input->ispersonal;
+                                $valueService->image_count = $input->image_count;
+                                $valueService->save();
+                            }
+                            //end save selected service
+    
+                            //add free point transfer 
+                            $pointtransfer = new Pointtransfer();
+                            $pntctrlr = new PointTransferController();
+                            $type = 'd';
+                            $firstLetters = $type . 'clg-';
+                            $newpnum = $pntctrlr->GenerateCode($firstLetters);
+                            //$pointtransfer->point_id = $formdata['point_id'];
+                            $pointtransfer->client_id = $client->id;
+                            $pointtransfer->expert_id = $expertService->expert_id;
+                            $pointtransfer->service_id = $expertService->service_id;
+                            $pointtransfer->count = $free_points;
+                            $pointtransfer->status = 1;
+                            $pointtransfer->selectedservice_id = $newObj->id;
+                            $pointtransfer->side = 'from-gift-client';
+                            $pointtransfer->state = 'wait';
+                            $pointtransfer->type = 'd';
+                            $pointtransfer->num = $newpnum;
+                            $pointtransfer->gift_id = $gift_id;
+                            $pointtransfer->notes = $expertService->points;
+                            $pointtransfer->save();
+                            //end add free point transfer
+    // decrease client balance
+                            $client->points_balance = $client->points_balance - $pointsremain;
+                            $client->save();
+                            //create point transfer row
+                            $pointtransfer = new Pointtransfer();
+                            $pntctrlr = new PointTransferController();
+                            $type = 'd';
+                            $firstLetters = $type . 'cl-';
+                            $newpnum = $pntctrlr->GenerateCode($firstLetters);
+                            //$pointtransfer->point_id = $formdata['point_id'];
+                            $pointtransfer->client_id = $client->id;
+                            $pointtransfer->expert_id = $expertService->expert_id;
+                            $pointtransfer->service_id = $expertService->service_id;
+                            $pointtransfer->count = $pointsremain;
+                            $pointtransfer->status = 1;
+                            $pointtransfer->selectedservice_id = $newObj->id;
+                            $pointtransfer->side = 'from-client';
+                            $pointtransfer->state = 'wait';
+                            $pointtransfer->type = 'd';
+                            $pointtransfer->num = $newpnum;
+                            $pointtransfer->notes = $expertService->points;
+                            $pointtransfer->save();
+    ///////// noti
+    $this->sendnotify_toclient($pointsremain, $newObj,$service->name);
+    
+                        }
+    
+    
+                    }
                 }
             }
+        
 
         });
         $res = [];
@@ -358,7 +365,12 @@ $this->sendnotify_toclient($pointsremain, $newObj,$service->name);
                 "message" => 0,
                 "error" => "nopoints",
             ];
-        } else {
+        } else if($this->msg == "not-available"){
+            $res = [
+                "message" => 0,
+                "error" => $this->msg ,
+            ];
+        }else {
             $res = ["message" => $this->id];
         }
         return response()->json($res);
