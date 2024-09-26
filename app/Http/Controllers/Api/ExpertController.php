@@ -362,6 +362,8 @@ class ExpertController extends Controller
                 'user_name',
                 'first_name',
                 'last_name',
+                'status',
+                'is_available',
                 //   'password',
                 // 'mobile',
                 // 'email',
@@ -518,6 +520,8 @@ class ExpertController extends Controller
                 'country_num',
                 'mobile_num',
                 'email',
+                'status',
+                'is_available',
                 // 'nationality',
                 'birthdate',
                 'gender',
@@ -894,7 +898,8 @@ if($expert->expertsServices->first()){
                     'record' => $expert->record == null ? " " : $recurl . $expert->record,
                     'image' => $expert->image == null ? $defaultimg : $url . $expert->image,
                     'is_favorite' => $expert->expertsFavorites->isEmpty() ? 0 : 1,
-
+                    
+                    'is_available'=> $expert->is_available,
 
                     //  'expertsFavorites' => $expert->expertsFavorites,
                     //  'expertsServices'=>$item->expertsServices,
