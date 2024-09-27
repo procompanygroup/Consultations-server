@@ -366,10 +366,8 @@ class SelectedServiceController extends Controller
                 "error" => "nopoints",
             ];
         } else if($this->msg == "not-available"){
-            $res = [
-                "message" => 0,
-                "error" => $this->msg ,
-            ];
+          
+            return response()->json(["message" =>"not-available"]);
         }else {
             $res = ["message" => $this->id];
         }
