@@ -43,10 +43,9 @@
 										<thead>
 											<tr>
 
-												<th class="border-bottom-0">{{ __('general.expert') }}</th>
-											 
-												<th class="border-bottom-0">{{ __('general.the balance') }}</th>
-												<th class="border-bottom-0">{{ __('general.total pull') }}</th>
+												<th class="border-bottom-0">{{ __('general.expert') }}</th>											 
+												<th class="border-bottom-0">رصيد غير مدفوع</th>
+												<th class="border-bottom-0">رصيد مدفوع</th>
                                                 <th class="border-bottom-0">{{ __('general.action') }}</th>
 
 											</tr>

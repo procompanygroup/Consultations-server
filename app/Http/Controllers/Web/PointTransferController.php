@@ -159,7 +159,8 @@ $clintctrlr->clientpullbalance( $side , $amount);
       'id',
       'first_name',
       'last_name',
-      'cash_balance'
+      'cash_balance',
+       'cash_balance_todate'
     )->get();
     // map
     $List = $DBList->map(function ($item) {
@@ -168,6 +169,7 @@ $clintctrlr->clientpullbalance( $side , $amount);
         'id' => $item->id,
         'name' => $item->full_name,
         'balance' => $item->cash_balance,
+        'cash_balance_todate' => $item->cash_balance_todate,
       ];
     });
     //end map

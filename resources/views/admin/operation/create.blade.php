@@ -61,8 +61,11 @@
                                     </div>
 									 
 									<div class="form-group">
-										<p class="filled" id="p_show_balance" style="display: none">
-											<span   id="balance_title">الرصيد الحالي: </span> <span  id="balance_val"></span> 
+										<p class="filled p_show_balance"  style="display: none">
+											<span   id="balance_title">رصيد غير مدفوع : </span> <span  id="balance_val"></span> 
+										</p>
+											<p class="filled p_show_balance" style="display: none" >
+											<span   id="balance_paid_title">رصيد مدفوع : </span> <span  id="balance_paid_val"></span> 
 										</p>
 										<input type="text" class="form-control " id="amount" placeholder="{{ __('general.pull value') }}" name="amount" value="">
 										<ul class="parsley-errors-list filled" >

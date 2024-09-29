@@ -82,9 +82,10 @@ if(option!="0"){
 	//var blc=	datalist.name;
 	var blc = datalist.filter(function(x){ return x.id == option }) ;
 	var blcval=  blc[0].balance;
-	$('#p_show_balance').show();
+	var balance_todate= blc[0].cash_balance_todate;
+	$('.p_show_balance').show();
 	$('#balance_val').html(blcval);
-	
+	$('#balance_paid_val').html(balance_todate);
 		});
 
 		$('#btn_save_pull').on('click', function (e) {
@@ -122,14 +123,14 @@ if(option!="0"){
 					endLoading();
 					resetForm();
 					ClearErrors();
-					$('#p_show_balance').hide();
+					$('.p_show_balance').hide();
 					$('#balance_val').html();
 					if (data.length == 0) {
 						noteError();
 					} else if (data == "ok") {
 	
 						noteSuccess();	
-						 
+						loadexperts() ;
 					}
 	
 					// $('.alert').html(result.success);

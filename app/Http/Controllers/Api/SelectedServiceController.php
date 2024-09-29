@@ -166,9 +166,9 @@ class SelectedServiceController extends Controller
                     //end normal
     
                 } else {
-                    // free with balance
+                          // free with balance
                     $giftmodel = $avlarr['giftmodel'];
-                    //الرصيد المجاني اكبر او يساوي الكلفة
+                       //الرصيد المجاني اكبر او يساوي الكلفة
                     if ($free_points >= $expertService->points) {
                         $newfree = $free_points - $expertService->points;
                         //update gift row
@@ -220,7 +220,7 @@ class SelectedServiceController extends Controller
                             $valueService->save();
                         }
                         //end save selected service
-    //add free point transfer
+                        //add free point transfer
                         //create point transfer row
                         $pointtransfer = new Pointtransfer();
                         $pntctrlr = new PointTransferController();
@@ -257,7 +257,7 @@ class SelectedServiceController extends Controller
                                 'status' => 'used',
                             ]);
                             //
-    // start save selected service
+                             // start save selected service
                             $newNum = $this->GenerateCode("order-");
                             $now = Carbon::now();
                             //save selected service
@@ -268,12 +268,9 @@ class SelectedServiceController extends Controller
                             $newObj->points = $expertService->points;
                             $newObj->rate = 0;
                             $newObj->form_state = 'wait';
-                            //   $newObj->answer = "";
-    //   $newObj->answer2 = "";
+                         
                             $newObj->comment = "";
-                            // $newObj->iscommentconfirmd = 0;
-    //   $newObj->issendconfirmd = 0;
-    //    $newObj->isanswerconfirmd = 0;
+                      
                             $newObj->comment_rate = 0;
                             $newObj->status = "created";
                             $newObj->expert_cost = $expertService->expert_cost;//percent
@@ -325,7 +322,7 @@ class SelectedServiceController extends Controller
                             $pointtransfer->notes = $expertService->points;
                             $pointtransfer->save();
                             //end add free point transfer
-    // decrease client balance
+                            // decrease client balance
                             $client->points_balance = $client->points_balance - $pointsremain;
                             $client->save();
                             //create point transfer row
@@ -347,8 +344,8 @@ class SelectedServiceController extends Controller
                             $pointtransfer->num = $newpnum;
                             $pointtransfer->notes = $expertService->points;
                             $pointtransfer->save();
-    ///////// noti
-    $this->sendnotify_toclient($pointsremain, $newObj,$service->name);
+                             ///////// noti
+                             $this->sendnotify_toclient($pointsremain, $newObj,$service->name);
     
                         }
     

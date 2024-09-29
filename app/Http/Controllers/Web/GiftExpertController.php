@@ -119,12 +119,12 @@ class GiftExpertController extends Controller
           $pointtransfer->state = 'expert-points-gift';
           $pointtransfer->type = $type;
           $pointtransfer->num = $newpnum;
-
           $pointtransfer->save();
+          
           $expert= Expert::find($side_id);
           $expert->points_balance+=$amount;
           $expert->cash_balance+=$amount;
-          $expert->cash_balance_todate+=$amount;
+       //   $expert->cash_balance_todate+=$amount;
           $expert->save();
          
         //  10
