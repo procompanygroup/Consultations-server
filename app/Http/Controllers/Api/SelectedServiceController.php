@@ -490,7 +490,7 @@ class SelectedServiceController extends Controller
     {
         //
         $formdata = $request->all();
-
+        $this->id=1;
         $storrequest = new StoreImageRequest();
 
         $validator = Validator::make(
@@ -504,6 +504,7 @@ class SelectedServiceController extends Controller
             //   return redirect()->back()->withErrors($validator)->withInput();
 
         } else {
+        
             DB::transaction(function () use ($request, $formdata) {
                 //isset($formdata["is_active"]) 
                 $valserCntrlr = new ValueServiceController();
