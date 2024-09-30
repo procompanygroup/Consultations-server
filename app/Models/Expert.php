@@ -84,10 +84,10 @@ class Expert extends Authenticatable implements JWTSubject
                 $conv = __('general.available');
                break;
                case('b'):
-                $conv =__('general.busy');
-               break;
-               case('n'):
                 $conv = __('general.notavailable');
+               break;
+               case('n'):              
+                $conv =__('general.busy');
                break;
     
             default:
