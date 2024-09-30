@@ -76,7 +76,7 @@ class SelectedServiceController extends Controller
             //check client balance
             $client = Client::find($client_id);
             $expert = Expert::find($data['expert_id']);
-            if( $expert->status=='b'){
+            if( $expert->status=='n'){
                 $this->msg ='not-available';
             }else{
                 $expertService = ExpertService::where('expert_id', $data['expert_id'])->where('service_id', $data['service_id'])->first();

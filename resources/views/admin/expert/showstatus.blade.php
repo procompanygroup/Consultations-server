@@ -108,8 +108,8 @@
 													<!--placeholder-->
 													<option title="" value="0"  class="text-muted">اختر الحالة</option>													 
 														<option value="a">{{ __('general.available') }}</option>
-														<option value="n">{{ __('general.notavailable') }}</option>
-														<option value="b">{{ __('general.busy') }}</option>
+														<option value="b">{{ __('general.notavailable') }}</option>
+														<option value="n">	{{ __('general.busy') }}</option>
 												</select>
 												<ul class="parsley-errors-list filled">
 													<li class="parsley-required" id="select_expert_error"></li>
