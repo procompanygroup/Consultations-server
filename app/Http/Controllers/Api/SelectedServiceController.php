@@ -511,7 +511,7 @@ class SelectedServiceController extends Controller
                 //save images if exist
                 if (isset($formdata["inputservice_id"])) {
                     if ($formdata["inputservice_id"] > 0) {
-                        $input = InputService::findOrFail($formdata['inputservice_id'])->input()->first();
+                        $input = InputService::find($formdata['inputservice_id'])->input()->first();
 
                         for ($i = 1; $i <= 4; $i++) {
                             if ($request->hasFile('image_' . $i)) {
@@ -538,8 +538,9 @@ class SelectedServiceController extends Controller
                 //save record if exist
                 if (isset($formdata["record_inputservice_id"])) {
                     if ($formdata["record_inputservice_id"] > 0) {
-                        $record_input = InputService::findOrFail($formdata['record_inputservice_id'])->input()->first();
-                        if ($request->hasFile('record')) {
+
+                        $record_input = InputService::find($formdata['record_inputservice_id'])->input()->first();
+                        if ($request->hasFile('record') ) {
                             $valueService = new valueService();
                             $valueService->value = "";
                             $valueService->inputservice_id = $formdata['record_inputservice_id'];
