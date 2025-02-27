@@ -23,3 +23,11 @@ body {
   max-width: 150px;
   margin: 5px;
 }
+.page-cont{
+  padding: 10px;
+}
+.page-a{
+text-decoration: none;
+color: #fff;
+padding: 5px 10px;
+}

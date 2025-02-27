@@ -198,6 +198,7 @@
 							<span class="side-menu__label">{{ __('general.settings') }}</span><i class="angle fe fe-chevron-down"></i></a>
 						<ul class="slide-menu">
 							<li><a class="slide-item" href="{{ url('admin/setting') }}">{{ __('general.general setting') }}</a></li>
+                            <li><a class="slide-item" href="{{ url('admin/setting/pages/show') }}">الصفحات الثابتة</a></li>
 							<li><a class="slide-item" href="{{ route('reason.index') }}">اسباب الرفض</a></li>
 						</ul>
 					</li>

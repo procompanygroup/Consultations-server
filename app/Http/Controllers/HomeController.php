@@ -26,7 +26,19 @@ class HomeController extends Controller
         $links=$this->getlinks();
         return view('site.home',['linksarr'=>$links]);
     }
+    public function getpage($slug)
+    {
+      $page= $this->findbyname($slug);
+      if($page && $page->dept=='pages'){
+        return view('site.page',compact('page'));
+      }else{
+        abort(404, '');
+      }
+       
+      
+    }
 
+    
     public function getlinks()
     { 
         $gplay_linkval="#";

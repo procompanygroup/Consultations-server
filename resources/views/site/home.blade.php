@@ -31,6 +31,12 @@
             <a href="{{ $linksarr['appstor_link'] }}"><img class="btn-size" src="{{URL::asset('assets/site/img/app-store-btn.png')}}"  alt=""></a>
             </div>
         </div>
+        <div class="row d-flex align-items-center">
+            <div class="col text-center mx-4 page-cont">
+                <a href="{{url('page/privacy')}}" class="page-a" >سياسة الخصوصية</a>
+            <a href="{{url('page/user_guide')}}" class="page-a" >دليل المستخدم </a> 
+            </div>
+        </div>
     </div>
 
     <!-- JS link-->

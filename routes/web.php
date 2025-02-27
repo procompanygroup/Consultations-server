@@ -46,7 +46,7 @@ use   App\Http\Controllers\Web\NotifyController;
  
   Route::get('/', [HomeController::class, 'index']);
  
-
+  Route::get('/page/{slug}', [HomeController::class, 'getpage']);
 
   Route::get('/clear', function () {
     $exitCode = Artisan::call('route:cache');
@@ -123,6 +123,11 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
             Route::post('/updatecallcost/{id}', [SettingController::class, 'updatecallcost']);
             Route::post('/updateapplink', [SettingController::class, 'updateapplink']);
             Route::post('/updatesociallink', [SettingController::class, 'updatesociallink']);
+           
+            Route::prefix('pages')->group(function () {
+                Route::get('/show', [SettingController::class, 'page_index']);
+                Route::post('/update/{id}', [SettingController::class, 'updatepage']);
+            });
         });
          // المعاملات المالية 
         //الرصيد

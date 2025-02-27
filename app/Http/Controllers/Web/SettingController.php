@@ -351,4 +351,34 @@ $object->save();
       return response()->json("ok");
     
   }
+  //pages
+  public function page_index()
+  {
+    //  $list =Setting::get();
+    $privacy = $this->findbyname('privacy');
+    $user_guide = $this->findbyname('user_guide');     
+  
+    return view('admin.setting.show-page', [
+      'privacy' => $privacy,
+      'user_guide' => $user_guide,      
+    ]);
+
+    //  return view('admin.setting.show', ['settings' => ['expert_percent'=>$expert_percent,'expert_service_points'=>$expert_service_points]]);
+  }
+
+  public function updatepage(Request $request,$id)
+  {
+    $formdata = $request->all();      //validate
+    $object = Setting::find($id);
+ //  return  dd($formdata[$object->name]);
+if(isset($formdata[$object->name])  )
+{
+  
+$object->value=$formdata[$object->name];
+$object->save();
+}
+ 
+      return response()->json("ok");
+    
+  }
 }
