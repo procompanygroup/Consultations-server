@@ -35,6 +35,12 @@
                     <h3 class="card-title mb-1">طلب الحذف</h3>
                 </div>
                 <div class="card-body row  pt-0">
+
+                    @if(isset($order_status))
+                    <div class="col-lg-8">
+                        <p>تم حذف هذا الحساب</p>
+                    </div>
+                    @else
                     <div class="col-lg-8">
                         <p><span class="badge badge-light badge-lg px-3 py-2">
                                 <img alt="Icon SVG Vector Icon" fetchpriority="high" decoding="async" data-nimg="1"
@@ -73,10 +79,7 @@
                             form="del_record_form"
                             class="btn btn-danger">{{ __('general.delete') }}</button>
                         </form>
-                        
-
-
-                    </div>
+                                       </div>
                     </div>
 
                     <div class="col-lg-4 mt-sm-3 mt-lg-0">
@@ -84,9 +87,8 @@
                             class="rounded img-thumbnail wd-100p float-sm-right  mg-t-10 mg-sm-t-0"
                             src="{{ $order->client->image_path }}">
                     </div>
-
-
-
+@endif
+ 
 
                 </div>
             </div>

@@ -405,8 +405,8 @@ public function del_client($order_id)
      // $recurl=$strgCtrlr->ExpertPath('record');
      // $url =url(Storage::url($this->path)).'/';
      $order=ClientDelOrder::with('client')->find($id);
-  //    $object = Client::find($id);
-  $order->client->birthdateStr= (string)Carbon::create( $order->client->birthdate)->format('d/m/Y');
+     if( $order){
+      $order->client->birthdateStr= (string)Carbon::create( $order->client->birthdate)->format('d/m/Y');
       $url=$strgCtrlr->InputPath('icon');
       $usericon= $url.'username.svg';
      $mobileicon=$url.'mobile-phone-icon.svg';
@@ -432,6 +432,11 @@ public function del_client($order_id)
       'martialicon' =>$martialicon,
     'sharp' =>  $sharp,
     ]);
+     }else{
+      return view('admin.client.del-showinfo', ['order_status' => 'deleted']);
+     }
+  //    $object = Client::find($id);
+
     }
 
     public function del_client_request($id)

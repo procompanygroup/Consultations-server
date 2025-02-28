@@ -59,7 +59,7 @@
               <div class="info">   <span> الموبايل:</span><strong class="code-style">{{ $data['client_mobile'] }}</strong><br/>    </div>
                <div class="info">  <span> السبب:</span><strong class="code-style">{{ $data['reason'] }}</strong><br/>    </div>
             </div>
-			   <div class="info"> <span>   لمتابعة الطلب انقر على الرابط :<a href="{{url('client/delete-order',$data['order_id'])}}">مراجعة الطلب</a></span></div>
+			   <div class="info"> <span>   لمتابعة الطلب انقر على الرابط :<a href="{{url('admin/client/del-orders/show',$data['order_id'])}}">مراجعة الطلب</a></span></div>
         </div>
         <div class="footer-line"></div>
     </div>
