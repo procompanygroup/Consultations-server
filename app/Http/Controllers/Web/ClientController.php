@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\DB;
 use App\Models\Client;
+use App\Models\ClientDelOrder;
 use File;
 
 use Illuminate\Support\Facades\Validator;
@@ -33,7 +34,7 @@ class ClientController extends Controller
     
     public function index()
     {
-      $list = DB::table('clients')->get();
+      $list =Client::where('is_active',1)->get();
       return view('admin.client.show', ['clients' => $list]);
       //return response()->json($users);
   
@@ -42,7 +43,7 @@ class ClientController extends Controller
     
     public function showbalance()
     {
-      $list = Client::get();
+      $list = Client::where('is_active',1)->get();
       
     return view('admin.balance.client', ['clients' => $list]);
       //return response()->json($users);
@@ -334,4 +335,115 @@ return redirect()->back()->with('success_message', 'user has been Updated!');
       //   return redirect()->route('users.index');
   
     }
+
+
+public function del_client($order_id)
+    {
+      $order=ClientDelOrder::find($order_id);
+      $id=$order->client_id;
+      $object = Client::find($id);
+      if (!($object === null)) {  
+    
+            //delete image
+    if (!empty($object->image)) {
+      $strgCtrlr=new StorageController();
+      $path=$strgCtrlr->path['clients'];
+      $imgpath =  $path . '/' . $object->image;
+      if (File::exists($imgpath)) {
+        File::delete($imgpath);
+      }
+    }
+    Expertfavorite::where('client_id', $id)->delete();
+        $item1 = Pointtransfer::where('client_id', $id)->first();
+        $item2 = Cashtransfer::where('client_id', $id)->first();
+        $item3 = Selectedservice::where('client_id', $id)->first();
+        if (!($item1 === null) || !($item2 === null) || !($item3 === null)) {
+         // disable client account
+         Client::find($id)->update([
+     
+          'user_name'=>'',
+          'password'=>'',
+           'mobile'=>'',
+          'email'=>'',
+          'nationality'=>'',
+           'birthdate'=>null,
+           'gender'=>null,
+          'marital_status'=>null,
+           'image'=>'',
+          'token'=>null,
+          'points_balance'=>0,
+          'minutes_balance'=>0,
+          'is_active'=>0,
+          'country_code'=>'',
+   'country_num'=>'',
+   'mobile_num'=>'',
+        ]);
+  
+        } else {
+
+    //delete object
+    Client::find($id)->delete();
+        }
+        ClientDelOrder::find($order_id)->delete();
+      }
+      return 1;
+    }
+    // delete orders
+    public function del_orders()
+    {
+      $list =ClientDelOrder::with('client')->orderByDesc('created_at')->get();
+
+      return view('admin.client.del-show', ['delorders' => $list]);
+      //return response()->json($users);
+  
+    }
+    
+    public function show_order($id)
+    {
+      $strgCtrlr=new StorageController();
+      //$url=$strgCtrlr->ExpertPath('image');
+     // $recurl=$strgCtrlr->ExpertPath('record');
+     // $url =url(Storage::url($this->path)).'/';
+     $order=ClientDelOrder::with('client')->find($id);
+  //    $object = Client::find($id);
+  $order->client->birthdateStr= (string)Carbon::create( $order->client->birthdate)->format('d/m/Y');
+      $url=$strgCtrlr->InputPath('icon');
+      $usericon= $url.'username.svg';
+     $mobileicon=$url.'mobile-phone-icon.svg';
+     $emailicon=$url.'email.svg';
+     $nationalityicon=$url.'nationality.svg';
+     $birthicon=$url.'birthdate.svg';
+     $gendericon=$url.'gender.svg';
+     $martialicon=$url.'martial.svg';
+     $sharp= $strgCtrlr->DefaultPath('sharp');
+ 
+      // if( $object->image !="" ){
+      //   $object->fullpathimg= $url.$object->image;
+      // }
+      //
+       //return  dd ($object);
+      return view('admin.client.del-showinfo', ['order' =>  $order,
+      'usericon' =>$usericon ,
+      'mobileicon' =>$mobileicon,
+      'emailicon' =>$emailicon,
+      'nationalityicon' =>$nationalityicon, 
+      'birthicon' =>$birthicon, 
+      'gendericon' =>$gendericon, 
+      'martialicon' =>$martialicon,
+    'sharp' =>  $sharp,
+    ]);
+    }
+
+    public function del_client_request($id)
+    {
+     $res= $this->del_client($id);
+     
+      if( $res==1){
+        return redirect()->route('client.del-order.all')->with('success-msg','deleted');
+      }else{
+        return redirect()->back()->with( 'error-msg','not-deleted');
+      }
+     
+    }
+   
 }

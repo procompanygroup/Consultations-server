@@ -280,7 +280,12 @@ class GiftController extends Controller
         $query->where('is_active', 1)
           ->select('id', 'user_name', 'mobile', 'points_balance', 'is_active', );
       }
-    ])->select(
+    ])
+    ->whereHas('client', function ($query)   {
+      $query->where('is_active', 1);
+         
+    })
+    ->select(
         'id',
         'client_id',
         'free_points',

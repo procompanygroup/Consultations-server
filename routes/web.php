@@ -187,10 +187,10 @@ Route::prefix('minute-gift')->group(function () {
             Route::post('/update/{id}', [ClientController::class, 'update'])->name('client.update');
             Route::prefix('del-orders')->group(function () { 
                 //show all
-                Route::get('/', [ClientController::class, 'del_orders']);
+                Route::get('/all', [ClientController::class, 'del_orders'])->name('client.del-order.all');
                 Route::get('/show/{id}', [ClientController::class, 'show_order']);
-                Route::post('/confirm/{id}', [ClientController::class, 'show_order']);
-                Route::post('/delete/{id}', [ClientController::class, 'del_order']);
+             
+                Route::post('/delete/{id}', [ClientController::class, 'del_client_request']);
             });
            
         });

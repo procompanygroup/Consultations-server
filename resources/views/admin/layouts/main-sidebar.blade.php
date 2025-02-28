@@ -70,8 +70,14 @@
 						</ul>
 					</li>
 
+
+
+
+
+
+
 					<li class="slide">
-						<a class="side-menu__item"   href="{{ route('client.index') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24">
+                        <a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24">
                             <path d="M0 0h24v24H0V0z" fill="none"/>
                             <path class="st1" d="M9.6,13.9c-0.3-0.3-0.6-0.8-0.7-1.3l-0.1,0c-0.1,0-0.2,0-0.4-0.1c-0.2-0.1-0.3-0.3-0.4-0.5
                             c-0.2-0.4-0.3-1.5,0.1-1.8l-0.1-0.1l0-0.1c0-0.2,0-0.5,0-0.8c0-1,0-2.3-0.9-2.5L6.9,6.7l0.2-0.3c0.7-0.8,1.4-1.5,2.1-2.1
@@ -79,9 +85,23 @@
                             c0.1,0.4,0.2,0.9,0.2,1.4c0,0.8-0.3,1.6-1,2.2c0.1,0,0.2,0,0.3,0.1c0.3,0.2,0.4,0.6,0.3,0.9c-0.1,0.3-0.2,0.6-0.3,0.9
                             c-0.1,0.4-0.3,0.4-0.7,0.4c0,0.6-0.4,1.1-0.8,1.4c-0.1,0.1-0.3,0.2-0.4,0.3c1.3,2.9,6.6,0.3,6.6,6.3c0,0.1-0.1,0.2-0.2,0.2H3.2
                             c-0.1,0-0.2-0.1-0.2-0.2c0-6.4,6.1-2.7,7.2-6.3C9.9,14.2,9.7,14.1,9.6,13.9L9.6,13.9z"/></svg>
-							<span class="side-menu__label"> {{ __('general.clients') }}</span> </a>
+ 
+                            <span class="side-menu__label">{{ __('general.clients') }}</span><i class="angle fe fe-chevron-down"></i></a>
+                            <ul class="slide-menu">
+                                <li><a class="slide-item"  href="{{ route('client.index') }}">الكل </a></li>
+                                <li><a class="slide-item"  href="{{ url('admin/client/del-orders/all') }}">طلبات الحذف </a></li>
+ 
+                            </ul>
 
 					</li>
+
+
+
+
+
+
+
+
                     <li class="slide">
 						<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24">
                             <path d="M0 0h24v24H0V0z" fill="none"/>

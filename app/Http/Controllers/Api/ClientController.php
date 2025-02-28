@@ -329,6 +329,7 @@ class ClientController extends Controller
             if (!($authuser->id == $id)) {
                 return response()->json('notexist', 401);
             } else {
+                ClientDelOrder::where('client_id', $id)->delete();
                  $client = Client::find($id);
                 $setctrlr = new SettingController();
                 $mailctrlr = new MailController();
@@ -339,7 +340,7 @@ class ClientController extends Controller
                 $delorder->reason = $formdata['reason'];
                 $delorder->state = 'w';
                 $delorder->save();
-                
+            
                   Client::find($id)->update([
                       'is_active' => 0,
                   ]);
