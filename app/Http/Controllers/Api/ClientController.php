@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Callpoint;
 use App\Models\ExpertService;
+use App\Models\ClientDelOrder;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
@@ -37,6 +38,7 @@ use App\Http\Requests\Api\Client\BuyMinutesRequest;
 use App\Models\Selectedservice;
 use App\Http\Requests\Api\Expert\UploadCallRequest;
 use App\Http\Requests\Api\Client\ActivateRequest;
+use App\Http\Requests\Api\Client\DeleteRequest;
 use App\Http\Requests\Api\Client\ChangeNotifyStatusRequest;
 use App\Http\Controllers\Web\GiftMinuteController;
 /*
@@ -135,7 +137,7 @@ class ClientController extends Controller
     }
     public function getbyid()
     {
-          $credentials = request(['client_id']);
+        $credentials = request(['client_id']);
         // $url = url('storage/app/public' . '/' . $this->path  ).'/';
         $strgCtrlr = new StorageController();
         $url = $strgCtrlr->ClientPath('image');
@@ -286,41 +288,81 @@ class ClientController extends Controller
     }
     public function activateaccount(Request $filerequest)
     {
-        $formdata = $filerequest->all();       
-        $storrequest = new ActivateRequest();        
+        $formdata = $filerequest->all();
+        $storrequest = new ActivateRequest();
         $validator = Validator::make(
             $formdata,
             $storrequest->rules(),
             $storrequest->messages()
         );
-        if ($validator->fails()) {            
+        if ($validator->fails()) {
             return response()->json($validator->errors());
-                } else {
-            $id = $formdata["id"];              
-                $this->setactive($id);
-        return response()->json($id);           
+        } else {
+            $id = $formdata["id"];
+            $this->setactive($id);
+            return response()->json($id);
         }
-      }
-      public function setactive($id){
+    }
+    public function setactive($id)
+    {
         Client::find($id)->update([
-            'is_active' => 1,                    
+            'is_active' => 1,
         ]);
         return 1;
-      }
+    }
 
     public function deleteaccount(Request $filerequest)
     {
-        $formdata = request(['id']);
-        $id = $formdata["id"];
-        $authuser = auth()->user();
-        if (!($authuser->id == $id)) {
-            return response()->json('notexist', 401);
+        $formdata = $filerequest->all();
+        $storrequest = new DeleteRequest();
+        $validator = Validator::make(
+            $formdata,
+            $storrequest->rules(),
+            $storrequest->messages()
+        );
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         } else {
-            Client::find($id)->update([
-                'is_active' => 0,
-            ]);
-            auth('api_clients')->logout();
-            return response()->json($id);
+          
+             $id = $formdata['id'];
+            $authuser = auth()->user();
+            if (!($authuser->id == $id)) {
+                return response()->json('notexist', 401);
+            } else {
+                 $client = Client::find($id);
+                $setctrlr = new SettingController();
+                $mailctrlr = new MailController();
+                $delorder = new ClientDelOrder();
+                $delorder->client_id = $id;
+                $delorder->email = $formdata['email'];
+                $delorder->mobile = $formdata['mobile'];
+                $delorder->reason = $formdata['reason'];
+                $delorder->state = 'w';
+                $delorder->save();
+                
+                  Client::find($id)->update([
+                      'is_active' => 0,
+                  ]);
+
+                  auth('api_clients')->logout();
+                   
+                $admin_email = $setctrlr->findbyname('admin_email')->value;
+                $data = [                   
+                    'com_title' => config('app.name', 'Rouh'),
+                     'client_name'=>$client->user_name,
+                    'client_email' => $delorder->email,
+                    'client_mobile' => $delorder->mobile,
+                    'reason' => $delorder->reason,
+                    'order_id' => $delorder->id,                   
+                ];          
+                //admin
+                if ($admin_email) {
+                    $mailctrlr->send_del_mail($admin_email, $data, 'admin');
+                }
+                // client
+                $mailctrlr->send_del_mail($delorder->email, $data, 'client');
+                return response()->json($id);
+            }
         }
     }
 
@@ -510,15 +552,15 @@ class ClientController extends Controller
             $title = __('general.12addminute_title');
             $body = __('general.12addminute_body', ['Points' => $pointsval]);
             $notctrlr->sendautonotify($title, $body, 'auto', 'text', '', 'finance', $client->id, 0, 0, $this->pointtransfer_id);
-            
+
             return response()->json("ok");
 
             //   } else {
             //     return response()->json(['error' => 'Unauthenticated'], 401);
             //  }
         }
-    }   
-     public function clientpullbalance($client, $amount)
+    }
+    public function clientpullbalance($client, $amount)
     {
 
         DB::transaction(function () use ($client, $amount) {
@@ -633,94 +675,99 @@ class ClientController extends Controller
         } else {
             $expert_id = $formdata['expert_id'];
             $client_id = $formdata['client_id'];
-$client_uid=$client_id;
-$expert_uid=$expert_id;  
-$expert = Expert::find($expert_id);  
-if($expert->is_available==2 ||$expert->is_available==3){
- 
-return response()->json([
-'msg'=>'busy',
-'is_available'=>$expert->is_available]
-, 401);
-}else{
-  //get cost for call service
-  $settctrlr=new SettingController();
-  $callcostobj=$settctrlr->findbyname('call_cost');
-  $minutecost=(float) $callcostobj->value;
-  //     
-          //calc valid time
-        $expiretime = 0;
-          // client call balance , expert minute cost
-          $client = Client::find($client_id);
-   //gift+minute 
-        //free point start
-        $giftctrlr = new GiftMinuteController();
-        $avlarr = $giftctrlr->checkavailablepoints($client_id);
-        $free_points = $avlarr['points'];
-        //free point end
-          $client_minutebalance= $client->minutes_balance + $free_points;
-          $expertService= ExpertService::where('expert_id',$expert_id )->whereHas('service', function ($query)  {
-              $query->where('is_callservice', 1);         
-            })->first();
-         
-          if( $client_minutebalance<=0 ){
-              return response()->json('insufficient_balance', 401);
-          }else{                
-        //add sel service record
-     $selectedservice_id= $this->Create_sel_serv($client_id,$expert_id, $expertService->service_id,$minutecost,$expertService->expert_cost);
-  // if($expertService->points>0){
-  //  //   $expiretime= (floor( $client_minutebalance/$expertService->points ))* 60;
+            $client_uid = $client_id;
+            $expert_uid = $expert_id;
+            $expert = Expert::find($expert_id);
+            if ($expert->is_available == 2 || $expert->is_available == 3) {
 
-  // }else{
-  //     $expiretime=$client_minutebalance*60;
-  // }
-  $expiretime=(($client_minutebalance)*60)+30;
-     $channel = Str::lower(Str::random(20));
-         $agorc = new AgoraTokenController();
-         // $calltoken ="";
-      //  $calltoken = $agorc->generateToken($client_id, $expiretime, $channel);
-      $client_calltoken = $agorc->generateToken($client_uid, $expiretime, $channel);
-      $expert_calltoken = $agorc->generateToken($expert_uid, $expiretime, $channel);
-          //  $calltoken= $formdata['calltoken'];           
-        //  $client->image_path;
-          $notctrlr = new NotificationController();
-          $title = __('general.11call_title');
-          $body = __('general.11call_body', ['Clientname' => $client->user_name]);
-          $calldata = [
-              'expert_uid' => strval($expert_uid),
-              'client_id' => strval($client_id),
-              'channel' => $channel,
-              'expert_calltoken' =>  $expert_calltoken,
-              'client_image' => $client->image_path,
-              'client_name' => $client->user_name,
-              'selectedservice_id'=>strval($selectedservice_id),
-              'id'=>strval(0),
-          ];
-     $notctrlr->send_autocall_notify($title, $body, 'auto', 'call', '', '', $client_id, $expert_id, $selectedservice_id, 0, $calldata);
-          return response()->json(
-              [
-                  'client_uid' =>$client_uid,
-                  'channel' => $channel,
-                  'client_calltoken' => $client_calltoken,
-                'selectedservice_id'=>$selectedservice_id,
-              ]
-          );
-      }
-      }
-}
-  
+                return response()->json(
+                    [
+                        'msg' => 'busy',
+                        'is_available' => $expert->is_available
+                    ]
+                    ,
+                    401
+                );
+            } else {
+                //get cost for call service
+                $settctrlr = new SettingController();
+                $callcostobj = $settctrlr->findbyname('call_cost');
+                $minutecost = (float) $callcostobj->value;
+                //     
+                //calc valid time
+                $expiretime = 0;
+                // client call balance , expert minute cost
+                $client = Client::find($client_id);
+                //gift+minute 
+                //free point start
+                $giftctrlr = new GiftMinuteController();
+                $avlarr = $giftctrlr->checkavailablepoints($client_id);
+                $free_points = $avlarr['points'];
+                //free point end
+                $client_minutebalance = $client->minutes_balance + $free_points;
+                $expertService = ExpertService::where('expert_id', $expert_id)->whereHas('service', function ($query) {
+                    $query->where('is_callservice', 1);
+                })->first();
+
+                if ($client_minutebalance <= 0) {
+                    return response()->json('insufficient_balance', 401);
+                } else {
+                    //add sel service record
+                    $selectedservice_id = $this->Create_sel_serv($client_id, $expert_id, $expertService->service_id, $minutecost, $expertService->expert_cost);
+                    // if($expertService->points>0){
+                    //  //   $expiretime= (floor( $client_minutebalance/$expertService->points ))* 60;
+
+                    // }else{
+                    //     $expiretime=$client_minutebalance*60;
+                    // }
+                    $expiretime = (($client_minutebalance) * 60) + 30;
+                    $channel = Str::lower(Str::random(20));
+                    $agorc = new AgoraTokenController();
+                    // $calltoken ="";
+                    //  $calltoken = $agorc->generateToken($client_id, $expiretime, $channel);
+                    $client_calltoken = $agorc->generateToken($client_uid, $expiretime, $channel);
+                    $expert_calltoken = $agorc->generateToken($expert_uid, $expiretime, $channel);
+                    //  $calltoken= $formdata['calltoken'];           
+                    //  $client->image_path;
+                    $notctrlr = new NotificationController();
+                    $title = __('general.11call_title');
+                    $body = __('general.11call_body', ['Clientname' => $client->user_name]);
+                    $calldata = [
+                        'expert_uid' => strval($expert_uid),
+                        'client_id' => strval($client_id),
+                        'channel' => $channel,
+                        'expert_calltoken' => $expert_calltoken,
+                        'client_image' => $client->image_path,
+                        'client_name' => $client->user_name,
+                        'selectedservice_id' => strval($selectedservice_id),
+                        'id' => strval(0),
+                    ];
+                    $notctrlr->send_autocall_notify($title, $body, 'auto', 'call', '', '', $client_id, $expert_id, $selectedservice_id, 0, $calldata);
+                    return response()->json(
+                        [
+                            'client_uid' => $client_uid,
+                            'channel' => $channel,
+                            'client_calltoken' => $client_calltoken,
+                            'selectedservice_id' => $selectedservice_id,
+                        ]
+                    );
+                }
+            }
+        }
+
     }
 
-    public function Create_sel_serv($client_id,$expert_id,$service_id,$points,$expert_cost ){
-       $selservCtrlr=new  SelectedServiceController();
-        $newNum =  $selservCtrlr->GenerateCode("order-");
+    public function Create_sel_serv($client_id, $expert_id, $service_id, $points, $expert_cost)
+    {
+        $selservCtrlr = new SelectedServiceController();
+        $newNum = $selservCtrlr->GenerateCode("order-");
         $now = Carbon::now();
         //save selected service
         $newObj = new Selectedservice();
         $newObj->client_id = $client_id;
         $newObj->expert_id = $expert_id;
         $newObj->service_id = $service_id;
-        $newObj->points =$points;
+        $newObj->points = $points;
         $newObj->rate = 0;
         $newObj->form_state = 'agree';
         //   $newObj->answer = "";
@@ -729,17 +776,17 @@ return response()->json([
         // $newObj->iscommentconfirmd = 0;
         //   $newObj->issendconfirmd = 0;
         //    $newObj->isanswerconfirmd = 0;
-      //  $newObj->comment_rate = 0;
+        //  $newObj->comment_rate = 0;
         $newObj->status = "created";
-        $newObj->expert_cost =$expert_cost;//percent
-       // $newObj->cost_type = $expertService->cost_type;
+        $newObj->expert_cost = $expert_cost;//percent
+        // $newObj->cost_type = $expertService->cost_type;
         //   $newObj->expert_cost_value = $expertService->expert_cost_value;
-        $newObj->expert_cost_value = StorageController::CalcPercentVal($expert_cost,$points);
+        $newObj->expert_cost_value = StorageController::CalcPercentVal($expert_cost, $points);
         $newObj->order_num = $newNum;
         $newObj->order_date = $now;
         $newObj->save();
-        return   $newObj->id;
-       
+        return $newObj->id;
+
     }
 
     public function uploadcall(Request $request)
@@ -755,15 +802,15 @@ return response()->json([
         if ($validator->fails()) {
             return response()->json($validator->errors());
         } else {
-           DB::transaction(function () use ($request, $formdata) {
-            $selservicemodel= Selectedservice::find($formdata['selectedservice_id'])  ;  
-            $servicemodel=Service::where('is_callservice',1)->first();
-                if ($request->hasFile('record') && $selservicemodel->service_id== $servicemodel->id) {
+            DB::transaction(function () use ($request, $formdata) {
+                $selservicemodel = Selectedservice::find($formdata['selectedservice_id']);
+                $servicemodel = Service::where('is_callservice', 1)->first();
+                if ($request->hasFile('record') && $selservicemodel->service_id == $servicemodel->id) {
                     $file = $request->file('record');
-                    $this->storeCall($file,  $selservicemodel->id);      
-                    $this->id=$selservicemodel->id  ;      
-                }else{
-                      $this->id=0;
+                    $this->storeCall($file, $selservicemodel->id);
+                    $this->id = $selservicemodel->id;
+                } else {
+                    $this->id = 0;
                 }
             });
             return response()->json([
@@ -793,7 +840,7 @@ return response()->json([
             );
             Selectedservice::find($id)->update([
                 "call_file" => $filename,
-                'status'=>'up'
+                'status' => 'up'
             ]);
             Storage::delete("public/" . $recpath . '/' . $oldfilename);
         }
@@ -815,19 +862,19 @@ return response()->json([
 
             return response()->json($validator->errors());
         } else {
-            $client_id = $formdata['client_id'];          
-           
+            $client_id = $formdata['client_id'];
+
             $nowsub = Carbon::now()->subDays($this->oldestday);
             //save token in expert 
 
             NotificationUser::where('client_id', $client_id)
-            ->where('state','sent')
-            ->whereDate('created_at', '>=', $nowsub)->update(
-                [
-                    'state' =>'open',
-                ]
-            );
-             
+                ->where('state', 'sent')
+                ->whereDate('created_at', '>=', $nowsub)->update(
+                    [
+                        'state' => 'open',
+                    ]
+                );
+
             return response()->json("ok");
         }
     }
@@ -847,25 +894,25 @@ return response()->json([
 
             return response()->json($validator->errors());
         } else {
-            $client_id = $formdata['client_id'];          
-           
+            $client_id = $formdata['client_id'];
+
             $nowsub = Carbon::now()->subDays($this->oldestday);
             //save token in expert 
 
-         $notifyuser=  NotificationUser::where('client_id', $client_id)            
-            ->whereDate('created_at', '>=',$nowsub)
-            ->orderByDesc('created_at')->first();
-            $status=1;
-            if($notifyuser){
-                if( $notifyuser->state=='open'){
+            $notifyuser = NotificationUser::where('client_id', $client_id)
+                ->whereDate('created_at', '>=', $nowsub)
+                ->orderByDesc('created_at')->first();
+            $status = 1;
+            if ($notifyuser) {
+                if ($notifyuser->state == 'open') {
                     //opend befor
-                    $status=0;
-                   } 
-            }else{
-                $status=0; 
+                    $status = 0;
+                }
+            } else {
+                $status = 0;
             }
-        
-           //sent : not opened yet
+
+            //sent : not opened yet
             return response()->json($status);
         }
     }

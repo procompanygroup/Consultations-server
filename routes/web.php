@@ -123,7 +123,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->group(function () {
             Route::post('/updatecallcost/{id}', [SettingController::class, 'updatecallcost']);
             Route::post('/updateapplink', [SettingController::class, 'updateapplink']);
             Route::post('/updatesociallink', [SettingController::class, 'updatesociallink']);
-           
+            Route::post('/update_admin_email/{id}', [SettingController::class, 'update_admin_email']);
             Route::prefix('pages')->group(function () {
                 Route::get('/show', [SettingController::class, 'page_index']);
                 Route::post('/update/{id}', [SettingController::class, 'updatepage']);

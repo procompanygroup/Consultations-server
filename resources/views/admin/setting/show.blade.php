@@ -426,7 +426,43 @@
 
     </div>
     <!-- row closed -->
+    <div class="col-xl-12">
+        <div class="card mg-b-20">
+            <div class="card-header pb-0">
+                <div class="d-flex justify-content-between">
+                    <h4 class="card-title mg-b-0"> ايميل الادارة</h4>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="">
 
+                    <form class="form-horizontal"
+                        action="{{ url('admin/setting/update_admin_email', $admin_email->id) }}"
+                        name="admin_email_form" method="POST" id="admin_emailform">
+                        @csrf
+                        <div class="row">
+                            <div class="form-group d-flex justify-content-between col-sm-12">
+                                <input type="text" class="form-control " id="admin_email"
+                                    placeholder=" ايميل الادارة" name="admin_email"
+                                    value="{{ $admin_email->value }}">
+                                <button type="submit" name="btn_admin_email" id="btn_admin_email"
+                                    class="btn btn-primary mr-3 send-btn">{{ __('general.save') }}</button>
+                            </div>
+                            <div class="col-sm-12">
+                                <ul class="parsley-errors-list filled">
+                                    <li class="parsley-required" id="admin_email_error"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <!--/div-->
+
+
+    </div>
     </div>
     <!-- Container closed -->
     </div>

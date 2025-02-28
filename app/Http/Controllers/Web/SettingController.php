@@ -15,6 +15,7 @@ use App\Http\Requests\Web\Setting\UpdateSecretkeyRequest;
 use App\Http\Requests\Web\Setting\UpdateExpireDaysRequest;
 use App\Http\Requests\Web\Setting\UpdateAppLinkRequest;
 use App\Http\Requests\Web\Setting\UpdateExpireDaysMinuteRequest;
+use App\Http\Requests\Web\Setting\UpdateAdminEmailRequest;
 
 
 class SettingController extends Controller
@@ -36,6 +37,7 @@ class SettingController extends Controller
     $appstor_link = $this->findbyname('appstor_link');
     $x_link = $this->findbyname('x_link');
     $facebook_link = $this->findbyname('facebook_link');
+    $admin_email=$this->findbyname('admin_email');
     //  updatepoints
     return view('admin.setting.show', [
       'expert_percent' => $expert_percent,
@@ -49,6 +51,7 @@ class SettingController extends Controller
       'appstor_link' => $appstor_link,
       'x_link' => $x_link,
       'facebook_link' => $facebook_link,
+      'admin_email'=> $admin_email,
     ]);
 
     //  return view('admin.setting.show', ['settings' => ['expert_percent'=>$expert_percent,'expert_service_points'=>$expert_service_points]]);
@@ -350,6 +353,34 @@ $object->save();
 } 
       return response()->json("ok");
     
+  }
+
+  
+  public function update_admin_email(UpdateAdminEmailRequest $request,$id)
+  {
+    $formdata = $request->all();
+    //validate
+    $validator = Validator::make(
+      $formdata,
+      $request->rules(),
+      $request->messages()
+    );
+    if ($validator->fails()) {
+      return response()->json($validator);
+
+    } else {
+      $admin_mail=null;
+if(isset( $formdata['admin_email'])){
+  $admin_mail= $formdata['admin_email'];
+}
+      Setting::find($id)->update([
+        'value' => $admin_mail,
+      ]);
+
+      //save image
+      return response()->json("ok");
+
+    }
   }
   //pages
   public function page_index()

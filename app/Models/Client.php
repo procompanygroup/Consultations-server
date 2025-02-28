@@ -188,5 +188,9 @@ public function getGenderConvAttribute(){
     {
         return $this->hasMany(NotifyClientState::class);
     }
+    public function clientsdelorders(): HasMany
+    {
+        return $this->hasMany(ClientDelOrder::class);
+    }
     
 }
