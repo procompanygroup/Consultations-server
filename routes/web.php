@@ -185,8 +185,13 @@ Route::prefix('minute-gift')->group(function () {
         Route::resource('client', ClientController::class, ['except' => ['update']]);
         Route::prefix('client')->group(function () {
             Route::post('/update/{id}', [ClientController::class, 'update'])->name('client.update');
-           
-
+            Route::prefix('del-orders')->group(function () { 
+                //show all
+                Route::get('/', [ClientController::class, 'del_orders']);
+                Route::get('/show/{id}', [ClientController::class, 'show_order']);
+                Route::post('/confirm/{id}', [ClientController::class, 'show_order']);
+                Route::post('/delete/{id}', [ClientController::class, 'del_order']);
+            });
            
         });
 
